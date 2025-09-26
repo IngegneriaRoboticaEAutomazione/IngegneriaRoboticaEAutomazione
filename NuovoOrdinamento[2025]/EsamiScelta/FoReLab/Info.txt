@@ -1,6 +1,7 @@
 -> Percorso di Eccellenza FoReLab
 
-Il corso di studio offre la possibilità di partecipare  al Percorso di Eccellenza istituito all'interno del FoReLab (Future-Oriented REsearch LABoratory), il laboratorio di eccellenza finanziato dal Ministero dell'Università al Dipartimento di Ingegneria dell'Informazione. 
+Il corso di studio offre la possibilità di partecipare  al Percorso di Eccellenza istituito all'interno del FoReLab (Future-Oriented REsearch LABoratory), 
+il laboratorio di eccellenza finanziato dal Ministero dell'Università al Dipartimento di Ingegneria dell'Informazione. 
 
 La partecipazione al percorso FoReLab prevede:
 
@@ -14,7 +15,8 @@ La redazione della Tesi in Lingua Inglese.
 L'aver sostenuto almeno 18 CFU presi all'interno dei corsi del "Paniere FoReLab".
 
 -> La verifica dei requisiti avviene in due momenti:
-La domanda di Tesi : il candidato deve presentare domanda sul modulo predisposto indicando il possesso o futuro possesso dei requisiti (è possibbile presentare domanda integrativa anche sucessivamenete prima della Laurea)
+La domanda di Tesi : il candidato deve presentare domanda sul modulo predisposto indicando il possesso o futuro possesso dei requisiti 
+(è possibbile presentare domanda integrativa anche sucessivamenete prima della Laurea)
 
 La Consegna della Tesi: alla consegna della tesi sarà verificato il possesso dei requisiti ed emesso il relativo certificato.
 
