@@ -31,7 +31,7 @@ To provide a quick and clear understanding of the changes made with commits, it 
 
 ### :robot: File & folders naming conventions
 
-For files, we recommend using **snake case** notation (e.g. `notes_course1.pdf`), while for folders, we recommend using **camel case** notation (e.g. `CourseMaterial1`).
+For files, we recommend using [snake case](https://developer.mozilla.org/en-US/docs/Glossary/Snake_case) notation (e.g. `notes_course1.pdf`), while for folders, we recommend using [camel case](https://developer.mozilla.org/en-US/docs/Glossary/Camel_case) notation (e.g. `CourseMaterial1`).
 
 > e.g. RootFolder\CourseFolder\Subfolder1\file_name
 
@@ -88,7 +88,7 @@ Per fornire una rapida e chiara comprensione delle modifiche apportate con i com
 
 ### :robot: Notazioni nomi file e cartelle
 
-Per i file si propone la notazione **snake case** (es. `appunti_corso_1.pdf`) mentre per le cartelle la notazione **camel case** (es. `MaterialeCorso1`).
+Per i file si propone la notazione [snake case](https://developer.mozilla.org/en-US/docs/Glossary/Snake_case) (es. `appunti_corso_1.pdf`) mentre per le cartelle la notazione [camel case](https://developer.mozilla.org/en-US/docs/Glossary/Camel_case) (es. `MaterialeCorso1`).
 
 > es. CartellaRoot\CartellaCorso\Sottocartella1\nome_file
 
