@@ -2,5 +2,8 @@ Esame di: "[1240I] MECCANICA E TECNOLOGIE PER LA ROBOTICA" - 12 CFU
 
 -Professori: GABICCINI MARCO, POLLINI LORENZO
 
--Mail Docente: 
--Mail Docente: 
+-Mail Docente: marco.gabiccini@unipi.it
+-Mail Docente: lorenzo.pollini@unipi.it
+
+-Sito web Gabiccini: http://www.dimnp.unipi.it/gabiccini-m/
+-Sito web Pollini: https://people.unipi.it/lorenzo_pollini/
