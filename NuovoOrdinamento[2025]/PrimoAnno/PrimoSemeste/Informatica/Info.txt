@@ -1,7 +1,0 @@
-Esame di: "[1227I] ELEMENTI DI INFORMATICA PER ROBOTICA E AUTOMAZIONE" - 6 CFU
-
--Professori: ANGELINI FRANCO, PETTORALI MARCO
-
--Mail Docente: franco.angelini@unipi.it
--Mail Docente: marco.pettorali@ing.unipi.it
-
