@@ -1,1 +1,0 @@
-Esame di Elementi di Informatica per Robotica e Automazione

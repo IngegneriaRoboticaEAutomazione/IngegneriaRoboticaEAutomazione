@@ -1,1 +1,0 @@
-Esame di Teoria dei sistemi e del controllo

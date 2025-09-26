@@ -1,1 +1,0 @@
-Esame di Probabilità e Processi Stocastici

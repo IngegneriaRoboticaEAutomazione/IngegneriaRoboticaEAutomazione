@@ -1,1 +1,0 @@
-Esame di Meccanica Teorica ed Applicata

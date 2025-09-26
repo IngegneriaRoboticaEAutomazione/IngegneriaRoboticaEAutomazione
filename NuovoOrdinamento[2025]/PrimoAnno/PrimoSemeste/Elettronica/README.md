@@ -1,1 +1,0 @@
-Esame di Sistemi elettronici per automazione e robotica
