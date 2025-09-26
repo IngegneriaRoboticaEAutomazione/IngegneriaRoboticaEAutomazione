@@ -123,3 +123,7 @@ In pratica:
 [![Contributors](https://contrib.rocks/image?repo=IngegneriaRoboticaEAutomazione/IngegneriaRoboticaEAutomazione&t=1727344800)](https://github.com/IngegneriaRoboticaEAutomazione/IngegneriaRoboticaEAutomazione/graphs/contributors)
 
 Grazie per la collaborazione!
+
+## Social & Link utili
+
+[![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/ingroboticaautomazionepisa/) [![Corso di Studi](https://img.shields.io/badge/Corso%20di%20Studi-003f7f?style=for-the-badge&logo=university&logoColor=white)](https://www.aut.ing.unipi.it/it/)
