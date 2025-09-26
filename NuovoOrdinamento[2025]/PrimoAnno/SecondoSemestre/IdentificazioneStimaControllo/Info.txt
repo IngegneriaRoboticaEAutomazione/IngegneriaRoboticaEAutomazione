@@ -2,5 +2,8 @@ Esame di: "[1248I] IDENTIFICAZIONE, STIMA E CONTROLLO ROBUSTO" - 12 CFU
 
 -Professori: SALARIS PAOLO, COSTANZI RICCARDO
 
--Mail Docente: 
--Mail Docente: 
+-Mail Docente: paolo.salaris@unipi.it
+-Mail Docente: riccardo.costanzi@unipi.it
+
+-Sito web Costanzi: http://www.centropiaggio.unipi.it/~costanzi
+
