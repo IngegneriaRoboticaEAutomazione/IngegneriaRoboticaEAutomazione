@@ -120,7 +120,7 @@ In pratica:
 
 ## Credits
 
-[![Contributors](https://contrib.rocks/image?repo=IngegneriaRoboticaEAutomazione/IngegneriaRoboticaEAutomazione&t=1727344800)](https://github.com/IngegneriaRoboticaEAutomazione/IngegneriaRoboticaEAutomazione/graphs/contributors)
+[![Contributors](https://contrib.rocks/image?repo=IngegneriaRoboticaEAutomazione/IngegneriaRoboticaEAutomazione)](https://github.com/IngegneriaRoboticaEAutomazione/IngegneriaRoboticaEAutomazione/graphs/contributors)
 
 Grazie per la collaborazione!
 
