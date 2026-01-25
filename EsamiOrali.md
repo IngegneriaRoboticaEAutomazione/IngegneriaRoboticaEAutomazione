@@ -266,6 +266,13 @@ Le nuove domande generano una **Pull Request** che gli Admin possono approvare (
 
 <!-- AUTO:nuovo|2|na|teoria-dei-sistemi-e-del-controllo-tdsc -->
 
+- **Docente:** Prof. Pallottino — **Appello:** _No response_ — **Inserito il:** 2026-01-25
+  - Se progetto un controllo del tipo u = kx, che proprietà (raggiungibilità e/o osservabilità perdo)?
+  - Differenza tra l'insieme degli stati raggiungibili dall'origine e stati raggiungibili da un generico x0?
+  - Scrivere espressione del costo del controllo ottimo a TD.
+  - Cosa vuol dire controllo su orizzonte finito/infinito di passi e cosa comporta?
+
+
 </details>
 
 <details>
