@@ -1,6 +1,7 @@
 # Esami Orali — Raccolta domande (UniPi Robotica)
 
 Questo file viene aggiornato automaticamente tramite **Issues → New issue → "Inserisci domande esame (Orale)"**.
+
 Le domande inserite dagli studenti generano una **Pull Request** che i maintainer possono approvare (merge).
 
 ---
