@@ -3,6 +3,7 @@
 Questo file raccoglie le domande degli esami orali, organizzate per ordinamento/anno/curriculum/esame.
 
 Per inserire nuove domande usa **Issues → New issue → “Inserisci domande esame (Orale)”**.
+
 Le nuove domande generano una **Pull Request** che i maintainer possono approvare (merge).
 
 ---
@@ -13,7 +14,7 @@ Le nuove domande generano una **Pull Request** che i maintainer possono approvar
 <br>
 
 <details>
-<summary><strong>2° Anno</strong></summary>
+<summary><strong>1° Anno</strong></summary>
 
 <br>
 
@@ -106,7 +107,7 @@ Le nuove domande generano una **Pull Request** che i maintainer possono approvar
 <br>
 
 <details>
-<summary><strong>3° Anno</strong></summary>
+<summary><strong>2° Anno</strong></summary>
 
 <br>
 
@@ -199,7 +200,7 @@ Le nuove domande generano una **Pull Request** che i maintainer possono approvar
 <br>
 
 <details>
-<summary><strong>2° Anno</strong></summary>
+<summary><strong>1° Anno</strong></summary>
 
 <br>
 
@@ -271,7 +272,7 @@ Le nuove domande generano una **Pull Request** che i maintainer possono approvar
 <br>
 
 <details>
-<summary><strong>3° Anno</strong></summary>
+<summary><strong>2° Anno</strong></summary>
 
 <br>
 
