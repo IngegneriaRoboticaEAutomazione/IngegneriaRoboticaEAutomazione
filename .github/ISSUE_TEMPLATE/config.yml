@@ -1,5 +1,5 @@
 blank_issues_enabled: false
 contact_links:
-  - name: "Come inserire domande"
-    url: https://github.com/
+  - name: "Dove trovo le domande inserite"
+    url: https://github.com/IngegneriaRoboticaEAutomazione/IngRobAut-UniPi/blob/main/EsamiOrali.md
     about: "Apri una Issue usando il modulo 'Inserisci domande esame (Orale)'."
