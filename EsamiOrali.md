@@ -1,372 +1,501 @@
 # Esami Orali — Raccolta domande (UniPi Robotica)
 
-Questo file viene aggiornato automaticamente tramite **Issues → New issue → "Inserisci domande esame (Orale)"**.
+Questo file raccoglie le domande degli esami orali, organizzate per ordinamento/anno/curriculum/esame.
 
-Le domande inserite dagli studenti generano una **Pull Request** che i maintainer possono approvare (merge).
+Per inserire nuove domande usa **Issues → New issue → “Inserisci domande esame (Orale)”**.
+Le nuove domande generano una **Pull Request** che i maintainer possono approvare (merge).
 
 ---
 
 <details>
-  <summary><strong>Vecchio Ordinamento</strong></summary>
+<summary><strong>Vecchio Ordinamento</strong></summary>
 
-  <br>
+<br>
 
-  <details>
-    <summary><strong>1° Anno</strong></summary>
+<details>
+<summary><strong>2° Anno</strong></summary>
 
-    <br>
+<br>
 
-    <details>
-      <summary><strong>Controllo Digitale — CD</strong></summary>
-      <!-- AUTO:vecchio|1|na|controllo-digitale -->
-    </details>
+<details>
+<summary><strong>Controllo Digitale - CD</strong></summary>
 
-    <details>
-      <summary><strong>Controllo dei Processi Tecnologici — CPT</strong></summary>
-      <!-- AUTO:vecchio|1|na|controllo-dei-processi-tecnologici -->
-    </details>
+<!-- AUTO:vecchio|2|na|controllo-digitale-cd -->
 
-    <details>
-      <summary><strong>Dinamica e Regolazione dei Sistemi Energetici — DRSE</strong></summary>
-      <!-- AUTO:vecchio|1|na|dinamica-e-regolazione-dei-sistemi-energetici -->
-    </details>
+</details>
 
-    <details>
-      <summary><strong>Informatica e Sistemi in Tempo Reale — ISTR</strong></summary>
-      <!-- AUTO:vecchio|1|na|informatica-e-sistemi-in-tempo-reale -->
-    </details>
+<details>
+<summary><strong>Controllo dei Processi Tecnologici - CPT</strong></summary>
 
-    <details>
-      <summary><strong>Laboratorio di Visione e Meccatronica (Lab. di Meccanica e Meccatronica) — LVM</strong></summary>
-      <!-- AUTO:vecchio|1|na|laboratorio-di-visione-e-meccatronica-lab-di-meccanica-e-meccatronica -->
-    </details>
+<!-- AUTO:vecchio|2|na|controllo-dei-processi-tecnologici-cpt -->
 
-    <details>
-      <summary><strong>Meccanica dei Robot — MDR</strong></summary>
-      <!-- AUTO:vecchio|1|na|meccanica-dei-robot -->
-    </details>
+</details>
 
-    <details>
-      <summary><strong>Meccanica Teorica e Applicata — MTA</strong></summary>
-      <!-- AUTO:vecchio|1|na|meccanica-teorica-e-applicata -->
-    </details>
+<details>
+<summary><strong>Dinamica e Regolazione dei Sistemi Energetici - DRSE</strong></summary>
 
-    <details>
-      <summary><strong>Probabilità e Processi Stocastici — PPS</strong></summary>
-      <!-- AUTO:vecchio|1|na|probabilita-e-processi-stocastici -->
-    </details>
+<!-- AUTO:vecchio|2|na|dinamica-e-regolazione-dei-sistemi-energetici-drse -->
 
-    <details>
-      <summary><strong>Sensori per la Robotica e Automazione — SRA</strong></summary>
-      <!-- AUTO:vecchio|1|na|sensori-per-la-robotica-e-automazione -->
-    </details>
+</details>
 
-    <details>
-      <summary><strong>Sistemi elettronici per automazione e robotica — SEAR</strong></summary>
-      <!-- AUTO:vecchio|1|na|sistemi-elettronici-per-automazione-e-robotica -->
-    </details>
+<details>
+<summary><strong>Informatica e Sistemi in Tempo Reale - ISTR</strong></summary>
 
-    <details>
-      <summary><strong>Teoria dei Sistemi e del Controllo — TDSC</strong></summary>
-      <!-- AUTO:vecchio|1|na|teoria-dei-sistemi-e-del-controllo -->
-    </details>
+<!-- AUTO:vecchio|2|na|informatica-e-sistemi-in-tempo-reale-istr -->
 
-    <details>
-      <summary><strong>Altro</strong></summary>
-      <!-- AUTO:vecchio|1|na|altro -->
-    </details>
+</details>
 
-  </details>
+<details>
+<summary><strong>Laboratorio di Visione e Meccatronica (Lab. di Meccanica e Meccatronica) - LVM</strong></summary>
 
-  <details>
-    <summary><strong>2° Anno</strong></summary>
+<!-- AUTO:vecchio|2|na|laboratorio-di-visione-e-meccatronica-lvm -->
 
-    <br>
+</details>
 
-    <details>
-      <summary><strong>Cibernetica Fisiologica — CF</strong></summary>
-      <!-- AUTO:vecchio|2|na|cibernetica-fisiologica -->
-    </details>
+<details>
+<summary><strong>Meccanica dei Robot - MDR</strong></summary>
 
-    <details>
-      <summary><strong>Controllo dei Sistemi Incerti — CSI</strong></summary>
-      <!-- AUTO:vecchio|2|na|controllo-dei-sistemi-incerti -->
-    </details>
+<!-- AUTO:vecchio|2|na|meccanica-dei-robot-mdr -->
 
-    <details>
-      <summary><strong>Controllo del Robot — CDR</strong></summary>
-      <!-- AUTO:vecchio|2|na|controllo-del-robot -->
-    </details>
+</details>
 
-    <details>
-      <summary><strong>Dinamica dei Veicoli — DV</strong></summary>
-      <!-- AUTO:vecchio|2|na|dinamica-dei-veicoli -->
-    </details>
+<details>
+<summary><strong>Meccanica Teorica e Applicata - MTA</strong></summary>
 
-    <details>
-      <summary><strong>Identificazione dei Sistemi Incerti — ISI</strong></summary>
-      <!-- AUTO:vecchio|2|na|identificazione-dei-sistemi-incerti -->
-    </details>
+<!-- AUTO:vecchio|2|na|meccanica-teorica-e-applicata-mta -->
 
-    <details>
-      <summary><strong>Modellistica e simulazione di processi di produzione discreti — MSPPD</strong></summary>
-      <!-- AUTO:vecchio|2|na|modellistica-e-simulazione-di-processi-di-produzione-discreti -->
-    </details>
+</details>
 
-    <details>
-      <summary><strong>Robotica Aerospaziale — RA</strong></summary>
-      <!-- AUTO:vecchio|2|na|robotica-aerospaziale -->
-    </details>
+<details>
+<summary><strong>Probabilità e Processi Stocastici - PPS</strong></summary>
 
-    <details>
-      <summary><strong>Sistemi di guida e navigazione — SGN</strong></summary>
-      <!-- AUTO:vecchio|2|na|sistemi-di-guida-e-navigazione -->
-    </details>
+<!-- AUTO:vecchio|2|na|probabilita-e-processi-stocastici-pps -->
 
-    <details>
-      <summary><strong>Sistemi Robotici Distribuiti — SRD</strong></summary>
-      <!-- AUTO:vecchio|2|na|sistemi-robotici-distribuiti -->
-    </details>
+</details>
 
-    <details>
-      <summary><strong>Sistemi subacquei — SS</strong></summary>
-      <!-- AUTO:vecchio|2|na|sistemi-subacquei -->
-    </details>
+<details>
+<summary><strong>Sensori per la Robotica e Automazione - SRA</strong></summary>
 
-    <details>
-      <summary><strong>Altro</strong></summary>
-      <!-- AUTO:vecchio|2|na|altro -->
-    </details>
+<!-- AUTO:vecchio|2|na|sensori-per-la-robotica-e-automazione-sra -->
 
-  </details>
+</details>
+
+<details>
+<summary><strong>Sistemi elettronici per automazione e robotica - SFAR</strong></summary>
+
+<!-- AUTO:vecchio|2|na|sistemi-elettronici-per-automazione-e-robotica-sfar -->
+
+</details>
+
+<details>
+<summary><strong>Teoria dei Sistemi e del Controllo - TDSC</strong></summary>
+
+<!-- AUTO:vecchio|2|na|teoria-dei-sistemi-e-del-controllo-tdsc -->
+
+</details>
+
+<details>
+<summary><strong>Altro</strong></summary>
+
+<!-- AUTO:vecchio|2|na|altro -->
+
+</details>
+
+</details>
+
+<br>
+
+<details>
+<summary><strong>3° Anno</strong></summary>
+
+<br>
+
+<details>
+<summary><strong>Cibernetica Fisiologica - CF</strong></summary>
+
+<!-- AUTO:vecchio|3|na|cibernetica-fisiologica-cf -->
+
+</details>
+
+<details>
+<summary><strong>Controllo dei Sistemi Incerti - CSI</strong></summary>
+
+<!-- AUTO:vecchio|3|na|controllo-dei-sistemi-incerti-csi -->
+
+</details>
+
+<details>
+<summary><strong>Controllo del Robot - CDR</strong></summary>
+
+<!-- AUTO:vecchio|3|na|controllo-del-robot-cdr -->
+
+</details>
+
+<details>
+<summary><strong>Dinamica dei Veicoli - DV</strong></summary>
+
+<!-- AUTO:vecchio|3|na|dinamica-dei-veicoli-dv -->
+
+</details>
+
+<details>
+<summary><strong>Identificazione dei Sistemi Incerti - ISI</strong></summary>
+
+<!-- AUTO:vecchio|3|na|identificazione-dei-sistemi-incerti-isi -->
+
+</details>
+
+<details>
+<summary><strong>Modellistica e simulazione di processi di produzione discreti - MSPPD</strong></summary>
+
+<!-- AUTO:vecchio|3|na|modellistica-e-simulazione-di-processi-di-produzione-discreti-msppd -->
+
+</details>
+
+<details>
+<summary><strong>Robotica Aerospaziale - RA</strong></summary>
+
+<!-- AUTO:vecchio|3|na|robotica-aerospaziale-ra -->
+
+</details>
+
+<details>
+<summary><strong>Sistemi di guida e navigazione - SGN</strong></summary>
+
+<!-- AUTO:vecchio|3|na|sistemi-di-guida-e-navigazione-sgn -->
+
+</details>
+
+<details>
+<summary><strong>Sistemi Robotici Distribuiti - SRD</strong></summary>
+
+<!-- AUTO:vecchio|3|na|sistemi-robotici-distribuiti-srd -->
+
+</details>
+
+<details>
+<summary><strong>Sistemi subacquei - SS</strong></summary>
+
+<!-- AUTO:vecchio|3|na|sistemi-subacquei-ss -->
+
+</details>
+
+<details>
+<summary><strong>Altro</strong></summary>
+
+<!-- AUTO:vecchio|3|na|altro -->
+
+</details>
+
+</details>
 
 </details>
 
 ---
 
 <details>
-  <summary><strong>Nuovo Ordinamento</strong></summary>
+<summary><strong>Nuovo Ordinamento</strong></summary>
 
-  <br>
+<br>
 
-  <details>
-    <summary><strong>1° Anno</strong></summary>
+<details>
+<summary><strong>2° Anno</strong></summary>
 
-    <br>
+<br>
 
-    <details>
-      <summary><strong>Elementi di Informatica per Robotica e Automazione</strong></summary>
-      <!-- AUTO:nuovo|1|na|elementi-di-informatica-per-robotica-e-automazione -->
-    </details>
+<details>
+<summary><strong>Elementi di Informatica per Robotica e Automazione</strong></summary>
 
-    <details>
-      <summary><strong>Identificazione, Stima e Controllo Robusto</strong></summary>
-      <!-- AUTO:nuovo|1|na|identificazione-stima-e-controllo-robusto -->
-    </details>
+<!-- AUTO:nuovo|2|na|elementi-di-informatica-per-robotica-e-automazione -->
 
-    <details>
-      <summary><strong>Meccanica dei Robot — MDR</strong></summary>
-      <!-- AUTO:nuovo|1|na|meccanica-dei-robot -->
-    </details>
+</details>
 
-    <details>
-      <summary><strong>Meccanica Teorica e Applicata — MTA</strong></summary>
-      <!-- AUTO:nuovo|1|na|meccanica-teorica-e-applicata -->
-    </details>
+<details>
+<summary><strong>Identificazione, Stima e Controllo Robusto</strong></summary>
 
-    <details>
-      <summary><strong>Probabilità e Processi Stocastici — PPS</strong></summary>
-      <!-- AUTO:nuovo|1|na|probabilita-e-processi-stocastici -->
-    </details>
+<!-- AUTO:nuovo|2|na|identificazione-stima-e-controllo-robusto -->
 
-    <details>
-      <summary><strong>Sistemi elettronici per automazione e robotica — SEAR</strong></summary>
-      <!-- AUTO:nuovo|1|na|sistemi-elettronici-per-automazione-e-robotica -->
-    </details>
+</details>
 
-    <details>
-      <summary><strong>Tecnologie per la Robotica</strong></summary>
-      <!-- AUTO:nuovo|1|na|tecnologie-per-la-robotica -->
-    </details>
+<details>
+<summary><strong>Meccanica dei Robot - MDR</strong></summary>
 
-    <details>
-      <summary><strong>Teoria dei Sistemi e del Controllo — TDSC</strong></summary>
-      <!-- AUTO:nuovo|1|na|teoria-dei-sistemi-e-del-controllo -->
-    </details>
+<!-- AUTO:nuovo|2|na|meccanica-dei-robot-mdr -->
 
-    <details>
-      <summary><strong>Altro</strong></summary>
-      <!-- AUTO:nuovo|1|na|altro -->
-    </details>
+</details>
 
-  </details>
+<details>
+<summary><strong>Meccanica Teorica e Applicata - MTA</strong></summary>
 
-  <details>
-    <summary><strong>2° Anno</strong></summary>
+<!-- AUTO:nuovo|2|na|meccanica-teorica-e-applicata-mta -->
 
-    <br>
+</details>
 
-    <details>
-      <summary><strong>Curriculum Mobile Robots and Autonomous Vehicles</strong></summary>
+<details>
+<summary><strong>Probabilità e Processi Stocastici - PPS</strong></summary>
 
-      <br>
+<!-- AUTO:nuovo|2|na|probabilita-e-processi-stocastici-pps -->
 
-      <details>
-        <summary><strong>Controllo del Robot</strong></summary>
-        <!-- AUTO:nuovo|2|mrav|controllo-del-robot -->
-      </details>
+</details>
 
-      <details>
-        <summary><strong>Dinamica dei Veicoli</strong></summary>
-        <!-- AUTO:nuovo|2|mrav|dinamica-dei-veicoli -->
-      </details>
+<details>
+<summary><strong>Sistemi elettronici per automazione e robotica - SEAR</strong></summary>
 
-      <details>
-        <summary><strong>Aerospace Robotics</strong></summary>
-        <!-- AUTO:nuovo|2|mrav|aerospace-robotics -->
-      </details>
+<!-- AUTO:nuovo|2|na|sistemi-elettronici-per-automazione-e-robotica-sear -->
 
-      <details>
-        <summary><strong>Guida, navigazione e coordinamento di sistemi autonomi</strong></summary>
-        <!-- AUTO:nuovo|2|mrav|guida-navigazione-e-coordinamento-di-sistemi-autonomi -->
-      </details>
+</details>
 
-      <details>
-        <summary><strong>Sistemi Robotici Distribuiti — SRD</strong></summary>
-        <!-- AUTO:nuovo|2|mrav|sistemi-robotici-distribuiti -->
-      </details>
+<details>
+<summary><strong>Tecnologie per la Robotica</strong></summary>
 
-      <details>
-        <summary><strong>Marine Robotics</strong></summary>
-        <!-- AUTO:nuovo|2|mrav|marine-robotics -->
-      </details>
+<!-- AUTO:nuovo|2|na|tecnologie-per-la-robotica -->
 
-      <details>
-        <summary><strong>Visione per la robotica</strong></summary>
-        <!-- AUTO:nuovo|2|mrav|visione-per-la-robotica -->
-      </details>
+</details>
 
-      <details>
-        <summary><strong>Artificial Intelligence for Robotics</strong></summary>
-        <!-- AUTO:nuovo|2|mrav|artificial-intelligence-for-robotics -->
-      </details>
+<details>
+<summary><strong>Teoria dei Sistemi e del Controllo - TDSC</strong></summary>
 
-      <details>
-        <summary><strong>Laboratorio di Automazione e Robotica</strong></summary>
-        <!-- AUTO:nuovo|2|mrav|laboratorio-di-automazione-e-robotica -->
-      </details>
+<!-- AUTO:nuovo|2|na|teoria-dei-sistemi-e-del-controllo-tdsc -->
 
-      <details>
-        <summary><strong>Altro</strong></summary>
-        <!-- AUTO:nuovo|2|mrav|altro -->
-      </details>
+</details>
 
-    </details>
+<details>
+<summary><strong>Altro</strong></summary>
 
-    <details>
-      <summary><strong>Curriculum Human Centered Robotics (Robotica Centrata sulla Persona)</strong></summary>
+<!-- AUTO:nuovo|2|na|altro -->
 
-      <br>
+</details>
 
-      <details>
-        <summary><strong>Cibernetica Fisiologica</strong></summary>
-        <!-- AUTO:nuovo|2|hcr|cibernetica-fisiologica -->
-      </details>
+</details>
 
-      <details>
-        <summary><strong>Controllo del Robot</strong></summary>
-        <!-- AUTO:nuovo|2|hcr|controllo-del-robot -->
-      </details>
+<br>
 
-      <details>
-        <summary><strong>Advanced human-robot interaction</strong></summary>
-        <!-- AUTO:nuovo|2|hcr|advanced-human-robot-interaction -->
-      </details>
+<details>
+<summary><strong>3° Anno</strong></summary>
 
-      <details>
-        <summary><strong>Artificial Intelligence for Robotics</strong></summary>
-        <!-- AUTO:nuovo|2|hcr|artificial-intelligence-for-robotics -->
-      </details>
+<br>
 
-      <details>
-        <summary><strong>Rapid Prototyping for Collaborative Robotics</strong></summary>
-        <!-- AUTO:nuovo|2|hcr|rapid-prototyping-for-collaborative-robotics -->
-      </details>
+<details>
+<summary><strong>Curriculum Mobile Robots and Autonomous Vehicles</strong></summary>
 
-      <details>
-        <summary><strong>Visione per la robotica</strong></summary>
-        <!-- AUTO:nuovo|2|hcr|visione-per-la-robotica -->
-      </details>
+<br>
 
-      <details>
-        <summary><strong>Embedded Systems</strong></summary>
-        <!-- AUTO:nuovo|2|hcr|embedded-systems -->
-      </details>
+<details>
+<summary><strong>Controllo del Robot</strong></summary>
 
-      <details>
-        <summary><strong>Laboratorio di Automazione e Robotica</strong></summary>
-        <!-- AUTO:nuovo|2|hcr|laboratorio-di-automazione-e-robotica -->
-      </details>
+<!-- AUTO:nuovo|3|mobile|controllo-del-robot -->
 
-      <details>
-        <summary><strong>Altro</strong></summary>
-        <!-- AUTO:nuovo|2|hcr|altro -->
-      </details>
+</details>
 
-    </details>
+<details>
+<summary><strong>Dinamica dei Veicoli</strong></summary>
 
-    <details>
-      <summary><strong>Curriculum Advanced Robotics and Automation for Industry and Services</strong></summary>
+<!-- AUTO:nuovo|3|mobile|dinamica-dei-veicoli -->
 
-      <br>
+</details>
 
-      <details>
-        <summary><strong>Controllo del Robot</strong></summary>
-        <!-- AUTO:nuovo|2|arais|controllo-del-robot -->
-      </details>
+<details>
+<summary><strong>Aerospace Robotics</strong></summary>
 
-      <details>
-        <summary><strong>Modellistica e simulazione di processi di produzione discreti</strong></summary>
-        <!-- AUTO:nuovo|2|arais|modellistica-e-simulazione-di-processi-di-produzione-discreti -->
-      </details>
+<!-- AUTO:nuovo|3|mobile|aerospace-robotics -->
 
-      <details>
-        <summary><strong>Smart Robotics and Automation Systems</strong></summary>
-        <!-- AUTO:nuovo|2|arais|smart-robotics-and-automation-systems -->
-      </details>
+</details>
 
-      <details>
-        <summary><strong>Sustainability of Energy Systems through Controls</strong></summary>
-        <!-- AUTO:nuovo|2|arais|sustainability-of-energy-systems-through-controls -->
-      </details>
+<details>
+<summary><strong>Guida, navigazione e coordinamento di sistemi autonomi</strong></summary>
 
-      <details>
-        <summary><strong>Visione per la robotica</strong></summary>
-        <!-- AUTO:nuovo|2|arais|visione-per-la-robotica -->
-      </details>
+<!-- AUTO:nuovo|3|mobile|guida-navigazione-e-coordinamento-di-sistemi-autonomi -->
 
-      <details>
-        <summary><strong>Pianificazione del Moto e Sistemi Multi-robot</strong></summary>
-        <!-- AUTO:nuovo|2|arais|pianificazione-del-moto-e-sistemi-multi-robot -->
-      </details>
+</details>
 
-      <details>
-        <summary><strong>Sistemi Real-Time</strong></summary>
-        <!-- AUTO:nuovo|2|arais|sistemi-real-time -->
-      </details>
+<details>
+<summary><strong>Sistemi Robotici Distribuiti - SRD</strong></summary>
 
-      <details>
-        <summary><strong>Laboratorio di Automazione e Robotica</strong></summary>
-        <!-- AUTO:nuovo|2|arais|laboratorio-di-automazione-e-robotica -->
-      </details>
+<!-- AUTO:nuovo|3|mobile|sistemi-robotici-distribuiti-srd -->
 
-      <details>
-        <summary><strong>Altro</strong></summary>
-        <!-- AUTO:nuovo|2|arais|altro -->
-      </details>
+</details>
 
-    </details>
+<details>
+<summary><strong>Marine Robotics</strong></summary>
 
-  </details>
+<!-- AUTO:nuovo|3|mobile|marine-robotics -->
+
+</details>
+
+<details>
+<summary><strong>Visione per la robotica</strong></summary>
+
+<!-- AUTO:nuovo|3|mobile|visione-per-la-robotica -->
+
+</details>
+
+<details>
+<summary><strong>Artificial Intelligence for Robotics</strong></summary>
+
+<!-- AUTO:nuovo|3|mobile|artificial-intelligence-for-robotics -->
+
+</details>
+
+<details>
+<summary><strong>Laboratorio di Automazione e Robotica</strong></summary>
+
+<!-- AUTO:nuovo|3|mobile|laboratorio-di-automazione-e-robotica -->
+
+</details>
+
+<details>
+<summary><strong>Altro</strong></summary>
+
+<!-- AUTO:nuovo|3|mobile|altro -->
+
+</details>
+
+</details>
+
+<br>
+
+<details>
+<summary><strong>Curriculum Human Centered Robotics (Robotica Centrata sulla Persona)</strong></summary>
+
+<br>
+
+<details>
+<summary><strong>Cibernetica Fisiologica</strong></summary>
+
+<!-- AUTO:nuovo|3|human|cibernetica-fisiologica -->
+
+</details>
+
+<details>
+<summary><strong>Controllo del Robot</strong></summary>
+
+<!-- AUTO:nuovo|3|human|controllo-del-robot -->
+
+</details>
+
+<details>
+<summary><strong>Advanced human-robot interaction</strong></summary>
+
+<!-- AUTO:nuovo|2|human|advanced-human-robot-interaction -->
+
+</details>
+
+<details>
+<summary><strong>Artificial Intelligence for Robotics</strong></summary>
+
+<!-- AUTO:nuovo|2|human|artificial-intelligence-for-robotics -->
+
+</details>
+
+<details>
+<summary><strong>Rapid Prototyping for Collaborative Robotics</strong></summary>
+
+<!-- AUTO:nuovo|2|human|rapid-prototyping-for-collaborative-robotics -->
+
+</details>
+
+<details>
+<summary><strong>Visione per la robotica</strong></summary>
+
+<!-- AUTO:nuovo|2|human|visione-per-la-robotica -->
+
+</details>
+
+<details>
+<summary><strong>Embedded Systems</strong></summary>
+
+<!-- AUTO:nuovo|2|human|embedded-systems -->
+
+</details>
+
+<details>
+<summary><strong>Laboratorio di Automazione e Robotica</strong></summary>
+
+<!-- AUTO:nuovo|2|human|laboratorio-di-automazione-e-robotica -->
+
+</details>
+
+<details>
+<summary><strong>Altro</strong></summary>
+
+<!-- AUTO:nuovo|2|human|altro -->
+
+</details>
+
+</details>
+
+<br>
+
+<details>
+<summary><strong>Curriculum Advanced Robotics and Automation for Industry and Services</strong></summary>
+
+<br>
+
+<details>
+<summary><strong>Controllo del Robot</strong></summary>
+
+<!-- AUTO:nuovo|2|industry|controllo-del-robot -->
+
+</details>
+
+<details>
+<summary><strong>Modellistica e simulazione di processi di produzione discreti</strong></summary>
+
+<!-- AUTO:nuovo|2|industry|modellistica-e-simulazione-di-processi-di-produzione-discreti -->
+
+</details>
+
+<details>
+<summary><strong>Smart Robotics and Automation Systems</strong></summary>
+
+<!-- AUTO:nuovo|2|industry|smart-robotics-and-automation-systems -->
+
+</details>
+
+<details>
+<summary><strong>Sustainability of Energy Systems through Controls</strong></summary>
+
+<!-- AUTO:nuovo|2|industry|sustainability-of-energy-systems-through-controls -->
+
+</details>
+
+<details>
+<summary><strong>Visione per la robotica</strong></summary>
+
+<!-- AUTO:nuovo|2|industry|visione-per-la-robotica -->
+
+</details>
+
+<details>
+<summary><strong>Pianificazione del Moto e Sistemi Multi-robot</strong></summary>
+
+<!-- AUTO:nuovo|2|industry|pianificazione-del-moto-e-sistemi-multi-robot -->
+
+</details>
+
+<details>
+<summary><strong>Sistemi Real-Time</strong></summary>
+
+<!-- AUTO:nuovo|2|industry|sistemi-real-time -->
+
+</details>
+
+<details>
+<summary><strong>Laboratorio di Automazione e Robotica</strong></summary>
+
+<!-- AUTO:nuovo|2|industry|laboratorio-di-automazione-e-robotica -->
+
+</details>
+
+<details>
+<summary><strong>Altro</strong></summary>
+
+<!-- AUTO:nuovo|2|industry|altro -->
+
+</details>
+
+</details>
+
+</details>
 
 </details>
