@@ -8,6 +8,14 @@ Le nuove domande generano una **Pull Request** che gli Admin possono approvare (
 
 ---
 
+QUESTO è il Forms per chi ha difficoltà, malgrado la Guida, ad inserire le domande d'orale:
+
+https://forms.office.com/e/utW2RbeX3h
+
+Forms dedito alla Raccolta dei quesiti d'esame, tutti i dati raccolti nel tempo, saranno messi assieme, e pubblicati sul GitHub del corso, così da aiutarci a vicenda e diventare leggenda per chi verrà dopo di noi.
+
+---
+
 <details>
 <summary><strong>Vecchio Ordinamento</strong></summary>
 
