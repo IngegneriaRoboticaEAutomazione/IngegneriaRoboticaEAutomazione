@@ -6,6 +6,7 @@ Per inserire nuove domande usa **Issues (che lo trovi nella barra in alto vicino
 
 Le nuove domande generano una **Pull Request** che gli Admin possono approvare (merge).
 
+---
 
 ## Questo è il Forms per chi ha difficoltà, malgrado la Guida, ad inserire le domande d'orale:
 
