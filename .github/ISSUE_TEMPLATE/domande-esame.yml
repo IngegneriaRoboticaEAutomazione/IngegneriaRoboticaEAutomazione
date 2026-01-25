@@ -27,7 +27,7 @@ body:
     id: curriculum
     attributes:
       label: Curriculum (solo Nuovo Ord. 2 anno)
-      description: "Se non applica (Vecchio Ord. o 1° anno), seleziona N/A."
+      description: "Non si applica a Vecchio Ord. o 1° anno, quindi seleziona N/A."
       options:
         - N/A
         - Mobile Robots and Autonomous Vehicles (MRAV)
