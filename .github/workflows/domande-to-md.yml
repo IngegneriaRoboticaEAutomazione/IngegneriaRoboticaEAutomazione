@@ -2,16 +2,27 @@ name: Append questions to EsamiOrali.md (PR)
 
 on:
   issues:
-    types: [opened]
+    types: [opened, edited, labeled]
 
 permissions:
   contents: write
-  issues: read
   pull-requests: write
+  issues: write
+
+concurrency:
+  group: domande-to-md-${{ github.event.issue.number }}
+  cancel-in-progress: true
 
 jobs:
   update-md:
-    if: contains(join(github.event.issue.labels.*.name, ','), 'domande-esame')
+    # Parte se:
+    # - titolo inizia con "[Domande]" (come da tue schermate)
+    #   OPPURE
+    # - è presente la label "domande-esame" (se vuoi usarla)
+    if: >
+      startsWith(github.event.issue.title, '[Domande]') ||
+      contains(join(github.event.issue.labels.*.name, ','), 'domande-esame')
+
     runs-on: ubuntu-latest
 
     steps:
@@ -24,23 +35,36 @@ jobs:
           script: |
             const fs = require("fs");
 
-            const body = context.payload.issue.body || "";
+            const body = (context.payload.issue.body || "").replace(/\r\n/g, "\n");
 
-            function extract(label) {
-              const re = new RegExp(`###\\s+${label}\\s*\\n+([\\s\\S]*?)(?=\\n###\\s+|$)`, "i");
-              const m = body.match(re);
-              return m ? m[1].trim() : "";
+            // Estrae il testo sotto una sezione "### LABEL"
+            // (Issue Forms generano esattamente questo formato)
+            function extract(labelVariants) {
+              const labels = Array.isArray(labelVariants) ? labelVariants : [labelVariants];
+              for (const label of labels) {
+                const re = new RegExp(`###\\s+${label}\\s*\\n+([\\s\\S]*?)(?=\\n###\\s+|$)`, "i");
+                const m = body.match(re);
+                if (m) return m[1].trim();
+              }
+              return "";
             }
 
-            const ordinamento = extract("Ordinamento");
-            const anno = extract("Anno");
-            const curriculum = extract("Curriculum \\(solo Nuovo Ord\\. 2 anno\\)");
-            const esame = extract("Esame");
-            const docente = extract("Docente");
-            const domande = extract("Domande");
-            const appello = extract("Data/Appello \\(opzionale\\)");
+            const ordinamento = extract(["Ordinamento"]);
+            const anno        = extract(["Anno"]);
+            const curriculum  = extract(["Curriculum \\(solo Nuovo Ord\\. 2 anno\\)", "Curriculum"]);
+            const esame       = extract(["Esame"]);
+            const docente     = extract(["Docente"]);
+            const domandeRaw  = extract(["Domande"]);
+            const appello     = extract(["Data/Appello \\(opzionale\\)", "Data/Appello"]);
 
-            const ordKey = /vecchio/i.test(ordinamento) ? "vecchio" : "nuovo";
+            if (!ordinamento || !anno || !esame || !docente || !domandeRaw) {
+              throw new Error(
+                "Campi mancanti nell'Issue Form. Servono almeno: Ordinamento, Anno, Esame, Docente, Domande."
+              );
+            }
+
+            // Normalizzazioni chiavi
+            const ordKey  = /vecchio/i.test(ordinamento) ? "vecchio" : "nuovo";
             const annoKey = /1/i.test(anno) ? "1" : "2";
 
             let curKey = "na";
@@ -52,7 +76,7 @@ jobs:
             }
 
             function slugifyAscii(s) {
-              return s
+              return (s || "")
                 .toLowerCase()
                 .normalize("NFD")
                 .replace(/[\u0300-\u036f]/g, "")     // rimuove accenti
@@ -63,9 +87,10 @@ jobs:
                 .replace(/\s+/g, "-");              // spazi -> hyphen
             }
 
-            const examKey = slugifyAscii(esame);
-            const marker = `<!-- AUTO:${ordKey}|${annoKey}|${curKey}|${examKey} -->`;
+            // Chiave "base" dell'esame (dal form)
+            const examKeyBase = slugifyAscii(esame);
 
+            // Prepara entry
             const today = new Date().toISOString().slice(0, 10);
 
             const header =
@@ -73,7 +98,7 @@ jobs:
               (appello ? ` — **Appello:** ${appello}` : "") +
               ` — **Inserito il:** ${today}\n`;
 
-            const questions = domande
+            const questions = domandeRaw
               .split("\n")
               .map(l => l.trim())
               .filter(Boolean)
@@ -85,17 +110,95 @@ jobs:
             const path = "EsamiOrali.md";
             let md = fs.readFileSync(path, "utf8");
 
-            if (!md.includes(marker)) {
+            // 1) Trova tutti i marker presenti nel file
+            // Marker attesi: <!-- AUTO:ord|anno|cur|examKey -->
+            const markerRe = /<!--\s*AUTO:([^|]+)\|([^|]+)\|([^|]+)\|([a-z0-9-]+)\s*-->/gi;
+            const markers = [];
+            let m;
+            while ((m = markerRe.exec(md)) !== null) {
+              markers.push({
+                full: m[0],
+                ord: (m[1] || "").trim(),
+                anno: (m[2] || "").trim(),
+                cur: (m[3] || "").trim(),
+                examKey: (m[4] || "").trim(),
+                index: m.index
+              });
+            }
+
+            if (markers.length === 0) {
               throw new Error(
-                `Marker non trovato in ${path}:\n${marker}\n` +
-                `Controlla che (ordinamento/anno/curriculum/esame) siano corretti e che il marker esista nel file.`
+                `Nessun marker AUTO trovato in ${path}. Inserisci marker tipo:\n` +
+                `<!-- AUTO:${ordKey}|${annoKey}|${curKey}|${examKeyBase} -->`
               );
+            }
+
+            // 2) Filtro marker compatibili per ordinamento/anno/curriculum
+            const candidates = markers.filter(x =>
+              x.ord === ordKey && x.anno === annoKey && x.cur === curKey
+            );
+
+            if (candidates.length === 0) {
+              throw new Error(
+                `Nessun marker compatibile trovato per ord=${ordKey}, anno=${annoKey}, cur=${curKey}.\n` +
+                `Controlla che EsamiOrali.md contenga marker per questa sezione.`
+              );
+            }
+
+            // 3) Matching flessibile sull'esame:
+            // - match esatto
+            // - oppure examKey del file contiene quello del form
+            // - oppure viceversa
+            function scoreMatch(fileKey, baseKey) {
+              if (fileKey === baseKey) return 100;
+              if (fileKey.includes(baseKey)) return 80;
+              if (baseKey.includes(fileKey)) return 70;
+              // bonus per prefisso comune
+              let common = 0;
+              for (let i = 0; i < Math.min(fileKey.length, baseKey.length); i++) {
+                if (fileKey[i] === baseKey[i]) common++;
+                else break;
+              }
+              return common; // tipicamente piccolo ma utile come fallback
+            }
+
+            let best = null;
+            for (const c of candidates) {
+              const sc = scoreMatch(c.examKey, examKeyBase);
+              if (!best || sc > best.score) best = { ...c, score: sc };
+            }
+
+            if (!best || best.score < 10) {
+              const list = candidates.map(x => x.examKey).slice(0, 20).join(", ");
+              throw new Error(
+                `Marker per esame non trovato (o match troppo debole).\n` +
+                `Form: "${esame}" -> "${examKeyBase}"\n` +
+                `Candidati in file (stessa sezione): ${list}\n` +
+                `Suggerimento: rendi il valore "Esame" del form identico alla sezione/marker nel file (es. "... - PPS").`
+              );
+            }
+
+            const marker = best.full;
+
+            // 4) Inserimento subito dopo il marker
+            if (!md.includes(marker)) {
+              throw new Error(`Marker selezionato non presente nel testo (incoerenza parsing): ${marker}`);
             }
 
             md = md.replace(marker, `${marker}\n\n${entry}`);
             fs.writeFileSync(path, md, "utf8");
 
+      - name: Check changes
+        id: diff
+        run: |
+          if git diff --quiet; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
       - name: Create Pull Request
+        if: steps.diff.outputs.changed == 'true'
         id: cpr
         uses: peter-evans/create-pull-request@v6
         with:
@@ -103,8 +206,10 @@ jobs:
           body: "PR generata automaticamente da Issue Form. Verificare e fare merge."
           branch: "auto/domande-esame-${{ github.event.issue.number }}"
           commit-message: "Append domande esame da issue #${{ github.event.issue.number }}"
+          delete-branch: true
 
       - name: Comment on issue with PR link
+        if: steps.diff.outputs.changed == 'true'
         uses: actions/github-script@v7
         with:
           script: |
@@ -117,3 +222,15 @@ jobs:
                 body: `Ho creato una Pull Request automatica per aggiornare EsamiOrali.md:\n\n${prUrl}\n\nUn maintainer può revisionare e fare merge.`
               });
             }
+
+      - name: Comment on issue if no changes
+        if: steps.diff.outputs.changed != 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.issue.number,
+              body: `Nessuna modifica applicata a EsamiOrali.md (probabilmente contenuto duplicato o parser non ha trovato differenze).`
+            });
