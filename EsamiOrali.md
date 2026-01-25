@@ -274,6 +274,12 @@ Forms dedito alla Raccolta dei quesiti d'esame, tutti i dati raccolti nel tempo,
 
 <!-- AUTO:nuovo|2|na|teoria-dei-sistemi-e-del-controllo-tdsc -->
 
+- **Docente:** Prof.Caiti — **Appello:** Gennaio 2026 — **Inserito il:** 2026-01-25
+  - Esercizio grafo controllo ottimo dove chiedeva di trovare il cammino che minimizza la funzione del costo.
+  - Equazioni funzione di costo e cost to go.
+  - Come devono essere le matrici V , Vn e P?
+
+
 - **Docente:** Prof. Pallottino — **Appello:** _No response_ — **Inserito il:** 2026-01-25
   - Se progetto un controllo del tipo u = kx, che proprietà (raggiungibilità e/o osservabilità perdo)?
   - Differenza tra l'insieme degli stati raggiungibili dall'origine e stati raggiungibili da un generico x0?
