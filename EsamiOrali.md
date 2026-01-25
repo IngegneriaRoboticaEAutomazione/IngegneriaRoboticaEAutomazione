@@ -1,10 +1,10 @@
 # Esami Orali — Raccolta domande (UniPi Robotica)
 
-Questo file raccoglie le domande degli esami orali, organizzate per ordinamento/anno/curriculum/esame.
+Questo file raccoglie le domande degli esami orali, organizzate per ordinamento/anno/curriculum (se presente)/esame.
 
-Per inserire nuove domande usa **Issues → New issue → “Inserisci domande esame (Orale)”**.
+Per inserire nuove domande usa **Issues (che lo trovi nella barra in alto vicino Code) → New issue → “Inserisci domande esame (Orale)”**.
 
-Le nuove domande generano una **Pull Request** che i maintainer possono approvare (merge).
+Le nuove domande generano una **Pull Request** che gli Admin possono approvare (merge).
 
 ---
 
