@@ -16,9 +16,9 @@ concurrency:
 jobs:
   update-md:
     # Parte se:
-    # - titolo inizia con "[Domande]" (come da tue schermate)
+    # - titolo inizia con "[Domande]"
     #   OPPURE
-    # - è presente la label "domande-esame" (se vuoi usarla)
+    # - è presente la label del form "domande-esame"
     if: >
       startsWith(github.event.issue.title, '[Domande]') ||
       contains(join(github.event.issue.labels.*.name, ','), 'domande-esame')
@@ -38,7 +38,6 @@ jobs:
             const body = (context.payload.issue.body || "").replace(/\r\n/g, "\n");
 
             // Estrae il testo sotto una sezione "### LABEL"
-            // (Issue Forms generano esattamente questo formato)
             function extract(labelVariants) {
               const labels = Array.isArray(labelVariants) ? labelVariants : [labelVariants];
               for (const label of labels) {
@@ -50,28 +49,32 @@ jobs:
             }
 
             const ordinamento = extract(["Ordinamento"]);
-            const anno        = extract(["Anno"]);
+            const annoLabel   = extract(["Anno"]);
             const curriculum  = extract(["Curriculum \\(solo Nuovo Ord\\. 2 anno\\)", "Curriculum"]);
             const esame       = extract(["Esame"]);
             const docente     = extract(["Docente"]);
             const domandeRaw  = extract(["Domande"]);
             const appello     = extract(["Data/Appello \\(opzionale\\)", "Data/Appello"]);
 
-            if (!ordinamento || !anno || !esame || !docente || !domandeRaw) {
+            if (!ordinamento || !annoLabel || !esame || !docente || !domandeRaw) {
               throw new Error(
                 "Campi mancanti nell'Issue Form. Servono almeno: Ordinamento, Anno, Esame, Docente, Domande."
               );
             }
 
-            // Normalizzazioni chiavi
-            const ordKey  = /vecchio/i.test(ordinamento) ? "vecchio" : "nuovo";
-            const annoKey = /1/i.test(anno) ? "1" : "2";
+            // 1) ordinamento
+            const ordKey = /vecchio/i.test(ordinamento) ? "vecchio" : "nuovo";
 
+            // 2) anno: nel file marker usano 2 per 1° anno, 3 per 2° anno
+            // (vedi EsamiOrali.md: nuovo|2|... e nuovo|3|...) 
+            const annoKey = /1/.test(annoLabel) ? "2" : "3";
+
+            // 3) curriculum: nel file usate chiavi "mobile / human / industry"
             let curKey = "na";
-            if (ordKey === "nuovo" && annoKey === "2") {
-              if (/mrav/i.test(curriculum)) curKey = "mrav";
-              else if (/hcr/i.test(curriculum)) curKey = "hcr";
-              else if (/arais/i.test(curriculum)) curKey = "arais";
+            if (ordKey === "nuovo" && annoKey === "3") {
+              if (/MRAV/i.test(curriculum) || /Mobile Robots/i.test(curriculum)) curKey = "mobile";
+              else if (/HCR/i.test(curriculum)  || /Human Centered/i.test(curriculum)) curKey = "human";
+              else if (/ARAIS/i.test(curriculum) || /Industry and Services/i.test(curriculum)) curKey = "industry";
               else curKey = "na";
             }
 
@@ -87,7 +90,7 @@ jobs:
                 .replace(/\s+/g, "-");              // spazi -> hyphen
             }
 
-            // Chiave "base" dell'esame (dal form)
+            // Chiave base dal form (senza sigle tipo PPS/SEAR ecc.)
             const examKeyBase = slugifyAscii(esame);
 
             // Prepara entry
@@ -110,30 +113,27 @@ jobs:
             const path = "EsamiOrali.md";
             let md = fs.readFileSync(path, "utf8");
 
-            // 1) Trova tutti i marker presenti nel file
-            // Marker attesi: <!-- AUTO:ord|anno|cur|examKey -->
+            // Trova tutti i marker presenti nel file:
+            // <!-- AUTO:ord|anno|cur|examKey -->
             const markerRe = /<!--\s*AUTO:([^|]+)\|([^|]+)\|([^|]+)\|([a-z0-9-]+)\s*-->/gi;
             const markers = [];
-            let m;
-            while ((m = markerRe.exec(md)) !== null) {
+            let mm;
+            while ((mm = markerRe.exec(md)) !== null) {
               markers.push({
-                full: m[0],
-                ord: (m[1] || "").trim(),
-                anno: (m[2] || "").trim(),
-                cur: (m[3] || "").trim(),
-                examKey: (m[4] || "").trim(),
-                index: m.index
+                full: mm[0],
+                ord: (mm[1] || "").trim(),
+                anno: (mm[2] || "").trim(),
+                cur: (mm[3] || "").trim(),
+                examKey: (mm[4] || "").trim(),
+                index: mm.index
               });
             }
 
             if (markers.length === 0) {
-              throw new Error(
-                `Nessun marker AUTO trovato in ${path}. Inserisci marker tipo:\n` +
-                `<!-- AUTO:${ordKey}|${annoKey}|${curKey}|${examKeyBase} -->`
-              );
+              throw new Error(`Nessun marker AUTO trovato in ${path}.`);
             }
 
-            // 2) Filtro marker compatibili per ordinamento/anno/curriculum
+            // Candidati compatibili per ordinamento/anno/curriculum
             const candidates = markers.filter(x =>
               x.ord === ordKey && x.anno === annoKey && x.cur === curKey
             );
@@ -145,21 +145,20 @@ jobs:
               );
             }
 
-            // 3) Matching flessibile sull'esame:
-            // - match esatto
-            // - oppure examKey del file contiene quello del form
-            // - oppure viceversa
+            // Matching flessibile sull'esame:
+            // (serve perché nel file spesso avete suffissi tipo "-pps", "-sear", "-tdsc", ecc.)
             function scoreMatch(fileKey, baseKey) {
               if (fileKey === baseKey) return 100;
               if (fileKey.includes(baseKey)) return 80;
               if (baseKey.includes(fileKey)) return 70;
-              // bonus per prefisso comune
+
+              // prefisso comune come fallback
               let common = 0;
               for (let i = 0; i < Math.min(fileKey.length, baseKey.length); i++) {
                 if (fileKey[i] === baseKey[i]) common++;
                 else break;
               }
-              return common; // tipicamente piccolo ma utile come fallback
+              return common;
             }
 
             let best = null;
@@ -169,22 +168,18 @@ jobs:
             }
 
             if (!best || best.score < 10) {
-              const list = candidates.map(x => x.examKey).slice(0, 20).join(", ");
+              const list = candidates.map(x => x.examKey).slice(0, 30).join(", ");
               throw new Error(
-                `Marker per esame non trovato (o match troppo debole).\n` +
+                `Marker per esame non trovato (match troppo debole).\n` +
                 `Form: "${esame}" -> "${examKeyBase}"\n` +
                 `Candidati in file (stessa sezione): ${list}\n` +
-                `Suggerimento: rendi il valore "Esame" del form identico alla sezione/marker nel file (es. "... - PPS").`
+                `Suggerimento: rendi il valore "Esame" del form identico al nome dell'esame usato nel file.`
               );
             }
 
             const marker = best.full;
 
-            // 4) Inserimento subito dopo il marker
-            if (!md.includes(marker)) {
-              throw new Error(`Marker selezionato non presente nel testo (incoerenza parsing): ${marker}`);
-            }
-
+            // Inserimento subito dopo il marker
             md = md.replace(marker, `${marker}\n\n${entry}`);
             fs.writeFileSync(path, md, "utf8");
 
@@ -232,5 +227,5 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.payload.issue.number,
-              body: `Nessuna modifica applicata a EsamiOrali.md (probabilmente contenuto duplicato o parser non ha trovato differenze).`
+              body: `Nessuna modifica applicata a EsamiOrali.md (contenuto duplicato o parser non ha trovato differenze).`
             });
