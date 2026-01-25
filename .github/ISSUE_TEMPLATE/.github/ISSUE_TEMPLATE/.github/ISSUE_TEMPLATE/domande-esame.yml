@@ -1,0 +1,112 @@
+name: "Inserisci domande esame (Orale)"
+description: "Compila il modulo: verrà creata una PR che aggiorna EsamiOrali.md."
+title: "[Domande] "
+labels: ["domande-esame"]
+body:
+  - type: dropdown
+    id: ordinamento
+    attributes:
+      label: Ordinamento
+      options:
+        - Vecchio Ordinamento
+        - Nuovo Ordinamento
+    validations:
+      required: true
+
+  - type: dropdown
+    id: anno
+    attributes:
+      label: Anno
+      options:
+        - 1° Anno
+        - 2° Anno
+    validations:
+      required: true
+
+  - type: dropdown
+    id: curriculum
+    attributes:
+      label: Curriculum (solo Nuovo Ord. 2 anno)
+      description: "Se non applica (Vecchio Ord. o 1° anno), seleziona N/A."
+      options:
+        - N/A
+        - Mobile Robots and Autonomous Vehicles (MRAV)
+        - Human Centered Robotics (HCR)
+        - Advanced Robotics and Automation for Industry and Services (ARAIS)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: esame
+    attributes:
+      label: Esame
+      description: "Seleziona l’esame corretto (usa 'Altro' se non presente)."
+      options:
+        - Controllo Digitale
+        - Controllo dei Processi Tecnologici
+        - Dinamica e Regolazione dei Sistemi Energetici
+        - Informatica e Sistemi in Tempo Reale
+        - Laboratorio di Visione e Meccatronica (Lab. di Meccanica e Meccatronica)
+        - Meccanica dei Robot
+        - Meccanica Teorica e Applicata
+        - Probabilità e Processi Stocastici
+        - Sensori per la Robotica e Automazione
+        - Sistemi elettronici per automazione e robotica
+        - Teoria dei Sistemi e del Controllo
+        - Cibernetica Fisiologica
+        - Controllo dei Sistemi Incerti
+        - Controllo del Robot
+        - Dinamica dei Veicoli
+        - Identificazione dei Sistemi Incerti
+        - Modellistica e simulazione di processi di produzione discreti
+        - Robotica Aerospaziale
+        - Sistemi di guida e navigazione
+        - Sistemi Robotici Distribuiti
+        - Sistemi subacquei
+        - Elementi di Informatica per Robotica e Automazione
+        - Identificazione, Stima e Controllo Robusto
+        - Tecnologie per la Robotica
+        - Aerospace Robotics
+        - Guida, navigazione e coordinamento di sistemi autonomi
+        - Marine Robotics
+        - Visione per la robotica
+        - Artificial Intelligence for Robotics
+        - Laboratorio di Automazione e Robotica
+        - Advanced human-robot interaction
+        - Rapid Prototyping for Collaborative Robotics
+        - Embedded Systems
+        - Smart Robotics and Automation Systems
+        - Sustainability of Energy Systems through Controls
+        - Pianificazione del Moto e Sistemi Multi-robot
+        - Sistemi Real-Time
+        - Altro
+    validations:
+      required: true
+
+  - type: input
+    id: docente
+    attributes:
+      label: Docente
+      placeholder: "Es. Prof. Cognome"
+    validations:
+      required: true
+
+  - type: textarea
+    id: domande
+    attributes:
+      label: Domande
+      description: "Scrivi una domanda per riga (o usa trattini)."
+      placeholder: |
+        - Domanda 1...
+        - Domanda 2...
+        - Domanda 3...
+    validations:
+      required: true
+
+  - type: input
+    id: appello
+    attributes:
+      label: Data/Appello (opzionale)
+      placeholder: "Es. 2026-01-25 oppure Gennaio 2026"
+    validations:
+      required: false

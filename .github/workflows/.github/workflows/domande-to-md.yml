@@ -1,0 +1,119 @@
+name: Append questions to EsamiOrali.md (PR)
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: read
+  pull-requests: write
+
+jobs:
+  update-md:
+    if: contains(join(github.event.issue.labels.*.name, ','), 'domande-esame')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Update EsamiOrali.md from issue form
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require("fs");
+
+            const body = context.payload.issue.body || "";
+
+            function extract(label) {
+              const re = new RegExp(`###\\s+${label}\\s*\\n+([\\s\\S]*?)(?=\\n###\\s+|$)`, "i");
+              const m = body.match(re);
+              return m ? m[1].trim() : "";
+            }
+
+            const ordinamento = extract("Ordinamento");
+            const anno = extract("Anno");
+            const curriculum = extract("Curriculum \\(solo Nuovo Ord\\. 2 anno\\)");
+            const esame = extract("Esame");
+            const docente = extract("Docente");
+            const domande = extract("Domande");
+            const appello = extract("Data/Appello \\(opzionale\\)");
+
+            const ordKey = /vecchio/i.test(ordinamento) ? "vecchio" : "nuovo";
+            const annoKey = /1/i.test(anno) ? "1" : "2";
+
+            let curKey = "na";
+            if (ordKey === "nuovo" && annoKey === "2") {
+              if (/mrav/i.test(curriculum)) curKey = "mrav";
+              else if (/hcr/i.test(curriculum)) curKey = "hcr";
+              else if (/arais/i.test(curriculum)) curKey = "arais";
+              else curKey = "na";
+            }
+
+            function slugifyAscii(s) {
+              return s
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")     // rimuove accenti
+                .replace(/[—–-]/g, " ")             // trattini -> spazio
+                .replace(/[()]/g, "")               // rimuove parentesi
+                .replace(/[^a-z0-9\s]/g, "")        // solo ascii alfanumerico e spazi
+                .trim()
+                .replace(/\s+/g, "-");              // spazi -> hyphen
+            }
+
+            const examKey = slugifyAscii(esame);
+            const marker = `<!-- AUTO:${ordKey}|${annoKey}|${curKey}|${examKey} -->`;
+
+            const today = new Date().toISOString().slice(0, 10);
+
+            const header =
+              `- **Docente:** ${docente}` +
+              (appello ? ` — **Appello:** ${appello}` : "") +
+              ` — **Inserito il:** ${today}\n`;
+
+            const questions = domande
+              .split("\n")
+              .map(l => l.trim())
+              .filter(Boolean)
+              .map(l => (l.startsWith("-") ? `  ${l}` : `  - ${l}`))
+              .join("\n");
+
+            const entry = `${header}${questions}\n`;
+
+            const path = "EsamiOrali.md";
+            let md = fs.readFileSync(path, "utf8");
+
+            if (!md.includes(marker)) {
+              throw new Error(
+                `Marker non trovato in ${path}:\n${marker}\n` +
+                `Controlla che (ordinamento/anno/curriculum/esame) siano corretti e che il marker esista nel file.`
+              );
+            }
+
+            md = md.replace(marker, `${marker}\n\n${entry}`);
+            fs.writeFileSync(path, md, "utf8");
+
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v6
+        with:
+          title: "Aggiunta domande esame (auto)"
+          body: "PR generata automaticamente da Issue Form. Verificare e fare merge."
+          branch: "auto/domande-esame-${{ github.event.issue.number }}"
+          commit-message: "Append domande esame da issue #${{ github.event.issue.number }}"
+
+      - name: Comment on issue with PR link
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prUrl = "${{ steps.cpr.outputs.pull-request-url }}";
+            if (prUrl) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.issue.number,
+                body: `Ho creato una Pull Request automatica per aggiornare EsamiOrali.md:\n\n${prUrl}\n\nUn maintainer può revisionare e fare merge.`
+              });
+            }
