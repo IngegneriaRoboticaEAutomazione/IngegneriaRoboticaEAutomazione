@@ -237,6 +237,14 @@ Le nuove domande generano una **Pull Request** che gli Admin possono approvare (
 
 <!-- AUTO:nuovo|2|na|probabilita-e-processi-stocastici-pps -->
 
+- **Docente:** Prof Trevisan — **Appello:** _No response_ — **Inserito il:** 2026-01-25
+  - Definizione di Convergenza in Legge
+  - Teorema del limite centrale con dimostrazione
+  - Relazione tra Convergenza e Teorema del limite Centrale
+  - Teorema e dimostrazione Legge dei grandi numeri
+  - Definizione di Varianza
+
+
 </details>
 
 <details>
