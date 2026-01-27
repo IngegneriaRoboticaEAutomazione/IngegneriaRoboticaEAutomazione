@@ -80,6 +80,13 @@ Forms dedito alla Raccolta dei quesiti d'esame, tutti i dati raccolti nel tempo,
 
 <!-- AUTO:vecchio|2|na|probabilita-e-processi-stocastici-pps -->
 
+- **Docente:** Prof Trevisan — **Appello:** Primo appello invernale 2026 — **Inserito il:** 2026-01-27
+  - Bayes: formula generale e con le alternative
+  - Processi ARIMA
+  - Matrice di covarianza, proprietà e coefficiente di correlazione. Cosa significa Rho=0, Rho=1 e Rho=-1?
+  - Formula della covarianza
+
+
 </details>
 
 <details>
