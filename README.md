@@ -193,7 +193,6 @@ Un'alternativa a questo metodo rimane l'uso dei Forms, là dove qualcuno fosse p
     ENG
 </summary>
 
-<details>
 
 ## Guide to Adding Exam Questions
 
@@ -248,7 +247,6 @@ An alternative to this method is using Forms, for those who are reluctant to lea
 
 ![questions file](readmeExtra/file_domande.png)
 
-</details>
 </details>
 </details>
 
