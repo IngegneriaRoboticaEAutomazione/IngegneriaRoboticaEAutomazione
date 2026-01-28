@@ -189,6 +189,47 @@ Un'alternativa a questo metodo rimane l'uso dei Forms, là dove qualcuno fosse p
 <summary>
     ENG
 </summary>
+
+## Guide to adding exam questions
+
+> This guide briefly explains how to personally add the questions that were
+heard during the exam and make them available to the rest of the community.
+
+### Steps to follow
+
+#### Step 1
+
+Open GitHub and go to the repository page  
+[Ingegneria Robotica e Automazione](https://github.com/IngegneriaRoboticaEAutomazione/IngRobAut-UniPi).  
+In the top navigation bar, click on "<span style="color: white;">Issues</span>".
+
+![issues](readmeExtra/issues.png)
+
+#### Step 2
+
+Click  
+"<span style="color: white; background: #238636; border-radius: 5px; padding: 0.5rem">New issue</span>".
+
+![new issue](readmeExtra/new_issue.png)
+
+#### Step 3
+
+Select the option "**Insert exam questions (Oral)**".
+
+![insert exam questions (oral)](readmeExtra/inserisci_domande.png)
+
+#### Step 4
+
+Fill in all the required fields. In particular, for the *Lecturer* field, before the surname, it is mandatory to insert `"Prof"`.  
+Once the form has been filled in, click  
+"<span style="color: white; background: #238636; border-radius: 5px; padding: 0.5rem">Create</span>".
+
+:warning: The questions *must* be entered in the following way:
+
+```text
+- question1
+- question2
+- ...
   
 </details>
 
