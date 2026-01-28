@@ -252,6 +252,16 @@ Forms dedito alla Raccolta dei quesiti d'esame, tutti i dati raccolti nel tempo,
 
 <!-- AUTO:nuovo|2|na|probabilita-e-processi-stocastici-pps -->
 
+- **Docente:** Prof Trevisan — **Appello:** 2026-01-28 — **Inserito il:** 2026-01-28
+  - Definizione di autocorrelazione
+  - Definizione di processo stazionario
+  - esempio di processo stazionario
+  - rumore bianco gaussiano: dimostrare che è stazionario
+  - passeggiata aleatoria gaussiana e spiegare perché non è stazionaria
+  - legge dei grandi numeri (enunciato)
+  - stima del parametro $\lambda$  per le code M/M/0
+
+
 - **Docente:** Prof. Trevisan — **Appello:** _No response_ — **Inserito il:** 2026-01-28
   - Definizione di Distribuzioni Invarianti
   - Teorema di Esistenza (senza dimostrazione)
