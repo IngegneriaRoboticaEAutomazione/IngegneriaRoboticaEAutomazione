@@ -98,7 +98,7 @@ Tenendo a mente le notazioni descritte prima, per la nominazione dei file si pro
 
 1. Tipologia file (esame, appunti, esercizi, laboratori);
 2. Autore (opzionale)[^6];
-   [^6]: Possono essere specificati sia nome che cognome, soprattutto nell'eventualità in cui studenti con lo stesso cognome abbiano già caricare del materiale.
+   [^6]: Possono essere specificati sia nome che cognome, soprattutto nell'eventualità in cui studenti con lo stesso cognome abbiano già caricato del materiale.
 3. Titolo;
 4. Data (relativa all'esame oppure appunti dell'aa. 25/26).
 
