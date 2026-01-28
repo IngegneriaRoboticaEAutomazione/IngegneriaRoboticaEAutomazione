@@ -120,11 +120,11 @@ In pratica:
 
 <details>
 <summary>
-    Guida al questionario per aggiungere le domande degli esami orali:
+    Guida al questionario per aggiungere le domande degli esami orali
 </summary>
 <details>
 <summary>
-    IT:
+    IT
 </summary>
 
 ## Guida per aggiungere le domande degli esami
@@ -183,6 +183,13 @@ Un'alternativa a questo metodo rimane l'uso dei Forms, là dove qualcuno fosse p
 ![file domande](readmeExtra/file_domande.png)
 
 </details>
+
+<summary>
+    ENG
+</summary>
+
+#### In fase di sviluppo
+
 </details>
 
 ## Credits
