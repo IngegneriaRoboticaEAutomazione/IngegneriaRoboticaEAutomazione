@@ -188,8 +188,6 @@ Un'alternativa a questo metodo rimane l'uso dei Forms, là dove qualcuno fosse p
     ENG
 </summary>
 
-#### In fase di sviluppo
-
 </details>
 
 ## Credits
