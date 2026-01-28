@@ -253,6 +253,13 @@ Forms dedito alla Raccolta dei quesiti d'esame, tutti i dati raccolti nel tempo,
 <!-- AUTO:nuovo|2|na|probabilita-e-processi-stocastici-pps -->
 
 - **Docente:** Prof. Trevisan — **Appello:** _No response_ — **Inserito il:** 2026-01-28
+  - Definizione di Distribuzioni Invarianti
+  - Teorema di Esistenza (senza dimostrazione)
+  - Alcuni casi in cui non si può applicare il teorema di esistenza
+  - Code M/M/1
+
+
+- **Docente:** Prof. Trevisan — **Appello:** _No response_ — **Inserito il:** 2026-01-28
   - Master equation e come si ricavano distribuzioni invarianti
   - Condizioni per esistenza e unicità delle distribuzioni invarianti
   - Parlare della stazionarietà nei processi ARIMA
