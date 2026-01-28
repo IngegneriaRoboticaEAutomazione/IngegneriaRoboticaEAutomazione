@@ -252,6 +252,13 @@ Forms dedito alla Raccolta dei quesiti d'esame, tutti i dati raccolti nel tempo,
 
 <!-- AUTO:nuovo|2|na|probabilita-e-processi-stocastici-pps -->
 
+- **Docente:** Prof. Trevisan — **Appello:** _No response_ — **Inserito il:** 2026-01-28
+  -Definizione di Distribuzioni Invarianti
+  -Teorema di Esistenza (senza dimostrazione)
+  -Alcuni casi in cui non si verifica il teorema di esistenza
+  -Code M/M/1
+
+
 - **Docente:** Prof Trevisan — **Appello:** _No response_ — **Inserito il:** 2026-01-25
   - Definizione di Convergenza in Legge
   - Teorema del limite centrale con dimostrazione
