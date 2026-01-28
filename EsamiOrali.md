@@ -281,6 +281,10 @@ Forms dedito alla Raccolta dei quesiti d'esame, tutti i dati raccolti nel tempo,
 
 <!-- AUTO:nuovo|2|na|teoria-dei-sistemi-e-del-controllo-tdsc -->
 
+- **Docente:** Prof. Caiti — **Appello:** _No response_ — **Inserito il:** 2026-01-28
+  - Rapporto tra frequenza di campionamento e frequenza del filtro Anti-alias
+
+
 - **Docente:** Prof.Caiti — **Appello:** Gennaio 2026 — **Inserito il:** 2026-01-25
   - Esercizio grafo controllo ottimo dove chiedeva di trovare il cammino che minimizza la funzione del costo.
   - Equazioni funzione di costo e cost to go.
