@@ -252,6 +252,13 @@ Forms dedito alla Raccolta dei quesiti d'esame, tutti i dati raccolti nel tempo,
 
 <!-- AUTO:nuovo|2|na|probabilita-e-processi-stocastici-pps -->
 
+- **Docente:** Prof. Trevisan — **Appello:** _No response_ — **Inserito il:** 2026-01-28
+  - Master equation e come si ricavano distribuzioni invarianti
+  - Condizioni per esistenza e unicità delle distribuzioni invarianti
+  - Parlare della stazionarietà nei processi ARIMA
+  - Dimostrare che, preso un processo stazionario in senso lato, anche la sua convoluzione con un filtro g(i) origina un processo stazionario
+
+
 - **Docente:** Prof Trevisan — **Appello:** _No response_ — **Inserito il:** 2026-01-25
   - Definizione di Convergenza in Legge
   - Teorema del limite centrale con dimostrazione
