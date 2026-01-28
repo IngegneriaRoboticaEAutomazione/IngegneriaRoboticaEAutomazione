@@ -118,6 +118,73 @@ In pratica:
 
 </details>
 
+<details>
+<summary>
+    Guide :it:
+</summary>
+<details>
+<summary>
+    Guida per aggiungere le domande degli esami orali
+</summary>
+
+## Guida per aggiungere le domande degli esami
+
+> Questa guida spiega brevemente come aggiungere personalmente le domande che sono
+state sentite in sede d'esame e renderle disponibili al resto della comunità.
+
+### Passi da seguire
+
+#### Passo 1
+
+Apri GitHub e vai alla pagina del repository [Ingegneria Robotica e Automazione](https://github.com/IngegneriaRoboticaEAutomazione/IngRobAut-UniPi). Nella navbar in alto clicca su <span style="color: white;">Issues</span>.
+
+![issues](readmeExtra/issues.png)
+
+#### Passo 2
+
+Clicca <span style="color: white; background: #238636; border-radius: 5px; padding: 0.5rem">New issue</span>.
+
+![new issue](readmeExtra/new_issue.png)
+
+#### Passo 3
+
+Seleziona l'opzione **Inserisci domande esame (Orale)**.
+
+![inserisci domande esame (orale)](readmeExtra/inserisci_domande.png)
+
+#### Passo 4
+
+Compila tutti i campi richiesti, in particolare, per il campo *Docente* bisogna inserire "Prof". Una volta riempito il form cliccare <span style="color: white; background: #238636; border-radius: 5px; padding: 0.5rem">Create</span>.
+
+:warning: Le domande *devono* essere inserite in questo modo:
+
+```text
+- domanda1
+- domanda2
+- ...
+```
+
+![form](readmeExtra/form.png)
+
+#### Conclusione
+
+Se avrete fatto tutto bene, un bot automatico vi darà conferma dell'operazione.
+
+![conferma aggiunta domande](readmeExtra/conferma.png)
+
+#### Dove trovo le domande?
+
+Le domande sono visibili su **["EsamiOrali.md"](https://github.com/IngegneriaRoboticaEAutomazione/IngRobAut-UniPi/blob/main/EsamiOrali.md)**, che si trova nella pagina principale del GitHub. Il file è diviso in Vecchio e Nuovo ordinamento, anno di corso, eventuale curriculum e esame.
+
+Potete trovare il file delle domande anche seguendo la guida fino al **Passo 3** e selezionando poi l'opzione "Dove trovo le domande inserite".
+
+Un'alternativa a questo metodo rimane l'uso dei Forms, là dove qualcuno fosse pigro nell'imparare il GitHub. Saltuariamente, gli admin verificheranno se i Forms avranno nuove domande/risposte e le aggiungeranno loro direttamente su GitHub.
+
+![file domande](readmeExtra/file_domande.png)
+
+</details>
+</details>
+
 ## Credits
 
 [![Contributors](https://contrib.rocks/image?repo=IngegneriaRoboticaEAutomazione/IngegneriaRoboticaEAutomazione)](https://github.com/IngegneriaRoboticaEAutomazione/IngegneriaRoboticaEAutomazione/graphs/contributors)
