@@ -288,6 +288,11 @@ Forms dedito alla Raccolta dei quesiti d'esame, tutti i dati raccolti nel tempo,
 
 <!-- AUTO:nuovo|2|na|teoria-dei-sistemi-e-del-controllo-tdsc -->
 
+- **Docente:** Prof Pallottino — **Appello:** _No response_ — **Inserito il:** 2026-01-28
+  - Come costruire una candidata di Lyapunov
+  - Equazione di Lyapunov Tempo Continua
+
+
 - **Docente:** Prof. Caiti — **Appello:** _No response_ — **Inserito il:** 2026-01-28
   - Rapporto tra frequenza di campionamento e frequenza del filtro Anti-alias
 
