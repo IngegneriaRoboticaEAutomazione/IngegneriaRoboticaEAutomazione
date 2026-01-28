@@ -192,6 +192,8 @@ Un'alternativa a questo metodo rimane l'uso dei Forms, là dove qualcuno fosse p
 
 </details>
 
+</details>
+
 ## Credits
 
 [![Contributors](https://contrib.rocks/image?repo=IngegneriaRoboticaEAutomazione/IngegneriaRoboticaEAutomazione)](https://github.com/IngegneriaRoboticaEAutomazione/IngegneriaRoboticaEAutomazione/graphs/contributors)
