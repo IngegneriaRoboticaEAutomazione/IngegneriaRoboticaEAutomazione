@@ -173,6 +173,14 @@ Forms dedito alla Raccolta dei quesiti d'esame, tutti i dati raccolti nel tempo,
 
 <!-- AUTO:vecchio|3|na|robotica-aerospaziale-ra -->
 
+- **Docente:** Prof. Pollini — **Appello:** 2026-01-27 — **Inserito il:** 2026-01-28
+  - Tutto sulla stabilità longitudinale
+  - Come si arriva alle leggi di keplero conoscendo il moto sull'orbita
+  - Linearizzazione dinamica aereo
+  - Manovra di Hohmann
+  - Controllo dei multirotori
+
+
 </details>
 
 <details>
