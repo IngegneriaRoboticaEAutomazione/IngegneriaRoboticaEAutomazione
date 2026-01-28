@@ -136,7 +136,7 @@ state sentite in sede d'esame e renderle disponibili al resto della comunità.
 
 #### Passo 1
 
-Apri GitHub e vai alla pagina del repository [Ingegneria Robotica e Automazione](https://github.com/IngegneriaRoboticaEAutomazione/IngRobAut-UniPi). Nella navbar in alto, clicca su "<span style="color: white;">Issues</span>".
+Apri GitHub e vai alla pagina del repository [Ingegneria Robotica e Automazione](https://github.com/IngegneriaRoboticaEAutomazione/IngRobAut-UniPi). Nella navbar in alto, clicca su <span style="color: white;">Issues</span>.
 
 ![issues](readmeExtra/issues.png)
 
@@ -154,7 +154,7 @@ Seleziona l'opzione "**Inserisci domande esame (Orale)**".
 
 #### Passo 4
 
-Compila tutti i campi richiesti, in particolare, per il campo *Docente*, prima del conognome, bisogna necessariamente inserire "Prof". Una volta riempito il form cliccare "<span style="color: white; background: #238636; border-radius: 5px; padding: 0.5rem">Create</span>".
+Compila tutti i campi richiesti, in particolare, per il campo *Docente* bisogna inserire "Prof". Una volta riempito il form cliccare "<span style="color: white; background: #238636; border-radius: 5px; padding: 0.5rem">Create</span>".
 
 :warning: Le domande *devono* essere inserite in questo modo:
 
