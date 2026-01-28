@@ -120,11 +120,11 @@ In pratica:
 
 <details>
 <summary>
-    Guide :it:
+    Guida al questionario per aggiungere le domande degli esami orali:
 </summary>
 <details>
 <summary>
-    Guida per aggiungere le domande degli esami orali
+    IT:
 </summary>
 
 ## Guida per aggiungere le domande degli esami
