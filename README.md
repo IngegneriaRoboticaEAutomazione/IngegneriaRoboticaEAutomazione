@@ -184,9 +184,13 @@ Un'alternativa a questo metodo rimane l'uso dei Forms, là dove qualcuno fosse p
 
 </details>
 
+<details>
+  
 <summary>
     ENG
 </summary>
+  
+</details>
 
 </details>
 
