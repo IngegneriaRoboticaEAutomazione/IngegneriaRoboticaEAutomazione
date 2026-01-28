@@ -119,10 +119,13 @@ In pratica:
 </details>
 
 <details>
+
 <summary>
     Guida al questionario per aggiungere le domande degli esami orali
 </summary>
+
 <details>
+
 <summary>
     IT
 </summary>
@@ -191,6 +194,59 @@ Un'alternativa a questo metodo rimane l'uso dei Forms, là dove qualcuno fosse p
 </summary>
 
 </details>
+
+## Guide to Adding Exam Questions
+
+> This guide briefly explains how to personally add the questions that were asked during exams and make them available to the rest of the community.
+
+### Steps to Follow
+
+#### Step 1
+
+Open GitHub and go to the repository page [Robotics and Automation Engineering](https://github.com/IngegneriaRoboticaEAutomazione/IngRobAut-UniPi). In the top navigation bar, click on <span style="color: white;">Issues</span>.
+
+![issues](readmeExtra/issues.png)
+
+#### Step 2
+
+Click on "<span style="color: white; background: #238636; border-radius: 5px; padding: 0.5rem">New issue</span>".
+
+![new issue](readmeExtra/new_issue.png)
+
+#### Step 3
+
+Select the option "**Insert exam questions (Oral)**".
+
+![insert exam questions (oral)](readmeExtra/inserisci_domande.png)
+
+#### Step 4
+
+Fill in all the required fields. In particular, for the *Lecturer* field you must enter `"Prof"`. Once the form has been completed, click "<span style="color: white; background: #238636; border-radius: 5px; padding: 0.5rem">Create</span>".
+
+:warning: The questions *must* be entered in the following way:
+```text
+- Question1
+- Question2
+- ...
+```
+
+![form](readmeExtra/form.png)
+
+#### Conclusion
+
+If everything has been done correctly, an automatic bot will confirm that the operation was successful.
+
+![question submission confirmation](readmeExtra/conferma.png)
+
+#### Where can I find the questions?
+
+The questions are available in **["EsamiOrali.md"](https://github.com/IngegneriaRoboticaEAutomazione/IngRobAut-UniPi/blob/main/EsamiOrali.md)**, which is located on the main GitHub page. The file is divided into Old and New curriculum, year of study, possible specialization track, and exam.
+
+You can also find the questions file by following this guide up to **Step 3** and then selecting the option "**Where can I find the submitted questions**".
+
+An alternative to this method is using Forms, for those who are reluctant to learn how to use GitHub. Periodically, the admins will check whether new questions/answers have been submitted via Forms and will add them directly to GitHub.
+
+![questions file](readmeExtra/file_domande.png)
 
 </details>
 
