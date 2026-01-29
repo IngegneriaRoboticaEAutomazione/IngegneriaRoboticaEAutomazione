@@ -3,3 +3,6 @@ contact_links:
   - name: "Dove trovo le domande inserite"
     url: https://github.com/IngegneriaRoboticaEAutomazione/IngRobAut-UniPi/blob/main/EsamiOrali.md
     about: "Reindirizzamento alle domande già approvate e presenti."
+  - name: "Guida alla publicazione delle domane (Istruzioni nel README)"
+    url: https://github.com/IngegneriaRoboticaEAutomazione/IngRobAut-UniPi/tree/main
+    about: "Consultare sul README il meccanismo per la sottomissione dei quesiti."
