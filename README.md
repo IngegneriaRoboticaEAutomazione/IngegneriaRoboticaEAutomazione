@@ -121,7 +121,7 @@ In pratica:
 <details>
 
 <summary>
-   🟢 Guida al questionario per aggiungere le domande degli esami orali
+   <strong> ⚠️ Guida al questionario per aggiungere le domande degli esami orali ⚠️ </strong>
 </summary>
 
 <details>
