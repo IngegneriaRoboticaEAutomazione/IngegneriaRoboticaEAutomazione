@@ -121,7 +121,7 @@ In pratica:
 <details>
 
 <summary>
-    Guida al questionario per aggiungere le domande degli esami orali
+   <span style="color:green"> Guida al questionario per aggiungere le domande degli esami orali </span>
 </summary>
 
 <details>
@@ -131,7 +131,7 @@ In pratica:
 </summary>
 
 
-## <span style="color:green"> Guida per aggiungere le domande degli esami </span>
+## Guida per aggiungere le domande degli esami 
 
 > Questa guida spiega brevemente come aggiungere personalmente le domande che sono
 state sentite in sede d'esame e renderle disponibili al resto della comunità.
