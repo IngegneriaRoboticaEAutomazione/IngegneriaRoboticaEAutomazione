@@ -130,7 +130,9 @@ In pratica:
     IT
 </summary>
 
+<span style="color:green">
 ## Guida per aggiungere le domande degli esami
+</span>
 
 > Questa guida spiega brevemente come aggiungere personalmente le domande che sono
 state sentite in sede d'esame e renderle disponibili al resto della comunità.
