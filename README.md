@@ -121,7 +121,7 @@ In pratica:
 <details>
 
 <summary>
-   <span style="color:green"> Guida al questionario per aggiungere le domande degli esami orali </span>
+   🟢 Guida al questionario per aggiungere le domande degli esami orali
 </summary>
 
 <details>
