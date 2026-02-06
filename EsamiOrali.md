@@ -313,6 +313,14 @@ Forms dedito alla Raccolta dei quesiti d'esame, tutti i dati raccolti nel tempo,
 
 <!-- AUTO:nuovo|2|na|teoria-dei-sistemi-e-del-controllo-tdsc -->
 
+- **Docente:** Prof. Caiti — **Appello:** _No response_ — **Inserito il:** 2026-02-06
+  -Definizione di stati indistinguibili, perché serve?
+  -Cosa serve per ricostruire lo stato iniziale?
+  -Per conoscere lo stato corrente serve sempre conoscere quello iniziale? Descrizione osservatore
+  -Dopo quanto tempo si annulla l'errore sullo stato in tc e td?
+  -Descrizione dead-beat
+
+
 - **Docente:** Prof Pallottino — **Appello:** _No response_ — **Inserito il:** 2026-01-28
   - Come costruire una candidata di Lyapunov
   - Equazione di Lyapunov Tempo Continua
