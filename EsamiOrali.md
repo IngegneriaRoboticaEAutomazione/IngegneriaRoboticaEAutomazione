@@ -318,6 +318,12 @@ Forms dedito alla Raccolta dei quesiti d'esame, tutti i dati raccolti nel tempo,
 
 <!-- AUTO:nuovo|2|na|teoria-dei-sistemi-e-del-controllo-tdsc -->
 
+- **Docente:** Prof Pallottino & Caiti — **Appello:** 05/02/26 — **Inserito il:** 2026-02-11
+  - Come si ottiene la forma di Kalman, in particolare com'è strutturata la matrice del cambio di base
+  - Scrivere l'equazione del costo totale nel caso di orizzonte finito; spiegare come funziona il processo iterativo
+  - A partire dall'equazione del costo, far vedere come si ricava l'espressione per il costo ottimo (dimostrazione)
+
+
 - **Docente:** Prof. Caiti — **Appello:** _No response_ — **Inserito il:** 2026-02-06
   -Definizione di stati indistinguibili, perché serve?
   -Cosa serve per ricostruire lo stato iniziale?
