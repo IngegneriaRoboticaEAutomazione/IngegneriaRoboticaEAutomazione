@@ -166,6 +166,11 @@ Forms dedito alla Raccolta dei quesiti d'esame, tutti i dati raccolti nel tempo,
 
 <!-- AUTO:vecchio|3|na|modellistica-e-simulazione-di-processi-di-produzione-discreti-msppd -->
 
+- **Docente:** Prof. Salaris — **Appello:** 2026-02-03 — **Inserito il:** 2026-02-04
+  - Proprietà assenza di memoria: definizione, dove l'abbiamo trovata, per cosa l'abbiamo usata e quale conseguenza importante ha (si riferisce alla probabilità di avere n avvenimenti distribuzione di poisson --> distribuzione esponenziale)
+  - Stati Ricorrenti e Transitori
+
+
 </details>
 
 <details>
