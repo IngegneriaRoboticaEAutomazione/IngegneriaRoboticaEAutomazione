@@ -325,11 +325,11 @@ Forms dedito alla Raccolta dei quesiti d'esame, tutti i dati raccolti nel tempo,
 
 
 - **Docente:** Prof. Caiti — **Appello:** _No response_ — **Inserito il:** 2026-02-06
-  Definizione di stati indistinguibili, perché serve?
-  Cosa serve per ricostruire lo stato iniziale?
-  Per conoscere lo stato corrente serve sempre conoscere quello iniziale? Descrizione osservatore
-  Dopo quanto tempo si annulla l'errore sullo stato in tc e td?
-  Descrizione dead-beat
+  - Definizione di stati indistinguibili, perché serve?
+  - Cosa serve per ricostruire lo stato iniziale?
+  - Per conoscere lo stato corrente serve sempre conoscere quello iniziale? Descrizione osservatore
+  - Dopo quanto tempo si annulla l'errore sullo stato in tc e td?
+  - Descrizione dead-beat
 
 
 - **Docente:** Prof Pallottino — **Appello:** _No response_ — **Inserito il:** 2026-01-28
