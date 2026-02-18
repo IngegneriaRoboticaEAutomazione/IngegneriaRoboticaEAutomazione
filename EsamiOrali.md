@@ -265,6 +265,11 @@ Forms dedito alla Raccolta dei quesiti d'esame, tutti i dati raccolti nel tempo,
 
 <!-- AUTO:nuovo|2|na|probabilita-e-processi-stocastici-pps -->
 
+- **Docente:** Trevisan — **Appello:** 2026-02-18 — **Inserito il:** 2026-02-18
+  -Estrazioni di palline con e senza rimpiazzo da un'urna. In particolare leggi delle marginali e delle congiunte e validità dell'indipendenza nei due esperimenti.
+  -Definire la funzione di autocovarianza e come è possibile stimarla se si ha una serie storica. Spiegare cos'è l'autocorrelazione e a cosa serve
+
+
 - **Docente:** Prof Trevisan — **Appello:** 2026-01-28 — **Inserito il:** 2026-01-28
   - Definizione di autocorrelazione
   - Definizione di processo stazionario
