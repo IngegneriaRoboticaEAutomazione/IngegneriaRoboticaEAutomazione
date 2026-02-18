@@ -265,6 +265,11 @@ Forms dedito alla Raccolta dei quesiti d'esame, tutti i dati raccolti nel tempo,
 
 <!-- AUTO:nuovo|2|na|probabilita-e-processi-stocastici-pps -->
 
+- **Docente:** Prof. Trevisan — **Appello:** _No response_ — **Inserito il:** 2026-02-18
+  - Formula di Bayes per variabili aleatorie nel caso discreto e nel caso continuo
+  - Processi MA: perché sono sempre stazionari?
+
+
 - **Docente:** Prof Trevisan — **Appello:** 2026-01-28 — **Inserito il:** 2026-01-28
   - Definizione di autocorrelazione
   - Definizione di processo stazionario
