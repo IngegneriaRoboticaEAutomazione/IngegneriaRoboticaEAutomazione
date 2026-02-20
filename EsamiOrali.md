@@ -265,7 +265,7 @@ Forms dedito alla Raccolta dei quesiti d'esame, tutti i dati raccolti nel tempo,
 
 <!-- AUTO:nuovo|2|na|probabilita-e-processi-stocastici-pps -->
 
-- **Docente:** Trevisan — **Appello:** 2026-02-18 — **Inserito il:** 2026-02-18
+- **Docente:** Prof. Trevisan — **Appello:** 2026-02-18 — **Inserito il:** 2026-02-18
   -Estrazioni di palline con e senza rimpiazzo da un'urna. In particolare leggi delle marginali e delle congiunte e validità dell'indipendenza nei due esperimenti.
   -Definire la funzione di autocovarianza e come è possibile stimarla se si ha una serie storica. Spiegare cos'è l'autocorrelazione e a cosa serve
 
@@ -322,6 +322,12 @@ Forms dedito alla Raccolta dei quesiti d'esame, tutti i dati raccolti nel tempo,
 <summary><strong>Teoria dei Sistemi e del Controllo - TDSC</strong></summary>
 
 <!-- AUTO:nuovo|2|na|teoria-dei-sistemi-e-del-controllo-tdsc -->
+
+- **Docente:** Prof. Pallottino e Prof. Caiti — **Appello:** _No response_ — **Inserito il:** 2026-02-18
+  -Metodo diretto di Lyapunov
+  -Teorema inverso di Lyapunov
+  -Come dimostreresti che un percorso ottimo è tale?
+
 
 - **Docente:** Prof Pallottino & Caiti — **Appello:** 05/02/26 — **Inserito il:** 2026-02-11
   - Come si ottiene la forma di Kalman, in particolare com'è strutturata la matrice del cambio di base
