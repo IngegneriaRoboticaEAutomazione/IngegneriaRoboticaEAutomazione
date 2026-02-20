@@ -329,9 +329,9 @@ Forms dedito alla Raccolta dei quesiti d'esame, tutti i dati raccolti nel tempo,
 <!-- AUTO:nuovo|2|na|teoria-dei-sistemi-e-del-controllo-tdsc -->
 
 - **Docente:** Prof. Pallottino e Prof. Caiti — **Appello:** _No response_ — **Inserito il:** 2026-02-18
-  -Metodo diretto di Lyapunov
-  -Teorema inverso di Lyapunov
-  -Come dimostreresti che un percorso ottimo è tale?
+  - Metodo diretto di Lyapunov
+  - Teorema inverso di Lyapunov
+  - Come dimostreresti che un percorso ottimo è tale?
 
 
 - **Docente:** Prof Pallottino & Caiti — **Appello:** 05/02/26 — **Inserito il:** 2026-02-11
