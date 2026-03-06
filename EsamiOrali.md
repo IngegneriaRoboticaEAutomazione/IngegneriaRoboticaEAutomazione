@@ -337,6 +337,14 @@ Forms dedito alla Raccolta dei quesiti d'esame, tutti i dati raccolti nel tempo,
 
 <!-- AUTO:nuovo|2|na|teoria-dei-sistemi-e-del-controllo-tdsc -->
 
+- **Docente:** Prof. Pallottino — **Appello:** _No response_ — **Inserito il:** 2026-03-06
+  - Concetto di Matrice di jordan, Molteplicità Algebrica e Geometrica
+  - Raggiungibilità
+  - Osservabilità
+  - Controllabilità
+  - L'osservatore di Luenberger
+
+
 - **Docente:** Prof. Caiti-Pallottino — **Appello:** 2026-02-26 — **Inserito il:** 2026-02-27
   - visione e correzione degli errori dello scritto
   - teorema del campionamento e segnali a banda limitata
