@@ -237,6 +237,15 @@ Forms dedito alla Raccolta dei quesiti d'esame, tutti i dati raccolti nel tempo,
 
 <!-- AUTO:nuovo|2|na|elementi-di-informatica-per-robotica-e-automazione -->
 
+- **Docente:** Prof Angelini — **Appello:** _No response_ — **Inserito il:** 2026-02-25
+  - DOMANDE SCRITTO:
+  - Parlare del ROS graph
+  - Come viene organizzato il work space e quale comando permette di creare un pacchetto
+  - Vantaggi del Launch file e comando
+  - DOMANDE ORALE:
+  - Quali sono le modalità con cui inviare più variabili tramite socket
+
+
 </details>
 
 <details>
