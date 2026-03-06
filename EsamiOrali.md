@@ -328,6 +328,14 @@ Forms dedito alla Raccolta dei quesiti d'esame, tutti i dati raccolti nel tempo,
 
 <!-- AUTO:nuovo|2|na|teoria-dei-sistemi-e-del-controllo-tdsc -->
 
+- **Docente:** Prof. Pallottino — **Appello:** 26.02.26 — **Inserito il:** 2026-03-06
+  - Concetto di Matrice di jordan, Molteplicità Algebrica e Geometrica
+  - Raggiungibilità
+  - Osservabilità
+  - Controllabilità
+  - L'osservatore di Luenberger
+
+
 - **Docente:** Prof. Pallottino e Prof. Caiti — **Appello:** _No response_ — **Inserito il:** 2026-02-18
   - Metodo diretto di Lyapunov
   - Teorema inverso di Lyapunov
