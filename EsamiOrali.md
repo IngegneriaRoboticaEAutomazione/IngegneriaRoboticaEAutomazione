@@ -389,7 +389,7 @@ Forms dedito alla Raccolta dei quesiti d'esame, tutti i dati raccolti nel tempo,
 
 
 - **Docente:** Prof. Pallottino — **Appello:** _No response_ — **Inserito il:** 2026-01-25
-  - Se progetto un controllo del tipo u = kx, che proprietà (raggiungibilità e/o osservabilità perdo)?
+  - Se progetto un controllo del tipo u = kx, che proprietà (raggiungibilità e/o osservabilità) perdo?
   - Differenza tra l'insieme degli stati raggiungibili dall'origine e stati raggiungibili da un generico x0?
   - Scrivere espressione del costo del controllo ottimo a TD.
   - Cosa vuol dire controllo su orizzonte finito/infinito di passi e cosa comporta?
