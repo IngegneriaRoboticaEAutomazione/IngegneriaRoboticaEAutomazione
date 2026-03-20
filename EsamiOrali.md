@@ -274,6 +274,37 @@ Forms dedito alla Raccolta dei quesiti d'esame, tutti i dati raccolti nel tempo,
 
 <!-- AUTO:nuovo|2|na|probabilita-e-processi-stocastici-pps -->
 
+- **Docente:** Prof Trevisan — **Appello:** Forms Gennaio/Febbraio 2026 — **Inserito il:** 2026-03-20
+  - Teorema di Bayes: formula generale e con le alternative.
+  - Processi ARIMA.
+  - Matrice di covarianza, proprietà e coefficiente di correlazione.
+  - Cosa significa avere un coefficiente di correlazione Rho=0, Rho=1 e Rho=-1?
+  - Formula della covarianza.
+  - Definizione di Convergenza in Legge.
+  - Teorema del Limite Centrale: enunciato e dimostrazione.
+  - Qual è la relazione tra Convergenza e Teorema del Limite Centrale?
+  - Legge dei grandi numeri: teorema e dimostrazione.
+  - Definizione di Varianza.
+  - Stima dei parametri di n variabili gaussiane con il metodo dei minimi quadrati.
+  - Cosa dice il metodo dei minimi quadrati?
+  - Estrazioni di palline con e senza rimpiazzo da un'urna: calcolo delle leggi marginali e delle congiunte.
+  - Validità dell'indipendenza nei due esperimenti (estrazione con e senza rimpiazzo).
+  - Definire la funzione di autocovarianza.
+  - Come è possibile stimare l'autocovarianza se si ha a disposizione una serie storica? (Sostituendo le medie campionarie).
+  - Spiegare cos'è l'autocorrelazione e a cosa serve.
+  - Cosa significa il Teorema del Limite Centrale in termini pratici?
+  - Perché il Teorema del Limite Centrale offre una nozione più raffinata rispetto alla Legge dei grandi numeri?
+  - Metodi Montecarlo: applicazione alla soluzione di un integrale come valor medio di g(X).
+  - Come si possono commentare le oscillazioni (nei metodi Montecarlo) usando il Teorema del Limite Centrale?
+  - Data una densità di probabilità continua, esiste sempre il valor medio? Motivare partendo dalla definizione.
+  - Data una densità di probabilità continua, esiste sempre la mediana? Motivare partendo dalla definizione.
+  - In una distribuzione discreta, la mediana potrebbe non appartenere all'insieme dei valori di X?
+  - Noto che un processo è stazionario, come si può stimare l'autocovarianza?
+  - Catene di Markov: Teoremi di classificazione per le distribuzioni invarianti (classe chiusa e irriducibile, raggiungibilità degli stati, teorema di unicità e di esistenza).
+  - Definizione di covarianza.
+  - Motivare con un controesempio perché due variabili a covarianza nulla non sono necessariamente indipendenti.
+
+
 - **Docente:** Prof. Trevisan — **Appello:** _No response_ — **Inserito il:** 2026-02-18
   - Esiste una variabile aleatoria che non sia né discreta né continua? Fornire un esempio
   - Modello AR(1) con dimostrazione stazionarietà
