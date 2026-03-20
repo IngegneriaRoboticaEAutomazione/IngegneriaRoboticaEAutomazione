@@ -337,6 +337,30 @@ Forms dedito alla Raccolta dei quesiti d'esame, tutti i dati raccolti nel tempo,
 
 <!-- AUTO:nuovo|2|na|teoria-dei-sistemi-e-del-controllo-tdsc -->
 
+- **Docente:** Prof Pallottino e Caiti — **Appello:** Forms Gennaio/Febbraio 2026 — **Inserito il:** 2026-03-20
+  - Se progetto un controllo del tipo u = kx, quali proprietà (raggiungibilità e/o osservabilità) perdo?
+  - Qual è la differenza tra l'insieme degli stati raggiungibili dall'origine e gli stati raggiungibili da un generico stato iniziale x0?
+  - Scrivere l'espressione del costo del controllo ottimo a tempo discreto (TD).
+  - Cosa vuol dire "controllo su orizzonte finito/infinito di passi" e cosa comporta questa scelta?
+  - Esercizio su grafo per il controllo ottimo: trovare il cammino che minimizza la funzione del costo.
+  - Scrivere le equazioni della funzione di costo e del "cost to go".
+  - Nel controllo ottimo su grafi, come devono essere le matrici V, Vn e P?
+  - Progetto di un regolatore digitale: come si scelgono la frequenza di campionamento e il filtro anti-alias?
+  - Retroazione dello stato, osservatore ed equazioni del sistema osservato.
+  - Definizione di "stati indistinguibili" per i Sistemi Lineari Tempo Invarianti (SLTI).
+  - Come costruire una funzione candidata di Lyapunov?
+  - Domande sulla discretizzazione relative al tempo di campionamento.
+  - Metodo di Lyapunov diretto.
+  - Teorema di Krasowskii.
+  - Manovra di Hohmann: descrizione della manovra.
+  - Manovra di Hohmann: ricavare la variazione di velocità all’inizio e alla fine.
+  - Dinamica del volo: Modi Longitudinali.
+  - Progettazione di un "pitch damper" con aggiunta di zero e tracciamento del relativo luogo delle radici.
+  - Per i sistemi tempo-varianti, che caratteristica deve avere la candidata di Lyapunov rispetto ai sistemi tempo-invarianti?
+  - Dato un sistema a tempo discreto con le sue matrici A e B, determinare l'ingresso ottimo in retroazione completa dello stato al passo N-1 utilizzando un controllo ottimo LQ.
+  - Scrivere la dinamica del sistema e il funzionale di costo complessivo per il controllo ottimo LQ.
+
+
 - **Docente:** Prof. Pallottino — **Appello:** _No response_ — **Inserito il:** 2026-03-06
   - Concetto di Matrice di jordan, Molteplicità Algebrica e Geometrica
   - Raggiungibilità
