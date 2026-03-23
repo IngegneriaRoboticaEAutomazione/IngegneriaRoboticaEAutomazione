@@ -1,0 +1,537 @@
+\chapter{Lezione 17 --- Esercizio su risposta al gradino, realizzazione minima e assegnamento dei poli}
+
+\section{Esercizio: studio di una funzione di trasferimento discreta}
+
+Consideriamo la funzione di trasferimento
+\[
+G(z)=\frac{z^2}{\left(z-\frac14\right)\left[\left(z-\frac12\right)^2+\frac14\right]}.
+\]
+
+Osserviamo subito che
+\[
+\left(z-\frac12\right)^2+\frac14
+=
+z^2-z+\frac12,
+\]
+quindi
+\[
+G(z)=\frac{z^2}{\left(z-\frac14\right)\left(z^2-z+\frac12\right)}.
+\]
+
+\subsection{Poli e modi del sistema}
+
+I poli sono:
+\[
+z_1=\frac14,
+\qquad
+z_{2,3}=\frac12\pm j\,\frac12.
+\]
+
+Per i poli complessi coniugati conviene passare alla forma polare:
+\[
+r=\sqrt{\left(\frac12\right)^2+\left(\frac12\right)^2}
+=\frac{\sqrt{2}}{2},
+\qquad
+\theta=\frac{\pi}{4}.
+\]
+
+Infatti
+\[
+\frac12\pm j\frac12
+=
+\frac{\sqrt2}{2}e^{\pm j\pi/4}.
+\]
+
+Quindi i modi naturali associati sono:
+\[
+\left(\frac14\right)^k,
+\qquad
+\left(\frac{\sqrt2}{2}\right)^k \cos\!\left(\frac{k\pi}{4}\right),
+\qquad
+\left(\frac{\sqrt2}{2}\right)^k \sin\!\left(\frac{k\pi}{4}\right).
+\]
+
+\section{Risposta al gradino}
+
+Vogliamo calcolare la risposta al gradino unitario.
+
+Nel dominio z:
+\[
+U(z)=\mathcal{Z}\{1(k)\}=\frac{z}{z-1}.
+\]
+
+Dunque
+\[
+Y(z)=G(z)U(z)
+=
+\frac{z^3}{(z-1)\left(z-\frac14\right)\left(z^2-z+\frac12\right)}.
+\]
+
+Per l'antitrasformata conviene scomporre in fratti semplici
+\[
+\frac{Y(z)}{z}
+=
+\frac{A}{z-1}
++
+\frac{B}{z-\frac14}
++
+C\,\frac{z-r\cos\theta}{z^2-2r\cos\theta\,z+r^2}
++
+D\,\frac{r\sin\theta}{z^2-2r\cos\theta\,z+r^2}.
+\]
+
+Nel nostro caso
+\[
+r=\frac{\sqrt2}{2},
+\qquad
+\theta=\frac{\pi}{4},
+\qquad
+r\cos\theta=\frac12,
+\qquad
+r\sin\theta=\frac12,
+\]
+quindi
+\[
+\frac{Y(z)}{z}
+=
+\frac{A}{z-1}
++
+\frac{B}{z-\frac14}
++
+C\,\frac{z-\frac12}{z^2-z+\frac12}
++
+D\,\frac{\frac12}{z^2-z+\frac12}.
+\]
+
+\subsection{Calcolo dei coefficienti}
+
+Per i termini del primo ordine si può usare il teorema di Heaviside.
+
+\paragraph{Coefficiente \(A\)}
+\[
+A=\lim_{z\to 1}\frac{Y(z)}{z}(z-1)
+=
+\frac{1}{\left(1-\frac14\right)\left(1-1+\frac12\right)}
+=
+\frac{1}{\frac34\cdot \frac12}
+=
+\frac{8}{3}.
+\]
+
+\paragraph{Coefficiente \(B\)}
+\[
+B=\lim_{z\to \frac14}\frac{Y(z)}{z}\left(z-\frac14\right)
+=
+\frac{1}{\left(\frac14-1\right)\left(\frac1{16}-\frac14+\frac12\right)}.
+\]
+
+Poiché
+\[
+\frac1{16}-\frac14+\frac12=\frac{5}{16},
+\]
+segue
+\[
+B
+=
+\frac{1}{-\frac34\cdot \frac5{16}}
+=
+-\frac{64}{15}
+\cdot \frac{1}{16}
+=
+-\frac{4}{15}.
+\]
+
+\paragraph{Coefficienti \(C\) e \(D\)}
+
+Scriviamo
+\[
+\frac{Y(z)}{z}
+=
+\frac{A}{z-1}
++
+\frac{B}{z-\frac14}
++
+C\,\frac{z-\frac12}{z^2-z+\frac12}
++
+D\,\frac{\frac12}{z^2-z+\frac12}.
+\]
+
+Moltiplicando per il denominatore comune e uguagliando i coefficienti si ottiene:
+\[
+C=-\frac{12}{5},
+\qquad
+D=-\frac{4}{5}.
+\]
+
+\subsection{Antitrasformata z}
+
+Usiamo le coppie note:
+\[
+\mathcal{Z}^{-1}\left\{\frac{z}{z-a}\right\}=a^k\,1(k),
+\]
+\[
+\mathcal{Z}^{-1}\left\{
+\frac{z(z-r\cos\theta)}{z^2-2r\cos\theta\,z+r^2}
+\right\}
+=
+r^k\cos(k\theta)\,1(k),
+\]
+\[
+\mathcal{Z}^{-1}\left\{
+\frac{zr\sin\theta}{z^2-2r\cos\theta\,z+r^2}
+\right\}
+=
+r^k\sin(k\theta)\,1(k).
+\]
+
+Moltiplicando di nuovo per \(z\), si ha
+\[
+Y(z)
+=
+\frac{8}{3}\frac{z}{z-1}
+-
+\frac{4}{15}\frac{z}{z-\frac14}
+-
+\frac{12}{5}\frac{z\left(z-\frac12\right)}{z^2-z+\frac12}
+-
+\frac{4}{5}\frac{z\cdot \frac12}{z^2-z+\frac12}.
+\]
+
+Quindi
+\[
+y(k)
+=
+\frac{8}{3}\,1(k)
+-
+\frac{4}{15}\left(\frac14\right)^k 1(k)
+-
+\frac{12}{5}\left(\frac{\sqrt2}{2}\right)^k
+\cos\!\left(\frac{k\pi}{4}\right)1(k)
+-
+\frac{4}{5}\left(\frac{\sqrt2}{2}\right)^k
+\sin\!\left(\frac{k\pi}{4}\right)1(k).
+\]
+
+Questa è la risposta al gradino.
+
+\section{Realizzazione minima in equazioni di stato}
+
+Vogliamo ora costruire una realizzazione minima del sistema, cioè del tipo
+\[
+\begin{cases}
+x(k+1)=Ax(k)+Bu(k),\\
+y(k)=Cx(k).
+\end{cases}
+\]
+
+\subsection{Denominatore come polinomio}
+
+Espandiamo il denominatore:
+\[
+\left(z-\frac14\right)\left(z^2-z+\frac12\right)
+=
+z^3-\frac54 z^2+\frac34 z-\frac18.
+\]
+
+Allora
+\[
+G(z)=\frac{z^2}{z^3-\frac54 z^2+\frac34 z-\frac18}.
+\]
+
+Poiché
+\[
+Y(z)=G(z)U(z),
+\]
+segue
+\[
+\left(z^3-\frac54 z^2+\frac34 z-\frac18\right)Y(z)=z^2U(z).
+\]
+
+\subsection{Equazione alle differenze}
+
+Antitrasformando si può scrivere, ad esempio,
+\[
+y(k)-\frac54 y(k-1)+\frac34 y(k-2)-\frac18 y(k-3)=u(k-1).
+\]
+
+Questa equazione suggerisce una realizzazione canonica di controllo di ordine \(3\).
+
+\subsection{Forma canonica di controllo}
+
+Poiché il denominatore ha grado \(3\), la dimensione minima dello stato è \(3\).  
+Una realizzazione minima è quindi:
+\[
+x(k+1)=
+\begin{bmatrix}
+0 & 1 & 0\\
+0 & 0 & 1\\
+\frac18 & -\frac34 & \frac54
+\end{bmatrix}x(k)
++
+\begin{bmatrix}
+0\\
+0\\
+1
+\end{bmatrix}u(k),
+\]
+\[
+y(k)=
+\begin{bmatrix}
+0 & 0 & 1
+\end{bmatrix}x(k).
+\]
+
+\section{Osservazione sulle realizzazioni minime}
+
+Dato un sistema in forma di stato, esiste un'unica funzione di trasferimento associata.
+
+Viceversa, data una funzione di trasferimento, esistono in generale infiniti sistemi in forma di stato che la realizzano.
+
+Tra tutte queste realizzazioni, si chiamano \textbf{realizzazioni minime} quelle con dimensione dello stato minima possibile.
+
+Una realizzazione minima è, per costruzione, completamente:
+\begin{itemize}
+    \item raggiungibile (o controllabile);
+    \item osservabile.
+\end{itemize}
+
+In particolare, i poli della funzione di trasferimento corrispondono agli autovalori raggiungibili e osservabili del sistema.
+
+Quindi, una volta ottenuta una realizzazione minima, sono soddisfatte le ipotesi necessarie
+per applicare le tecniche di assegnamento dei poli mediante retroazione dello stato.
+
+\section{Progetto in ciclo chiuso: scelta dei poli desiderati}
+
+Il sistema ha un polo reale in
+\[
+\frac14
+\]
+e una coppia di poli complessi coniugati in
+\[
+\frac12\pm j\frac12.
+\]
+
+Non essendoci specifiche particolari, scegliamo poli desiderati:
+\begin{itemize}
+    \item reali;
+    \item più vicini a zero;
+    \item quindi più veloci dei poli originari.
+\end{itemize}
+
+Una scelta semplice è:
+\[
+z_1^\star=\frac15,
+\qquad
+z_2^\star=\frac1{10},
+\qquad
+z_3^\star=\frac1{20}.
+\]
+
+\subsection{Polinomio caratteristico desiderato}
+
+Il polinomio caratteristico desiderato è
+\[
+p_c^\star(\lambda)
+=
+\left(\lambda-\frac15\right)
+\left(\lambda-\frac1{10}\right)
+\left(\lambda-\frac1{20}\right).
+\]
+
+Sviluppando:
+\[
+p_c^\star(\lambda)
+=
+\lambda^3
+-\frac{7}{20}\lambda^2
++\frac{7}{200}\lambda
+-\frac{1}{1000}.
+\]
+
+\section{Retroazione completa dello stato}
+
+Introduciamo una retroazione completa dello stato del tipo
+\[
+u(k)=-H\,x(k),
+\qquad
+H=
+\begin{bmatrix}
+h_1 & h_2 & h_3
+\end{bmatrix}.
+\]
+
+La dinamica in ciclo chiuso diventa
+\[
+x(k+1)=(A-BH)x(k).
+\]
+
+Poiché
+\[
+B=
+\begin{bmatrix}
+0\\0\\1
+\end{bmatrix},
+\]
+si ha
+\[
+BH=
+\begin{bmatrix}
+0\\0\\1
+\end{bmatrix}
+\begin{bmatrix}
+h_1 & h_2 & h_3
+\end{bmatrix}
+=
+\begin{bmatrix}
+0 & 0 & 0\\
+0 & 0 & 0\\
+h_1 & h_2 & h_3
+\end{bmatrix}.
+\]
+
+Quindi
+\[
+A-BH=
+\begin{bmatrix}
+0 & 1 & 0\\
+0 & 0 & 1\\
+\frac18-h_1 & -\frac34-h_2 & \frac54-h_3
+\end{bmatrix}.
+\]
+
+Essendo ancora in forma canonica di controllo, il suo polinomio caratteristico è
+\[
+\lambda^3
++\left(-\frac54+h_3\right)\lambda^2
++\left(\frac34+h_2\right)\lambda
++\left(-\frac18+h_1\right).
+\]
+
+Imponiamo l'uguaglianza con il polinomio desiderato:
+\[
+\lambda^3
++\left(-\frac54+h_3\right)\lambda^2
++\left(\frac34+h_2\right)\lambda
++\left(-\frac18+h_1\right)
+=
+\lambda^3-\frac{7}{20}\lambda^2+\frac{7}{200}\lambda-\frac{1}{1000}.
+\]
+
+Da cui:
+\[
+-\frac54+h_3=-\frac{7}{20},
+\qquad
+\frac34+h_2=\frac{7}{200},
+\qquad
+-\frac18+h_1=-\frac{1}{1000}.
+\]
+
+Si ottiene quindi
+\[
+h_3=\frac{9}{10},
+\qquad
+h_2=-\frac{143}{200},
+\qquad
+h_1=\frac{31}{250}.
+\]
+
+Dunque la matrice di guadagno è
+\[
+H=
+\begin{bmatrix}
+\frac{31}{250} & -\frac{143}{200} & \frac{9}{10}
+\end{bmatrix}.
+\]
+
+\section{Commento finale}
+
+Questa lezione mette insieme tre aspetti importanti.
+
+\begin{enumerate}
+    \item Data una funzione di trasferimento discreta, si possono ricavare:
+    \begin{itemize}
+        \item poli;
+        \item modi naturali;
+        \item risposta al gradino;
+        \item una realizzazione minima in forma di stato.
+    \end{itemize}
+
+    \item Una realizzazione minima è la più conveniente per il progetto, perché è:
+    \begin{itemize}
+        \item completamente raggiungibile;
+        \item completamente osservabile.
+    \end{itemize}
+
+    \item Se la realizzazione è in forma canonica di controllo, l'assegnamento dei poli in ciclo chiuso
+    è particolarmente semplice: basta confrontare i coefficienti del polinomio caratteristico.
+\end{enumerate}
+
+\section{Sintesi della lezione}
+
+I risultati principali sono:
+\begin{itemize}
+    \item i poli di
+    \[
+    G(z)=\frac{z^2}{\left(z-\frac14\right)\left(z^2-z+\frac12\right)}
+    \]
+    sono
+    \[
+    \frac14,\qquad \frac12\pm j\frac12;
+    \]
+
+    \item la risposta al gradino è
+    \[
+    y(k)
+    =
+    \frac{8}{3}\,1(k)
+    -
+    \frac{4}{15}\left(\frac14\right)^k 1(k)
+    -
+    \frac{12}{5}\left(\frac{\sqrt2}{2}\right)^k
+    \cos\!\left(\frac{k\pi}{4}\right)1(k)
+    -
+    \frac{4}{5}\left(\frac{\sqrt2}{2}\right)^k
+    \sin\!\left(\frac{k\pi}{4}\right)1(k);
+    \]
+
+    \item una realizzazione minima è
+    \[
+    x(k+1)=
+    \begin{bmatrix}
+    0 & 1 & 0\\
+    0 & 0 & 1\\
+    \frac18 & -\frac34 & \frac54
+    \end{bmatrix}x(k)
+    +
+    \begin{bmatrix}
+    0\\0\\1
+    \end{bmatrix}u(k),
+    \qquad
+    y(k)=
+    \begin{bmatrix}
+    0 & 0 & 1
+    \end{bmatrix}x(k);
+    \]
+
+    \item scegliendo i poli desiderati
+    \[
+    \frac15,\quad \frac1{10},\quad \frac1{20},
+    \]
+    il polinomio caratteristico desiderato è
+    \[
+    \lambda^3-\frac{7}{20}\lambda^2+\frac{7}{200}\lambda-\frac{1}{1000};
+    \]
+
+    \item la retroazione completa dello stato
+    \[
+    u(k)=-H x(k)
+    \]
+    con
+    \[
+    H=
+    \begin{bmatrix}
+    \frac{31}{250} & -\frac{143}{200} & \frac{9}{10}
+    \end{bmatrix}
+    \]
+    assegna esattamente tali poli al sistema in ciclo chiuso.
+\end{itemize}

@@ -1,0 +1,632 @@
+\chapter{L4 -- Soluzione dei sistemi lineari: caso discreto generale, caso stazionario, successione di Peano--Baker ed esponenziale di matrice}
+
+\section{Collegamento tra forma esplicita e forma implicita}
+
+Nella lezione precedente abbiamo ottenuto le relazioni che collegano le quantità ``globali'' $\Phi$ e $H$ alle quantità ``locali'' $A$ e $B$.
+
+\subsection{Tempo continuo}
+
+Per il tempo continuo valgono:
+\begin{equation}
+A(t)=\left.\frac{\partial \Phi(\xi,t)}{\partial \xi}\right|_{\xi=t},
+\qquad
+B(t)=H(t,t).
+\label{eq:L4_def_A_B_TC}
+\end{equation}
+
+Quindi la rappresentazione implicita locale del sistema è
+\begin{equation}
+\dot x(t)=A(t)x(t)+B(t)u(t),
+\qquad
+y(t)=C(t)x(t)+D(t)u(t).
+\label{eq:L4_TC_implicita}
+\end{equation}
+
+\subsection{Tempo discreto}
+
+Nel tempo discreto, invece, si ha:
+\begin{equation}
+A(j)=\Phi(j+1,j),
+\qquad
+B(j)=H(j+1,j),
+\label{eq:L4_def_A_B_TD}
+\end{equation}
+e dunque la forma implicita diventa
+\begin{equation}
+x(k+1)=A(k)x(k)+B(k)u(k),
+\qquad
+y(k)=C(k)x(k)+D(k)u(k).
+\label{eq:L4_TD_implicita}
+\end{equation}
+
+L'obiettivo di questa lezione è capire come, a partire da \eqref{eq:L4_TD_implicita} e \eqref{eq:L4_TC_implicita}, si ricostruiscono le forme esplicite e come si presentano le matrici $\Phi$ e $H$.
+
+\section{Sistemi lineari discreti generici}
+
+Consideriamo il sistema discreto non necessariamente stazionario
+\begin{equation}
+x(k+1)=A(k)x(k)+B(k)u(k),
+\qquad
+x(K_0)\ \text{assegnato}.
+\label{eq:L4_sys_TD}
+\end{equation}
+
+\subsection{Sviluppo iterativo dei primi passi}
+
+Iteriamo la dinamica a partire da $K_0$.
+
+Per $k=K_0$:
+\[
+x(K_0+1)=A(K_0)x(K_0)+B(K_0)u(K_0).
+\]
+
+Per $k=K_0+1$:
+\begin{align*}
+x(K_0+2)
+&=A(K_0+1)x(K_0+1)+B(K_0+1)u(K_0+1)\\
+&=A(K_0+1)\bigl[A(K_0)x(K_0)+B(K_0)u(K_0)\bigr]+B(K_0+1)u(K_0+1)\\
+&=A(K_0+1)A(K_0)x(K_0)+A(K_0+1)B(K_0)u(K_0)+B(K_0+1)u(K_0+1).
+\end{align*}
+
+Per $k=K_0+2$:
+\begin{align*}
+x(K_0+3)
+&=A(K_0+2)x(K_0+2)+B(K_0+2)u(K_0+2)\\
+&=A(K_0+2)A(K_0+1)A(K_0)x(K_0)\\
+&\quad +A(K_0+2)A(K_0+1)B(K_0)u(K_0)\\
+&\quad +A(K_0+2)B(K_0+1)u(K_0+1)\\
+&\quad +B(K_0+2)u(K_0+2).
+\end{align*}
+
+A questo punto il pattern è chiaro:
+\begin{itemize}
+    \item compare un termine libero, cioè la propagazione dello stato iniziale;
+    \item compare una somma di termini forzati, uno per ogni ingresso passato, ciascuno trasportato fino all'istante finale.
+\end{itemize}
+
+\subsection{Forma esplicita generale}
+
+Introduciamo la convenzione di prodotto ordinato
+\[
+\prod_{i=K_0}^{K-1}A(i):=A(K-1)A(K-2)\cdots A(K_0),
+\]
+cioè gli indici crescono da destra verso sinistra, come richiesto dalla composizione delle matrici di stato.
+
+Con questa convenzione si ottiene:
+\begin{equation}
+x(K)=\Phi(K,K_0)x(K_0)+\sum_{j=K_0}^{K-1}H(K,j)u(j),
+\label{eq:L4_explicit_TD}
+\end{equation}
+dove
+\begin{equation}
+\Phi(K,K_0)=\prod_{i=K_0}^{K-1}A(i),
+\label{eq:L4_Phi_TD_generic}
+\end{equation}
+e
+\begin{equation}
+H(K,j)=\left(\prod_{i=j+1}^{K-1}A(i)\right)B(j).
+\label{eq:L4_H_TD_generic}
+\end{equation}
+
+\paragraph{Convenzione importante.}
+Se il prodotto è vuoto, esso vale l'identità:
+\[
+\prod_{i=K}^{K-1}A(i)=I.
+\]
+Per esempio, per $j=K-1$ si ha
+\[
+H(K,K-1)=B(K-1).
+\]
+
+\paragraph{Interpretazione di $H(K,j)$.}
+Il termine $H(K,j)$ dice come un ingresso applicato all'istante $j$ viene trasportato fino all'istante finale $K$.  
+In altre parole:
+\begin{itemize}
+    \item $B(j)$ trasforma l'ingresso in variazione immediata dello stato;
+    \item il prodotto di matrici $A$ successive trasporta quella variazione fino al tempo finale.
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[>=Latex, node distance=1.45cm]
+    \node[draw, rounded corners, minimum width=1.2cm, minimum height=0.9cm] (x0) {$x(K_0)$};
+    \node[draw, rounded corners, right=of x0, minimum width=1.2cm, minimum height=0.9cm] (x1) {$x(K_0+1)$};
+    \node[draw, rounded corners, right=of x1, minimum width=1.2cm, minimum height=0.9cm] (x2) {$x(K_0+2)$};
+    \node[right=0.7cm of x2] (dots) {$\cdots$};
+    \node[draw, rounded corners, right=0.7cm of dots, minimum width=1.2cm, minimum height=0.9cm] (xk) {$x(K)$};
+
+    \draw[->, thick] (x0) -- (x1) node[midway, above] {$A(K_0)$};
+    \draw[->, thick] (x1) -- (x2) node[midway, above] {$A(K_0+1)$};
+    \draw[->, thick] (x2) -- (dots);
+    \draw[->, thick] (dots) -- (xk) node[midway, above] {$A(K-1)$};
+
+    \draw[->, thick] ($(x0)+(0,-1.4)$) -- (x1.south) node[midway, left] {$B(K_0)u(K_0)$};
+    \draw[->, thick] ($(x1)+(0,-1.4)$) -- (x2.south) node[midway, left] {$B(K_0+1)u(K_0+1)$};
+\end{tikzpicture}
+\caption{Interpretazione della dinamica discreta: lo stato iniziale si propaga tramite i prodotti di $A(k)$, mentre ciascun ingresso entra attraverso $B(k)$ e poi viene trasportato in avanti.}
+\end{figure}
+
+\section{Caso discreto stazionario}
+
+Consideriamo ora il caso in cui il sistema sia tempo-invariante:
+\[
+A(k)=A,\qquad B(k)=B,\qquad C(k)=C,\qquad D(k)=D
+\qquad \forall k.
+\]
+
+Allora le formule precedenti si semplificano molto.
+
+\subsection{Matrice di transizione}
+
+Da \eqref{eq:L4_Phi_TD_generic} segue
+\begin{equation}
+\Phi(K,K_0)=A^{K-K_0}.
+\label{eq:L4_Phi_TD_LTI}
+\end{equation}
+
+\subsection{Nucleo forzato}
+
+Da \eqref{eq:L4_H_TD_generic} segue
+\begin{equation}
+H(K,j)=A^{K-j-1}B.
+\label{eq:L4_H_TD_LTI}
+\end{equation}
+
+\subsection{Soluzione esplicita}
+
+Quindi la soluzione del sistema discreto stazionario è
+\begin{equation}
+x(K)=A^{K-K_0}x(K_0)+\sum_{j=K_0}^{K-1}A^{K-j-1}Bu(j).
+\label{eq:L4_sol_TD_LTI}
+\end{equation}
+
+L'uscita vale
+\begin{equation}
+y(K)=Cx(K)+Du(K).
+\label{eq:L4_out_TD_LTI}
+\end{equation}
+
+\paragraph{Messaggio chiave.}
+Nel caso discreto stazionario, tutto il comportamento del sistema dipende dallo studio delle potenze di $A$.  
+Per questo motivo il corso dedicherà grande attenzione alle proprietà spettrali di $A$.
+
+\section{Caso continuo: dinamica libera e matrice di transizione}
+
+Passiamo ora al tempo continuo:
+\begin{equation}
+\dot x(t)=A(t)x(t)+B(t)u(t).
+\label{eq:L4_sys_TC}
+\end{equation}
+
+Per capire come è fatta la matrice di transizione, si parte dall'evoluzione libera, cioè dal caso
+\[
+u(t)=0.
+\]
+
+In questo caso la dinamica diventa
+\begin{equation}
+\dot x(t)=A(t)x(t),
+\qquad x(t_0)=x_0.
+\label{eq:L4_free_TC}
+\end{equation}
+
+Poiché l'evoluzione libera è descritta da $\Phi(t,t_0)$, deve valere
+\[
+x(t)=\Phi(t,t_0)x(t_0).
+\]
+
+Derivando rispetto a $t$:
+\[
+\dot x(t)=\frac{\partial \Phi(t,t_0)}{\partial t}x(t_0).
+\]
+
+Ma dalla dinamica libera \eqref{eq:L4_free_TC} si ha anche
+\[
+\dot x(t)=A(t)x(t)=A(t)\Phi(t,t_0)x(t_0).
+\]
+
+Poiché la relazione vale per ogni $x(t_0)$, si ottiene l'\emph{equazione differenziale matriciale}:
+\begin{equation}
+\boxed{
+\frac{\partial \Phi(t,t_0)}{\partial t}=A(t)\Phi(t,t_0),
+\qquad
+\Phi(t_0,t_0)=I.
+}
+\label{eq:L4_matrix_ode}
+\end{equation}
+
+\paragraph{Questa è la caratterizzazione fondamentale di $\Phi$.}
+Essa dice che trovare la matrice di transizione equivale a risolvere un problema di Cauchy matriciale.
+
+\section{Successione di Peano}
+
+Per risolvere \eqref{eq:L4_matrix_ode} in modo costruttivo si introduce la \emph{successione di Peano}.
+
+Si cerca $\Phi(t,t_0)$ sotto forma di serie
+\begin{equation}
+\Phi(t,t_0)=\sum_{k=0}^{\infty} S_k(t,t_0),
+\label{eq:L4_peano_series}
+\end{equation}
+dove i termini sono definiti ricorsivamente da
+\begin{equation}
+S_0(t,t_0)=I,
+\label{eq:L4_S0}
+\end{equation}
+\begin{equation}
+S_1(t,t_0)=\int_{t_0}^{t}A(\tau)S_0(\tau,t_0)\,d\tau
+=
+\int_{t_0}^{t}A(\tau)\,d\tau,
+\label{eq:L4_S1}
+\end{equation}
+e, più in generale,
+\begin{equation}
+S_{k+1}(t,t_0)=\int_{t_0}^{t}A(\tau)S_k(\tau,t_0)\,d\tau.
+\label{eq:L4_Sk_rec}
+\end{equation}
+
+\paragraph{Interpretazione.}
+Ogni termine della successione rappresenta un ordine successivo di ``accumulo'' dell'effetto della matrice $A(\tau)$ lungo l'intervallo di integrazione.
+
+\subsection{Primi termini}
+
+Scriviamo i primi termini per capire la struttura:
+\[
+S_0(t,t_0)=I,
+\]
+\[
+S_1(t,t_0)=\int_{t_0}^{t}A(\tau_1)\,d\tau_1,
+\]
+\[
+S_2(t,t_0)=\int_{t_0}^{t}A(\tau_1)\left(\int_{t_0}^{\tau_1}A(\tau_2)\,d\tau_2\right)d\tau_1,
+\]
+e così via.
+
+In modo informale, la successione di Peano è l'analogo matriciale della serie iterativa che si ottiene riscrivendo il problema differenziale come equazione integrale.
+
+\section{Stima dei termini della successione di Peano}
+
+Per dimostrare che la serie \eqref{eq:L4_peano_series} converge, serve una stima uniforme sui termini $S_k$.
+
+Sia
+\[
+M=\sup_{\tau\in[t_0,t]}\norm{A(\tau)}.
+\]
+Supponiamo che $A(\tau)$ sia limitata sull'intervallo considerato. Allora vale il seguente risultato.
+
+\begin{proposizione}
+Per ogni $k\ge 0$,
+\begin{equation}
+\norm{S_k(t,t_0)}\le \frac{M^k(t-t_0)^k}{k!}.
+\label{eq:L4_bound_Sk}
+\end{equation}
+\end{proposizione}
+
+\begin{proof}
+Procediamo per induzione.
+
+Per $k=0$:
+\[
+S_0(t,t_0)=I,
+\]
+e la stima vale banalmente, perché
+\[
+\norm{S_0(t,t_0)}=\norm{I}\le 1.
+\]
+Nel seguito si assume una norma matriciale compatibile e, se necessario, si assorbe il valore di $\norm{I}$ nella costante.
+
+Per $k=1$:
+\[
+S_1(t,t_0)=\int_{t_0}^{t}A(\tau)\,d\tau.
+\]
+Usando disuguaglianza triangolare e definizione di $M$:
+\[
+\norm{S_1(t,t_0)}
+\le
+\int_{t_0}^{t}\norm{A(\tau)}\,d\tau
+\le
+\int_{t_0}^{t}M\,d\tau
+=
+M(t-t_0).
+\]
+
+Supponiamo ora vera la stima per un certo $k$ e dimostriamola per $k+1$:
+\[
+S_{k+1}(t,t_0)=\int_{t_0}^{t}A(\tau)S_k(\tau,t_0)\,d\tau.
+\]
+Allora
+\begin{align*}
+\norm{S_{k+1}(t,t_0)}
+&\le
+\int_{t_0}^{t}\norm{A(\tau)}\,\norm{S_k(\tau,t_0)}\,d\tau\\
+&\le
+\int_{t_0}^{t}
+M\,
+\frac{M^k(\tau-t_0)^k}{k!}
+\,d\tau\\
+&=
+\frac{M^{k+1}}{k!}\int_{t_0}^{t}(\tau-t_0)^k\,d\tau\\
+&=
+\frac{M^{k+1}}{k!}\cdot \frac{(t-t_0)^{k+1}}{k+1}\\
+&=
+\frac{M^{k+1}(t-t_0)^{k+1}}{(k+1)!}.
+\end{align*}
+La tesi è dimostrata.
+\end{proof}
+
+\paragraph{Conseguenza.}
+La serie di Peano è dominata dalla serie esponenziale
+\[
+\sum_{k=0}^{\infty}\frac{M^k(t-t_0)^k}{k!}=e^{M(t-t_0)},
+\]
+quindi converge assolutamente e uniformemente su ogni intervallo limitato.
+
+\section{Verifica che la serie di Peano risolve il problema matriciale}
+
+Una volta definita
+\[
+\Phi(t,t_0)=\sum_{k=0}^{\infty}S_k(t,t_0),
+\]
+bisogna verificare che soddisfi davvero \eqref{eq:L4_matrix_ode}.
+
+\subsection{Condizione iniziale}
+
+Valutiamo la serie per $t=t_0$:
+\[
+\Phi(t_0,t_0)=\sum_{k=0}^{\infty}S_k(t_0,t_0).
+\]
+
+Ora:
+\[
+S_0(t_0,t_0)=I,
+\]
+mentre per ogni $k\ge 1$ i termini sono integrali su intervalli degeneri, quindi
+\[
+S_k(t_0,t_0)=0.
+\]
+
+Ne segue
+\begin{equation}
+\Phi(t_0,t_0)=I.
+\label{eq:L4_Phi_initial}
+\end{equation}
+
+\subsection{Equazione differenziale}
+
+Dalla definizione ricorsiva:
+\[
+S_k(t,t_0)=\int_{t_0}^{t}A(\tau)S_{k-1}(\tau,t_0)\,d\tau,
+\qquad k\ge 1.
+\]
+
+Derivando termine a termine:
+\[
+\frac{\partial S_k(t,t_0)}{\partial t}=A(t)S_{k-1}(t,t_0),\qquad k\ge 1.
+\]
+
+Allora
+\begin{align*}
+\frac{\partial \Phi(t,t_0)}{\partial t}
+&=
+\sum_{k=1}^{\infty}\frac{\partial S_k(t,t_0)}{\partial t}\\
+&=
+\sum_{k=1}^{\infty}A(t)S_{k-1}(t,t_0)\\
+&=
+A(t)\sum_{k=1}^{\infty}S_{k-1}(t,t_0)\\
+&=
+A(t)\sum_{j=0}^{\infty}S_j(t,t_0)\\
+&=
+A(t)\Phi(t,t_0).
+\end{align*}
+
+Quindi
+\begin{equation}
+\frac{\partial \Phi(t,t_0)}{\partial t}=A(t)\Phi(t,t_0),
+\end{equation}
+come volevamo dimostrare.
+
+\section{Espressione di \texorpdfstring{$H(t,\tau)$}{H(t,tau)} nel continuo}
+
+Nella lezione precedente era emersa la proprietà di composizione
+\[
+\Phi(t,\tau)H(\tau,t_0)=H(t,t_0).
+\]
+
+Scegliendo come istante iniziale il tempo $\tau$, si ottiene
+\[
+H(t,\tau)=\Phi(t,\tau)H(\tau,\tau).
+\]
+
+Ma per definizione
+\[
+H(\tau,\tau)=B(\tau).
+\]
+
+Quindi
+\begin{equation}
+H(t,\tau)=\Phi(t,\tau)B(\tau).
+\label{eq:L4_H_TC_from_Phi}
+\end{equation}
+
+Sostituendo nella rappresentazione esplicita dello stato:
+\begin{equation}
+x(t)=\Phi(t,t_0)x(t_0)+\int_{t_0}^{t}\Phi(t,\tau)B(\tau)u(\tau)\,d\tau.
+\label{eq:L4_explicit_TC_general}
+\end{equation}
+
+Questa è la formula generale della soluzione dei sistemi lineari a tempo continuo.
+
+\section{Caso continuo stazionario}
+
+Supponiamo ora che il sistema sia tempo-invariante:
+\[
+A(t)=A,\qquad B(t)=B,\qquad C(t)=C,\qquad D(t)=D.
+\]
+
+In questo caso la ricorsione di Peano si semplifica moltissimo.
+
+\subsection{Termini della successione di Peano}
+
+Poiché $A(\tau)=A$ è costante, i primi termini diventano:
+\[
+S_0(t,t_0)=I,
+\]
+\[
+S_1(t,t_0)=\int_{t_0}^{t}A\,d\tau=A(t-t_0),
+\]
+\[
+S_2(t,t_0)=\int_{t_0}^{t}A\,S_1(\tau,t_0)\,d\tau
+=
+\int_{t_0}^{t}A\cdot A(\tau-t_0)\,d\tau
+=
+A^2\frac{(t-t_0)^2}{2!}.
+\]
+
+Procedendo per induzione si ottiene
+\begin{equation}
+S_k(t,t_0)=\frac{A^k(t-t_0)^k}{k!}.
+\label{eq:L4_Peano_TI_term}
+\end{equation}
+
+\subsection{Matrice di transizione}
+
+Allora la serie di Peano diventa
+\[
+\Phi(t,t_0)=\sum_{k=0}^{\infty}\frac{A^k(t-t_0)^k}{k!}.
+\]
+
+Questa è precisamente la definizione di \emph{esponenziale di matrice}:
+\begin{equation}
+\boxed{
+\Phi(t,t_0)=e^{A(t-t_0)}.
+}
+\label{eq:L4_Phi_exp_matrix}
+\end{equation}
+
+\paragraph{Osservazione fondamentale.}
+L'esponenziale di matrice gioca, per i sistemi lineari continui, lo stesso ruolo che le potenze di $A$ giocano per i sistemi lineari discreti stazionari.
+
+\subsection{Nucleo forzato}
+
+Da \eqref{eq:L4_H_TC_from_Phi} segue
+\[
+H(t,\tau)=\Phi(t,\tau)B=e^{A(t-\tau)}B.
+\]
+
+\subsection{Soluzione completa}
+
+La soluzione del sistema lineare continuo stazionario è quindi
+\begin{equation}
+x(t)=e^{A(t-t_0)}x(t_0)+\int_{t_0}^{t}e^{A(t-\tau)}Bu(\tau)\,d\tau.
+\label{eq:L4_sol_TC_LTI}
+\end{equation}
+
+L'uscita vale
+\begin{equation}
+y(t)=Cx(t)+Du(t).
+\label{eq:L4_out_TC_LTI}
+\end{equation}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[>=Latex]
+    \draw[->] (0,0) -- (9.8,0) node[right] {$\tau$};
+    \draw[->] (0,0) -- (0,2.6) node[above] {};
+    \draw[dashed] (1.5,0) -- (1.5,2.1) node[above] {$t_0$};
+    \draw[dashed] (8.2,0) -- (8.2,2.1) node[above] {$t$};
+
+    \draw[thick,blue] (2.3,0.6) -- (2.3,1.3);
+    \draw[thick,blue] (4.2,0.6) -- (4.2,1.6);
+    \draw[thick,blue] (6.1,0.6) -- (6.1,1.1);
+
+    \node[blue] at (2.3,1.55) {$u(\tau_1)$};
+    \node[blue] at (4.2,1.85) {$u(\tau_2)$};
+    \node[blue] at (6.1,1.35) {$u(\tau_3)$};
+
+    \draw[->, thick,red] (2.3,1.3) to[bend left=15] (8.0,2.2);
+    \draw[->, thick,red] (4.2,1.6) to[bend left=10] (8.0,2.0);
+    \draw[->, thick,red] (6.1,1.1) to[bend left=5]  (8.0,1.8);
+
+    \node[red] at (8.8,2.25) {$x(t)$};
+\end{tikzpicture}
+\caption{Interpretazione della convoluzione nel continuo: ogni ingresso passato $u(\tau)$ contribuisce allo stato finale $x(t)$ attraverso il peso $\Phi(t,\tau)B$.}
+\end{figure}
+
+\section{Confronto finale tra continuo e discreto}
+
+A questo punto il parallelo tra i due casi è completo.
+
+\subsection{Tempo discreto stazionario}
+
+\[
+x(K)=A^{K-K_0}x(K_0)+\sum_{j=K_0}^{K-1}A^{K-j-1}Bu(j),
+\]
+\[
+y(K)=Cx(K)+Du(K).
+\]
+
+\subsection{Tempo continuo stazionario}
+
+\[
+x(t)=e^{A(t-t_0)}x(t_0)+\int_{t_0}^{t}e^{A(t-\tau)}Bu(\tau)\,d\tau,
+\]
+\[
+y(t)=Cx(t)+Du(t).
+\]
+
+\paragraph{Analogia concettuale.}
+\begin{itemize}
+    \item Nel discreto l'evoluzione libera è governata da $A^k$.
+    \item Nel continuo l'evoluzione libera è governata da $e^{At}$.
+    \item Nel discreto la risposta forzata è una somma.
+    \item Nel continuo la risposta forzata è un integrale di convoluzione.
+\end{itemize}
+
+\section{Sintesi della lezione}
+
+In questa lezione abbiamo visto che:
+
+\begin{enumerate}
+    \item nel tempo discreto, iterando la dinamica
+    \[
+    x(k+1)=A(k)x(k)+B(k)u(k),
+    \]
+    si ottengono esplicitamente
+    \[
+    \Phi(K,K_0)=\prod_{i=K_0}^{K-1}A(i),
+    \qquad
+    H(K,j)=\left(\prod_{i=j+1}^{K-1}A(i)\right)B(j);
+    \]
+
+    \item nel caso discreto stazionario queste formule si riducono a
+    \[
+    \Phi(K,K_0)=A^{K-K_0},
+    \qquad
+    H(K,j)=A^{K-j-1}B;
+    \]
+
+    \item nel tempo continuo la matrice di transizione è la soluzione del problema
+    \[
+    \dot \Phi(t,t_0)=A(t)\Phi(t,t_0),
+    \qquad
+    \Phi(t_0,t_0)=I;
+    \]
+
+    \item tale soluzione si costruisce tramite la successione di Peano;
+
+    \item nel caso tempo-invariante la serie di Peano coincide con l'esponenziale di matrice:
+    \[
+    \Phi(t,t_0)=e^{A(t-t_0)};
+    \]
+
+    \item la soluzione completa del sistema continuo stazionario è
+    \[
+    x(t)=e^{A(t-t_0)}x(t_0)+\int_{t_0}^{t}e^{A(t-\tau)}Bu(\tau)\,d\tau.
+    \]
+\end{enumerate}
+
+Questi risultati sono fondamentali: da qui in avanti tutto lo studio dei sistemi lineari ruoterà intorno a
+\begin{itemize}
+    \item potenze di matrici nel discreto;
+    \item esponenziale di matrice nel continuo;
+    \item struttura spettrale della matrice $A$.
+\end{itemize}

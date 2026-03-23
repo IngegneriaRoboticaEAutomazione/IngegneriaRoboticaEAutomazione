@@ -1,0 +1,652 @@
+\chapter{L18 -- Realizzazione dei sistemi, interconnessioni SISO, sistemi MIMO e forma minima}
+\label{chap:L18}
+
+\section{Richiamo iniziale: quando compare il termine \(t e^{-t}\)?}
+
+Prima di entrare negli argomenti nuovi, conviene fissare bene un fatto che nei tuoi appunti compare come richiamo.
+
+Se in una risposta temporale compare un termine del tipo
+\[
+t e^{-t},
+\]
+allora l'autovalore \(\lambda=-1\) \emph{non} è semplice nel senso dinamico: deve essere associato ad almeno un blocco di Jordan di ordine maggiore o uguale a \(2\).
+
+Più precisamente:
+\begin{itemize}
+    \item se \(-1\) è autovalore semplice e \(A\) è diagonalizzabile in quel modo, allora i modi associati a \(-1\) sono solo multipli di \(e^{-t}\);
+    \item il termine \(t e^{-t}\) compare solo se esiste una catena di Jordan di lunghezza almeno \(2\) associata a \(-1\);
+    \item in generale, per un autovalore \(\lambda\), la dimensione del nucleo di \(A-\lambda I\) dà il numero di blocchi di Jordan associati a \(\lambda\), mentre la molteplicità algebrica dà la somma delle loro dimensioni.
+\end{itemize}
+
+Questa osservazione è importante perché, quando si studiano i modi di un sistema, non basta conoscere gli autovalori: bisogna anche capire la loro \emph{struttura di Jordan}.
+
+\bigskip
+
+\section{Forma minima di una realizzazione}
+
+Sia
+\[
+G(s)=\frac{n(s)}{d(s)},
+\qquad \deg d(s)=n.
+\]
+
+Una \emph{realizzazione minima} di \(G(s)\) è una realizzazione in forma di stato con:
+\begin{itemize}
+    \item numero minimo di stati;
+    \item coppia \((A,B)\) completamente raggiungibile;
+    \item coppia \((A,C)\) completamente osservabile.
+\end{itemize}
+
+Dal punto di vista strutturale, la forma minima si ottiene prendendo la decomposizione di Kalman e conservando solo il blocco contemporaneamente:
+\begin{itemize}
+    \item raggiungibile;
+    \item osservabile.
+\end{itemize}
+
+Se indichiamo tale blocco con \((A_{RO},B_{RO},C_{RO})\), allora la funzione di trasferimento è
+
+\[
+G(s)=C_{RO}(sI-A_{RO})^{-1}B_{RO}+D.
+\]
+
+Questa è l'idea fondamentale:
+\begin{quote}
+\emph{la funzione di trasferimento ``vede'' solo la parte del sistema che è sia raggiungibile sia osservabile.}
+\end{quote}
+
+\bigskip
+
+\section{Esercizio: equazione alle differenze e cancellazione polo-zero}
+
+Consideriamo il sistema discreto descritto dall'equazione alle differenze
+\[
+y(t+2)+3y(t+1)+2y(t)=u(t+1)+2u(t),
+\]
+con condizioni iniziali nulle.
+
+\subsection{Calcolo della funzione di trasferimento}
+
+Applicando la trasformata \(Z\) con condizioni iniziali nulle si ottiene
+
+\[
+(z^2+3z+2)Y(z)=(z+2)U(z),
+\]
+quindi
+\[
+G(z)=\frac{Y(z)}{U(z)}=\frac{z+2}{z^2+3z+2}.
+\]
+
+Poiché
+\[
+z^2+3z+2=(z+1)(z+2),
+\]
+segue che
+\[
+G(z)=\frac{z+2}{(z+1)(z+2)}=\frac{1}{z+1}.
+\]
+
+Dunque c'è una cancellazione polo-zero nel punto \(z=-2\).
+
+\subsection{Interpretazione della cancellazione}
+
+La cancellazione dice che una realizzazione costruita \emph{prima} della riduzione può contenere uno stato in più rispetto al minimo necessario.
+
+In particolare:
+\begin{itemize}
+    \item una realizzazione in forma canonica di controllo costruita dal denominatore non ridotto sarà completamente raggiungibile, ma non completamente osservabile;
+    \item una realizzazione in forma canonica di osservazione costruita dal denominatore non ridotto sarà completamente osservabile, ma non completamente raggiungibile;
+    \item se invece si realizza il sistema \emph{dopo} la cancellazione, si ottiene una realizzazione minima di ordine \(1\), che è sia raggiungibile sia osservabile.
+\end{itemize}
+
+\subsection{Una realizzazione minima}
+
+Dalla forma ridotta
+\[
+G(z)=\frac{1}{z+1}
+\]
+si ottiene una realizzazione minima scalare, ad esempio
+
+\[
+x(t+1)=-x(t)+u(t),
+\qquad
+y(t)=x(t),
+\]
+cioè
+\[
+A=(-1),\qquad B=(1),\qquad C=(1),\qquad D=0.
+\]
+
+Essendo di ordine \(1\) e non avendo più cancellazioni, questa realizzazione è minima.
+
+\bigskip
+
+\section{Interconnessione di sistemi SISO}
+
+Passiamo ora a un tema nuovo: come si realizza in forma di stato l'interconnessione di due sistemi.
+
+\subsection{Connessione in serie}
+
+Consideriamo due sistemi SISO \(\Sigma_1\) e \(\Sigma_2\), con funzioni di trasferimento
+\[
+G_1(s)=\frac{n_1(s)}{d_1(s)},
+\qquad
+G_2(s)=\frac{n_2(s)}{d_2(s)}.
+\]
+
+La connessione in serie è schematicamente
+
+\[
+u \longrightarrow \boxed{\Sigma_1} \longrightarrow \boxed{\Sigma_2} \longrightarrow y.
+\]
+
+Supponiamo che le realizzazioni siano
+
+\[
+\Sigma_1:
+\begin{cases}
+\dot x_1=A_1x_1+B_1u_1,\\
+y_1=C_1x_1+D_1u_1,
+\end{cases}
+\qquad
+\Sigma_2:
+\begin{cases}
+\dot x_2=A_2x_2+B_2u_2,\\
+y_2=C_2x_2+D_2u_2.
+\end{cases}
+\]
+
+Nella connessione in serie vale
+\[
+u_1=u,\qquad u_2=y_1,\qquad y=y_2.
+\]
+
+Quindi:
+\[
+u_2=C_1x_1+D_1u.
+\]
+
+Sostituendo nel secondo sistema:
+
+\[
+\dot x_2=A_2x_2+B_2(C_1x_1+D_1u)
+      =A_2x_2+B_2C_1x_1+B_2D_1u.
+\]
+
+Inoltre
+\[
+y=y_2=C_2x_2+D_2u_2
+     =C_2x_2+D_2C_1x_1+D_2D_1u.
+\]
+
+Se definiamo lo stato complessivo
+\[
+x=\begin{bmatrix}x_1\\x_2\end{bmatrix},
+\]
+si ottiene la realizzazione complessiva
+
+\[
+\begin{cases}
+\dot x=
+\begin{bmatrix}
+A_1 & 0\\
+B_2C_1 & A_2
+\end{bmatrix}x+
+\begin{bmatrix}
+B_1\\
+B_2D_1
+\end{bmatrix}u,\\[1.2em]
+y=
+\begin{bmatrix}
+D_2C_1 & C_2
+\end{bmatrix}x+D_2D_1u.
+\end{cases}
+\]
+
+Naturalmente, a livello di funzione di trasferimento, vale
+\[
+G(s)=G_2(s)G_1(s).
+\]
+
+\subsection{Cosa succede se ci sono cancellazioni?}
+
+Se nella cascata si verifica una cancellazione polo-zero, la realizzazione ottenuta non è più minima.
+
+Ci sono due casi concettualmente distinti.
+
+\paragraph{Caso 1: uno zero di \(\Sigma_1\) coincide con un polo di \(\Sigma_2\).}
+
+Allora il modo cancellato appartiene al secondo sistema, cioè a quello ``a valle''. In questo caso il sistema complessivo può perdere \emph{raggiungibilità}: esiste una dinamica interna di \(\Sigma_2\) che non riesce più a essere eccitata dall'ingresso esterno.
+
+\paragraph{Caso 2: un polo di \(\Sigma_1\) coincide con uno zero di \(\Sigma_2\).}
+
+In questo caso il modo cancellato appartiene al primo sistema, cioè a quello ``a monte''. Il sistema complessivo può perdere \emph{osservabilità}: esiste una dinamica interna che l'uscita finale non riesce più a vedere.
+
+\medskip
+
+In sintesi:
+\begin{quote}
+\emph{nelle interconnessioni in serie, le cancellazioni possono nascondere modi interni, rendendo il sistema complessivo non minimo.}
+\end{quote}
+
+\bigskip
+
+\subsection{Connessione in parallelo}
+
+La connessione in parallelo è schematicamente
+
+\[
+\begin{array}{c}
+u \\
+\downarrow
+\end{array}
+\qquad
+\begin{array}{c}
+\boxed{\Sigma_1}\\[0.4em]
+\boxed{\Sigma_2}
+\end{array}
+\qquad
+\longrightarrow\ y=y_1+y_2.
+\]
+
+Più precisamente:
+\[
+u_1=u,\qquad u_2=u,\qquad y=y_1+y_2.
+\]
+
+Se
+\[
+\Sigma_i:
+\begin{cases}
+\dot x_i=A_ix_i+B_iu,\\
+y_i=C_ix_i+D_iu,
+\end{cases}
+\qquad i=1,2,
+\]
+e si pone
+\[
+x=\begin{bmatrix}x_1\\x_2\end{bmatrix},
+\]
+allora la realizzazione complessiva è
+
+\[
+\begin{cases}
+\dot x=
+\begin{bmatrix}
+A_1 & 0\\
+0 & A_2
+\end{bmatrix}x+
+\begin{bmatrix}
+B_1\\
+B_2
+\end{bmatrix}u,\\[1.2em]
+y=
+\begin{bmatrix}
+C_1 & C_2
+\end{bmatrix}x+(D_1+D_2)u.
+\end{cases}
+\]
+
+A livello di funzione di trasferimento:
+\[
+G(s)=G_1(s)+G_2(s)
+=
+\frac{n_1(s)}{d_1(s)}+\frac{n_2(s)}{d_2(s)}
+=
+\frac{n_1(s)d_2(s)+n_2(s)d_1(s)}{d_1(s)d_2(s)}.
+\]
+
+\subsection{Quando possono avvenire cancellazioni in parallelo?}
+
+Nel collegamento in parallelo, eventuali cancellazioni nel sistema risultante possono comparire solo se i due sottosistemi hanno fattori dinamici comuni, cioè poli coincidenti nei denominatori.
+
+In quel caso, il modo comune può sparire nella somma delle due risposte e il sistema complessivo non risulta più minimo.
+
+Anche qui il messaggio è lo stesso:
+\[
+\text{cancellazione} \quad \Longrightarrow \quad \text{realizzazione non minima}.
+\]
+
+\bigskip
+
+\section{Sistemi MIMO e matrice di trasferimento}
+
+Passiamo ora ai sistemi con più ingressi e più uscite.
+
+Se il sistema ha \(m\) ingressi e \(\ell\) uscite, la sua matrice di trasferimento è
+\[
+G(s)\in\mathbb R(s)^{\ell\times m},
+\]
+e si scrive come
+\[
+Y(s)=G(s)U(s),
+\]
+dove
+\[
+Y(s)=
+\begin{bmatrix}
+Y_1(s)\\ \vdots \\ Y_\ell(s)
+\end{bmatrix},
+\qquad
+U(s)=
+\begin{bmatrix}
+U_1(s)\\ \vdots \\ U_m(s)
+\end{bmatrix}.
+\]
+
+Gli elementi della matrice sono le funzioni di trasferimento ingresso-uscita:
+\[
+G(s)=
+\begin{bmatrix}
+g_{11}(s) & \cdots & g_{1m}(s)\\
+\vdots & \ddots & \vdots\\
+g_{\ell 1}(s) & \cdots & g_{\ell m}(s)
+\end{bmatrix},
+\]
+e per ogni uscita vale
+\[
+Y_i(s)=g_{i1}(s)U_1(s)+g_{i2}(s)U_2(s)+\cdots+g_{im}(s)U_m(s).
+\]
+
+\subsection{Significato dei poli della matrice di trasferimento}
+
+Per capire i poli di una matrice di trasferimento, una prima idea è spegnere tutti gli ingressi tranne uno.
+
+Se fissiamo \(j\) e imponiamo
+\[
+U_k(s)=0 \qquad \forall k\neq j,
+\]
+allora
+\[
+Y(s)=G_{\bullet j}(s)\,U_j(s),
+\]
+dove \(G_{\bullet j}(s)\) è la \(j\)-esima colonna di \(G(s)\).
+
+Questo significa che una colonna della matrice di trasferimento descrive \emph{tutti gli effetti del singolo ingresso \(u_j\) su tutte le uscite}. Analogamente, una riga descrive come una certa uscita dipende da tutti gli ingressi.
+
+\subsection{Il termine diretto \(D\)}
+
+Nel modello in forma di stato
+\[
+\begin{cases}
+\dot x=Ax+Bu,\\
+y=Cx+Du,
+\end{cases}
+\]
+la matrice \(D\) raccoglie i termini di \emph{accoppiamento diretto} ingresso--uscita.
+
+In una matrice di trasferimento MIMO, se un elemento \(g_{ij}(s)\) non è strettamente proprio, lo si può decomporre come
+\[
+g_{ij}(s)=d_{ij}+\text{parte strettamente propria},
+\]
+e il termine costante \(d_{ij}\) va inserito nella matrice \(D\).
+
+\bigskip
+
+\section{Realizzazione di una matrice di trasferimento lavorando per colonne}
+
+Un metodo pratico per realizzare un sistema MIMO consiste nel lavorare \emph{per colonne}.
+
+Supponiamo, ad esempio, di avere due ingressi e tre uscite, cioè una matrice di trasferimento \(G(s)\in\mathbb R(s)^{3\times 2}\). La scriviamo per colonne:
+\[
+G(s)=
+\begin{bmatrix}
+\vert & \vert\\
+G^{(1)}(s) & G^{(2)}(s)\\
+\vert & \vert
+\end{bmatrix},
+\]
+dove ciascuna colonna \(G^{(j)}(s)\) contiene l'effetto dell'ingresso \(u_j\) su tutte le uscite.
+
+Per ogni colonna:
+\begin{enumerate}
+    \item si cerca un denominatore comune;
+    \item si costruisce una realizzazione SISO/MISO in forma canonica di controllo;
+    \item si accoppiano poi i vari blocchi in modo disaccoppiato sugli ingressi.
+\end{enumerate}
+
+\subsection{Struttura generale ottenuta per colonne}
+
+Se dalla colonna \(j\)-esima si ricava una realizzazione
+\[
+(A^{(j)},B^{(j)},C^{(j)}),
+\]
+allora una realizzazione complessiva si può scrivere come
+
+\[
+A=
+\begin{bmatrix}
+A^{(1)} & 0 & \cdots & 0\\
+0 & A^{(2)} & \cdots & 0\\
+\vdots & \vdots & \ddots & \vdots\\
+0 & 0 & \cdots & A^{(m)}
+\end{bmatrix},
+\qquad
+B=
+\begin{bmatrix}
+B^{(1)} & 0 & \cdots & 0\\
+0 & B^{(2)} & \cdots & 0\\
+\vdots & \vdots & \ddots & \vdots\\
+0 & 0 & \cdots & B^{(m)}
+\end{bmatrix},
+\]
+e
+\[
+C=
+\begin{bmatrix}
+C^{(1)} & C^{(2)} & \cdots & C^{(m)}
+\end{bmatrix}.
+\]
+
+Questa costruzione è molto utile perché permette di realizzare la matrice di trasferimento in modo operativo. Tuttavia:
+\begin{itemize}
+    \item la realizzazione ottenuta \emph{non è in generale minima};
+    \item potrebbero esserci cancellazioni tra colonne;
+    \item spesso è necessario ridurre poi la realizzazione con strumenti strutturali.
+\end{itemize}
+
+\bigskip
+
+\section{Metodo duale: lavorare per righe}
+
+Esiste naturalmente il metodo duale, che consiste nel lavorare per \emph{righe}.
+
+In questo caso si guarda ogni uscita separatamente:
+\[
+Y_i(s)=g_{i1}(s)U_1(s)+\cdots+g_{im}(s)U_m(s).
+\]
+
+Dal punto di vista realizzativo:
+\begin{itemize}
+    \item lavorare per colonne enfatizza il ruolo degli ingressi;
+    \item lavorare per righe enfatizza il ruolo delle uscite;
+    \item i due metodi sono duali.
+\end{itemize}
+
+Non c'è una regola assoluta per scegliere tra i due:
+\begin{quote}
+\emph{si sceglie di solito il metodo più conveniente, cioè quello che porta a sottosistemi di ordine più basso o con strutture più semplici.}
+\end{quote}
+
+\bigskip
+
+\section{Come si individuano poli e zeri di una matrice di trasferimento?}
+
+Per sistemi MIMO la nozione di poli e zeri non si legge più guardando semplicemente ogni singolo elemento della matrice. Serve uno strumento più robusto: la \emph{forma di Smith} di una matrice polinomiale.
+
+\section{Forma di Smith di una matrice polinomiale}
+
+Sia
+\[
+P(s)\in \mathbb R[s]^{p\times m}
+\]
+una matrice polinomiale.
+
+Allora esistono matrici unimodulari \(U_1(s)\) e \(U_2(s)\) tali che
+\[
+P(s)=U_1(s)\,\Lambda(s)\,U_2(s),
+\]
+dove
+\[
+\Lambda(s)=
+\operatorname{diag}\bigl(d_1(s),d_2(s),\dots,d_r(s),0,\dots,0\bigr),
+\]
+con:
+\begin{itemize}
+    \item \(r=\operatorname{rk}(P(s))\);
+    \item i polinomi \(d_i(s)\) sono monici;
+    \item \(d_i(s)\) divide \(d_{i+1}(s)\) per ogni \(i\).
+\end{itemize}
+
+Questa è la \emph{forma di Smith}.
+
+\subsection{Come si costruiscono i polinomi invarianti}
+
+Si definiscono:
+\[
+D_0(s)=1,
+\]
+e, per \(i=1,\dots,r\),
+\[
+D_i(s)=\gcd\{\text{tutti i minori di ordine } i \text{ di } P(s)\},
+\]
+presi monici.
+
+Poi si pongono
+\[
+d_i(s)=\frac{D_i(s)}{D_{i-1}(s)}.
+\]
+
+I polinomi \(d_i(s)\) sono proprio gli \emph{invariant factors} della matrice.
+
+\bigskip
+
+\section{Esempio di forma di Smith}
+
+Consideriamo
+\[
+P(s)=
+\begin{bmatrix}
+1 & -1\\
+s^2+s-4 & 2s^2-s-8\\
+s^2-4 & 2s^2-8
+\end{bmatrix}.
+\]
+
+\subsection{Calcolo di \(D_1(s)\)}
+
+Il massimo comun divisore di tutti gli elementi è
+\[
+D_1(s)=1.
+\]
+
+\subsection{Calcolo di \(D_2(s)\)}
+
+Occorre calcolare i minori \(2\times 2\).
+
+\paragraph{Minore delle righe 1 e 2:}
+\[
+\det
+\begin{bmatrix}
+1 & -1\\
+s^2+s-4 & 2s^2-s-8
+\end{bmatrix}
+=
+2s^2-s-8+s^2+s-4
+=
+3s^2-12
+=
+3(s^2-4).
+\]
+
+\paragraph{Minore delle righe 1 e 3:}
+\[
+\det
+\begin{bmatrix}
+1 & -1\\
+s^2-4 & 2s^2-8
+\end{bmatrix}
+=
+2s^2-8+s^2-4
+=
+3s^2-12
+=
+3(s^2-4).
+\]
+
+\paragraph{Minore delle righe 2 e 3:}
+\[
+\det
+\begin{bmatrix}
+s^2+s-4 & 2s^2-s-8\\
+s^2-4 & 2s^2-8
+\end{bmatrix}.
+\]
+
+Sviluppando:
+\[
+(s^2+s-4)(2s^2-8)-(2s^2-s-8)(s^2-4)
+=
+3s(s^2-4).
+\]
+
+Il massimo comun divisore monico di questi minori è quindi
+\[
+D_2(s)=s^2-4.
+\]
+
+\subsection{Polinomi invarianti}
+
+Poiché
+\[
+D_0(s)=1,\qquad D_1(s)=1,\qquad D_2(s)=s^2-4,
+\]
+si ottiene
+\[
+d_1(s)=\frac{D_1(s)}{D_0(s)}=1,
+\qquad
+d_2(s)=\frac{D_2(s)}{D_1(s)}=s^2-4.
+\]
+
+Quindi la forma di Smith è
+
+\[
+\Lambda(s)=
+\begin{bmatrix}
+1 & 0\\
+0 & s^2-4\\
+0 & 0
+\end{bmatrix}.
+\]
+
+\medskip
+
+Questo esempio è importante perché mostra che, in un sistema MIMO, i poli e gli zeri strutturali non si leggono banalmente elemento per elemento, ma emergono dai fattori invarianti.
+
+\bigskip
+
+\section{Messaggio concettuale della lezione}
+
+Possiamo riassumere l'intera lezione così.
+
+\begin{enumerate}
+    \item Una funzione di trasferimento può essere realizzata in molti modi diversi, ma la \emph{forma minima} è quella con il minor numero di stati ed è sia completamente raggiungibile sia completamente osservabile.
+    \item Nelle interconnessioni in serie e in parallelo possono comparire cancellazioni interne, che rendono la realizzazione complessiva non minima.
+    \item Nei sistemi MIMO la matrice di trasferimento va studiata come oggetto unico, non guardando soltanto i singoli elementi.
+    \item Per realizzare un sistema MIMO si può lavorare per colonne o per righe, scegliendo la via più conveniente.
+    \item Per studiare poli e zeri strutturali di una matrice di trasferimento si usa la forma di Smith della matrice polinomiale associata.
+\end{enumerate}
+
+\bigskip
+
+\section*{Promemoria operativo}
+
+Quando ti danno una matrice di trasferimento MIMO e ti chiedono una realizzazione, la strategia pratica è:
+
+\begin{enumerate}
+    \item separare l'eventuale parte diretta \(D\), cioè i termini non strettamente propri;
+    \item decidere se conviene lavorare per colonne o per righe;
+    \item per ciascun blocco trovato, costruire una realizzazione canonica del denominatore comune;
+    \item assemblare i blocchi in una realizzazione complessiva;
+    \item verificare se la realizzazione è minima oppure se restano modi cancellati;
+    \item se serve, usare la decomposizione di Kalman o la forma di Smith per ridurre il sistema.
+\end{enumerate}

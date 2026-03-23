@@ -1,0 +1,379 @@
+\chapter{Lezione 2 --- Spazi di funzioni, serie di Fourier, trasformate e distribuzioni}
+
+\section{Spazio di funzioni periodiche}
+
+Consideriamo uno spazio di funzioni periodiche di periodo \(T\).
+L'idea è lavorare in uno spazio funzionale su cui sia possibile introdurre
+una struttura geometrica analoga a quella degli spazi vettoriali.
+
+Indichiamo con
+\[
+L_T^2
+\]
+lo spazio delle funzioni periodiche di periodo \(T\) che siano quadrato-sommabili
+su un periodo, cioè tali che
+\[
+\int_{t_0}^{t_0+T} |f(t)|^2\,dt < +\infty.
+\]
+
+Poiché \(f\) è periodica, il valore di questo integrale non dipende dalla scelta di \(t_0\).
+
+\section{Richiamo su integrabilità}
+
+Negli appunti si distinguono due nozioni di integrale.
+
+\subsection{Integrale di Riemann}
+
+Nell'integrale di Riemann si approssima l'area sotto il grafico della funzione
+discretizzando il dominio e costruendo somme di rettangoli.
+
+\subsection{Integrale di Lebesgue}
+
+Nell'integrale di Lebesgue la costruzione è più generale:
+invece di discretizzare il dominio, si discretizza il codominio,
+cioè si ragiona sui livelli assunti dalla funzione.
+
+L'integrale di Lebesgue consente di trattare classi più ampie di funzioni
+e, sotto ipotesi opportune, permette di scambiare limiti e integrali.
+
+Nel seguito assumiamo che l'integrabilità sia nel senso di Lebesgue.
+
+\section{Perché funzioni a quadrato sommabile}
+
+Vogliamo introdurre nello spazio delle funzioni una struttura geometrica,
+in particolare prodotto scalare e norma.
+
+Per questo consideriamo funzioni
+\[
+f:\mathbb{R}\to\mathbb{R}
+\quad \text{oppure} \quad
+f:\mathbb{R}\to\mathbb{C}
+\]
+tali che
+\[
+\int_{t_0}^{t_0+T} |f(t)|^2\,dt < +\infty.
+\]
+
+Questa ipotesi garantisce che la norma della funzione sia finita.
+
+\section{Prodotto scalare in \(L_T^2\)}
+
+Se \(f_1,f_2\in L_T^2\), definiamo il prodotto scalare come
+\[
+\langle f_1,f_2\rangle
+=
+\frac{1}{T}\int_{t_0}^{t_0+T} f_1(t)\,\overline{f_2(t)}\,dt.
+\]
+
+Se le funzioni sono reali, la coniugazione si può omettere:
+\[
+\langle f_1,f_2\rangle
+=
+\frac{1}{T}\int_{t_0}^{t_0+T} f_1(t)\,f_2(t)\,dt.
+\]
+
+Il fattore \(1/T\) serve a normalizzare il prodotto scalare rispetto alla lunghezza del periodo.
+
+\section{Norma}
+
+Una volta definito il prodotto scalare, la norma associata è
+\[
+\|f\|=\sqrt{\langle f,f\rangle}.
+\]
+
+Questo chiarisce perché si richieda che le funzioni appartengano a \(L_T^2\):
+senza quadrato-sommabilità la norma potrebbe non esistere oppure essere infinita.
+
+\section{Interpretazione geometrica}
+
+Con prodotto scalare e norma, lo spazio delle funzioni acquista una struttura
+simile a quella di uno spazio vettoriale euclideo.
+
+Di conseguenza si può parlare di:
+\begin{itemize}
+    \item basi;
+    \item ortogonalità;
+    \item ortonormalità;
+    \item proiezioni.
+\end{itemize}
+
+L'idea fondamentale di Fourier è che una funzione periodica possa essere espressa
+come combinazione lineare di sinusoidi a frequenze diverse.
+
+\section{Formula di Eulero}
+
+Ricordiamo la formula di Eulero:
+\[
+e^{j\omega t}=\cos(\omega t)+j\sin(\omega t).
+\]
+
+Questa scrittura permette di trattare seni e coseni con un'unica notazione
+tramite esponenziali complessi.
+
+\section{Serie di Fourier complessa}
+
+Sia \(f\in L_T^2\). Allora, in forma complessa, la sua serie di Fourier è
+\[
+f(t)=\sum_{n=-\infty}^{+\infty} C_n e^{j n\omega_0 t},
+\qquad
+\omega_0=\frac{2\pi}{T}.
+\]
+
+Qui:
+\begin{itemize}
+    \item \(T\) è il periodo della funzione;
+    \item \(\omega_0\) è la pulsazione fondamentale;
+    \item la frequenza fondamentale in Hertz è
+    \[
+    \nu_0=\frac{1}{T}=\frac{\omega_0}{2\pi}.
+    \]
+\end{itemize}
+
+La formula dice che ogni funzione del nostro spazio si rappresenta come combinazione lineare
+di armoniche della fondamentale.
+
+\section{Che funzioni base compaiono}
+
+Le funzioni base sono
+\[
+e^{j n\omega_0 t},
+\qquad n\in\mathbb{Z}.
+\]
+
+Equivalentemente si può parlare di seni e coseni alle pulsazioni
+\[
+n\omega_0.
+\]
+
+Queste sono precisamente le sinusoidi che hanno periodo \(T\) oppure un suo sottomultiplo:
+\[
+\frac{T}{|n|}, \qquad n\neq 0.
+\]
+
+La famiglia delle funzioni base è infinita ma numerabile,
+perché è indicizzata dagli interi.
+
+\section{Ortogonalità della base}
+
+Nel prodotto scalare definito sopra, le funzioni esponenziali complesse risultano ortogonali:
+\[
+\left\langle e^{j m\omega_0 t}, e^{j n\omega_0 t}\right\rangle
+=
+\frac{1}{T}\int_{t_0}^{t_0+T}
+e^{j m\omega_0 t}\,\overline{e^{j n\omega_0 t}}\,dt.
+\]
+
+Poiché
+\[
+\overline{e^{j n\omega_0 t}}=e^{-j n\omega_0 t},
+\]
+si ottiene
+\[
+\left\langle e^{j m\omega_0 t}, e^{j n\omega_0 t}\right\rangle
+=
+\frac{1}{T}\int_{t_0}^{t_0+T} e^{j(m-n)\omega_0 t}\,dt
+=
+\begin{cases}
+1, & m=n,\\
+0, & m\neq n.
+\end{cases}
+\]
+
+Quindi la famiglia
+\[
+\left\{e^{j n\omega_0 t}\right\}_{n\in\mathbb{Z}}
+\]
+è ortonormale.
+
+\section{Coefficienti della serie di Fourier}
+
+I coefficienti \(C_n\) si ottengono proiettando \(f\) sulla funzione base corrispondente:
+\[
+C_n=\left\langle f(t), e^{j n\omega_0 t}\right\rangle.
+\]
+
+Usando la definizione di prodotto scalare si ricava
+\[
+C_n
+=
+\frac{1}{T}\int_{t_0}^{t_0+T} f(t)e^{-j n\omega_0 t}\,dt.
+\]
+
+Scegliendo per comodità \(t_0=0\), si ha
+\[
+C_n
+=
+\frac{1}{T}\int_0^T f(t)e^{-j n\omega_0 t}\,dt.
+\]
+
+\section{Significato dei coefficienti \(C_n\)}
+
+In generale \(C_n\) è un numero complesso.
+
+Possiamo quindi scrivere
+\[
+C_n = |C_n| e^{j\varphi_n}.
+\]
+
+Il modulo \(|C_n|\) misura il peso dell'armonica \(n\omega_0\),
+mentre la fase \(\varphi_n\) ne misura lo sfasamento.
+
+Se una funzione coincide con una singola armonica, allora un solo coefficiente è non nullo;
+negli altri casi il segnale è una combinazione lineare di più armoniche.
+
+\section{Interpretazione per i sistemi lineari}
+
+Se un segnale periodico entra in un sistema lineare, possiamo scomporlo in armoniche.
+Per linearità, la risposta complessiva si ottiene sommando le risposte del sistema
+alle singole componenti sinusoidali.
+
+Questa è la base concettuale dell'analisi in frequenza dei sistemi lineari.
+
+\section{Dal caso periodico al caso non periodico}
+
+Se il periodo \(T\) cresce, la pulsazione fondamentale
+\[
+\omega_0=\frac{2\pi}{T}
+\]
+diventa sempre più piccola.
+
+Nel limite \(T\to+\infty\):
+\begin{itemize}
+    \item le frequenze discrete \(n\omega_0\) si addensano;
+    \item la sommatoria sulle armoniche tende a un integrale;
+    \item si passa da una descrizione discreta in frequenza a una descrizione continua.
+\end{itemize}
+
+Questo passaggio porta dalla serie di Fourier alla trasformata di Fourier.
+
+\section{Trasformata di Fourier}
+
+Nel caso non periodico si scrive formalmente
+\[
+f(t)=\frac{1}{2\pi}\int_{-\infty}^{+\infty} F(\omega)e^{j\omega t}\,d\omega,
+\]
+dove
+\[
+\mathcal{F}\{f(t)\}=F(\omega)
+=
+\int_{-\infty}^{+\infty} f(t)e^{-j\omega t}\,dt.
+\]
+
+Qui \(\omega\) è una variabile continua e \(F(\omega)\) è, in generale, una funzione complessa.
+
+Possiamo scrivere
+\[
+F(\omega)=|F(\omega)|e^{j\arg F(\omega)}.
+\]
+
+Il modulo \(|F(\omega)|\) descrive il contenuto in frequenza del segnale;
+la fase \(\arg F(\omega)\) descrive lo sfasamento delle varie componenti.
+
+\section{Segnali stazionari e significato della Fourier}
+
+La trasformata di Fourier è lo strumento naturale per analizzare segnali stazionari
+oppure segnali definiti su tutto l'asse reale.
+
+Nel caso di segnali periodici o stazionari, il contenuto in frequenza non dipende
+dall'istante da cui si comincia a osservare il segnale.
+
+Per questo la Fourier è particolarmente adatta a descrivere il regime
+e il contenuto armonico del segnale.
+
+\section{Trasformata di Laplace}
+
+La trasformata di Laplace unilaterale si definisce come
+\[
+\mathcal{L}\{f(t)\}=F(s)
+=
+\int_{0^-}^{+\infty} f(t)e^{-st}\,dt,
+\]
+dove
+\[
+s\in\mathbb{C},
+\qquad
+s=\sigma+j\omega.
+\]
+
+La variabile complessa \(s\) permette di pesare il segnale non solo con sinusoidi,
+ma con esponenziali del tipo \(e^{st}\).
+
+\section{Significato della Laplace}
+
+La trasformata di Laplace è particolarmente utile per:
+\begin{itemize}
+    \item segnali causali;
+    \item fenomeni transitori;
+    \item studio dei sistemi dinamici;
+    \item trattamento delle condizioni iniziali;
+    \item descrizione di segnali che non ammettono Fourier classica.
+\end{itemize}
+
+Per questo, dal punto di vista fisico e ingegneristico:
+\begin{itemize}
+    \item Fourier è soprattutto uno strumento per il contenuto in frequenza
+    e per i segnali stazionari;
+    \item Laplace è soprattutto uno strumento per sistemi causali, transitori
+    e risposte forzate.
+\end{itemize}
+
+\section{Rapporto tra Fourier e Laplace}
+
+Formalmente, la trasformata di Fourier si può vedere come la trasformata di Laplace
+valutata sull'asse immaginario:
+\[
+s=j\omega.
+\]
+
+Tuttavia questo passaggio è lecito solo quando l'asse immaginario appartiene
+alla regione di convergenza della trasformata di Laplace.
+
+Quindi Fourier non è semplicemente ``Laplace con \(s=j\omega\)''
+in modo automatico: il legame è corretto, ma richiede condizioni di esistenza.
+
+\section{Distribuzioni}
+
+Per trattare in modo rigoroso oggetti come impulso, gradino e loro derivate,
+si introducono le distribuzioni.
+
+Una distribuzione non è, in generale, una funzione regolare nel senso classico,
+ma un oggetto definito attraverso il suo effetto integrale su funzioni test.
+
+\section{Delta di Dirac}
+
+L'esempio fondamentale è la delta di Dirac \(\delta(t)\), definita dalla proprietà
+\[
+\int_{-\infty}^{+\infty} f(t)\delta(t)\,dt = f(0).
+\]
+
+Questa relazione dice che la delta estrae il valore della funzione nel punto \(t=0\).
+
+Intuitivamente:
+\begin{itemize}
+    \item la delta è concentrata in \(t=0\);
+    \item il suo effetto è nullo ovunque tranne che in quell'istante;
+    \item ha senso solo sotto segno di integrale.
+\end{itemize}
+
+\section{Altre distribuzioni utili}
+
+Anche il gradino, la rampa e le derivate della delta
+si interpretano correttamente nel quadro delle distribuzioni.
+
+Questo è importante perché trasformate come Laplace e Fourier,
+essendo operazioni integrali, possono essere estese anche a questi oggetti generalizzati.
+
+\section{Sintesi della lezione}
+
+I punti chiave della lezione sono:
+\begin{enumerate}
+    \item introduzione dello spazio \(L_T^2\) delle funzioni periodiche quadrato-sommabili;
+    \item definizione di prodotto scalare e norma;
+    \item interpretazione geometrica dello spazio delle funzioni;
+    \item base ortonormale di esponenziali complessi;
+    \item serie di Fourier e coefficienti \(C_n\);
+    \item passaggio dal caso periodico al caso non periodico;
+    \item trasformata di Fourier;
+    \item trasformata di Laplace;
+    \item distribuzioni e delta di Dirac.
+\end{enumerate}

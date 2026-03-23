@@ -1,0 +1,477 @@
+\chapter{Lezione 11 --- Progetto del controllo digitale via loop shaping continuo, filtro anti-alias, sample-and-hold e discretizzazione del regolatore}
+
+\section{Obiettivo della lezione}
+
+In questa lezione si imposta una procedura pratica di progetto per un sistema di controllo digitale.
+
+L'idea di fondo è la seguente:
+\begin{itemize}
+    \item l'impianto fisico resta un sistema continuo;
+    \item il regolatore viene implementato in digitale;
+    \item per il progetto, per\`o, si sfruttano gli strumenti pi\`u ricchi del controllo continuo;
+    \item solo alla fine il regolatore continuo viene discretizzato.
+\end{itemize}
+
+Questa scelta \`e molto naturale per sistemi SISO tempo-invarianti, perch\'e il progetto nel continuo,
+specialmente tramite diagrammi di Bode e loop shaping, \`e pi\`u intuitivo e pi\`u ricco
+dal punto di vista degli strumenti disponibili.
+
+\section{Schema del sistema di controllo digitale}
+
+Lo schema fisico considerato \`e il seguente:
+\[
+y^\star \longrightarrow \text{sommatore} \longrightarrow \text{campionatore} \longrightarrow R(z)
+\longrightarrow \text{D/A} \longrightarrow \text{amplificatore + attuatore}
+\longrightarrow G(s) \longrightarrow y.
+\]
+
+Prima del campionatore bisogna inoltre prevedere un filtro anti-alias analogico.
+
+Quindi, dal punto di vista fisico e implementativo, i blocchi aggiuntivi rispetto al solo impianto sono:
+\begin{itemize}
+    \item \textbf{\(Q_1(s)\)}: filtro anti-alias;
+    \item \textbf{\(Q_2(s)\)}: convertitore D/A, modellato come tenuta di ordine zero;
+    \item \textbf{\(Q_3(s)\)}: amplificatore + attuatore.
+\end{itemize}
+
+A seconda della convenzione usata, nel modello globale pu\`o essere inclusa anche la dinamica del sensore.
+
+\section{Modello continuo equivalente usato per il progetto}
+
+Per il progetto si inglobano tutte le dinamiche continue nel blocco
+\[
+\tilde G(s)=Q_1(s)\,Q_2(s)\,Q_3(s)\,G(s).
+\]
+
+Si progetta quindi un regolatore continuo \(C(s)\) come se il sistema fosse interamente continuo,
+in modo tale che la funzione di trasferimento in ciclo chiuso
+\[
+H(s)=\frac{C(s)\tilde G(s)}{1+C(s)\tilde G(s)}
+\]
+soddisfi le specifiche assegnate.
+
+Una volta determinato \(C(s)\), lo si discretizza per ottenere \(R(z)\),
+ad esempio con la trasformata di Tustin, con o senza pre-warping.
+
+\section{Perch\'e si progetta \(C(s)\) e non direttamente \(R(z)\)}
+
+Il motivo \`e pratico:
+nel continuo si hanno a disposizione strumenti di progetto molto efficaci:
+\begin{itemize}
+    \item specifiche statiche;
+    \item specifiche in transitorio;
+    \item margine di fase;
+    \item banda passante;
+    \item reiezione dei disturbi;
+    \item loop shaping sulla funzione d'anello.
+\end{itemize}
+
+Per questo si sceglie di:
+\begin{enumerate}
+    \item progettare \(C(s)\) nel continuo;
+    \item poi trasformarlo in \(R(z)\).
+\end{enumerate}
+
+\section{Specifiche del problema}
+
+L'impostazione fatta a lezione considera specifiche tipiche del controllo:
+\begin{itemize}
+    \item prestazioni statiche;
+    \item prestazioni di transitorio;
+    \item reiezione dei disturbi e del rumore di misura.
+\end{itemize}
+
+Nell'esempio svolto, il sistema continuo da controllare \`e
+\[
+G(s)=\frac{10}{s+3}.
+\]
+
+Le specifiche richieste per il sistema in ciclo chiuso sono del tipo:
+\begin{itemize}
+    \item errore nullo a regime in risposta al gradino;
+    \item tempo di assestamento al \(95\%\) inferiore a \(2\) s;
+    \item assenza di sovraelongazione nella risposta al gradino;
+    \item reiezione del rumore di misura di almeno \(40\) dB per frequenze superiori a \(60\) rad/s.
+\end{itemize}
+
+\section{Forma della funzione d'anello}
+
+Nel progetto per loop shaping si lavora sulla funzione di anello aperto
+\[
+L(s)=C(s)G(s)
+\]
+oppure, pi\`u correttamente, sul sistema globale continuo
+\[
+L(s)=C(s)\tilde G(s).
+\]
+
+La funzione in ciclo chiuso \`e
+\[
+H(s)=\frac{L(s)}{1+L(s)}.
+\]
+
+\section{Specifica di errore a regime nullo}
+
+Per avere errore nullo al gradino occorre che la funzione d'anello abbia almeno un polo nell'origine.
+
+Quindi il regolatore deve contenere un integratore:
+\[
+C(s)\sim \frac{1}{s}.
+\]
+
+Questa \`e la prima scelta strutturale da fare nel progetto.
+
+\section{Specifica di assenza di sovraelongazione}
+
+Per evitare sovraelongazione, si vuole un sistema in ciclo chiuso con comportamento fortemente smorzato,
+idealmente con polo dominante reale oppure con coppia dominante molto smorzata.
+
+Negli appunti viene richiamata la regola empirica gi\`a vista nelle lezioni precedenti:
+\[
+\zeta \approx \frac{M_\varphi}{100},
+\]
+con \(M_\varphi\) espresso in gradi.
+
+Per avere una risposta senza overshoot, si richiede quindi un margine di fase elevato, ad esempio
+\[
+M_\varphi > 75^\circ.
+\]
+
+\section{Specifica sul tempo di assestamento}
+
+Se la risposta chiusa pu\`o essere approssimata con quella di un primo ordine
+\[
+H(s)=\frac{1}{1+s\theta},
+\]
+allora la risposta al gradino \`e
+\[
+y(t)=1-e^{-t/\theta}.
+\]
+
+Imponendo il tempo di assestamento al \(95\%\),
+\[
+1-e^{-t_a/\theta}=0.95,
+\]
+si ricava
+\[
+e^{-t_a/\theta}=0.05,
+\qquad
+-\frac{t_a}{\theta}=\ln(0.05),
+\qquad
+\theta=\frac{t_a}{-\ln(0.05)}.
+\]
+
+Con la specifica
+\[
+t_{a,95\%}<2\ \text{s},
+\]
+segue
+\[
+\theta<\frac{2}{-\ln(0.05)} \approx 0.668.
+\]
+
+Quindi
+\[
+\frac{1}{\theta} \gtrsim 1.5\ \text{rad/s}.
+\]
+
+Negli appunti, la banda passante desiderata del sistema chiuso viene quindi scelta attorno a
+\[
+\omega_{B,-3}\approx 2\ \text{rad/s}.
+\]
+
+\section{Specifica di reiezione del rumore}
+
+La richiesta di attenuare il rumore di misura di almeno \(40\) dB per
+\[
+\omega>60\ \text{rad/s}
+\]
+si traduce in una barriera sul modulo della funzione d'anello:
+alle alte frequenze \(L(s)\) deve essere sufficientemente piccolo,
+cos\`i che il rumore venga attenuato.
+
+Questo vincolo impone che, oltre una certa pulsazione, il modulo di \(L(s)\)
+scenda rapidamente.
+
+\section{Regolatori di tentativo e loop shaping}
+
+Negli appunti il regolatore viene costruito per tentativi, cio\`e plasmando il Bode di \(L(s)\).
+
+\subsection{Primo tentativo}
+
+Una prima scelta naturale \`e
+\[
+C_1(s)=\frac{k}{s},
+\]
+in modo da:
+\begin{itemize}
+    \item introdurre il polo nell'origine;
+    \item avere elevato guadagno a bassa frequenza;
+    \item iniziare con una pendenza di \(-20\) dB/dec nel diagramma del modulo.
+\end{itemize}
+
+\subsection{Correzione con una rete anticipatrice/ritardatrice}
+
+Per soddisfare contemporaneamente:
+\begin{itemize}
+    \item crossover desiderato;
+    \item margine di fase elevato;
+    \item attenuazione ad alta frequenza;
+\end{itemize}
+si modifica il regolatore introducendo uno zero e un polo.
+
+Dalle formule annotate in foto emerge la forma finale del regolatore continuo:
+\[
+C(s)=\frac{3}{10}\,\frac{1}{s}\,
+\frac{1+\dfrac{s}{0.7}}{1+\dfrac{s}{1.5}}.
+\]
+
+Questa struttura:
+\begin{itemize}
+    \item mantiene l'integratore;
+    \item aggiunge un aumento di fase nell'intorno della banda d'interesse;
+    \item consente di posizionare il taglio a \(0\) dB circa in
+    \[
+    \omega_c \approx 2\ \text{rad/s};
+    \]
+    \item lascia poi al polo dell'impianto e agli altri poli il compito di far scendere il modulo alle alte frequenze.
+\end{itemize}
+
+\section{Interpretazione del Bode del progetto}
+
+La logica del progetto riportata in lavagna \`e la seguente:
+\begin{itemize}
+    \item a bassissima frequenza serve l'integratore;
+    \item vicino alla zona del crossover si introducono zeri per aumentare la fase;
+    \item si lascia poi che i poli del sistema riportino il modulo verso il basso;
+    \item ad alta frequenza si aggiungono poli per rispettare la barriera di attenuazione del rumore.
+\end{itemize}
+
+Questo \`e il tipico schema di loop shaping:
+\[
+\text{guadagno alto in bassa frequenza, fase sufficiente al crossover, modulo piccolo in alta frequenza.}
+\]
+
+\section{Scelta del periodo di campionamento}
+
+Dopo aver fissato le prestazioni in ciclo chiuso, si passa alla scelta del campionamento.
+
+Negli appunti si usa la regola empirica:
+\[
+\omega_c^\text{camp} \approx 10\,\omega_{B,-3},
+\]
+dove \(\omega_c^\text{camp}\) \`e la pulsazione di campionamento.
+
+Poich\'e nel progetto si \`e scelto
+\[
+\omega_{B,-3}\approx 2\ \text{rad/s},
+\]
+una prima scelta naturale sarebbe
+\[
+\omega_c^\text{camp}=20\ \text{rad/s}.
+\]
+
+La pulsazione di Nyquist corrispondente sarebbe
+\[
+\omega_N=\frac{\omega_c^\text{camp}}{2}=10\ \text{rad/s}.
+\]
+
+\section{Scelta del filtro anti-alias}
+
+Il filtro anti-alias analogico deve avere una banda passante non superiore alla Nyquist,
+per evitare aliasing del rumore e delle componenti veloci.
+
+Quindi, con la prima scelta
+\[
+\omega_N=10\ \text{rad/s},
+\]
+bisognerebbe scegliere un anti-alias con frequenza di taglio non superiore a tale valore.
+
+Negli appunti si osserva per\`o che questa scelta pu\`o essere troppo penalizzante,
+e si preferisce aumentare la frequenza di campionamento.
+
+Un esempio riportato \`e scegliere
+\[
+\omega_c^\text{camp}=60\ \text{rad/s},
+\qquad
+\omega_N=30\ \text{rad/s},
+\]
+cos\`i da poter usare un filtro anti-alias con pulsazione caratteristica attorno a \(30\) rad/s.
+
+Una possibile scelta di anti-alias richiamata a lezione \`e un passa-basso del terzo ordine del tipo
+\[
+Q_1(s)=\left(\frac{30}{s+30}\right)^3.
+\]
+
+\subsection*{Periodo di campionamento}
+
+Con
+\[
+\omega_c^\text{camp}=60\ \text{rad/s},
+\]
+si ottiene
+\[
+T=\frac{2\pi}{\omega_c^\text{camp}}=\frac{2\pi}{60}\approx 0.1\ \text{s}.
+\]
+
+\section{Effetto della tenuta di ordine zero sul margine di fase}
+
+Una volta fissato \(T\), bisogna tenere conto del convertitore D/A con tenuta di ordine zero.
+
+Alle frequenze basse rispetto alla Nyquist, la tenuta si comporta come
+\[
+F(s)\approx T e^{-sT/2},
+\]
+quindi introduce un ritardo puro approssimato pari a \(T/2\).
+
+Questo significa che alla pulsazione di crossover \(\omega\) si ha un contributo di fase circa
+\[
+-\omega \frac{T}{2}.
+\]
+
+Nel caso dell'esempio, con
+\[
+\omega=2\ \text{rad/s},
+\qquad
+T\approx 0.1\ \text{s},
+\]
+si ottiene
+\[
+-\omega\frac{T}{2}\approx -0.1\ \text{rad}\approx -6^\circ.
+\]
+
+Negli appunti questa perdita di fase viene ritenuta non trascurabile:
+se il margine di fase \`e gi\`a al limite, \(6^\circ\) possono compromettere la specifica.
+
+\section{Campionare pi\`u velocemente}
+
+Per ridurre la perdita di fase dovuta alla tenuta, conviene campionare pi\`u rapidamente,
+cio\`e diminuire \(T\).
+
+L'idea annotata a lezione \`e quindi:
+\begin{itemize}
+    \item mantenere l'anti-alias fissato sulla banda scelta;
+    \item aumentare ulteriormente la frequenza di campionamento;
+    \item in questo modo il ritardo equivalente \(T/2\) diventa pi\`u piccolo.
+\end{itemize}
+
+Cos\`i la perdita di fase della tenuta si riduce e il margine di fase resta compatibile con la specifica.
+
+\section{Da \(C(s)\) a \(R(z)\)}
+
+Una volta definito il regolatore continuo \(C(s)\), si passa a costruire il regolatore digitale \(R(z)\).
+
+La trasformazione scelta a lezione \`e la trasformata di Tustin:
+\[
+s=\frac{2}{T}\frac{z-1}{z+1}.
+\]
+
+\subsection{Pre-warping: serve o no?}
+
+Negli appunti compare la domanda:
+\begin{quote}
+\emph{Da \(C(s)\) a \(R(z)\) faccio la trasformata di Tustin. Ma faccio o non faccio il pre-warping?}
+\end{quote}
+
+La risposta data nel caso in esame \`e:
+\begin{itemize}
+    \item s\`i, conviene farlo;
+    \item perch\'e il progetto del margine di fase \`e gi\`a piuttosto tirato;
+    \item senza pre-warping, la deformazione in frequenza della Tustin potrebbe far perdere il rispetto della specifica.
+\end{itemize}
+
+Quindi si usa la Tustin con pre-warping sulla frequenza di maggiore interesse,
+tipicamente la frequenza di crossover o la frequenza di taglio desiderata.
+
+\section{Riserva di fase nel progetto continuo}
+
+Un messaggio importante della lezione \`e che,
+nel progetto continuo del regolatore,
+non conviene soddisfare la specifica sul margine di fase in modo troppo poco conservativo.
+
+Infatti, una parte del margine viene poi ``mangiata'' da:
+\begin{itemize}
+    \item filtro anti-alias;
+    \item tenuta di ordine zero;
+    \item eventuali altre dinamiche implementative.
+\end{itemize}
+
+Per questo \`e buona norma:
+\begin{itemize}
+    \item o campionare abbastanza velocemente da rendere trascurabili questi effetti;
+    \item oppure progettare \(C(s)\) con una riserva di fase aggiuntiva.
+\end{itemize}
+
+\section{Procedura complessiva di progetto}
+
+La procedura emersa in questa lezione pu\`o essere riassunta cos\`i:
+
+\begin{enumerate}
+    \item Si modellano tutte le dinamiche continue presenti:
+    \[
+    \tilde G(s)=Q_1(s)Q_2(s)Q_3(s)G(s).
+    \]
+
+    \item Si fissano le specifiche:
+    \begin{itemize}
+        \item errore a regime;
+        \item tempo di assestamento;
+        \item overshoot;
+        \item reiezione del rumore.
+    \end{itemize}
+
+    \item Si progetta un regolatore continuo \(C(s)\) mediante loop shaping,
+    imponendo che
+    \[
+    H(s)=\frac{C(s)\tilde G(s)}{1+C(s)\tilde G(s)}
+    \]
+    soddisfi le specifiche.
+
+    \item Si sceglie la banda passante desiderata del sistema chiuso.
+
+    \item Si sceglie una frequenza di campionamento sufficientemente maggiore della banda chiusa.
+
+    \item Si sceglie un filtro anti-alias compatibile con la Nyquist.
+
+    \item Si verifica la perdita di fase introdotta dalla tenuta di ordine zero.
+
+    \item Si discretizza il regolatore con Tustin, eventualmente con pre-warping.
+
+    \item Si verifica infine il comportamento del sistema discreto tramite simulazione,
+    ad esempio con risposta al gradino, rampa e analisi del margine.
+\end{enumerate}
+
+\section{Sintesi della lezione}
+
+I punti chiave della lezione sono:
+\begin{enumerate}
+    \item nel progetto digitale conviene inglobare le dinamiche implementative nel modello continuo
+    \[
+    \tilde G(s)=Q_1(s)Q_2(s)Q_3(s)G(s);
+    \]
+    \item il regolatore si progetta inizialmente come \(C(s)\), usando gli strumenti del controllo continuo;
+    \item nell'esempio con
+    \[
+    G(s)=\frac{10}{s+3},
+    \]
+    si richiedono errore nullo al gradino, transitorio rapido, assenza di overshoot e attenuazione del rumore;
+    \item per avere errore nullo al gradino serve un polo nell'origine nel regolatore;
+    \item per evitare overshoot si vuole un margine di fase elevato, dell'ordine di \(75^\circ\);
+    \item un regolatore continuo compatibile con gli appunti \`e
+    \[
+    C(s)=\frac{3}{10}\,\frac{1}{s}\,
+    \frac{1+\dfrac{s}{0.7}}{1+\dfrac{s}{1.5}};
+    \]
+    \item la banda passante chiusa viene scelta circa a
+    \[
+    \omega_{B,-3}\approx 2\ \text{rad/s};
+    \]
+    \item il periodo di campionamento va scelto a partire da questa banda;
+    \item il filtro anti-alias e la tenuta di ordine zero introducono effetti dinamici non trascurabili;
+    \item la tenuta introduce una perdita di fase circa pari a
+    \[
+    -\omega T/2;
+    \]
+    \item se questa perdita \`e rilevante, bisogna campionare pi\`u velocemente oppure aumentare la riserva di fase del progetto continuo;
+    \item il passaggio finale da \(C(s)\) a \(R(z)\) si fa con Tustin, in questo caso preferibilmente con pre-warping.
+\end{enumerate}

@@ -1,0 +1,148 @@
+\documentclass[a4paper,12pt]{report}
+
+% --------------------------------------------------
+% Codifica e lingua
+% --------------------------------------------------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+
+% --------------------------------------------------
+% Impaginazione e tipografia
+% --------------------------------------------------
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage{parskip}
+
+% --------------------------------------------------
+% Matematica
+% --------------------------------------------------
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{amsthm}
+\usepackage{bm}
+\usepackage{physics}
+
+% --------------------------------------------------
+% Figure, grafici, colori
+% --------------------------------------------------
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+
+% --------------------------------------------------
+% TikZ e PGFPlots per diagrammi, blocchi, grafici
+% --------------------------------------------------
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\usetikzlibrary{
+    arrows.meta,
+    calc,
+    positioning,
+    fit,
+    matrix,
+    backgrounds,
+    decorations.pathreplacing,
+    shapes.geometric,
+    shapes.symbols,
+    shapes.misc,
+    patterns
+}
+
+% Se vuoi anche circuiti/diagrammi più tecnici
+\usepackage{circuitikz}
+
+% --------------------------------------------------
+% Link ipertestuali
+% --------------------------------------------------
+\usepackage[
+    colorlinks=true,
+    linkcolor=blue!50!black,
+    urlcolor=blue!50!black,
+    citecolor=blue!50!black
+]{hyperref}
+
+% --------------------------------------------------
+% Comandi utili
+% --------------------------------------------------
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+
+\begin{document}
+
+% --------------------------------------------------
+% Frontespizio
+% --------------------------------------------------
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+
+    {\Huge\bfseries Teoria del Controllo\par}
+    \vspace{0.8cm}
+
+    {\Large Professor Caiti\par}
+    \vspace{0.5cm}
+
+    {\large Università di Pisa\par}
+    \vspace{0.3cm}
+
+    {\large Ingegneria Robotica e dell'Automazione\par}
+
+    \vfill
+
+    {\Large\bfseries Autori: Ingegneri Robotizzati\par}
+    \vspace{0.8cm}
+
+    {\large\textbf{Materiale:}\par}
+    \vspace{0.2cm}
+    {\large Alessio, Francesca, Mery, Gabriele, Samuele, Lucia, Donatella\par}
+
+    \vfill
+
+\end{titlepage}
+
+% --------------------------------------------------
+% Disclaimer
+% --------------------------------------------------
+\chapter*{Disclaimer}
+\addcontentsline{toc}{chapter}{Disclaimer}
+
+Questo documento è stato realizzato con il supporto dell'intelligenza artificiale a partire dagli appunti presi in aula durante le lezioni. Il materiale è stato successivamente rielaborato, organizzato e ampliato mediante l'uso di libri, documenti di supporto e strumenti di IA, con l'obiettivo di renderlo più chiaro, completo e utile allo studio.
+
+Il testo ha esclusivamente finalità didattiche e di supporto personale allo studio. Non sostituisce in alcun modo le lezioni, il materiale ufficiale del corso, né i testi consigliati dal docente.
+
+Questo documento non è assolutamente pensato per la vendita, la distribuzione commerciale o qualunque altra forma di utilizzo a scopo di lucro.
+
+\tableofcontents
+
+\input{lezione1}
+\input{lezione2}
+\input{lezione3}
+\input{lezione4}
+\input{lezione5}
+\input{lezione6}
+\input{lezione7}
+\input{lezione8}
+\input{lezione9}
+\input{lezione10}
+\input{lezione11}
+\input{lezione12}
+\input{lezione13}
+\input{lezione14}
+\input{lezione15}
+\input{lezione16}
+\input{lezione17}
+\input{lezione18}
+\input{lezione19}
+\input{lezione20}
+\input{lezione21}
+\input{lezione22}
+
+\end{document}

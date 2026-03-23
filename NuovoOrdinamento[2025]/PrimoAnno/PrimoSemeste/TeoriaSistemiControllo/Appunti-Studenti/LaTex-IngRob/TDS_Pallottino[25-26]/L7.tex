@@ -1,0 +1,676 @@
+\chapter{L7 -- Costruzione pratica della forma di Jordan e catene di autovettori generalizzati}
+
+\section{Obiettivo della lezione}
+
+Dopo aver introdotto nella lezione precedente gli autovettori generalizzati, in questa lezione vogliamo passare dalla teoria alla \emph{costruzione pratica} della forma di Jordan di una matrice generica.
+
+Il problema è il seguente: data una matrice
+\[
+A\in\mathbb{R}^{n\times n},
+\]
+si vuole costruire una matrice invertibile $Q$ tale che
+\[
+Q^{-1}AQ=J,
+\]
+dove $J$ è la forma di Jordan associata ad $A$.
+
+Equivalentemente, si può scrivere
+\begin{equation}
+AQ=QJ.
+\label{eq:L7_AQ_QJ}
+\end{equation}
+
+Il punto chiave è capire come devono essere scelte le colonne di $Q$ affinché questa relazione produca esattamente i blocchi di Jordan desiderati.
+
+\section{Caso fondamentale: un solo blocco di Jordan}
+
+Conviene cominciare dal caso più semplice ma più istruttivo: supponiamo che $A$ sia simile a un unico blocco di Jordan di dimensione $m$ associato all'autovalore $\lambda$:
+\[
+J=
+J_\lambda^{(m)}
+=
+\begin{pmatrix}
+\lambda & 1 & 0 & \cdots & 0\\
+0 & \lambda & 1 & \cdots & 0\\
+0 & 0 & \lambda & \ddots & \vdots\\
+\vdots & \vdots & \ddots & \ddots & 1\\
+0 & 0 & \cdots & 0 & \lambda
+\end{pmatrix}.
+\]
+
+Sia
+\[
+Q=\begin{pmatrix} q_1 & q_2 & \cdots & q_m \end{pmatrix},
+\]
+dove $q_1,\dots,q_m$ sono le colonne di $Q$.
+
+Dalla relazione \eqref{eq:L7_AQ_QJ}, confrontando colonna per colonna, si ottiene:
+
+\subsection{Prima colonna}
+
+La prima colonna di $J$ è
+\[
+\begin{pmatrix}
+\lambda\\
+0\\
+\vdots\\
+0
+\end{pmatrix},
+\]
+quindi
+\[
+Aq_1=Q
+\begin{pmatrix}
+\lambda\\
+0\\
+\vdots\\
+0
+\end{pmatrix}
+=\lambda q_1.
+\]
+
+Dunque
+\begin{equation}
+(A-\lambda I)q_1=0.
+\label{eq:L7_chain_first}
+\end{equation}
+
+Quindi $q_1$ è un \emph{autovettore} associato a $\lambda$.
+
+\subsection{Colonne successive}
+
+Per $j=2,\dots,m$, la $j$-esima colonna di $J$ ha un $1$ nella riga $j-1$, un $\lambda$ sulla diagonale e zeri altrove.  
+Quindi:
+\[
+Aq_j=q_{j-1}+\lambda q_j,
+\]
+ossia
+\begin{equation}
+(A-\lambda I)q_j=q_{j-1},
+\qquad j=2,\dots,m.
+\label{eq:L7_chain_relation}
+\end{equation}
+
+Queste relazioni sono la struttura fondamentale di una \emph{catena di autovettori generalizzati}.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[>=Latex, node distance=1.6cm]
+    \node[draw, rounded corners] (q1) {$q_1$};
+    \node[draw, rounded corners, right=of q1] (q2) {$q_2$};
+    \node[right=of q2] (dots) {$\cdots$};
+    \node[draw, rounded corners, right=of dots] (qm1) {$q_{m-1}$};
+    \node[draw, rounded corners, right=of qm1] (qm) {$q_m$};
+
+    \draw[<- , thick] (q1) -- node[above] {$A-\lambda I$} (q2);
+    \draw[<- , thick] (q2) -- (dots);
+    \draw[<- , thick] (dots) -- (qm1);
+    \draw[<- , thick] (qm1) -- node[above] {$A-\lambda I$} (qm);
+
+    \draw[->, thick] (q1) -- +(0,-1.2) node[below] {$0$};
+\end{tikzpicture}
+\caption{Catena di autovettori generalizzati associata a un blocco di Jordan.}
+\end{figure}
+
+\section{Ordine degli autovettori generalizzati}
+
+Dalle relazioni \eqref{eq:L7_chain_first}--\eqref{eq:L7_chain_relation} segue immediatamente che:
+\[
+q_1\in\ker(A-\lambda I),
+\]
+\[
+q_2\in\ker(A-\lambda I)^2,\qquad q_2\notin\ker(A-\lambda I),
+\]
+\[
+q_3\in\ker(A-\lambda I)^3,\qquad q_3\notin\ker(A-\lambda I)^2,
+\]
+e così via.
+
+In generale:
+\begin{equation}
+q_j\in\ker(A-\lambda I)^j
+\qquad\text{e}\qquad
+q_j\notin\ker(A-\lambda I)^{j-1}.
+\label{eq:L7_order_generalized}
+\end{equation}
+
+Questo significa che $q_j$ è un autovettore generalizzato di ordine $j$.
+
+\paragraph{Osservazione.}
+Per costruire una catena conviene spesso partire \emph{dall'ultimo vettore}, cioè da un elemento di ordine massimo, e poi risalire applicando $A-\lambda I$:
+\[
+q_m \xmapsto{\,A-\lambda I\,} q_{m-1} \xmapsto{\,A-\lambda I\,} \cdots \xmapsto{\,A-\lambda I\,} q_1 \xmapsto{\,A-\lambda I\,} 0.
+\]
+
+\section{Costruzione delle catene a partire dai nuclei successivi}
+
+Sia $\lambda$ un autovalore di $A$. Consideriamo la catena crescente di sottospazi
+\begin{equation}
+\ker(A-\lambda I)\subseteq \ker(A-\lambda I)^2 \subseteq \cdots \subseteq \ker(A-\lambda I)^p=\ker(A-\lambda I)^{p+1},
+\label{eq:L7_kernel_chain}
+\end{equation}
+dove $p$ è il primo indice di stabilizzazione.
+
+Definiamo
+\begin{equation}
+\mu_j:=\dim\ker(A-\lambda I)^j,
+\label{eq:L7_mu_j}
+\end{equation}
+e poniamo convenzionalmente
+\[
+\mu_0:=0.
+\]
+
+Allora la quantità
+\begin{equation}
+m_j:=\mu_j-\mu_{j-1}
+\label{eq:L7_m_j}
+\end{equation}
+misura quanti \emph{nuovi} vettori compaiono passando dall'ordine $j-1$ all'ordine $j$.
+
+\paragraph{Interpretazione pratica.}
+Nella costruzione adattata a Jordan:
+\begin{itemize}
+    \item $m_1$ è il numero di autovettori indipendenti, cioè la molteplicità geometrica;
+    \item $m_2$ dice quante catene raggiungono almeno l'ordine $2$;
+    \item $m_3$ dice quante catene raggiungono almeno l'ordine $3$;
+    \item e così via.
+\end{itemize}
+
+\paragraph{Procedura costruttiva per un autovalore fissato $\lambda$.}
+\begin{enumerate}
+    \item Si calcolano i nuclei successivi $\ker(A-\lambda I)^j$ fino a stabilizzazione.
+    \item Si determinano le dimensioni $\mu_j$ e le differenze $m_j$.
+    \item Si parte dal massimo ordine $p$ e si scelgono $m_p$ vettori
+    \[
+    q_1^{(p)},\dots,q_{m_p}^{(p)}\in \ker(A-\lambda I)^p\setminus \ker(A-\lambda I)^{p-1}.
+    \]
+    \item Da ciascuno di essi si genera una catena ponendo
+    \[
+    q_i^{(p-1)}=(A-\lambda I)q_i^{(p)},\qquad
+    q_i^{(p-2)}=(A-\lambda I)q_i^{(p-1)},\quad \dots
+    \]
+    fino ad arrivare a un autovettore.
+    \item Si passa poi all'ordine $p-1$, scegliendo \emph{nuovi} vettori che non siano già coinvolti nelle catene costruite.
+\end{enumerate}
+
+\paragraph{Idea di fondo.}
+Si parte dall'alto per evitare di scegliere vettori che finirebbero per essere già contenuti nelle catene costruite in precedenza.
+
+\section{Come si dispongono le colonne di \texorpdfstring{$Q$}{Q}}
+
+Una volta costruite le catene, le colonne di $Q$ devono essere ordinate \emph{catena per catena}.
+
+Se, per esempio, abbiamo due catene:
+\[
+q_1^{(1)},q_1^{(2)},\dots,q_1^{(p)},
+\qquad
+q_2^{(1)},q_2^{(2)},\dots,q_2^{(r)},
+\]
+allora una scelta compatibile è
+\begin{equation}
+Q=
+\begin{pmatrix}
+q_1^{(1)} & q_1^{(2)} & \cdots & q_1^{(p)} &
+q_2^{(1)} & q_2^{(2)} & \cdots & q_2^{(r)}
+\end{pmatrix}.
+\label{eq:L7_Q_ordered_by_chains}
+\end{equation}
+
+\paragraph{Nota importante.}
+Si possono permutare i blocchi di Jordan, ma non si può spezzare una catena internamente, altrimenti la relazione $AQ=QJ$ non assume più la forma desiderata.
+
+\section{Procedura generale per costruire la forma di Jordan}
+
+Riassumiamo adesso l'algoritmo completo.
+
+\subsection*{Passo 1: autovalori e molteplicità algebriche}
+
+Si calcolano gli autovalori $\lambda_i$ di $A$ e le loro molteplicità algebriche $m_a(\lambda_i)$.
+
+\subsection*{Passo 2: nuclei successivi}
+
+Per ogni autovalore $\lambda_i$ si calcolano i nuclei
+\[
+\ker(A-\lambda_i I),\ \ker(A-\lambda_i I)^2,\ \dots,\ \ker(A-\lambda_i I)^p,
+\]
+fino al primo indice $p$ per cui
+\[
+\ker(A-\lambda_i I)^p=\ker(A-\lambda_i I)^{p+1}.
+\]
+
+\subsection*{Passo 3: dimensioni e differenze}
+
+Si definiscono
+\[
+\mu_j=\dim\ker(A-\lambda_i I)^j,
+\qquad
+m_j=\mu_j-\mu_{j-1}.
+\]
+
+\subsection*{Passo 4: costruzione delle catene}
+
+Si parte dall'ordine massimo $p$ e si scelgono i vettori generalizzati di ordine massimo; poi si fa scendere la catena applicando $A-\lambda_i I$.
+
+\subsection*{Passo 5: matrice \texorpdfstring{$Q$}{Q}}
+
+Si mettono come colonne di $Q$ tutti i vettori delle catene, ordinati blocco per blocco.
+
+\subsection*{Passo 6: forma di Jordan}
+
+La matrice $J$ si legge direttamente dalle lunghezze delle catene:
+\begin{itemize}
+    \item una catena di lunghezza $1$ produce un blocco di Jordan di ordine $1$;
+    \item una catena di lunghezza $2$ produce un blocco di ordine $2$;
+    \item ecc.
+\end{itemize}
+
+\section{Esempio completo}
+
+Negli appunti compare un esempio molto istruttivo. Consideriamo la matrice
+\begin{equation}
+A=
+\begin{pmatrix}
+0 & 1 & 0 & 0 & -1 & 0\\
+0 & 0 & 0 & 0 & 0 & -1\\
+0 & -1 & -1 & 1 & 0 & -1\\
+0 & 0 & 0 & -1 & 0 & 0\\
+0 & 0 & 0 & 0 & -1 & 1\\
+0 & 0 & 0 & 0 & 0 & -1
+\end{pmatrix}.
+\label{eq:L7_example_A}
+\end{equation}
+
+La matrice è triangolare superiore a blocchi, quindi gli autovalori si leggono sulla diagonale:
+\[
+\lambda=0 \quad \text{con molteplicità algebrica }2,
+\]
+\[
+\lambda=-1 \quad \text{con molteplicità algebrica }4.
+\]
+
+Dunque:
+\[
+m_a(0)=2,
+\qquad
+m_a(-1)=4.
+\]
+
+\subsection{Autovalore \texorpdfstring{$\lambda=0$}{lambda=0}}
+
+Dobbiamo studiare i nuclei di $A^j$.
+
+\subsubsection*{Primo passo}
+
+Poiché la prima colonna di $A$ è nulla, si ha subito
+\[
+Ae_1=0,
+\]
+quindi
+\[
+\ker(A)=\operatorname{span}\{e_1\},
+\qquad
+\mu_1=\dim\ker(A)=1.
+\]
+
+\subsubsection*{Secondo passo}
+
+Calcolando $A^2$ si ottiene
+\[
+\mu_2=\dim\ker(A^2)=2.
+\]
+Poiché la molteplicità algebrica di $0$ è già pari a $2$, la catena si stabilizza qui:
+\[
+\ker(A^3)=\ker(A^2).
+\]
+
+Quindi
+\[
+m_1=\mu_1=1,
+\qquad
+m_2=\mu_2-\mu_1=1.
+\]
+
+\paragraph{Conclusione.}
+Esiste una sola catena per $\lambda=0$, di lunghezza $2$.
+
+\subsubsection*{Scelta della catena}
+
+Una scelta possibile è
+\[
+q_{0,1}^{(2)}=
+\begin{pmatrix}
+1\\
+1\\
+-1\\
+0\\
+0\\
+0
+\end{pmatrix},
+\]
+per cui
+\[
+q_{0,1}^{(1)}=Aq_{0,1}^{(2)}=
+\begin{pmatrix}
+1\\
+0\\
+0\\
+0\\
+0\\
+0
+\end{pmatrix}
+=e_1.
+\]
+
+Questa produce il blocco di Jordan
+\[
+J_0^{(2)}=
+\begin{pmatrix}
+0 & 1\\
+0 & 0
+\end{pmatrix}.
+\]
+
+\subsection{Autovalore \texorpdfstring{$\lambda=-1$}{lambda=-1}}
+
+Ora studiamo
+\[
+A+I.
+\]
+
+\subsubsection*{Primo passo}
+
+Si trova
+\[
+\dim\ker(A+I)=2,
+\]
+quindi
+\[
+\mu_1=2.
+\]
+
+Una possibile base di $\ker(A+I)$ è
+\[
+q_{-1,1}^{(1)}=
+\begin{pmatrix}
+0\\
+0\\
+1\\
+0\\
+0\\
+0
+\end{pmatrix},
+\qquad
+q_{-1,2}^{(1)}=
+\begin{pmatrix}
+1\\
+0\\
+0\\
+0\\
+1\\
+0
+\end{pmatrix}.
+\]
+
+\subsubsection*{Secondo passo}
+
+Si calcola poi
+\[
+\mu_2=\dim\ker(A+I)^2=4.
+\]
+
+Quindi
+\[
+m_2=\mu_2-\mu_1=4-2=2.
+\]
+
+\subsubsection*{Terzo passo}
+
+Si verifica che
+\[
+\mu_3=\dim\ker(A+I)^3=4,
+\]
+perciò la catena si stabilizza:
+\[
+\ker(A+I)^3=\ker(A+I)^2.
+\]
+
+Quindi
+\[
+m_3=\mu_3-\mu_2=0.
+\]
+
+\paragraph{Conclusione.}
+Per l'autovalore $-1$ ci sono due catene di lunghezza $2$.
+
+\subsubsection*{Scelta delle catene}
+
+Una prima scelta naturale è
+\[
+q_{-1,1}^{(2)}=
+\begin{pmatrix}
+0\\
+0\\
+0\\
+1\\
+0\\
+0
+\end{pmatrix},
+\qquad
+(A+I)q_{-1,1}^{(2)}=
+\begin{pmatrix}
+0\\
+0\\
+1\\
+0\\
+0\\
+0
+\end{pmatrix}
+=q_{-1,1}^{(1)}.
+\]
+
+Per la seconda catena, una scelta possibile è
+\[
+q_{-1,2}^{(2)}=
+\begin{pmatrix}
+0\\
+1\\
+0\\
+2\\
+0\\
+1
+\end{pmatrix},
+\]
+infatti
+\[
+(A+I)q_{-1,2}^{(2)}=
+\begin{pmatrix}
+1\\
+0\\
+0\\
+0\\
+1\\
+0
+\end{pmatrix}
+=q_{-1,2}^{(1)}.
+\]
+
+\subsection{Costruzione di \texorpdfstring{$Q$}{Q}}
+
+Disponiamo ora le colonne per catene:
+\[
+Q=
+\begin{pmatrix}
+q_{0,1}^{(1)} & q_{0,1}^{(2)} &
+q_{-1,1}^{(1)} & q_{-1,1}^{(2)} &
+q_{-1,2}^{(1)} & q_{-1,2}^{(2)}
+\end{pmatrix}.
+\]
+
+Esplicitamente, una possibile matrice di cambio di base è
+\begin{equation}
+Q=
+\begin{pmatrix}
+1 & 1 & 0 & 0 & 1 & 0\\
+0 & 1 & 0 & 0 & 0 & 1\\
+0 & -1 & 1 & 0 & 0 & 0\\
+0 & 0 & 0 & 1 & 0 & 2\\
+0 & 0 & 0 & 0 & 1 & 0\\
+0 & 0 & 0 & 0 & 0 & 1
+\end{pmatrix}.
+\label{eq:L7_example_Q}
+\end{equation}
+
+\subsection{Forma di Jordan finale}
+
+La forma di Jordan corrispondente è
+\begin{equation}
+J=
+\operatorname{diag}\!\left(
+J_0^{(2)},
+J_{-1}^{(2)},
+J_{-1}^{(2)}
+\right)
+=
+\begin{pmatrix}
+0 & 1 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & -1 & 1 & 0 & 0\\
+0 & 0 & 0 & -1 & 0 & 0\\
+0 & 0 & 0 & 0 & -1 & 1\\
+0 & 0 & 0 & 0 & 0 & -1
+\end{pmatrix}.
+\label{eq:L7_example_J}
+\end{equation}
+
+Dunque
+\[
+Q^{-1}AQ=J.
+\]
+
+\paragraph{Commento.}
+L'esempio mostra bene che:
+\begin{itemize}
+    \item l'autovalore $0$ genera un unico blocco di ordine $2$;
+    \item l'autovalore $-1$ genera due blocchi di ordine $2$;
+    \item l'informazione cruciale non è solo la molteplicità algebrica, ma la crescita delle dimensioni dei nuclei successivi.
+\end{itemize}
+
+\section{Proprietà degli autovettori generalizzati}
+
+Gli appunti sottolineano alcune proprietà che è utile fissare.
+
+\subsection{Linearità lungo una catena}
+
+Se
+\[
+(A-\lambda I)q^{(k)}=q^{(k-1)},
+\]
+allora i vettori
+\[
+q^{(k)},\,q^{(k-1)},\,\dots,\,q^{(1)}
+\]
+sono linearmente indipendenti.
+
+\paragraph{Idea della dimostrazione.}
+Se fossero linearmente dipendenti, applicando successivamente $A-\lambda I$ si arriverebbe a una dipendenza anche tra vettori di ordine inferiore, fino a contraddire il fatto che $q^{(1)}\neq 0$ è un autovettore.
+
+\subsection{Connessione con i sottospazi \texorpdfstring{$A$}{A}-invarianti}
+
+Ricordiamo che il sottospazio ciclico generato da $x_0$,
+\[
+S_{x_0}=\operatorname{span}\{x_0,Ax_0,\dots,A^{p-1}x_0\},
+\]
+è $A$-invariante.
+
+Se $x_0$ è un autovettore, allora
+\[
+S_{x_0}=\operatorname{span}\{x_0\},
+\]
+cioè una retta.
+
+Se invece $x_0$ è un autovettore generalizzato di ordine $k$, allora la catena associata genera un sottospazio $A$-invariante di dimensione $k$, che coincide con il blocco di Jordan corrispondente.
+
+\section{Interpretazione strutturale}
+
+Tutta la costruzione fatta fin qui serve a capire la struttura dinamica del sistema.
+
+\paragraph{Per un autovalore reale $\lambda$:}
+\begin{itemize}
+    \item se il blocco è di ordine $1$, compare solo il modo $e^{\lambda t}$ nel continuo o $\lambda^k$ nel discreto;
+    \item se il blocco è di ordine $r>1$, compaiono anche fattori polinomiali:
+    \[
+    e^{\lambda t},\ te^{\lambda t},\ \dots,\ t^{r-1}e^{\lambda t},
+    \]
+    nel continuo, oppure
+    \[
+    \lambda^k,\ k\lambda^{k-1},\ \binom{k}{2}\lambda^{k-2},\dots
+    \]
+    nel discreto.
+\end{itemize}
+
+\paragraph{Per questo motivo:}
+non basta conoscere gli autovalori; serve conoscere anche la forma di Jordan, cioè la dimensione dei blocchi.
+
+\section{Schema riassuntivo finale}
+
+Per un autovalore fissato $\lambda$:
+
+\begin{enumerate}
+    \item Calcolo le dimensioni
+    \[
+    \mu_j=\dim\ker(A-\lambda I)^j.
+    \]
+    \item Calcolo le differenze
+    \[
+    m_j=\mu_j-\mu_{j-1}.
+    \]
+    \item Interpreto $m_j$ come numero di catene che arrivano almeno all'ordine $j$.
+    \item Scelgo i vettori di ordine massimo.
+    \item Li faccio scendere con l'operatore $A-\lambda I$.
+    \item Dispongo le colonne di $Q$ per catene.
+    \item Ricavo $J$.
+\end{enumerate}
+
+\section{Sintesi della lezione}
+
+In questa lezione abbiamo visto che:
+
+\begin{enumerate}
+    \item la relazione
+    \[
+    AQ=QJ
+    \]
+    letta colonna per colonna produce naturalmente le catene di autovettori generalizzati;
+
+    \item un vettore $q_j$ di una catena soddisfa
+    \[
+    (A-\lambda I)q_j=q_{j-1},
+    \]
+    e quindi appartiene a
+    \[
+    \ker(A-\lambda I)^j\setminus \ker(A-\lambda I)^{j-1};
+    \]
+
+    \item per costruire la forma di Jordan bisogna studiare la crescita dei nuclei
+    \[
+    \ker(A-\lambda I)^j;
+    \]
+
+    \item le quantità
+    \[
+    \mu_j=\dim\ker(A-\lambda I)^j,
+    \qquad
+    m_j=\mu_j-\mu_{j-1}
+    \]
+    permettono di capire quante catene e di quali lunghezze servono;
+
+    \item le colonne della matrice di cambio di base $Q$ vanno disposte seguendo le catene, senza spezzarle;
+
+    \item nell'esempio proposto, la matrice ha:
+    \[
+    J=\operatorname{diag}\!\left(J_0^{(2)},J_{-1}^{(2)},J_{-1}^{(2)}\right).
+    \]
+\end{enumerate}
+
+Questa procedura completa il passaggio dalla teoria degli autovalori generalizzati alla costruzione operativa della forma di Jordan, che sarà poi usata per studiare in modo sistematico l'evoluzione libera dei sistemi lineari.

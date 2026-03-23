@@ -1,0 +1,494 @@
+\chapter{Lezione 13 --- Assegnamento degli autovalori mediante retroazione completa dello stato}
+
+\section{Impostazione del problema}
+
+Consideriamo un sistema lineare tempo-invariante in forma di stato
+\[
+\begin{cases}
+\dot x(t)=Ax(t)+Bu(t),\\[4pt]
+y(t)=Cx(t),
+\end{cases}
+\]
+dove, per evitare ambiguità di notazione,
+\[
+x(t)\in\mathbb{R}^n,\qquad
+u(t)\in\mathbb{R}^r,\qquad
+y(t)\in\mathbb{R}^\ell,
+\]
+e
+\[
+A\in\mathbb{R}^{n\times n},\qquad
+B\in\mathbb{R}^{n\times r},\qquad
+C\in\mathbb{R}^{\ell\times n}.
+\]
+
+Vogliamo controllare il sistema attraverso una \textbf{retroazione dello stato}.
+
+\subsection{Problema di regolazione e problema di tracking}
+
+Negli appunti si distinguono due casi:
+\begin{itemize}
+    \item se il riferimento \(y^\star\) è costante, si ha un \textbf{problema di regolazione};
+    \item se il riferimento è tempo-variabile,
+    \[
+    y^\star=y^\star(t),
+    \]
+    si ha un \textbf{problema di tracking}.
+\end{itemize}
+
+Nel seguito ci concentriamo soprattutto sulla parte di stabilizzazione e assegnamento degli autovalori,
+che riguarda la dinamica interna del sistema retroazionato.
+
+\section{Retroazione completa dello stato}
+
+Supponiamo che tutto lo stato sia misurabile e disponibile.
+In tal caso possiamo usare una legge di controllo del tipo
+\[
+u(t)=-Kx(t)+n(t),
+\]
+dove:
+\begin{itemize}
+    \item \(K\) è la matrice di guadagno di retroazione;
+    \item \(n(t)\) è un ingresso esterno, usato ad esempio per il riferimento.
+\end{itemize}
+
+Nel caso SISO, \(K\) è un vettore riga:
+\[
+K\in\mathbb{R}^{1\times n}.
+\]
+
+\subsection*{Osservazione}
+
+L'ipotesi cruciale è che lo stato sia \emph{tutto misurabile}.
+Qui non stiamo ancora affrontando il problema dell'osservatore:
+si assume direttamente di conoscere \(x(t)\).
+
+\section{Dinamica del sistema retroazionato}
+
+Sostituendo la legge di controllo
+\[
+u(t)=-Kx(t)+n(t)
+\]
+nell'equazione di stato,
+si ottiene
+\[
+\dot x(t)=Ax(t)+B\bigl(-Kx(t)+n(t)\bigr).
+\]
+
+Quindi
+\[
+\dot x(t)=Ax(t)-BKx(t)+Bn(t),
+\]
+ossia
+\[
+\dot x(t)=(A-BK)x(t)+Bn(t).
+\]
+
+La matrice di stato del sistema retroazionato è dunque
+\[
+A_{\text{cl}}=A-BK.
+\]
+
+\section{Autovalori del sistema retroazionato}
+
+Gli autovalori della matrice \(A\) sono le radici del polinomio caratteristico
+\[
+p_A(\lambda)=\det(\lambda I-A).
+\]
+
+Dopo la retroazione di stato, gli autovalori del sistema diventano quelli della matrice
+\[
+A-BK,
+\]
+cioè le radici di
+\[
+\det(\lambda I-A+BK)=0.
+\]
+
+La domanda fondamentale è quindi:
+
+\begin{quote}
+\emph{Posso progettare \(K\) in modo da assegnare arbitrariamente gli autovalori di \(A-BK\)?}
+\end{quote}
+
+\section{Teorema di assegnamento degli autovalori}
+
+\subsection*{Caso continuo}
+
+Negli appunti il teorema è formulato nel caso tempo continuo.
+
+\begin{theorem}
+Se la coppia \((A,B)\) è completamente controllabile, allora esiste una matrice di retroazione \(K\)
+tale da assegnare arbitrariamente gli \(n\) autovalori della matrice
+\[
+A-BK.
+\]
+\end{theorem}
+
+Nel caso continuo, controllabilità e raggiungibilità sono equivalenti,
+quindi l'ipotesi può essere formulata in entrambi i modi.
+
+\subsection*{Osservazione}
+
+Il termine di riferimento \(n(t)\) non entra nel teorema:
+esso non modifica la matrice di stato del sistema retroazionato.
+Per lo studio dell'assegnamento degli autovalori si può quindi porre
+\[
+n(t)=0.
+\]
+
+\section{Caso SISO e forma canonica di controllo}
+
+La dimostrazione negli appunti viene svolta nel caso SISO, cioè per
+\[
+\dot x=Ax+bu,
+\qquad b\in\mathbb{R}^n.
+\]
+
+Se la coppia \((A,b)\) è completamente controllabile,
+allora esiste una trasformazione di coordinate invertibile
+\[
+z=P^{-1}x
+\]
+che porta il sistema in \textbf{forma canonica di controllo}:
+\[
+\dot z=A_{cc}z+b_{cc}u.
+\]
+
+La matrice \(A_{cc}\) ha la forma
+\[
+A_{cc}=
+\begin{bmatrix}
+0 & 1 & 0 & \cdots & 0\\
+0 & 0 & 1 & \cdots & 0\\
+\vdots & \vdots & \vdots & \ddots & \vdots\\
+0 & 0 & 0 & \cdots & 1\\
+-a_0 & -a_1 & -a_2 & \cdots & -a_{n-1}
+\end{bmatrix},
+\]
+mentre
+\[
+b_{cc}=
+\begin{bmatrix}
+0\\
+0\\
+\vdots\\
+0\\
+1
+\end{bmatrix}.
+\]
+
+I coefficienti \(a_0,\dots,a_{n-1}\) sono quelli del polinomio caratteristico di \(A\):
+\[
+\det(\lambda I-A)
+=
+\lambda^n+a_{n-1}\lambda^{n-1}+\cdots+a_1\lambda+a_0.
+\]
+
+\subsection*{Osservazione sulla trasformazione di similitudine}
+
+Poiché
+\[
+A_{cc}=P^{-1}AP,
+\]
+la trasformazione è una trasformazione di similitudine, quindi conserva gli autovalori.
+
+In particolare,
+\[
+\det(\lambda I-A)=\det(\lambda I-A_{cc}).
+\]
+
+\section{Retroazione in forma canonica}
+
+Nel nuovo sistema di coordinate si applica la retroazione
+\[
+u=-K_{cc}z,
+\qquad
+K_{cc}=
+\begin{bmatrix}
+k_1 & k_2 & \cdots & k_n
+\end{bmatrix}.
+\]
+
+La dinamica chiusa diventa
+\[
+\dot z=(A_{cc}-b_{cc}K_{cc})z.
+\]
+
+Poiché
+\[
+b_{cc}K_{cc}
+=
+\begin{bmatrix}
+0\\
+0\\
+\vdots\\
+0\\
+1
+\end{bmatrix}
+\begin{bmatrix}
+k_1 & k_2 & \cdots & k_n
+\end{bmatrix}
+=
+\begin{bmatrix}
+0 & 0 & \cdots & 0\\
+0 & 0 & \cdots & 0\\
+\vdots & \vdots & \ddots & \vdots\\
+k_1 & k_2 & \cdots & k_n
+\end{bmatrix},
+\]
+si ottiene
+\[
+A_{cc}-b_{cc}K_{cc}
+=
+\begin{bmatrix}
+0 & 1 & 0 & \cdots & 0\\
+0 & 0 & 1 & \cdots & 0\\
+\vdots & \vdots & \vdots & \ddots & \vdots\\
+0 & 0 & 0 & \cdots & 1\\
+-(a_0+k_1) & -(a_1+k_2) & \cdots & -(a_{n-2}+k_{n-1}) & -(a_{n-1}+k_n)
+\end{bmatrix}.
+\]
+
+Questa è ancora una matrice in forma canonica di controllo.
+
+\section{Polinomio caratteristico del sistema retroazionato}
+
+Il polinomio caratteristico della matrice retroazionata è
+\[
+\det(\lambda I-A_{cc}+b_{cc}K_{cc})
+=
+\lambda^n
++(a_{n-1}+k_n)\lambda^{n-1}
++\cdots
++(a_1+k_2)\lambda
++(a_0+k_1).
+\]
+
+Supponiamo di voler assegnare gli autovalori desiderati
+\[
+\lambda_1,\lambda_2,\dots,\lambda_n.
+\]
+
+Allora imponiamo come polinomio desiderato
+\[
+(\lambda-\lambda_1)(\lambda-\lambda_2)\cdots(\lambda-\lambda_n)
+=
+\lambda^n+\alpha_{n-1}\lambda^{n-1}+\cdots+\alpha_1\lambda+\alpha_0.
+\]
+
+Uguagliando i coefficienti dei due polinomi, si ricava:
+\[
+\alpha_{n-1}=a_{n-1}+k_n,
+\]
+\[
+\alpha_{n-2}=a_{n-2}+k_{n-1},
+\]
+\[
+\vdots
+\]
+\[
+\alpha_0=a_0+k_1.
+\]
+
+Quindi i guadagni si scelgono come
+\[
+k_1=\alpha_0-a_0,
+\qquad
+k_2=\alpha_1-a_1,
+\qquad
+\dots,
+\qquad
+k_n=\alpha_{n-1}-a_{n-1}.
+\]
+
+Questo mostra che, in forma canonica di controllo, i guadagni di retroazione
+permettono di assegnare arbitrariamente il polinomio caratteristico.
+
+\section{Ritorno alle coordinate originali}
+
+Poiché
+\[
+z=P^{-1}x
+\qquad\Longrightarrow\qquad
+x=Pz,
+\]
+si ha
+\[
+u=-Kx=-KPz.
+\]
+
+Confrontando con
+\[
+u=-K_{cc}z,
+\]
+segue
+\[
+K_{cc}=KP.
+\]
+
+Dunque
+\[
+K=K_{cc}P^{-1}.
+\]
+
+Questa formula permette di tornare dal sistema in forma canonica
+al sistema nelle coordinate originarie.
+
+\section{Sufficienza dell'ipotesi di controllabilità}
+
+La costruzione appena fatta dimostra la \textbf{sufficienza} dell'ipotesi:
+se \((A,b)\) è completamente controllabile,
+allora è possibile assegnare arbitrariamente tutti gli autovalori del sistema retroazionato.
+
+\section{Necessità dell'ipotesi di controllabilità}
+
+Negli appunti viene anche mostrato perché l'ipotesi di controllabilità è necessaria.
+
+Supponiamo che la coppia \((A,b)\) non sia completamente controllabile
+e che il sottospazio di controllabilità abbia dimensione
+\[
+p<n.
+\]
+
+Allora esiste un cambiamento di coordinate
+\[
+z=Q^{-1}x
+\]
+che separa la parte controllabile e quella non controllabile:
+\[
+z=
+\begin{bmatrix}
+z_c\\
+z_{nc}
+\end{bmatrix},
+\qquad
+z_c\in\mathbb{R}^p,
+\qquad
+z_{nc}\in\mathbb{R}^{n-p}.
+\]
+
+Nel nuovo sistema di coordinate la dinamica assume la forma
+\[
+\dot z
+=
+\begin{bmatrix}
+\tilde A_c & \tilde A_{12}\\
+0 & \tilde A_{nc}
+\end{bmatrix}
+z
++
+\begin{bmatrix}
+\tilde b_c\\
+0
+\end{bmatrix}u.
+\]
+
+Scrivendo anche la retroazione in tali coordinate,
+\[
+\tilde K=KQ=
+\begin{bmatrix}
+\tilde K_c & \tilde K_{nc}
+\end{bmatrix},
+\]
+la matrice chiusa diventa
+\[
+\tilde A-\tilde b\tilde K
+=
+\begin{bmatrix}
+\tilde A_c-\tilde b_c\tilde K_c & \tilde A_{12}-\tilde b_c\tilde K_{nc}\\
+0 & \tilde A_{nc}
+\end{bmatrix}.
+\]
+
+Essendo una matrice triangolare a blocchi, il polinomio caratteristico fattorizza:
+\[
+\det(\lambda I-\tilde A+\tilde b\tilde K)
+=
+\det(\lambda I_p-\tilde A_c+\tilde b_c\tilde K_c)\,
+\det(\lambda I_{n-p}-\tilde A_{nc}).
+\]
+
+Quindi:
+\begin{itemize}
+    \item i primi \(p\) autovalori, associati alla parte controllabile, possono essere spostati;
+    \item i restanti \(n-p\) autovalori, associati alla parte non controllabile, \textbf{non vengono modificati} dalla retroazione di stato.
+\end{itemize}
+
+\subsection*{Conclusione}
+
+Se la coppia non è completamente controllabile, non posso assegnare arbitrariamente tutti gli autovalori:
+posso al più assegnarne \(p\), dove \(p\) è la dimensione del sottospazio controllabile.
+
+Questo dimostra la necessità dell'ipotesi del teorema.
+
+\section{Interpretazione fisica}
+
+Gli autovalori della matrice \(A\) sono determinati dalla fisica del sistema.
+La matrice \(B\) descrive come l'ingresso agisce sul sistema.
+
+La retroazione di stato modifica la dinamica attraverso il termine
+\[
+-BKx,
+\]
+quindi cambia la matrice di stato da \(A\) a
+\[
+A-BK.
+\]
+
+Ma questa modifica può influenzare soltanto i modi dinamici che sono effettivamente raggiungibili
+dall'ingresso.
+
+Per questo:
+\begin{itemize}
+    \item i modi controllabili possono essere spostati;
+    \item i modi non controllabili restano dov'erano.
+\end{itemize}
+
+\section{Forma finale del problema di controllo}
+
+Il problema di assegnamento degli autovalori si può quindi formulare così:
+
+dato il sistema
+\[
+\begin{cases}
+\dot x=Ax+Bu,\\
+y=Cx,
+\end{cases}
+\]
+si vuole trovare una legge di controllo
+\[
+u(t)=-Kx(t)+n(t)
+\]
+tale che la matrice chiusa
+\[
+A-BK
+\]
+abbia autovalori desiderati.
+
+Se \((A,B)\) è completamente controllabile, questo è sempre possibile.
+
+\section{Sintesi della lezione}
+
+I punti chiave della lezione sono:
+\begin{enumerate}
+    \item si considera una retroazione completa dello stato:
+    \[
+    u(t)=-Kx(t)+n(t);
+    \]
+    \item la matrice di stato del sistema retroazionato è
+    \[
+    A-BK;
+    \]
+    \item gli autovalori del sistema chiuso sono le radici di
+    \[
+    \det(\lambda I-A+BK)=0;
+    \]
+    \item se la coppia \((A,B)\) è completamente controllabile, allora è possibile assegnare arbitrariamente tutti gli autovalori del sistema chiuso;
+    \item nel caso SISO, la dimostrazione si fa portando il sistema in forma canonica di controllo;
+    \item in forma canonica, i coefficienti del polinomio caratteristico dipendono linearmente dai guadagni \(k_i\);
+    \item uguagliando i coefficienti del polinomio desiderato si ricavano direttamente i guadagni;
+    \item tornando alle coordinate originali si ottiene il guadagno \(K\) del sistema reale;
+    \item se il sistema non è completamente controllabile, soltanto gli autovalori della parte controllabile possono essere assegnati;
+    \item gli autovalori non controllabili non vengono modificati dalla retroazione di stato.
+\end{enumerate}

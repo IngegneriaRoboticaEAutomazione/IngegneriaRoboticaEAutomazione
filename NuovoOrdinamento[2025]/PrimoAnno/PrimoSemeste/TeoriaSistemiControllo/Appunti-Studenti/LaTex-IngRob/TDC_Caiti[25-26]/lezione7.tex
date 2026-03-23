@@ -1,0 +1,327 @@
+\chapter{Lezione 7 --- Anti-trasformata z, fratti semplici e funzione di trasferimento discreta}
+
+\section{Richiamo: trasformata z e sistemi discreti}
+
+Riprendiamo la definizione di trasformata z monolatera di una successione
+\[
+x(k), \qquad k=0,1,2,\dots
+\]
+data da
+\[
+X(z)=\mathcal{Z}\{x(k)\}=\sum_{k=0}^{+\infty} x(k)\,z^{-k}.
+\]
+
+Nel caso di un segnale continuo \(f(t)\) campionato con periodo \(T\), si scrive pi\`u rigorosamente
+\[
+\mathcal{Z}\{f(kT)\}=\sum_{k=0}^{+\infty} f(kT)\,z^{-k}.
+\]
+
+Negli appunti si sottolinea che la trasformata z nasce come riscrittura della trasformata di Laplace
+del segnale campionato, con il cambio di variabile
+\[
+z=e^{sT}.
+\]
+
+\section{Richiamo: matrice e funzione di trasferimento}
+
+Per un sistema discreto in forma di stato
+\[
+\begin{cases}
+x(k+1)=Ax(k)+Bu(k),\\[4pt]
+y(k)=Cx(k),
+\end{cases}
+\]
+la matrice di trasferimento \`e
+\[
+G(z)=C(zI-A)^{-1}B.
+\]
+
+Nel caso \textbf{SISO}, si ha
+\[
+u(k)\in\mathbb{R}, \qquad y(k)\in\mathbb{R}, \qquad x(k)\in\mathbb{R}^n,
+\]
+e quindi
+\[
+G(z)=c^T(zI-A)^{-1}b=\frac{N(z)}{D(z)},
+\]
+cio\`e una funzione razionale in \(z\).
+
+In condizioni iniziali nulle vale
+\[
+Y(z)=G(z)U(z).
+\]
+
+Il problema affrontato in questa lezione \`e allora il seguente:
+dato \(Y(z)\), oppure pi\`u in generale data una funzione razionale \(G(z)\),
+\emph{come si torna alla successione nel tempo discreto}?
+
+\section{Questione di unicit\`a}
+
+Negli appunti compare un'osservazione importante sul confronto tra Laplace e zeta.
+
+Nel continuo, due funzioni che differiscono solo su un insieme di misura nulla
+possono avere la stessa trasformata di Laplace, perch\'e la trasformata si basa su un integrale.
+
+Nel discreto, invece, la successione \`e definita punto per punto:
+se due successioni sono diverse, differiscono necessariamente su almeno un campione,
+e quindi in condizioni standard danno trasformate z diverse.
+
+Per questo, in ambito discreto, si ragiona di fatto con una corrispondenza biunivoca
+tra successione e trasformata z, purch\'e si tenga conto anche della regione di convergenza.
+
+\section{Metodi per l'anti-trasformata z}
+
+Negli appunti vengono richiamati due metodi principali per ricavare la successione \(x(k)\)
+a partire da \(X(z)\), quando \(X(z)\) \`e razionale:
+
+\begin{enumerate}
+    \item \textbf{fratti semplici};
+    \item \textbf{lunga divisione}.
+\end{enumerate}
+
+Il primo \`e il metodo principale quando il denominatore si pu\`o fattorizzare bene
+e si vogliono ricavare formule chiuse.
+Il secondo \`e utile quando si vuole sviluppare \(X(z)\) come serie in potenze di \(z^{-1}\)
+e leggere direttamente i coefficienti della successione.
+
+\section{Richiamo sui fratti semplici nel dominio di Laplace}
+
+Negli appunti si fa prima un parallelo con la trasformata di Laplace.
+
+Se
+\[
+G(s)=\frac{N(s)}{D(s)}
+\]
+e il denominatore si fattorizza come
+\[
+D(s)=\prod_{i=1}^{n}(s-\alpha_i),
+\]
+con radici semplici, allora si pu\`o scrivere
+\[
+G(s)=\sum_{i=1}^{n}\frac{A_i}{s-\alpha_i}.
+\]
+
+Da qui segue immediatamente
+\[
+g(t)=\sum_{i=1}^{n} A_i e^{\alpha_i t}.
+\]
+
+Se invece una radice \(\alpha_i\) ha molteplicit\`a maggiore di \(1\), compaiono termini del tipo
+\[
+\frac{A_{i,1}}{s-\alpha_i}+\frac{A_{i,2}}{(s-\alpha_i)^2}+\dots+\frac{A_{i,\mu_i}}{(s-\alpha_i)^{\mu_i}}.
+\]
+
+I coefficienti si possono determinare:
+\begin{itemize}
+    \item per confronto dei coefficienti;
+    \item con il metodo dei residui, nel caso di poli semplici:
+    \[
+    A_i=\lim_{s\to \alpha_i}(s-\alpha_i)G(s).
+    \]
+\end{itemize}
+
+\section{Applicazione del metodo dei fratti semplici nel dominio \(z\)}
+
+L'idea \`e del tutto analoga nel dominio z.
+
+Se
+\[
+G(z)=\frac{N(z)}{D(z)},
+\]
+si vorrebbe decomporre \(G(z)\) in termini elementari di cui si conosce gi\`a
+l'anti-trasformata z.
+
+\subsection*{Osservazione pratica}
+
+Negli appunti si osserva che spesso, scrivendo \(G(z)\) in funzione di \(z\),
+il numeratore e il denominatore hanno lo stesso grado.
+In questi casi, per applicare comodamente i fratti semplici,
+si lavora su
+\[
+\frac{G(z)}{z}=\frac{N(z)}{z\,D(z)},
+\]
+cio\`e si aggiunge un polo nell'origine.
+
+Questo rende pi\`u naturale la decomposizione in termini elementari
+ed \`e coerente con il fatto che molte tavole di anti-trasformata z
+sono espresse in forme del tipo
+\[
+\frac{z}{z-a}, \qquad
+\frac{z\sin\theta}{z^2-2\cos\theta\,z+1},
+\qquad
+\frac{z(z-\cos\theta)}{z^2-2\cos\theta\,z+1}.
+\]
+
+\section{Tavola di riferimento per l'anti-trasformata z}
+
+Le forme elementari da tenere a mente sono:
+
+\[
+\mathcal{Z}\{\delta(k)\}=1,
+\]
+\[
+\mathcal{Z}\{a^k 1(k)\}=\frac{z}{z-a},
+\qquad |z|>|a|,
+\]
+\[
+\mathcal{Z}\{\sin(k\theta)\,1(k)\}
+=
+\frac{z\sin\theta}{z^2-2\cos\theta\,z+1},
+\]
+\[
+\mathcal{Z}\{\cos(k\theta)\,1(k)\}
+=
+\frac{z(z-\cos\theta)}{z^2-2\cos\theta\,z+1}.
+\]
+
+Queste forme sono quelle che permettono di riconoscere rapidamente
+i contributi elementari nella decomposizione in fratti semplici.
+
+\section{Esempio di decomposizione nel dominio \(z\)}
+
+Negli appunti compare l'esempio
+\[
+G_1(z)=\frac{z+1}{\left(z-\frac13\right)\left(z^2-\frac14 z+1\right)}.
+\]
+
+I poli sono:
+\[
+z_1=\frac13,
+\qquad
+z_{2,3}=\frac18 \pm j\,\frac{3\sqrt7}{8}.
+\]
+
+Poich\'e
+\[
+z^2-\frac14 z+1
+=
+z^2-2\cos\theta\,z+1,
+\]
+si ricava
+\[
+2\cos\theta=\frac14
+\qquad\Longrightarrow\qquad
+\cos\theta=\frac18,
+\qquad
+\theta=\arccos\!\left(\frac18\right).
+\]
+
+Per applicare il metodo, si considera
+\[
+\frac{G_1(z)}{z}
+=
+\frac{z+1}{z\left(z-\frac13\right)\left(z^2-\frac14 z+1\right)}.
+\]
+
+Una forma di decomposizione coerente con le tavole note \`e
+\[
+\frac{G_1(z)}{z}
+=
+\frac{A}{z}
++
+\frac{B}{z-\frac13}
++
+C\,\frac{z\sin\theta}{z^2-\frac14 z+1}
++
+D\,\frac{z(z-\cos\theta)}{z^2-\frac14 z+1}.
+\]
+
+I coefficienti \(A,B,C,D\) si determinano per uguaglianza tra i due membri,
+oppure combinando confronto dei coefficienti e uso delle forme note.
+
+Una volta trovati i coefficienti, l'anti-trasformata si legge termine a termine come combinazione di:
+\begin{itemize}
+    \item un termine impulsivo;
+    \item un'esponenziale discreta \(\left(\frac13\right)^k\);
+    \item un termine sinusoidale \(\sin(k\theta)\);
+    \item un termine cosinusoidale \(\cos(k\theta)\).
+\end{itemize}
+
+\subsection*{Osservazione}
+
+Negli appunti \`e evidenziato che i vari metodi possono anche essere \emph{combinati}:
+per esempio si possono isolare alcuni termini con i fratti semplici
+e ricavare altri sviluppando in serie.
+
+\section{Metodo della lunga divisione}
+
+Il secondo metodo consiste nello sviluppare \(X(z)\) in serie di potenze di \(z^{-1}\):
+\[
+X(z)=x(0)+x(1)z^{-1}+x(2)z^{-2}+\dots
+\]
+
+Se si riesce a scrivere la funzione razionale in questa forma,
+allora i coefficienti della serie sono direttamente i valori della successione.
+
+Questo metodo \`e particolarmente utile:
+\begin{itemize}
+    \item quando si vogliono calcolare i primi campioni;
+    \item quando la fattorizzazione del denominatore \`e scomoda;
+    \item quando interessa una realizzazione ricorsiva.
+\end{itemize}
+
+\section{Collegamento con la funzione di trasferimento discreta}
+
+Nel caso SISO, la funzione di trasferimento
+\[
+G(z)=\frac{N(z)}{D(z)}
+\]
+descrive il legame tra ingresso e uscita:
+\[
+Y(z)=G(z)U(z).
+\]
+
+Per tornare al dominio discreto si possono seguire due strade:
+\begin{enumerate}
+    \item anti-trasformare direttamente \(Y(z)\) con fratti semplici o lunga divisione;
+    \item riscrivere \(G(z)\) in forma polinomiale in \(z^{-1}\) e ottenere
+    l'equazione alle differenze.
+\end{enumerate}
+
+La seconda strada \`e quella pi\`u utile quando si vuole implementare il sistema,
+mentre la prima \`e quella pi\`u utile quando si vuole trovare una formula esplicita
+per la risposta.
+
+\section{Osservazione sul continuo e sul discreto}
+
+Negli appunti compare un'ultima osservazione concettuale:
+nel continuo esistono formalmente funzioni diverse che differiscono solo su insiemi
+di misura nulla e che quindi hanno la stessa trasformata integrale.
+
+Nel discreto questo problema, dal punto di vista pratico, non si presenta:
+i segnali reali sono successioni di valori campionati, quindi l'informazione
+\`e contenuta esattamente nei campioni.
+
+Per questo, nell'uso ingegneristico della trasformata z,
+si ragiona come se ci fosse una corrispondenza biunivoca tra sequenza e trasformata.
+
+\section{Sintesi della lezione}
+
+I punti principali della lezione sono:
+\begin{enumerate}
+    \item richiamo della matrice di trasferimento discreta
+    \[
+    G(z)=C(zI-A)^{-1}B;
+    \]
+    \item nel caso SISO, \(G(z)\) \`e una funzione razionale
+    \[
+    G(z)=\frac{N(z)}{D(z)};
+    \]
+    \item il problema dell'anti-trasformata z consiste nel tornare da \(X(z)\)
+    alla successione \(x(k)\);
+    \item i due metodi principali sono:
+    \begin{itemize}
+        \item fratti semplici;
+        \item lunga divisione;
+    \end{itemize}
+    \item il metodo dei fratti semplici nel dominio \(z\) ricalca quello della Laplace;
+    \item spesso conviene lavorare su
+    \[
+    \frac{G(z)}{z}
+    \]
+    per ottenere una forma pi\`u comoda da decomporre;
+    \item i termini elementari dell'anti-trasformata sono esponenziali discreti,
+    seni e coseni discreti, oltre agli impulsi;
+    \item l'esempio svolto mostra come trattare un polo reale e una coppia di poli
+    complessi coniugati nel piano \(z\).
+\end{enumerate}

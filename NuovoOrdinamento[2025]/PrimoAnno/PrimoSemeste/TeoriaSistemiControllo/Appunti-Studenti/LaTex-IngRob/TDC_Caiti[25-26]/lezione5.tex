@@ -1,0 +1,519 @@
+\chapter{Lezione 5 --- Trasformata z, esempi elementari e corrispondenza tra piano \(s\) e piano \(z\)}
+
+\section{Richiamo dalla lezione precedente}
+
+Nella lezione precedente abbiamo concluso che, se un segnale continuo causale \(f(t)\)
+viene campionato con periodo \(T\), allora il segnale campionato in forma impulsiva può essere scritto come
+\[
+\hat f(t)=\sum_{k=0}^{+\infty} f(kT)\,\delta(t-kT).
+\]
+
+Applicando la trasformata di Laplace si ottiene
+\[
+\mathcal{L}\{\hat f(t)\}
+=
+\int_{0^-}^{+\infty}
+\left(
+\sum_{k=0}^{+\infty} f(kT)\,\delta(t-kT)
+\right)e^{-st}\,dt.
+\]
+
+Scambiando somma e integrale,
+\[
+\mathcal{L}\{\hat f(t)\}
+=
+\sum_{k=0}^{+\infty} f(kT)\int_{0^-}^{+\infty}\delta(t-kT)e^{-st}\,dt
+=
+\sum_{k=0}^{+\infty} f(kT)e^{-skT}.
+\]
+
+Questa espressione è una successione di termini numerici pesati da \(e^{-skT}\),
+e suggerisce naturalmente l'introduzione di una nuova variabile complessa.
+
+\section{Nascita della trasformata \(z\)}
+
+Poiché l'esponenziale \(e^{-skT}\) non è particolarmente comodo da manipolare,
+si introduce la variabile
+\[
+z=e^{sT},
+\qquad\text{per cui}\qquad
+e^{-sT}=z^{-1}.
+\]
+
+La trasformata di Laplace del segnale campionato diventa allora
+\[
+\mathcal{L}\{\hat f(t)\}
+=
+\sum_{k=0}^{+\infty} f(kT)z^{-k}.
+\]
+
+Questa espressione motiva la definizione della \textbf{trasformata \(z\)}.
+
+\section{Definizione della trasformata \(z\)}
+
+\subsection{Trasformata \(z\) monolatera}
+
+Per una sequenza discreta
+\[
+x[k], \qquad k=0,1,2,\dots
+\]
+si definisce la trasformata \(z\) monolatera come
+\[
+X(z)=\mathcal{Z}\{x[k]\}=\sum_{k=0}^{+\infty} x[k]\,z^{-k}.
+\]
+
+Nel nostro contesto,
+\[
+x[k]=f(kT),
+\]
+quindi
+\[
+\mathcal{Z}\{f(kT)\}=\sum_{k=0}^{+\infty} f(kT)\,z^{-k}.
+\]
+
+La trasformata \(z\) monolatera è l'analogo discreto della trasformata di Laplace unilaterale:
+parte da \(k=0\) e arriva a \(+\infty\), quindi è adatta a segnali causali e transitori.
+
+\subsection{Trasformata \(z\) bilatera}
+
+Per sequenze definite su tutti gli interi, si introduce invece la trasformata \(z\) bilatera:
+\[
+X(z)=\mathcal{Z}_b\{x[k]\}=\sum_{k=-\infty}^{+\infty} x[k]\,z^{-k}.
+\]
+
+Questa forma è l'analogo discreto della trasformata di Fourier/Laplace bilatera
+ed è utile per segnali stazionari o definiti su tutto l'asse discreto.
+
+\subsection{Osservazione}
+
+La sequenza \(x[k]\) è discreta, ma \(X(z)\) è una funzione della variabile complessa
+\[
+z\in\mathbb{C}.
+\]
+Quindi la trasformata \(z\) non è un oggetto discreto:
+\[
+X(z)
+\]
+è una funzione continua della variabile complessa \(z\), definita sul proprio dominio di convergenza.
+
+\section{Interpretazione di \(z^{-1}\) e \(z\)}
+
+Negli appunti compare una lettura operativa molto utile:
+\begin{itemize}
+    \item \(z^{-1}\) si interpreta come \textbf{operatore di ritardo unitario};
+    \item \(z\) si interpreta formalmente come \textbf{operatore di anticipo unitario}.
+\end{itemize}
+
+Questa interpretazione è fondamentale nei sistemi discreti e nei diagrammi a blocchi.
+
+\section{Sequenze equispaziate}
+
+La trasformata \(z\) vale per sequenze discrete i cui campioni siano equispaziati nel tempo,
+cioè prelevati con periodo costante \(T\).
+
+Dire che i campioni sono equispaziati significa che tra due campioni consecutivi
+passa sempre lo stesso intervallo di tempo:
+\[
+t_k = kT.
+\]
+
+Questo è il caso naturale che si incontra nel campionamento uniforme.
+
+\section{Proprietà della trasformata \(z\)}
+
+La trasformata \(z\) monolatera gode di proprietà del tutto analoghe a quelle della Laplace.
+
+\subsection{Linearità}
+
+Per \(\alpha,\beta\in\mathbb{R}\) oppure \(\mathbb{C}\),
+\[
+\mathcal{Z}\{\alpha x[k]+\beta y[k]\}
+=
+\alpha X(z)+\beta Y(z).
+\]
+
+\subsection{Convoluzione discreta}
+
+Se \(x[k]\) e \(y[k]\) sono due sequenze causali, la loro convoluzione discreta è
+\[
+(x\ast y)[n]
+=
+\sum_{k=0}^{n} x[k]\,y[n-k].
+\]
+
+La trasformata \(z\) trasforma la convoluzione in prodotto:
+\[
+\mathcal{Z}\{x\ast y\}=X(z)Y(z).
+\]
+
+Questa proprietà è perfettamente analoga a quella già vista per Laplace nel caso continuo.
+
+\section{Primo esempio: trasformata \(z\) del gradino}
+
+Consideriamo il gradino continuo
+\[
+f(t)=1(t)=H(t),
+\]
+e adottiamo la convenzione coerente con gli appunti secondo cui il segnale campionato vale
+\[
+f(kT)=1,
+\qquad k=0,1,2,\dots
+\]
+
+Allora
+\[
+X(z)=\sum_{k=0}^{+\infty} 1\cdot z^{-k}
+=
+\sum_{k=0}^{+\infty}(z^{-1})^k.
+\]
+
+Questa è una serie geometrica, che converge se
+\[
+|z^{-1}|<1
+\qquad\Longleftrightarrow\qquad
+|z|>1.
+\]
+
+Quindi
+\[
+X(z)=\frac{1}{1-z^{-1}}
+=
+\frac{z}{z-1},
+\qquad
+\text{ROC: } |z|>1.
+\]
+
+\subsection{Osservazioni}
+
+\begin{itemize}
+    \item La trasformata è una funzione razionale.
+    \item C'è un polo in \(z=1\).
+    \item C'è uno zero in \(z=0\), se si guarda la forma \(\dfrac{z}{z-1}\).
+\end{itemize}
+
+Questo mostra che, anche nel dominio \(z\), possiamo continuare a ragionare in termini di poli,
+zeri e funzioni razionali.
+
+\section{Regione di convergenza}
+
+Come nella trasformata di Laplace, anche la trasformata \(z\) non è caratterizzata solo
+dalla sua espressione algebrica, ma anche dalla \textbf{regione di convergenza} (ROC).
+
+Nel primo esempio abbiamo ottenuto
+\[
+X(z)=\frac{z}{z-1},
+\qquad \text{ROC: } |z|>1.
+\]
+
+Questo significa che la funzione è definita e utile nella regione esterna al cerchio di raggio \(1\),
+escluso il polo \(z=1\).
+
+\subsection{Osservazione sul dominio}
+
+Negli appunti compare l'idea, mutuata dall'analisi matematica, di studiare i punti di bordo
+del dominio guardando i limiti dai punti in cui la funzione è effettivamente definita.
+
+Questa osservazione serve a ricordare che:
+\begin{itemize}
+    \item una funzione razionale può essere prolungata per continuità in un punto
+    solo se il limite esiste ed è finito;
+    \item in presenza di un polo il prolungamento non è possibile;
+    \item quindi il punto resta escluso dal dominio.
+\end{itemize}
+
+\section{Secondo esempio: trasformata \(z\) di un esponenziale campionato}
+
+Consideriamo il segnale continuo causale
+\[
+f(t)=e^{-at}1(t),
+\qquad a>0.
+\]
+
+Campionandolo agli istanti \(t=kT\), otteniamo
+\[
+f(kT)=e^{-akT},
+\qquad k=0,1,2,\dots
+\]
+
+La trasformata \(z\) è allora
+\[
+X(z)=\sum_{k=0}^{+\infty} e^{-akT}z^{-k}
+=
+\sum_{k=0}^{+\infty}\left(e^{-aT}z^{-1}\right)^k.
+\]
+
+La serie converge se
+\[
+|e^{-aT}z^{-1}|<1
+\qquad\Longleftrightarrow\qquad
+|z|>e^{-aT}.
+\]
+
+Quindi
+\[
+X(z)=\frac{1}{1-e^{-aT}z^{-1}}
+=
+\frac{z}{z-e^{-aT}},
+\qquad
+\text{ROC: } |z|>e^{-aT}.
+\]
+
+\subsection{Interpretazione}
+
+La trasformata ha:
+\begin{itemize}
+    \item un polo in
+    \[
+    z=e^{-aT},
+    \]
+    \item uno zero in \(z=0\), nella forma razionale in \(z\).
+\end{itemize}
+
+Poiché \(a>0\), si ha
+\[
+0<e^{-aT}<1,
+\]
+quindi il polo cade all'interno del cerchio unitario.
+
+\section{Funzioni razionali nel dominio \(z\)}
+
+Un punto sottolineato negli appunti è che la trasformata \(z\) dei segnali elementari
+porta ancora a funzioni razionali.
+
+Questo è importante perché permette di mantenere, anche nel discreto,
+molti degli strumenti concettuali usati nel continuo:
+\begin{itemize}
+    \item poli;
+    \item zeri;
+    \item fattorizzazioni;
+    \item studio della stabilità;
+    \item diagrammi a blocchi.
+\end{itemize}
+
+\subsection{Osservazione tecnica}
+
+Nel dominio \(z\) occorre sempre essere attenti alla convenzione usata:
+una funzione può essere scritta come polinomio in \(z\) oppure come polinomio in \(z^{-1}\).
+Per questo alcune considerazioni su grado del numeratore e del denominatore
+vanno interpretate con cautela, specificando sempre quale forma si sta usando.
+
+\section{Corrispondenza tra piano \(s\) e piano \(z\)}
+
+La relazione fondamentale tra piano continuo e piano discreto è
+\[
+z=e^{sT}.
+\]
+
+Se
+\[
+s=\sigma+j\omega,
+\]
+allora
+\[
+z=e^{(\sigma+j\omega)T}=e^{\sigma T}e^{j\omega T}.
+\]
+
+Questa formula contiene tutta la corrispondenza geometrica tra i due piani.
+
+\subsection{Caso \(\omega=0\)}
+
+Se \(\omega=0\), allora
+\[
+s=\sigma
+\qquad\Longrightarrow\qquad
+z=e^{\sigma T}.
+\]
+
+Quindi:
+\begin{itemize}
+    \item se \(\sigma=0\), allora \(z=1\);
+    \item se \(\sigma>0\), allora \(z=e^{\sigma T}>1\), cioè si va sull'asse reale positivo
+    all'esterno del cerchio unitario;
+    \item se \(\sigma<0\), allora \(0<z=e^{\sigma T}<1\), cioè si va sull'asse reale positivo
+    all'interno del cerchio unitario;
+    \item se \(\sigma\to -\infty\), allora \(z\to 0\).
+\end{itemize}
+
+\subsection{Caso \(\sigma=0\)}
+
+Se \(\sigma=0\), allora
+\[
+s=j\omega
+\qquad\Longrightarrow\qquad
+z=e^{j\omega T}=\cos(\omega T)+j\sin(\omega T).
+\]
+
+Quindi l'asse immaginario del piano \(s\) viene mappato sul cerchio unitario nel piano \(z\):
+\[
+|z|=1.
+\]
+
+\subsection{Osservazione importante}
+
+Questa mappa non è biunivoca su tutto l'asse immaginario:
+infatti
+\[
+e^{j\omega T}=e^{j(\omega+2k\pi/T)T},
+\qquad k\in\mathbb{Z}.
+\]
+
+Cioè lo stesso punto del piano \(z\) corrisponde a infiniti valori di \(\omega\)
+che differiscono di multipli di \(2\pi/T\).
+
+\section{Caso generale}
+
+Nel caso generale
+\[
+z=e^{\sigma T}e^{j\omega T}.
+\]
+
+Da qui si leggono due proprietà geometriche fondamentali:
+
+\begin{itemize}
+    \item fissato \(\sigma\), il modulo è
+    \[
+    |z|=e^{\sigma T},
+    \]
+    quindi le rette verticali \(\sigma=\text{costante}\) nel piano \(s\)
+    si trasformano in circonferenze concentriche nel piano \(z\);
+
+    \item fissato \(\omega\), l'argomento è
+    \[
+    \arg(z)=\omega T \pmod{2\pi},
+    \]
+    quindi le rette orizzontali \(\omega=\text{costante}\) nel piano \(s\)
+    si trasformano in semirette uscenti dall'origine nel piano \(z\).
+\end{itemize}
+
+\section{Conseguenze fondamentali della mappa \(z=e^{sT}\)}
+
+Dalla formula precedente segue immediatamente che:
+
+\begin{itemize}
+    \item l'asse immaginario del piano \(s\) diventa il cerchio unitario del piano \(z\);
+    \item il semipiano sinistro
+    \[
+    \Re(s)<0
+    \]
+    viene mappato all'interno del cerchio unitario
+    \[
+    |z|<1;
+    \]
+    \item il semipiano destro
+    \[
+    \Re(s)>0
+    \]
+    viene mappato all'esterno del cerchio unitario
+    \[
+    |z|>1;
+    \]
+    \item l'origine del piano \(s\), cioè \(s=0\), viene mappata nel punto
+    \[
+    z=1.
+    \]
+\end{itemize}
+
+\section{Fascia primaria}
+
+Per rendere biunivoca la corrispondenza tra \(s\) e \(z\), bisogna limitarsi a una fascia
+del piano \(s\) di ampiezza \(2\pi/T\) rispetto alla variabile \(\omega\).
+
+Una scelta standard è la \textbf{fascia primaria}
+\[
+-\frac{\pi}{T}<\omega\le \frac{\pi}{T}.
+\]
+
+Se ci si limita a questa fascia, la mappa
+\[
+z=e^{sT}
+\]
+diventa univoca.
+
+\subsection{Interpretazione}
+
+La massima pulsazione contenuta nella fascia primaria è
+\[
+\omega_{\max}=\frac{\pi}{T}.
+\]
+
+Se definiamo la pulsazione di campionamento
+\[
+\omega_c=\omega_s=\frac{2\pi}{T},
+\]
+allora
+\[
+\omega_{\max}=\frac{\omega_c}{2}.
+\]
+
+Questa è un'altra forma del teorema del campionamento:
+la fascia primaria contiene le frequenze non aliasate.
+
+\section{Legame con il teorema di Shannon}
+
+Poiché la fascia primaria è
+\[
+-\frac{\pi}{T}<\omega\le \frac{\pi}{T},
+\]
+per evitare aliasing bisogna fare in modo che il contenuto in frequenza del segnale
+ricada interamente dentro questa fascia.
+
+Equivalentemente:
+\[
+\omega_b < \frac{\pi}{T}
+\qquad \Longleftrightarrow \qquad
+\omega_s=\frac{2\pi}{T}>2\omega_b.
+\]
+
+Questa è esattamente la formulazione del teorema di Shannon nel dominio delle pulsazioni.
+
+\section{Mappatura di poli e singolarità}
+
+Un altro punto importante richiamato negli appunti è che le singolarità della trasformata
+nel dominio continuo vengono mappate nei corrispondenti punti del piano \(z\).
+
+Se un sistema continuo ha un polo in
+\[
+s=p,
+\]
+allora il corrispondente punto nel dominio discreto è
+\[
+z=e^{pT}.
+\]
+
+Questo significa che:
+\begin{itemize}
+    \item poli continui nel semipiano sinistro vanno all'interno del cerchio unitario;
+    \item poli continui sull'asse immaginario vanno sul cerchio unitario;
+    \item poli continui nel semipiano destro vanno all'esterno del cerchio unitario.
+\end{itemize}
+
+Questa corrispondenza è alla base del criterio di stabilità per i sistemi discreti.
+
+\section{Sintesi della lezione}
+
+I punti principali della lezione sono:
+\begin{enumerate}
+    \item derivazione della trasformata \(z\) dalla trasformata di Laplace del segnale campionato;
+    \item definizione di trasformata \(z\) monolatera e bilatera;
+    \item interpretazione di \(z^{-1}\) come operatore di ritardo;
+    \item proprietà di linearità e convoluzione;
+    \item calcolo della trasformata \(z\) del gradino:
+    \[
+    \mathcal{Z}\{1\}=\frac{z}{z-1},\qquad |z|>1;
+    \]
+    \item calcolo della trasformata \(z\) dell'esponenziale campionato:
+    \[
+    \mathcal{Z}\{e^{-akT}\}=\frac{z}{z-e^{-aT}},\qquad |z|>e^{-aT};
+    \]
+    \item corrispondenza tra piano \(s\) e piano \(z\) tramite
+    \[
+    z=e^{sT};
+    \]
+    \item asse immaginario di \(s\) mappato sul cerchio unitario;
+    \item semipiano sinistro mappato all'interno del cerchio unitario;
+    \item introduzione della fascia primaria
+    \[
+    -\frac{\pi}{T}<\omega\le \frac{\pi}{T},
+    \]
+    che rappresenta la porzione non aliasata del piano \(s\).
+\end{enumerate}

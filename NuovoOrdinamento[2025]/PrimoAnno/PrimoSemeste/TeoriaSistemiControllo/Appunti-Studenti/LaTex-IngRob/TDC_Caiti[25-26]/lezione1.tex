@@ -1,0 +1,380 @@
+\chapter{Lezione 1 --- Sistemi in retroazione}
+
+\section{Schema generale del sistema in retroazione}
+
+Consideriamo un sistema lineare tempo-invariante descritto nel dominio di Laplace
+da un regolatore \(R(s)\) e da un impianto \(G(s)\), con retroazione unitaria negativa.
+
+Indicando con:
+\begin{itemize}
+    \item \(y^\star(t)\) il riferimento,
+    \item \(e(t)\) l'errore,
+    \item \(u(t)\) il segnale di controllo,
+    \item \(y(t)\) l'uscita,
+\end{itemize}
+si ha nel dominio di Laplace
+\[
+E(s)=Y^\star(s)-Y(s),
+\qquad
+U(s)=R(s)E(s),
+\qquad
+Y(s)=G(s)U(s).
+\]
+
+La funzione d'anello, o funzione di catena diretta, è
+\[
+L(s)=R(s)G(s).
+\]
+
+La funzione di trasferimento in ciclo chiuso dal riferimento all'uscita è
+\[
+H(s)=\frac{Y(s)}{Y^\star(s)}=\frac{L(s)}{1+L(s)}=\frac{R(s)G(s)}{1+R(s)G(s)}.
+\]
+
+Nel seguito si assume che le eventuali dinamiche non visibili dall'esterno
+(non osservabili o non raggiungibili) siano stabili, in modo da poter
+ricondurre l'analisi della stabilità del sistema alla stabilità del ciclo chiuso.
+
+\section{Obiettivo del progetto del regolatore}
+
+Dato l'impianto \(G(s)\), il problema del controllo consiste nel progettare \(R(s)\)
+in modo che il sistema in retroazione soddisfi alcune specifiche.
+
+Le richieste principali si dividono tipicamente in tre gruppi:
+\begin{enumerate}
+    \item stabilità;
+    \item prestazioni statiche, cioè a regime;
+    \item prestazioni dinamiche, cioè nel transitorio.
+\end{enumerate}
+
+\section{Stabilità}
+
+Una prima richiesta fondamentale è la stabilità BIBO
+(\emph{Bounded Input, Bounded Output}):
+a ogni ingresso limitato deve corrispondere un'uscita limitata.
+
+In formule:
+\[
+y^\star \in L_\infty \quad \Longrightarrow \quad y \in L_\infty.
+\]
+
+La stabilità BIBO è la proprietà minima richiesta al sistema in ciclo chiuso.
+In molti problemi si richiede anche la stabilità asintotica, cioè che i transitori
+si estinguano nel tempo.
+
+\section{Prestazioni statiche}
+
+Le prestazioni statiche riguardano l'errore a regime, cioè la differenza tra
+riferimento e uscita quando il transitorio si è esaurito.
+
+Definiamo
+\[
+e_\infty=\lim_{t\to+\infty}\bigl(y^\star(t)-y(t)\bigr),
+\]
+quando tale limite esiste.
+
+L'errore a regime dipende dal comportamento di \(L(s)\) alle basse frequenze
+e, in particolare, dal numero di poli nell'origine presenti nella funzione d'anello.
+
+\subsection{Tipo del sistema}
+
+Si dice che il sistema è di tipo \(\nu\) se la funzione d'anello \(L(s)\)
+ha \(\nu\) poli nell'origine, cioè se si può scrivere localmente per \(s\to 0\) come
+\[
+L(s)\sim \frac{K}{s^\nu},
+\qquad \nu=0,1,2,\dots
+\]
+con \(K>0\).
+
+Il numero di integratori nella catena diretta è quindi ciò che determina
+la capacità del sistema di inseguire segnali di riferimento ``lenti''.
+
+\subsection{Ingressi tipici}
+
+I riferimenti canonici sono:
+\[
+\text{gradino: } r(t)=1(t),
+\qquad
+\text{rampa: } r(t)=t\,1(t),
+\qquad
+\text{parabola: } r(t)=\frac{t^2}{2}\,1(t),
+\]
+le cui trasformate di Laplace sono rispettivamente
+\[
+R(s)=\frac{1}{s},
+\qquad
+R(s)=\frac{1}{s^2},
+\qquad
+R(s)=\frac{1}{s^3}.
+\]
+
+\subsection{Errore a regime per gradino, rampa e parabola}
+
+Per sistemi in retroazione unitaria, le regole classiche sono:
+
+\[
+\begin{array}{c|ccc}
+ & \nu=0 & \nu=1 & \nu=2 \\ \hline
+\text{gradino} & \dfrac{1}{1+K_p} & 0 & 0 \\[1.2ex]
+\text{rampa} & +\infty & \dfrac{1}{K_v} & 0 \\[1.2ex]
+\text{parabola} & +\infty & +\infty & \dfrac{1}{K_a}
+\end{array}
+\]
+dove:
+\[
+K_p=\lim_{s\to 0}L(s),\qquad
+K_v=\lim_{s\to 0}sL(s),\qquad
+K_a=\lim_{s\to 0}s^2L(s).
+\]
+
+Questa tabella mostra che:
+\begin{itemize}
+    \item un alto guadagno a bassa frequenza riduce l'errore statico;
+    \item la presenza di integratori è essenziale per annullare l'errore
+    su riferimenti di tipo rampa o parabola.
+\end{itemize}
+
+\subsection{Interpretazione in frequenza}
+
+Le prestazioni statiche si leggono dal comportamento di \(L(j\omega)\) per \(\omega\to 0\).
+
+Se
+\[
+|L(j\omega)|\gg 1 \qquad \text{per } \omega\to 0,
+\]
+allora
+\[
+H(j\omega)=\frac{L(j\omega)}{1+L(j\omega)}\approx 1,
+\]
+cioè il sistema in ciclo chiuso riproduce bene il riferimento alle basse frequenze.
+
+Questa è la ragione per cui si desidera che la funzione d'anello abbia
+modulo elevato in bassa frequenza.
+
+\section{Risposta armonica}
+
+Se il sistema è lineare e asintoticamente stabile, a un ingresso sinusoidale
+\[
+u(t)=A\sin(\omega t)
+\]
+corrisponde, a regime, un'uscita sinusoidale alla stessa pulsazione:
+\[
+y(t)=A\,|H(j\omega)|\,\sin\bigl(\omega t+\varphi(\omega)\bigr),
+\]
+dove
+\[
+\varphi(\omega)=\arg H(j\omega).
+\]
+
+In forma complessa:
+\[
+H(j\omega)\in\mathbb{C},
+\qquad
+H(j\omega)=|H(j\omega)|\,e^{j\varphi(\omega)}.
+\]
+
+Il modulo \(|H(j\omega)|\) dice quanto il sistema amplifica o attenua
+una sinusoide a quella frequenza; la fase \(\varphi(\omega)\) dice quanto la ritarda o anticipa.
+
+\section{Prestazioni dinamiche}
+
+Le prestazioni dinamiche riguardano il transitorio, cioè il modo in cui il sistema
+raggiunge il regime.
+
+\subsection{Sistema del primo ordine}
+
+Un modello elementare è
+\[
+H(s)=\frac{1}{1+s\tau}.
+\]
+
+La risposta al gradino unitario è
+\[
+y(t)=1-e^{-t/\tau}.
+\]
+
+Il parametro \(\tau\) è la costante di tempo:
+più \(\tau\) è piccola, più il sistema è rapido.
+
+\subsection{Sistema del secondo ordine}
+
+Un modello standard del secondo ordine è
+\[
+H(s)=\frac{\omega_n^2}{s^2+2\zeta\omega_n s+\omega_n^2}
+=
+\frac{1}{1+2\zeta \dfrac{s}{\omega_n}+\dfrac{s^2}{\omega_n^2}}.
+\]
+
+I parametri principali sono:
+\begin{itemize}
+    \item \(\omega_n\): pulsazione naturale;
+    \item \(\zeta\): coefficiente di smorzamento.
+\end{itemize}
+
+Se \(0<\zeta<1\), la risposta al gradino è oscillante smorzata.
+All'aumentare di \(\zeta\), le oscillazioni si riducono.
+
+\subsection{Margine di fase}
+
+Nel progetto in frequenza è molto importante il margine di fase \(M_\varphi\).
+
+Sia \(\omega_c\) la pulsazione di attraversamento in ampiezza, definita da
+\[
+|L(j\omega_c)|=1
+\qquad
+\text{(oppure 0 dB)}.
+\]
+
+Il margine di fase è
+\[
+M_\varphi = \pi + \arg L(j\omega_c)
+\]
+oppure, in gradi,
+\[
+M_\varphi = 180^\circ + \arg L(j\omega_c).
+\]
+
+Interpretazione:
+\begin{itemize}
+    \item se il margine di fase è troppo piccolo, il sistema è poco smorzato
+    o addirittura instabile;
+    \item un margine di fase intorno a \(45^\circ\)-\(70^\circ\) è spesso
+    associato a un comportamento soddisfacente.
+\end{itemize}
+
+In modo euristico, per sistemi dominati dal secondo ordine, si usa spesso la regola:
+\[
+\zeta \approx \frac{M_\varphi}{100}
+\qquad
+\text{(con \(M_\varphi\) espresso in gradi, stima grossolana).}
+\]
+
+\section{Bassa e alta frequenza}
+
+Il progetto del controllore deve tenere conto sia del comportamento a bassa frequenza
+sia di quello ad alta frequenza.
+
+\subsection{Bassa frequenza}
+
+Alle basse frequenze si vuole:
+\[
+|L(j\omega)| \gg 1,
+\]
+in modo da avere
+\[
+H(j\omega)\approx 1.
+\]
+
+Questo garantisce buone prestazioni statiche e un buon inseguimento del riferimento.
+
+\subsection{Alta frequenza}
+
+Alle alte frequenze, se
+\[
+|L(j\omega)|\ll 1,
+\]
+allora
+\[
+H(j\omega)\approx L(j\omega).
+\]
+
+In genere è desiderabile attenuare le alte frequenze, perché lì si collocano
+rumore di misura, componenti non modellate e dinamiche indesiderate.
+
+\section{Disturbi, sensibilità e sensibilità complementare}
+
+Introduciamo ora due disturbi tipici:
+\begin{itemize}
+    \item \(m\): disturbo di misura, cioè rumore sul segnale misurato;
+    \item \(d\): disturbo di carico, applicato in uscita all'impianto.
+\end{itemize}
+
+Assumiamo il modello standard:
+\[
+e(t)=y^\star(t)-\bigl(y(t)+m(t)\bigr),
+\]
+e che il disturbo \(d(t)\) si sommi all'uscita dell'impianto.
+
+Nel dominio di Laplace si ottiene
+\[
+Y(s)=T(s)\,Y^\star(s)-T(s)\,M(s)+S(s)\,D(s),
+\]
+dove:
+\[
+T(s)=\frac{R(s)G(s)}{1+R(s)G(s)}
+\]
+è la \emph{sensibilità complementare}, mentre
+\[
+S(s)=\frac{1}{1+R(s)G(s)}
+\]
+è la \emph{sensibilità}.
+
+Le due funzioni soddisfano la relazione fondamentale
+\[
+S(s)+T(s)=1.
+\]
+
+\subsection{Significato fisico}
+
+\begin{itemize}
+    \item \(T(s)\) governa l'effetto del riferimento e del rumore di misura sull'uscita.
+    \item \(S(s)\) governa l'effetto dei disturbi di carico e l'errore residuo.
+\end{itemize}
+
+Di conseguenza:
+\begin{itemize}
+    \item a bassa frequenza si desidera \(S(j\omega)\approx 0\), quindi \(T(j\omega)\approx 1\),
+    per rigettare i disturbi lenti e seguire bene il riferimento;
+    \item ad alta frequenza si desidera \(T(j\omega)\approx 0\), quindi \(S(j\omega)\approx 1\),
+    per non amplificare il rumore di misura.
+\end{itemize}
+
+Questa è la classica tensione di progetto del controllo in frequenza:
+non si può rendere contemporaneamente piccolo sia \(S\) sia \(T\) alla stessa frequenza,
+perché la loro somma è sempre uguale a \(1\).
+
+\section{Filtri ideali}
+
+Gli andamenti qualitativi richiamati nella lezione sono quelli dei filtri ideali.
+
+\subsection{Passa-basso}
+
+Un filtro passa-basso lascia passare le basse frequenze e attenua le alte:
+\[
+|H(j\omega)| \approx
+\begin{cases}
+1, & \omega \ll \omega_c,\\
+0, & \omega \gg \omega_c.
+\end{cases}
+\]
+
+\subsection{Passa-alto}
+
+Un filtro passa-alto attenua le basse frequenze e lascia passare le alte:
+\[
+|H(j\omega)| \approx
+\begin{cases}
+0, & \omega \ll \omega_c,\\
+1, & \omega \gg \omega_c.
+\end{cases}
+\]
+
+\subsection{Passa-banda}
+
+Un filtro passa-banda lascia passare un intervallo di frequenze compreso tra
+\(\omega_1\) e \(\omega_2\), attenuando quelle molto basse e quelle molto alte.
+
+\section{Sintesi della lezione}
+
+La progettazione del regolatore \(R(s)\) si basa quindi su pochi principi chiave:
+\begin{enumerate}
+    \item rendere stabile il sistema in ciclo chiuso;
+    \item garantire prestazioni statiche adeguate attraverso alto guadagno a bassa frequenza
+    e opportuno numero di integratori;
+    \item garantire prestazioni dinamiche adeguate controllando banda e margine di fase;
+    \item attenuare i disturbi mediante le funzioni di sensibilità
+    \[
+    S(s)=\frac{1}{1+R(s)G(s)},\qquad
+    T(s)=\frac{R(s)G(s)}{1+R(s)G(s)}.
+    \]
+\end{enumerate}

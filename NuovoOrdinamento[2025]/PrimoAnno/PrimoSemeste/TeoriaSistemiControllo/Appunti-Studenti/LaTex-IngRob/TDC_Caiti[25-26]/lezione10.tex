@@ -1,0 +1,431 @@
+\chapter{Lezione 10 --- STFT, regolatore digitale, convertitore D/A e tenuta di ordine zero}
+
+\section{Richiamo: comportamento in frequenza della tenuta di ordine zero}
+
+Nella parte iniziale della lezione si riprende la funzione di trasferimento della
+tenuta di ordine zero, che era stata introdotta come modello del convertitore
+digitale-analogico.
+
+Se la risposta impulsiva della tenuta è un rettangolo di altezza \(1\) e durata \(T\),
+allora
+\[
+h(t)=1(t)-1(t-T),
+\]
+e la sua trasformata di Laplace è
+\[
+F(s)=\mathcal{L}\{h(t)\}
+=
+\frac{1-e^{-sT}}{s}.
+\]
+
+Valutando la risposta armonica:
+\[
+F(j\omega)=\frac{1-e^{-j\omega T}}{j\omega}.
+\]
+
+Moltiplicando e dividendo opportunamente, si ottiene la forma standard
+\[
+F(j\omega)
+=
+e^{-j\omega T/2}\,\frac{2j\sin(\omega T/2)}{j\omega}
+=
+T\,e^{-j\omega T/2}\,\frac{\sin(\omega T/2)}{\omega T/2}.
+\]
+
+Questa espressione mette in evidenza due fattori distinti:
+\begin{itemize}
+    \item un termine di ritardo puro
+    \[
+    e^{-j\omega T/2},
+    \]
+    \item un termine reale di tipo sinc
+    \[
+    \frac{\sin(\omega T/2)}{\omega T/2}.
+    \]
+\end{itemize}
+
+\section{Modulo della tenuta di ordine zero}
+
+Dal risultato precedente segue
+\[
+|F(j\omega)|=
+T\left|\frac{\sin(\omega T/2)}{\omega T/2}\right|.
+\]
+
+Quindi:
+\begin{itemize}
+    \item per \(\omega\to 0\), il modulo tende a \(T\);
+    \item ci sono zeri quando
+    \[
+    \sin(\omega T/2)=0
+    \quad\Longrightarrow\quad
+    \omega=\frac{2k\pi}{T},\qquad k\in\mathbb{Z}\setminus\{0\};
+    \]
+    \item il modulo ha quindi l'andamento tipico di una sinc.
+\end{itemize}
+
+Se si considera la versione normalizzata dividendo per \(T\), si ottiene
+\[
+\left|\frac{F(j\omega)}{T}\right|
+=
+\left|\frac{\sin(\omega T/2)}{\omega T/2}\right|.
+\]
+
+Alla pulsazione di Nyquist
+\[
+\omega_N=\frac{\pi}{T},
+\]
+si ha
+\[
+\frac{\sin(\omega_N T/2)}{\omega_N T/2}
+=
+\frac{\sin(\pi/2)}{\pi/2}
+=
+\frac{2}{\pi}.
+\]
+
+Quindi il modulo normalizzato alla Nyquist vale
+\[
+20\log_{10}\!\left(\frac{2}{\pi}\right)\approx -3.92\ \mathrm{dB}.
+\]
+
+Negli appunti questa attenuazione viene approssimata qualitativamente come circa \(-3\) dB;
+il valore esatto è più vicino a \(-4\) dB.
+
+\section{Fase della tenuta di ordine zero}
+
+La fase di \(F(j\omega)\) si può scrivere come
+\[
+\angle F(j\omega)
+=
+-\omega T/2
++
+\angle\!\left(\frac{\sin(\omega T/2)}{\omega T/2}\right).
+\]
+
+Poiché il termine sinc è reale:
+\begin{itemize}
+    \item quando
+    \[
+    \frac{\sin(\omega T/2)}{\omega T/2}>0,
+    \]
+    il suo argomento è \(0\);
+    \item quando
+    \[
+    \frac{\sin(\omega T/2)}{\omega T/2}<0,
+    \]
+    il suo argomento è \(\pi\) oppure \(-\pi\), a seconda della convenzione scelta.
+\end{itemize}
+
+Per questo la fase complessiva:
+\begin{itemize}
+    \item decresce linearmente come \(-\omega T/2\);
+    \item subisce salti di \(\pi\) in corrispondenza degli zeri del sinc.
+\end{itemize}
+
+Se si rappresenta la fase principale, il diagramma ha il classico andamento a rampe
+con riavvolgimenti periodici.
+
+\section{Approssimazione a bassa frequenza}
+
+Per frequenze sufficientemente piccole rispetto alla Nyquist, il termine sinc vale circa \(1\):
+\[
+\frac{\sin(\omega T/2)}{\omega T/2}\approx 1.
+\]
+
+Quindi
+\[
+F(j\omega)\approx T e^{-j\omega T/2}.
+\]
+
+Nel dominio di Laplace, questo corrisponde a
+\[
+F(s)\approx T e^{-sT/2}.
+\]
+
+Quindi, a bassa frequenza, la tenuta di ordine zero si comporta come:
+\begin{itemize}
+    \item un guadagno statico \(T\);
+    \item seguito da un ritardo puro pari a \(T/2\).
+\end{itemize}
+
+Questo fatto è molto importante perché mostra che il DAC non è neutro:
+introduce attenuazione alle alte frequenze e soprattutto una fase aggiuntiva
+che può influenzare i margini di stabilità del sistema.
+
+\section{Short Time Fourier Transform}
+
+Nella prima parte della lezione viene anche introdotta la \textbf{Short Time Fourier Transform} (STFT).
+
+L'idea è la seguente:
+invece di calcolare una sola trasformata di Fourier su tutto il segnale,
+si prende una finestra temporale di lunghezza finita, si calcola la trasformata
+su quella finestra, poi si trasla la finestra nel tempo e si ripete il procedimento.
+
+In questo modo si ottiene una rappresentazione bidimensionale:
+\begin{itemize}
+    \item asse del tempo;
+    \item asse della frequenza;
+    \item intensità o colore proporzionali al modulo spettrale.
+\end{itemize}
+
+\subsection{Interpretazione}
+
+La STFT permette di vedere:
+\begin{itemize}
+    \item quali frequenze sono presenti;
+    \item in quali intervalli temporali compaiono;
+    \item come i transitori modificano il contenuto spettrale nel tempo.
+\end{itemize}
+
+Per esempio:
+\begin{itemize}
+    \item un transitorio veloce tende a generare contenuto ad alte frequenze;
+    \item un fenomeno più lento si manifesta soprattutto alle basse frequenze.
+\end{itemize}
+
+\subsection{Compromesso tempo--frequenza}
+
+La STFT introduce un compromesso fondamentale:
+\begin{itemize}
+    \item se la finestra è corta, si ha buona risoluzione temporale ma scarsa risoluzione in frequenza;
+    \item se la finestra è lunga, si ha buona risoluzione in frequenza ma scarsa risoluzione temporale.
+\end{itemize}
+
+Questa è un'altra manifestazione del classico compromesso tempo--frequenza.
+
+\section{Richiamo alle wavelet}
+
+Negli appunti si accenna anche al fatto che esistono trasformate wavelet,
+che consentono rappresentazioni tempo-frequenza con risoluzione variabile.
+
+L'idea qualitativa è che le wavelet siano particolarmente adatte
+a rappresentare fenomeni localizzati e transitori,
+migliorando in molti casi il compromesso rispetto alla STFT classica.
+
+\section{Problema di controllo digitale}
+
+La seconda parte della lezione torna sul problema del controllo digitale.
+
+Lo schema considerato è del tipo:
+\[
+y^\star \longrightarrow \text{sommatore} \longrightarrow e
+\longrightarrow \text{campionatore}
+\longrightarrow R(z)
+\longrightarrow \text{D/A}
+\longrightarrow G(s)
+\longrightarrow y.
+\]
+
+Il regolatore è quindi implementato in digitale, mentre l'impianto resta continuo.
+
+\subsection{Significato di \(G(s)\)}
+
+Negli appunti si sottolinea che il blocco \(G(s)\) rappresenta in realtà non solo l'impianto,
+ma l'intera parte continua dell'anello:
+\begin{itemize}
+    \item impianto fisico;
+    \item attuazione;
+    \item amplificazione;
+    \item eventualmente anche la dinamica del sensore,
+    se la si ingloba nel modello standard a retroazione unitaria.
+\end{itemize}
+
+Quindi, in pratica,
+\[
+G(s)=\text{impianto}+\text{attuazione}+\text{amplificazione}+\text{sensore}.
+\]
+
+\section{Tempo di calcolo del regolatore}
+
+Se il regolatore digitale \(R(z)\) è implementato su microprocessore,
+esso produce una sequenza discreta \(u(k)\) a partire dai campioni dell'errore.
+
+In linea di principio si potrebbe pensare che, campionato l'ingresso \(e(k)\),
+l'uscita \(u(k)\) venga prodotta nello stesso intervallo \([kT,(k+1)T)\).
+Tuttavia il tempo di calcolo non è veramente nullo.
+
+Negli appunti si osserva che il ritardo tra campionamento dell'ingresso
+e disponibilità dell'uscita:
+\begin{itemize}
+    \item è inferiore a \(T\);
+    \item ma non è noto con precisione;
+    \item e soprattutto non è costante.
+\end{itemize}
+
+Questo è indesiderabile dal punto di vista del modello.
+
+\subsection{Scelta pratica}
+
+Per evitare questa incertezza, si adotta una convenzione temporale più ordinata:
+\begin{itemize}
+    \item il regolatore usa i campioni disponibili al passo \(k\);
+    \item l'uscita effettiva viene resa coerente con il passo successivo;
+    \item in questo modo ingresso e uscita del regolatore sono sempre separati da un intervallo esattamente pari a \(T\).
+\end{itemize}
+
+Questa scelta rende il modello più regolare e adatto al progetto.
+
+\section{Due strategie di progetto del controllo digitale}
+
+Negli appunti vengono distinte due possibili strategie.
+
+\subsection{Prima strategia}
+
+La più completa, ma anche più complicata, consiste nel:
+\begin{itemize}
+    \item discretizzare l'impianto;
+    \item lavorare interamente nel dominio discreto;
+    \item progettare il regolatore direttamente sul modello discreto.
+\end{itemize}
+
+\subsection{Seconda strategia}
+
+Quella su cui il corso si concentra maggiormente è:
+\begin{itemize}
+    \item progettare il regolatore nel continuo, ottenendo \(R(s)\);
+    \item discretizzare il solo regolatore, ad esempio con Tustin;
+    \item mantenere l'impianto in forma continua.
+\end{itemize}
+
+In questo approccio serve però un buon modello del convertitore D/A,
+cioè proprio della tenuta di ordine zero.
+
+\section{Convertitore D/A come sample and hold}
+
+Il convertitore digitale-analogico viene modellato come \textbf{sample and hold},
+più precisamente \textbf{zero-order hold}.
+
+In ingresso riceve una sequenza di campioni
+\[
+u(k),
+\]
+e in uscita produce un segnale continuo a tratti costante:
+\[
+u_h(t)=u(k), \qquad kT \le t < (k+1)T.
+\]
+
+Quindi il valore del campione viene mantenuto costante per tutta la durata di un periodo \(T\).
+
+\subsection{Interpretazione}
+
+Il segnale in uscita dal D/A non è una successione di impulsi, ma una funzione continua a tratti.
+Dal punto di vista fisico, è questo segnale che entra nell'impianto \(G(s)\).
+
+\section{Risposta impulsiva della tenuta di ordine zero}
+
+Per determinare la funzione di trasferimento della tenuta di ordine zero,
+si studia la risposta a un impulso discreto in ingresso.
+
+Se in ingresso si applica un solo campione unitario al tempo \(k=0\),
+l'uscita analogica della tenuta è un rettangolo:
+\[
+h(t)=
+\begin{cases}
+1, & 0\le t < T,\\
+0, & t\ge T.
+\end{cases}
+\]
+
+Equivalentemente:
+\[
+h(t)=1(t)-1(t-T).
+\]
+
+La trasformata di Laplace della risposta impulsiva è allora
+\[
+F(s)=\mathcal{L}\{h(t)\}
+=
+\mathcal{L}\{1(t)-1(t-T)\}
+=
+\frac{1}{s}-\frac{e^{-sT}}{s}
+=
+\frac{1-e^{-sT}}{s}.
+\]
+
+Questa è la funzione di trasferimento della tenuta di ordine zero.
+
+\section{Risposta armonica della tenuta}
+
+Per capire l'effetto del DAC sul comportamento complessivo del sistema,
+bisogna studiare la risposta armonica della sua funzione di trasferimento.
+
+Sostituendo \(s=j\omega\), si ottiene
+\[
+F(j\omega)=\frac{1-e^{-j\omega T}}{j\omega}.
+\]
+
+Come già visto, questa si può riscrivere nella forma
+\[
+F(j\omega)=T e^{-j\omega T/2}\frac{\sin(\omega T/2)}{\omega T/2}.
+\]
+
+\subsection{Modulo}
+
+Il modulo vale
+\[
+|F(j\omega)|=T\left|\frac{\sin(\omega T/2)}{\omega T/2}\right|.
+\]
+
+Quindi:
+\begin{itemize}
+    \item alle basse frequenze il modulo è circa costante e pari a \(T\);
+    \item all'aumentare della frequenza compare l'attenuazione di tipo sinc;
+    \item il modulo si annulla ai multipli di
+    \[
+    \omega_c=\frac{2\pi}{T}.
+    \]
+\end{itemize}
+
+\subsection{Fase}
+
+La fase è data da
+\[
+\angle F(j\omega)
+=
+-\omega T/2
++
+\angle\!\left(\frac{\sin(\omega T/2)}{\omega T/2}\right).
+\]
+
+Nel primo intervallo di frequenze, dove il sinc è positivo,
+la fase è approssimativamente
+\[
+\angle F(j\omega)\approx -\omega T/2.
+\]
+
+Quindi, a bassa frequenza, la tenuta si comporta quasi come un ritardo puro di \(T/2\).
+
+\section{Effetto sul diagramma di Bode}
+
+Il DAC con tenuta di ordine zero influenza il diagramma di Bode complessivo dell'impianto:
+\begin{itemize}
+    \item introduce attenuazione alle alte frequenze;
+    \item introduce sfasamento addizionale;
+    \item può quindi peggiorare i margini di fase e il comportamento dinamico.
+\end{itemize}
+
+Per questo, nel progetto di un regolatore digitale, il blocco di tenuta
+non può essere trascurato se si vuole una descrizione accurata del sistema reale.
+
+\section{Sintesi della lezione}
+
+I punti principali della lezione sono:
+\begin{enumerate}
+    \item la STFT fornisce una rappresentazione tempo--frequenza del segnale;
+    \item con la STFT si vede quali frequenze sono presenti e in quali intervalli temporali;
+    \item esiste un compromesso inevitabile tra risoluzione temporale e risoluzione in frequenza;
+    \item nel problema di controllo digitale il regolatore \(R(z)\) è implementato in forma discreta, mentre il blocco \(G(s)\) resta continuo;
+    \item il segnale prodotto dal regolatore digitale deve essere convertito in analogico tramite un convertitore D/A;
+    \item il D/A è modellato come tenuta di ordine zero;
+    \item la sua funzione di trasferimento è
+    \[
+    F(s)=\frac{1-e^{-sT}}{s};
+    \]
+    \item la risposta armonica della tenuta è
+    \[
+    F(j\omega)=T e^{-j\omega T/2}\frac{\sin(\omega T/2)}{\omega T/2};
+    \]
+    \item a bassa frequenza il DAC si comporta approssimativamente come un guadagno \(T\) seguito da un ritardo puro \(T/2\);
+    \item il blocco di tenuta introduce attenuazione e sfasamento, e quindi modifica il Bode complessivo del sistema.
+\end{enumerate}

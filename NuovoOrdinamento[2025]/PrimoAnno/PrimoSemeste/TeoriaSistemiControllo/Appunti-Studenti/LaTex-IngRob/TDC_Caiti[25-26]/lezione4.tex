@@ -1,0 +1,461 @@
+\chapter{Lezione 4 --- Teorema del campionamento, banda pratica, rumore, filtro anti-alias e modello di sampling in Laplace}
+
+\section{Richiamo: campionamento nel tempo e periodicizzazione in frequenza}
+
+Ripartiamo dal modello già introdotto nella lezione precedente.
+Un segnale continuo \(f(t)\) viene campionato moltiplicandolo per un pettine di Dirac
+di periodo \(T\):
+\[
+\operatorname{III}_T(t)=\sum_{k=-\infty}^{+\infty}\delta(t-kT).
+\]
+
+Il segnale campionato è quindi
+\[
+\hat f(t)=f(t)\,\operatorname{III}_T(t)
+=
+f(t)\sum_{k=-\infty}^{+\infty}\delta(t-kT)
+=
+\sum_{k=-\infty}^{+\infty} f(kT)\,\delta(t-kT).
+\]
+
+Dal punto di vista del tempo, questa operazione sostituisce il segnale continuo
+con un treno di impulsi pesati con i valori dei campioni.
+
+Nel dominio della frequenza, la trasformata di Fourier del segnale campionato
+risulta periodica e ripete lo spettro originale con periodo
+\[
+\omega_s=\frac{2\pi}{T},
+\]
+se si lavora nel dominio delle pulsazioni, oppure con periodo
+\[
+f_s=\frac{1}{T},
+\]
+se si lavora nella frequenza ordinaria in Hertz.
+
+Più precisamente, se \(F(\omega)\) è la trasformata di Fourier del segnale continuo,
+allora
+\[
+\hat F(\omega)=\frac{1}{T}\sum_{n=-\infty}^{+\infty} F(\omega-n\omega_s).
+\]
+
+Quindi il campionamento:
+\begin{itemize}
+    \item discretizza il segnale nel tempo;
+    \item replica periodicamente il suo spettro in frequenza.
+\end{itemize}
+
+\section{Ricostruzione ideale del segnale continuo}
+
+Poiché tra dominio del tempo e dominio della frequenza esiste una relazione biunivoca
+tramite trasformata e antitrasformata di Fourier, per ricostruire idealmente \(f(t)\)
+a partire dal segnale campionato si procede così:
+\begin{enumerate}
+    \item si considera lo spettro periodico \(\hat F(\omega)\) del segnale campionato;
+    \item si isola una sola copia dello spettro originale;
+    \item si applica l'antitrasformata di Fourier di quella sola porzione spettrale.
+\end{enumerate}
+
+Questo procedimento è possibile solo se le repliche spettrali non si sovrappongono.
+
+\section{Teorema del campionamento}
+
+Supponiamo che il segnale sia a banda limitata, cioè che esista una pulsazione \(\bar\omega\)
+tale che
+\[
+F(\omega)=0
+\qquad
+\text{per } |\omega|>\bar\omega.
+\]
+
+Allora il segnale è ricostruibile dai suoi campioni se la frequenza di campionamento
+è sufficientemente alta da impedire la sovrapposizione delle copie periodiche dello spettro.
+
+La condizione fondamentale è
+\[
+\omega_s > 2\bar\omega.
+\]
+
+Poiché
+\[
+\omega_s=\frac{2\pi}{T},
+\]
+questa condizione è equivalente a
+\[
+\frac{2\pi}{T}>2\bar\omega
+\qquad \Longleftrightarrow \qquad
+T<\frac{\pi}{\bar\omega}.
+\]
+
+Nel dominio delle frequenze ordinarie, la stessa condizione si scrive
+\[
+f_s>\,2\bar f.
+\]
+
+\subsection{Interpretazione}
+
+La distanza tra le repliche dello spettro è fissata da \(1/T\) oppure da \(\omega_s\):
+\begin{itemize}
+    \item se \(T\) è piccolo, le repliche in frequenza sono lontane;
+    \item se \(T\) è grande, le repliche in frequenza si avvicinano.
+\end{itemize}
+
+Per campionare segnali con frequenze elevate bisogna quindi ridurre il periodo di campionamento,
+cioè aumentare la frequenza di campionamento.
+
+\section{Dualismo tempo--frequenza}
+
+Negli appunti viene richiamato un principio qualitativo molto importante:
+c'è un dualismo tra localizzazione temporale e localizzazione in frequenza.
+
+Nel caso del campionamento:
+\begin{itemize}
+    \item campioni molto distanziati nel tempo (cioè \(T\) grande) producono repliche
+    molto vicine in frequenza;
+    \item campioni molto fitti nel tempo (cioè \(T\) piccolo) producono repliche
+    molto lontane in frequenza.
+\end{itemize}
+
+Questo spiega geometricamente perché la ricostruzione peggiora quando si campiona troppo lentamente.
+
+\section{Segnali a banda limitata: caso ideale e caso pratico}
+
+Dal punto di vista matematico, un segnale \emph{strettamente} a banda limitata
+ha trasformata di Fourier nulla oltre una certa frequenza di taglio.
+
+Tuttavia un segnale davvero a banda limitata è un modello ideale:
+in molti casi reali il segnale non si esaurisce perfettamente in frequenza,
+ma presenta code spettrali che decadono progressivamente.
+
+Per questo, in pratica, si introduce una \textbf{banda passante effettiva}
+o \textbf{banda pratica}, definita tramite una soglia convenzionale.
+
+\section{Definizione pratica di banda: il criterio dei \(-3\) dB}
+
+Negli appunti compare il richiamo al valore \(-3\) dB.
+
+Se \(F(\omega)\) ha un massimo a bassa frequenza, si può definire la banda passante
+come l'intervallo di frequenze per cui il modulo resta sopra una soglia prefissata.
+Una scelta molto comune è la soglia a \(-3\) dB rispetto al massimo.
+
+In questo modo si definisce una pulsazione di banda \(\bar\omega\) come il punto
+in cui il modulo è sceso di \(3\) dB rispetto al valore di riferimento.
+
+\subsection{Osservazione importante}
+
+La soglia dei \(-3\) dB non è una legge assoluta:
+\begin{itemize}
+    \item è una convenzione pratica molto diffusa;
+    \item in altri casi si può usare una soglia diversa, ad esempio \(-6\) dB;
+    \item la scelta va fatta in base al sistema e alla precisione desiderata.
+\end{itemize}
+
+Quindi, per i segnali reali, la nozione di banda è spesso una nozione \emph{operativa}
+più che rigorosamente matematica.
+
+\section{Rumore di misura}
+
+Quando si misura un segnale fisico con un sensore, la misura non è mai esatta.
+Si può modellare il segnale misurato come
+\[
+f_m(t)=f(t)+m(t),
+\]
+dove:
+\begin{itemize}
+    \item \(f(t)\) è il segnale ``vero'';
+    \item \(m(t)\) è il rumore di misura.
+\end{itemize}
+
+Il rumore dipende da:
+\begin{itemize}
+    \item sensibilità del sensore;
+    \item elettronica di misura;
+    \item ambiente;
+    \item processo di acquisizione.
+\end{itemize}
+
+Per questo, nel problema del campionamento, non si ha quasi mai a che fare
+con un segnale puro, ma con un segnale contaminato dal rumore.
+
+\section{Rumore bianco}
+
+Negli appunti compare il richiamo al \textbf{processo bianco}.
+
+\subsection{Autocorrelazione}
+
+Un processo di rumore bianco ideale ha autocorrelazione del tipo
+\[
+R_m(\tau)=\mathbb{E}\{m(t)m(t+\tau)\}=K\,\delta(\tau),
+\]
+dove \(K\) è una costante positiva.
+
+Questo significa che campioni presi a istanti diversi sono incorrelati.
+
+\subsection{Spettro del rumore bianco}
+
+La trasformata di Fourier della delta è costante, quindi la densità spettrale
+del rumore bianco è piatta:
+\[
+S_m(\omega)=\mathcal{F}\{R_m(\tau)\}=K.
+\]
+
+Per questo si dice che un rumore bianco ha energia distribuita su tutte le frequenze.
+
+\subsection{Rumore bianco e rumore gaussiano}
+
+Le due proprietà non coincidono:
+\begin{itemize}
+    \item \textbf{bianco} significa spettro piatto / campioni incorrelati;
+    \item \textbf{gaussiano} si riferisce invece alla distribuzione di probabilità.
+\end{itemize}
+
+Un rumore può essere gaussiano ma non bianco, oppure bianco ma non gaussiano.
+
+\section{Perché il rumore crea problemi nel campionamento}
+
+Se il segnale misurato è
+\[
+f_m(t)=f(t)+m(t),
+\]
+allora il suo spettro contiene:
+\begin{itemize}
+    \item la parte utile \(F(\omega)\);
+    \item la parte di rumore \(M(\omega)\).
+\end{itemize}
+
+Quando si campiona, anche lo spettro del rumore viene replicato periodicamente.
+Poiché il rumore bianco è presente su tutte le frequenze, le repliche possono ripiegarsi
+sulle basse frequenze e contaminare la banda utile.
+
+Questo fenomeno è una delle ragioni principali per cui, \emph{prima del campionamento},
+si introduce un filtro anti-alias.
+
+\section{Filtro anti-alias}
+
+Prima di campionare un segnale reale è quindi necessario inserire un
+\textbf{filtro anti-alias}, cioè un filtro analogico posto a monte del campionatore.
+
+Lo schema concettuale è:
+\[
+f(t)\ \longrightarrow\ \text{filtro anti-alias}\ \longrightarrow\ \text{campionatore}\ \longrightarrow\ \hat f(kT).
+\]
+
+\subsection{Funzione del filtro anti-alias}
+
+Il filtro anti-alias deve:
+\begin{itemize}
+    \item attenuare le componenti ad alta frequenza;
+    \item limitare il contenuto spettrale che, dopo il campionamento,
+    si ripiegherebbe nella banda utile;
+    \item rendere applicabile in modo pratico il teorema del campionamento.
+\end{itemize}
+
+Idealmente sarebbe un passa-basso rettangolare, ma nella realtà si usano filtri
+con pendenza finita.
+
+\section{Caratteristiche del filtro anti-alias}
+
+Il filtro anti-alias è tipicamente un filtro passa-basso analogico.
+
+Un esempio semplice è un filtro RC del primo ordine, con pendenza asintotica
+\[
+-20\ \text{dB/decade}.
+\]
+
+Filtri di ordine più elevato permettono pendenze maggiori, ma introducono
+in generale maggiore complessità e maggiore sfasamento.
+
+\subsection{Compromesso attenuazione--sfasamento}
+
+Un punto essenziale della lezione è che il filtro anti-alias non può essere scelto
+guardando solo l'attenuazione.
+
+Infatti:
+\begin{itemize}
+    \item una pendenza più rapida attenua meglio le alte frequenze;
+    \item però una pendenza più rapida introduce più sfasamento;
+    \item lo sfasamento può degradare la dinamica del sistema e, in alcuni casi,
+    compromettere anche i margini di stabilità.
+\end{itemize}
+
+La scelta del filtro è quindi sempre un compromesso tra:
+\begin{itemize}
+    \item quanto rumore / aliasing si vuole sopprimere;
+    \item quanto ritardo di fase si può tollerare.
+\end{itemize}
+
+\section{Scelta pratica di frequenza di taglio e frequenza di campionamento}
+
+Nel caso ideale il teorema di campionamento richiederebbe soltanto
+\[
+\omega_s>2\bar\omega.
+\]
+
+Nella pratica però, poiché il filtro anti-alias non è ideale, si preferisce lavorare
+con un margine di sicurezza:
+\begin{itemize}
+    \item si sceglie la frequenza di campionamento ben più alta del doppio della banda utile;
+    \item si colloca la frequenza di taglio del filtro anti-alias in modo coerente
+    con la banda del segnale e con la pendenza disponibile.
+\end{itemize}
+
+Negli appunti è richiamata una regola pratica secondo cui conviene scegliere
+\[
+\omega_c \gg 2\bar\omega,
+\]
+oppure, in forma equivalente,
+\[
+f_s \text{ sufficientemente maggiore di } 2\bar f.
+\]
+
+Una regola empirica spesso usata in pratica è quella di scegliere la frequenza di campionamento
+diverse volte più grande della banda utile, ad esempio
+\[
+f_s \ge 5\cdot (2\bar f)
+\quad \text{oppure} \quad
+f_s \ge 10\cdot (2\bar f),
+\]
+a seconda delle prestazioni richieste e della pendenza del filtro disponibile.
+
+\subsection{Osservazione}
+
+Se si sbaglia la scelta della frequenza di campionamento oppure della frequenza di taglio
+del filtro anti-alias, l'informazione persa per aliasing non può più essere recuperata a valle.
+
+\section{Sensori digitali e sensori analogici}
+
+Molti sensori reali sono ancora analogici, e in tal caso:
+\begin{itemize}
+    \item il filtraggio anti-alias;
+    \item il campionamento;
+\end{itemize}
+vengono effettuati nel sistema di acquisizione.
+
+Se invece il sensore è digitale, spesso:
+\begin{itemize}
+    \item il costruttore incorpora già una fase di filtraggio;
+    \item il periodo di campionamento è prefissato oppure regolabile in modo limitato.
+\end{itemize}
+
+In ogni caso, dal punto di vista progettuale, rimane centrale capire quali siano
+le caratteristiche in frequenza del filtro anti-alias effettivo.
+
+\section{Passaggio dal modello in Fourier al modello in Laplace}
+
+Finora il campionamento è stato descritto soprattutto nel dominio della Fourier,
+cioè guardando la periodicizzazione dello spettro.
+
+Tuttavia, per l'analisi e il progetto dei sistemi di controllo, è più comodo lavorare
+nel dominio di Laplace, perché:
+\begin{itemize}
+    \item i modelli dei sistemi dinamici continui sono dati in \(s\);
+    \item il regolatore e l'impianto vengono normalmente descritti tramite
+    funzioni di trasferimento;
+    \item il campionamento interessa solo una parte dell'anello di controllo.
+\end{itemize}
+
+Per questo si introduce un modello di sampling compatibile con la trasformata di Laplace.
+
+\section{Modello di sampling nel dominio di Laplace}
+
+Per un segnale causale campionato agli istanti \(kT\), si considera
+\[
+\hat f(t)=\sum_{k=0}^{+\infty} f(kT)\,\delta(t-kT).
+\]
+
+Calcoliamo la sua trasformata di Laplace:
+\[
+\mathcal{L}\{\hat f(t)\}
+=
+\int_{0^-}^{+\infty}
+\left(
+\sum_{k=0}^{+\infty} f(kT)\,\delta(t-kT)
+\right)e^{-st}\,dt.
+\]
+
+Portando fuori la sommatoria,
+\[
+\mathcal{L}\{\hat f(t)\}
+=
+\sum_{k=0}^{+\infty} f(kT)\,\mathcal{L}\{\delta(t-kT)\}.
+\]
+
+Poiché
+\[
+\mathcal{L}\{\delta(t-kT)\}=e^{-skT},
+\]
+si ottiene
+\[
+\mathcal{L}\{\hat f(t)\}
+=
+\sum_{k=0}^{+\infty} f(kT)e^{-skT}.
+\]
+
+Questa non è una funzione razionale in \(s\), perché contiene l'esponenziale \(e^{-sT}\).
+
+\section{Introduzione della trasformata \(z\)}
+
+Per trattare comodamente il campionamento si introduce la variabile
+\[
+z=e^{sT}.
+\]
+
+Di conseguenza
+\[
+e^{-sT}=z^{-1}.
+\]
+
+Sostituendo nella formula precedente,
+\[
+\mathcal{L}\{\hat f(t)\}
+=
+\sum_{k=0}^{+\infty} f(kT)\,z^{-k}.
+\]
+
+Questa espressione suggerisce la definizione della \textbf{trasformata \(z\)} del segnale campionato:
+\[
+\mathcal{Z}\{f[k]\}
+=
+\sum_{k=0}^{+\infty} f(kT)\,z^{-k}.
+\]
+
+Quindi la trasformata \(z\) nasce come strumento naturale per descrivere
+segnali e sistemi campionati.
+
+\section{Significato della trasformata \(z\)}
+
+La variabile \(z\) incorpora in sé l'informazione del campionamento,
+perché è legata al periodo \(T\) attraverso la relazione
+\[
+z=e^{sT}.
+\]
+
+La trasformata \(z\):
+\begin{itemize}
+    \item svolge per i sistemi discreti un ruolo analogo a quello della Laplace
+    per i sistemi continui;
+    \item permette di passare da equazioni alle differenze a funzioni di trasferimento discrete;
+    \item è lo strumento naturale per lo studio dei regolatori digitali.
+\end{itemize}
+
+\section{Sintesi della lezione}
+
+I punti fondamentali della lezione sono:
+\begin{enumerate}
+    \item richiamo del teorema del campionamento e della condizione
+    \[
+    \omega_s>2\bar\omega
+    \qquad\text{oppure}\qquad
+    T<\frac{\pi}{\bar\omega};
+    \]
+    \item interpretazione del dualismo tempo--frequenza;
+    \item distinzione tra banda ideale e banda pratica;
+    \item uso del criterio a \(-3\) dB per definire una banda passante operativa;
+    \item introduzione del rumore di misura e del rumore bianco;
+    \item necessità del filtro anti-alias prima del campionamento;
+    \item compromesso tra attenuazione delle alte frequenze e sfasamento introdotto dal filtro;
+    \item passaggio dal modello di sampling in Fourier al modello di sampling in Laplace;
+    \item nascita della trasformata \(z\) dalla relazione
+    \[
+    z=e^{sT}.
+    \]
+\end{enumerate}

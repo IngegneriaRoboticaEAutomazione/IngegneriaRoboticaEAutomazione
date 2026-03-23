@@ -1,0 +1,605 @@
+\chapter{L2 -- Sistemi a stato vettore, rappresentazioni, moto, equilibrio, raggiungibilità, osservabilità e sistemi lineari}
+
+\section{Sistemi a stato vettore}
+
+In questa lezione si passa dalla descrizione astratta del sistema dinamico alla formulazione \emph{a stato vettore}.  
+L'idea è che, in moltissimi problemi di interesse ingegneristico, i valori istantanei di ingresso, uscita e stato possano essere rappresentati come vettori.
+
+Si assumono quindi:
+\[
+U,\quad Y,\quad X
+\]
+spazi vettoriali, con
+\[
+\dim U = m,\qquad \dim Y = \ell,\qquad \dim X = n.
+\]
+
+Qui:
+\begin{itemize}
+    \item $m$ è il numero di ingressi;
+    \item $\ell$ è il numero di uscite;
+    \item $n$ è il numero di variabili di stato.
+\end{itemize}
+
+\paragraph{Caso SISO e MIMO.}
+Se
+\[
+m=\ell=1,
+\]
+il sistema è SISO (\emph{Single Input Single Output}); altrimenti, in generale, è MIMO.
+
+\subsection{Spazi dei valori istantanei e spazi dei segnali}
+
+Anche qui è fondamentale distinguere:
+\[
+U \ \text{da}\ \mathcal{U},
+\qquad
+Y \ \text{da}\ \mathcal{Y}.
+\]
+
+Infatti:
+\begin{itemize}
+    \item $U$ e $Y$ sono spazi vettoriali di valori \emph{istantanei};
+    \item $\mathcal{U}$ e $\mathcal{Y}$ sono insiemi di \emph{funzioni nel tempo}.
+\end{itemize}
+
+Se $u_1(\cdot),u_2(\cdot)\in\mathcal{U}$ e $\alpha\in\mathbb{R}$, le operazioni naturali sono definite punto per punto:
+\[
+(u_1+u_2)(t)=u_1(t)+u_2(t),
+\qquad
+(\alpha u_1)(t)=\alpha\,u_1(t).
+\]
+
+Quando $\mathcal{U}$ è chiuso rispetto a tali operazioni, esso è uno spazio vettoriale. Lo stesso vale per $\mathcal{Y}$.
+
+\paragraph{Osservazione importante.}
+In generale:
+\begin{itemize}
+    \item $U$, $X$, $Y$ sono spazi vettoriali di dimensione finita;
+    \item $\mathcal{U}$ e $\mathcal{Y}$ sono invece, tipicamente, spazi di dimensione infinita.
+\end{itemize}
+
+Questo diventerà cruciale quando si parlerà di rappresentazioni matriciali: una mappa lineare tra spazi finito-dimensionali si rappresenta con una matrice; una mappa lineare definita su uno spazio di funzioni, in generale, no.
+
+\section{Rappresentazione esplicita del sistema}
+
+Nel linguaggio introdotto nella lezione precedente, un sistema dinamico può essere descritto in forma esplicita come
+\begin{align}
+x(t) &= \phi\bigl(t,t_0,x(t_0),u_{[t_0,t]}\bigr), \label{eq:L2_phi}\\
+y(t) &= g\bigl(t,t_0,x(t_0),u_{[t_0,t]}\bigr). \label{eq:L2_gglob}
+\end{align}
+
+Questa scrittura è detta \emph{esplicita} perché fornisce direttamente lo stato e l'uscita al tempo $t$.
+
+\paragraph{Interpretazione.}
+Se conosco:
+\begin{itemize}
+    \item lo stato iniziale $x(t_0)$,
+    \item l'ingresso applicato nell'intervallo $[t_0,t]$,
+    \item la funzione di transizione $\phi$,
+\end{itemize}
+allora conosco esattamente lo stato al tempo $t$.
+
+\section{Rappresentazione implicita}
+
+Spesso il sistema non viene descritto direttamente tramite $\phi$, ma tramite una legge locale di evoluzione.
+
+\subsection{Caso a tempo continuo}
+
+Nel tempo continuo, sotto opportune ipotesi di regolarità, la descrizione diventa:
+\begin{equation}
+\dot x(t)=f\bigl(x(t),u(t),t\bigr),
+\label{eq:L2_ct_state}
+\end{equation}
+con condizione iniziale
+\[
+x(t_0)=x_0.
+\]
+
+L'uscita è descritta localmente da
+\begin{equation}
+y(t)=g\bigl(x(t),u(t),t\bigr).
+\label{eq:L2_ct_output}
+\end{equation}
+
+Questa è la \emph{rappresentazione implicita}: non mi dice direttamente quale sia lo stato a un certo tempo futuro, ma mi dice \emph{come varia} lo stato.
+
+\subsection{Da \texorpdfstring{$\phi$}{phi} a \texorpdfstring{$f$}{f}: idea del passaggio}
+
+Dalla proprietà di composizione si ha, per $\Delta t>0$ piccolo,
+\[
+x(t+\Delta t)=\phi\bigl(t+\Delta t,t,x(t),u_{[t,t+\Delta t]}\bigr).
+\]
+
+Allora
+\[
+\frac{x(t+\Delta t)-x(t)}{\Delta t}
+=
+\frac{\phi\bigl(t+\Delta t,t,x(t),u_{[t,t+\Delta t]}\bigr)-x(t)}{\Delta t}.
+\]
+
+Se il limite esiste per $\Delta t\to 0$, si ottiene
+\[
+\dot x(t)=f\bigl(x(t),u(t),t\bigr).
+\]
+
+\paragraph{Lettura concettuale.}
+\begin{itemize}
+    \item La forma esplicita descrive il risultato finale dell'evoluzione.
+    \item La forma implicita descrive la legge istantanea che genera quell'evoluzione.
+\end{itemize}
+
+\subsection{Caso a tempo discreto}
+
+Nel tempo discreto non si usa la derivata, ma una relazione ricorsiva:
+\begin{equation}
+x(k+1)=f\bigl(x(k),u(k),k\bigr),
+\label{eq:L2_dt_state}
+\end{equation}
+e
+\begin{equation}
+y(k)=g\bigl(x(k),u(k),k\bigr).
+\label{eq:L2_dt_output}
+\end{equation}
+
+Qui la rappresentazione implicita coincide di fatto con un aggiornamento passo-passo dello stato.
+
+\paragraph{Osservazione.}
+Nel continuo passare da $f$ a $\phi$ significa risolvere un sistema di equazioni differenziali.  
+Nel discreto passare da $f$ a $\phi$ significa iterare la dinamica.
+
+\section{Eventi, moti, traiettorie e punti di equilibrio}
+
+\subsection{Evento}
+
+Un \emph{evento} del sistema è una coppia
+\[
+(x(t),t)\in X\times T.
+\]
+
+Si tratta quindi di uno stato osservato in un preciso istante.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=1.0]
+    \draw[->] (0,0) -- (7.5,0) node[right] {$t$};
+    \draw[->] (0,0) -- (0,4.0) node[above] {$x(t)$};
+
+    \draw[thick]
+        plot[smooth] coordinates {(0.6,1.0) (1.3,1.8) (2.2,1.5) (3.2,2.4) (4.1,2.0) (5.3,3.0) (6.5,3.4)};
+
+    \draw[dashed] (3.2,0) -- (3.2,2.4);
+    \draw[dashed] (0,2.4) -- (3.2,2.4);
+    \filldraw (3.2,2.4) circle (2pt);
+
+    \node at (3.55,2.75) {evento $(x(t),t)$};
+\end{tikzpicture}
+\caption{Rappresentazione grafica di un evento del sistema.}
+\end{figure}
+
+\subsection{Moto del sistema}
+
+Fissati:
+\begin{itemize}
+    \item uno stato iniziale $x(t_0)$,
+    \item un ingresso $u(\cdot)$,
+    \item un istante iniziale $t_0$,
+\end{itemize}
+il \emph{moto} del sistema è l'insieme
+\[
+\Bigl\{(x(t),t)\in X\times T:\ x(t)=\phi(t,t_0,x(t_0),u),\ t\ge t_0\Bigr\}.
+\]
+
+Il moto vive quindi nello spazio stato--tempo.
+
+\subsection{Traiettoria}
+
+La \emph{traiettoria} è la proiezione del moto sul solo spazio degli stati:
+\[
+\Bigl\{x(t)\in X:\ x(t)=\phi(t,t_0,x(t_0),u),\ t\ge t_0\Bigr\}.
+\]
+
+\paragraph{Differenza tra moto e traiettoria.}
+\begin{itemize}
+    \item Il moto tiene conto anche del tempo.
+    \item La traiettoria descrive solo il percorso dello stato nello spazio $X$.
+\end{itemize}
+
+\subsection{Punto di equilibrio}
+
+Uno stato $\bar x\in X$ è un \emph{punto di equilibrio} per un ingresso $\bar u(\cdot)$ se
+\[
+\bar x=\phi(t,t_0,\bar x,\bar u)\qquad \forall t\ge t_0.
+\]
+
+Questo significa che, se il sistema parte da $\bar x$ ed è soggetto all'ingresso $\bar u$, allora resta per sempre nello stesso stato.
+
+\paragraph{Tempo continuo.}
+Se il sistema è descritto da
+\[
+\dot x(t)=f(x(t),u(t),t),
+\]
+allora la condizione di equilibrio è
+\[
+0=f(\bar x,\bar u(t),t)\qquad \forall t\ge t_0.
+\]
+
+Nel caso tempo-invariante con ingresso costante $\bar u$, si riduce a
+\[
+0=f(\bar x,\bar u).
+\]
+
+\paragraph{Tempo discreto.}
+Se
+\[
+x(k+1)=f(x(k),u(k),k),
+\]
+allora un equilibrio soddisfa
+\[
+\bar x=f(\bar x,\bar u(k),k)\qquad \forall k\ge k_0.
+\]
+
+Nel caso tempo-invariante con ingresso costante:
+\[
+\bar x=f(\bar x,\bar u).
+\]
+
+\section{Ciclo limite}
+
+Un moto è periodico se esiste $T_p>0$ tale che
+\[
+x(t+T_p)=x(t)\qquad \forall t.
+\]
+
+Un \emph{ciclo limite} è una traiettoria periodica isolata nello spazio di stato.
+
+\paragraph{Interpretazione.}
+Il sistema non converge a un punto di equilibrio, ma evolve ripetutamente lungo una stessa orbita chiusa.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=1.0]
+    \draw[->] (-3.2,0) -- (3.2,0) node[right] {$x_1$};
+    \draw[->] (0,-2.7) -- (0,2.7) node[above] {$x_2$};
+
+    \draw[thick]
+        plot[smooth cycle, tension=0.9]
+        coordinates {(1.8,0.2) (1.0,1.6) (-0.8,1.7) (-1.8,0.2) (-1.2,-1.5) (0.8,-1.7)};
+\end{tikzpicture}
+\caption{Schema qualitativo di un ciclo limite nel piano di stato.}
+\end{figure}
+
+\paragraph{Nota concettuale.}
+Il ciclo limite è tipico dei sistemi non lineari. Nei sistemi lineari possono comparire moti periodici, ma non nel senso strutturale forte tipico dei cicli limite isolati.
+
+\section{Raggiungibilità e controllabilità}
+
+L'ingresso modifica il moto del sistema. Da qui nascono due nozioni fondamentali.
+
+Siano dati due eventi:
+\[
+(x_1,t_1),\qquad (x_2,t_2),\qquad t_2>t_1.
+\]
+
+Si dice che $(x_2,t_2)$ è \emph{raggiungibile} da $(x_1,t_1)$ se esiste un ingresso $u(\cdot)\in\mathcal{U}$ tale che
+\[
+x_2=\phi(t_2,t_1,x_1,u).
+\]
+
+In modo duale, si dice che $(x_1,t_1)$ è \emph{controllabile} da $(x_2,t_2)$ se esiste un ingresso che porta il sistema da $x_1$ al tempo $t_1$ a $x_2$ al tempo $t_2$.
+
+\paragraph{Idea intuitiva.}
+\begin{itemize}
+    \item Raggiungibilità: posso arrivare nello stato desiderato?
+    \item Controllabilità: posso forzare il sistema a seguire l'evoluzione voluta?
+\end{itemize}
+
+\section{Osservabilità e ricostruibilità}
+
+La domanda di fondo è:
+
+\begin{quote}
+Osservando ingresso e uscita, riesco a capire da quale stato iniziale è partito il sistema?
+\end{quote}
+
+\subsection{Stati indistinguibili}
+
+Due stati iniziali $x_0$ e $\bar x_0$ si dicono \emph{indistinguibili} nell'intervallo $[t_0,t_1]$ se, applicando lo stesso ingresso, producono la stessa uscita su tutto l'intervallo:
+\[
+g(\tau,t_0,x_0,u)=g(\tau,t_0,\bar x_0,u)
+\qquad
+\forall \tau\in [t_0,t_1],\ \forall u\in\mathcal U.
+\]
+
+Se esistono due stati distinti indistinguibili, il sistema non è osservabile.
+
+\paragraph{Interpretazione fisica.}
+Il sensore non riesce a distinguere quei due stati: l'uscita ``copre'' troppo poco dello stato.
+
+\section{Esempio discreto di mancata raggiungibilità e mancata osservabilità}
+
+Consideriamo il sistema a tempo discreto
+\[
+\begin{cases}
+x(k+1)=Ax(k)+Bu(k),\\
+y(k)=Cx(k),
+\end{cases}
+\]
+con
+\[
+A=
+\begin{bmatrix}
+0 & 1\\
+0 & 0
+\end{bmatrix},
+\qquad
+B=
+\begin{bmatrix}
+1\\
+0
+\end{bmatrix},
+\qquad
+C=
+\begin{bmatrix}
+0 & 1
+\end{bmatrix}.
+\]
+
+\subsection{Verifica della raggiungibilità}
+
+La matrice di raggiungibilità è
+\[
+\mathcal{R}=\begin{bmatrix}B & AB\end{bmatrix}.
+\]
+
+Calcoliamo:
+\[
+AB=
+\begin{bmatrix}
+0 & 1\\
+0 & 0
+\end{bmatrix}
+\begin{bmatrix}
+1\\
+0
+\end{bmatrix}
+=
+\begin{bmatrix}
+0\\
+0
+\end{bmatrix}.
+\]
+
+Quindi
+\[
+\mathcal{R}=
+\begin{bmatrix}
+1 & 0\\
+0 & 0
+\end{bmatrix},
+\qquad
+\operatorname{rank}(\mathcal{R})=1<2.
+\]
+
+Il sistema non è raggiungibile.
+
+\paragraph{Lettura diretta.}
+Se parto da
+\[
+x(0)=\begin{bmatrix}0\\0\end{bmatrix},
+\]
+allora
+\[
+x(1)=Ax(0)+Bu(0)=\begin{bmatrix}u(0)\\0\end{bmatrix},
+\]
+e poi
+\[
+x(2)=Ax(1)+Bu(1)=\begin{bmatrix}u(1)\\0\end{bmatrix}.
+\]
+
+La seconda componente resta sempre nulla.  
+Quindi non posso raggiungere uno stato del tipo
+\[
+\begin{bmatrix}
+1\\5
+\end{bmatrix}.
+\]
+
+\subsection{Verifica dell'osservabilità}
+
+La matrice di osservabilità è
+\[
+\mathcal{O}=
+\begin{bmatrix}
+C\\
+CA
+\end{bmatrix}.
+\]
+
+Calcoliamo:
+\[
+CA=
+\begin{bmatrix}
+0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+0 & 1\\
+0 & 0
+\end{bmatrix}
+=
+\begin{bmatrix}
+0 & 0
+\end{bmatrix}.
+\]
+
+Quindi
+\[
+\mathcal{O}=
+\begin{bmatrix}
+0 & 1\\
+0 & 0
+\end{bmatrix},
+\qquad
+\operatorname{rank}(\mathcal{O})=1<2.
+\]
+
+Il sistema non è osservabile.
+
+\paragraph{Interpretazione.}
+L'uscita vale
+\[
+y(k)=Cx(k)=
+\begin{bmatrix}
+0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+x_1(k)\\
+x_2(k)
+\end{bmatrix}
+=x_2(k).
+\]
+
+Il sensore legge solo la seconda componente dello stato.  
+La prima componente può cambiare senza essere direttamente rilevata: per questo parte dello stato rimane nascosta all'osservazione.
+
+\section{Sistemi lineari}
+
+Un sistema si dice lineare se la funzione di transizione $\phi$ e la trasformazione d'uscita $g$ sono lineari rispetto a stato iniziale e ingresso.
+
+Formalmente, per ogni $x_1,x_2\in X$, $u_1,u_2\in\mathcal{U}$ e $\alpha_1,\alpha_2\in\mathbb{R}$,
+\begin{multline}
+\phi\bigl(t,t_0,\alpha_1x_1+\alpha_2x_2,\alpha_1u_1+\alpha_2u_2\bigr)
+\\
+=
+\alpha_1\phi(t,t_0,x_1,u_1)+\alpha_2\phi(t,t_0,x_2,u_2),
+\label{eq:L2_linearity_phi}
+\end{multline}
+e analogamente
+\begin{multline}
+g\bigl(t,t_0,\alpha_1x_1+\alpha_2x_2,\alpha_1u_1+\alpha_2u_2\bigr)
+\\
+=
+\alpha_1g(t,t_0,x_1,u_1)+\alpha_2g(t,t_0,x_2,u_2).
+\label{eq:L2_linearity_g}
+\end{multline}
+
+\subsection{Proprietà di decomposizione}
+
+La linearità permette di separare l'effetto dello stato iniziale dall'effetto dell'ingresso.
+
+Ponendo in \eqref{eq:L2_linearity_phi}
+\[
+x_2=0,\qquad u_1=0,\qquad \alpha_1=\alpha_2=1,
+\]
+si ottiene
+\[
+\phi(t,t_0,x,u)=\phi(t,t_0,x,0)+\phi(t,t_0,0,u).
+\]
+
+Quindi l'evoluzione dello stato si decompone in:
+\[
+\phi(t,t_0,x,u)=\phi_\ell(t,t_0,x)+\phi_f(t,t_0,u),
+\]
+dove
+\[
+\phi_\ell(t,t_0,x):=\phi(t,t_0,x,0)
+\]
+è la \emph{risposta libera}, e
+\[
+\phi_f(t,t_0,u):=\phi(t,t_0,0,u)
+\]
+è la \emph{risposta forzata}.
+
+Allo stesso modo:
+\[
+g(t,t_0,x,u)=g_\ell(t,t_0,x)+g_f(t,t_0,u).
+\]
+
+\paragraph{Interpretazione.}
+\begin{itemize}
+    \item La risposta libera è quella dovuta unicamente allo stato iniziale.
+    \item La risposta forzata è quella dovuta unicamente all'ingresso.
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[>=Latex, scale=1.0]
+    \node[draw, rounded corners, minimum width=2.7cm, minimum height=1.1cm] (sum) at (0,0) {$\phi$};
+    \draw[->, thick] (-3,0.7) -- (sum.west) node[midway, above] {$x(t_0)$};
+    \draw[->, thick] (-3,-0.7) -- (sum.west) node[midway, below] {$u(\cdot)$};
+    \draw[->, thick] (sum.east) -- (3.5,0) node[midway, above] {$x(t)$};
+
+    \node at (0,-2.0) {$x(t)=\underbrace{\phi_\ell(t,t_0,x(t_0))}_{\text{risposta libera}}
+    +\underbrace{\phi_f(t,t_0,u)}_{\text{risposta forzata}}$};
+\end{tikzpicture}
+\caption{Idea di decomposizione della risposta nei sistemi lineari.}
+\end{figure}
+
+\subsection{Caso lineare tempo-invariante continuo}
+
+Per un sistema LTI continuo
+\[
+\dot x(t)=Ax(t)+Bu(t),
+\qquad
+y(t)=Cx(t)+Du(t),
+\]
+la soluzione dello stato è
+\[
+x(t)=e^{A(t-t_0)}x(t_0)+\int_{t_0}^{t} e^{A(t-\tau)}Bu(\tau)\,d\tau.
+\]
+
+Qui:
+\begin{itemize}
+    \item
+    \[
+    e^{A(t-t_0)}x(t_0)
+    \]
+    è la risposta libera;
+    \item
+    \[
+    \int_{t_0}^{t} e^{A(t-\tau)}Bu(\tau)\,d\tau
+    \]
+    è la risposta forzata.
+\end{itemize}
+
+\section{Nota finale sulle mappe lineari}
+
+La decomposizione mette in evidenza una differenza importante.
+
+\subsection{Parte libera}
+
+La mappa
+\[
+\phi_\ell: X\to X
+\]
+è una mappa lineare tra spazi finito-dimensionali; quindi si può rappresentare con una matrice.
+
+\subsection{Parte forzata}
+
+La mappa
+\[
+\phi_f:\mathcal{U}\to X
+\]
+è una mappa lineare da uno spazio di funzioni, in generale infinito-dimensionale, verso lo spazio di stato.
+
+Per questo motivo, in generale, $\phi_f$ \emph{non} si rappresenta con una matrice finita.
+
+\paragraph{Conseguenza.}
+Nei sistemi lineari:
+\begin{itemize}
+    \item la dinamica interna si presta naturalmente a una descrizione matriciale;
+    \item l'effetto dell'ingresso richiede invece operatori più generali, oppure formule integrali/sommatorie.
+\end{itemize}
+
+\section{Sintesi della lezione}
+
+In questa seconda lezione sono emersi i seguenti punti chiave:
+\begin{enumerate}
+    \item nei sistemi a stato vettore, ingresso, uscita e stato vivono in spazi vettoriali;
+    \item la rappresentazione esplicita usa $\phi$, quella implicita usa $f$;
+    \item si definiscono evento, moto, traiettoria, equilibrio e ciclo limite;
+    \item si introducono raggiungibilità e osservabilità;
+    \item nei sistemi lineari vale la decomposizione in risposta libera e risposta forzata.
+\end{enumerate}
+
+Questi concetti saranno alla base di tutto il seguito del corso: esponenziale di matrice, stabilità, raggiungibilità, osservabilità e progetto del controllo.

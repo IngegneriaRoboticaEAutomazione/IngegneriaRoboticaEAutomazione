@@ -1,0 +1,729 @@
+\chapter{L11 -- Raggiungibilità e controllabilità all'origine}
+
+\section{Idea della lezione}
+
+In questa lezione introduciamo uno dei problemi centrali della teoria del controllo:
+
+\begin{quote}
+dato un sistema dinamico lineare, esiste un ingresso di controllo che permetta di portare lo stato dove vogliamo?
+\end{quote}
+
+Questa domanda può essere letta in due modi leggermente diversi.
+
+\begin{itemize}
+    \item \textbf{Raggiungibilità}: partendo dall'origine, quali stati posso raggiungere in un tempo finito?
+    \item \textbf{Controllabilità all'origine}: partendo da uno stato iniziale assegnato, posso riportare il sistema all'origine in un tempo finito?
+\end{itemize}
+
+Nel caso dei sistemi lineari tempo-invarianti questi concetti si descrivono in modo molto chiaro attraverso:
+\begin{itemize}
+    \item la formula di evoluzione dello stato;
+    \item uno spazio di stati raggiungibili;
+    \item la matrice di raggiungibilità;
+    \item nel continuo, anche il gramiano di raggiungibilità.
+\end{itemize}
+
+L’idea fondamentale da tenere a mente è questa:
+
+\begin{quote}
+la possibilità di muovere il sistema nello spazio di stato non dipende da un singolo ingresso scelto a mano, ma dalla struttura della coppia \((A,B)\).
+\end{quote}
+
+\section{Sistema lineare stazionario a tempo continuo}
+
+Consideriamo un sistema lineare stazionario a tempo continuo
+\begin{equation}
+\Sigma_c:
+\begin{cases}
+\dot x(t)=Ax(t)+Bu(t),\\
+y(t)=Cx(t)+Du(t),
+\end{cases}
+\qquad x(t_0)=x_0,
+\label{eq:L11_sistema_tc}
+\end{equation}
+dove
+\[
+x(t)\in\mathbb{R}^n,\qquad
+u(t)\in\mathbb{R}^m,\qquad
+y(t)\in\mathbb{R}^p.
+\]
+
+La soluzione del sistema è
+\begin{equation}
+x(t)=e^{A(t-t_0)}x_0+\int_{t_0}^{t} e^{A(t-\tau)}Bu(\tau)\,d\tau.
+\label{eq:L11_soluzione_tc}
+\end{equation}
+
+Questa formula separa in modo netto due contributi:
+\begin{itemize}
+    \item il termine
+    \[
+    e^{A(t-t_0)}x_0,
+    \]
+    che è l'\textbf{evoluzione libera} e dipende solo dallo stato iniziale;
+    \item il termine
+    \[
+    \int_{t_0}^{t} e^{A(t-\tau)}Bu(\tau)\,d\tau,
+    \]
+    che è l'\textbf{evoluzione forzata} e dipende dall’ingresso.
+\end{itemize}
+
+\subsection{Riduzione al caso con stato iniziale nullo}
+
+Valutiamo \eqref{eq:L11_soluzione_tc} all’istante finale \(t_f\):
+\begin{equation}
+x(t_f)=e^{A(t_f-t_0)}x(t_0)+\int_{t_0}^{t_f} e^{A(t_f-\tau)}Bu(\tau)\,d\tau.
+\label{eq:L11_x_tf_tc}
+\end{equation}
+
+Portando a sinistra il termine di evoluzione libera otteniamo
+\begin{equation}
+x(t_f)-e^{A(t_f-t_0)}x(t_0)
+=
+\int_{t_0}^{t_f} e^{A(t_f-\tau)}Bu(\tau)\,d\tau.
+\label{eq:L11_traslazione_tc}
+\end{equation}
+
+Questa formula è molto importante, perché ci dice che il problema
+
+\begin{quote}
+\emph{partendo da \(x(t_0)\), posso arrivare in \(x(t_f)\)?}
+\end{quote}
+
+è equivalente al problema
+
+\begin{quote}
+\emph{partendo dall’origine, posso arrivare nel vettore}
+\[
+\bar x(t_f):=x(t_f)-e^{A(t_f-t_0)}x(t_0)\, ?
+\]
+\end{quote}
+
+Quindi, per studiare la raggiungibilità, basta concentrarsi sul caso \(x(t_0)=0\).
+
+\section{Insieme degli stati raggiungibili dall'origine nel continuo}
+
+Se \(x(t_0)=0\), la formula dello stato diventa
+\begin{equation}
+x(t_f)=\int_{t_0}^{t_f} e^{A(t_f-\tau)}Bu(\tau)\,d\tau.
+\label{eq:L11_raggiungibile_tc}
+\end{equation}
+
+Questo porta alla seguente definizione.
+
+\subsection*{Definizione}
+Fissato \(t_f>t_0\), l’insieme degli stati raggiungibili dall’origine è
+\begin{equation}
+\mathcal{R}^{t_f}
+=
+\left\{
+x\in\mathbb{R}^n \;:\;
+\exists\,u(\cdot)\ \text{tale che}\
+x=
+\int_{t_0}^{t_f} e^{A(t_f-\tau)}Bu(\tau)\,d\tau
+\right\}.
+\label{eq:L11_def_R_tf}
+\end{equation}
+
+In altre parole, \(\mathcal{R}^{t_f}\) è l’insieme di tutti gli stati in cui posso portare il sistema all’istante \(t_f\), partendo dall’origine.
+
+\subsection{Operatore di raggiungibilità}
+
+Definiamo l’operatore lineare
+\begin{equation}
+\varphi:\mathcal{U}\to\mathbb{R}^n,
+\qquad
+\varphi(u)=\int_{t_0}^{t_f} e^{A(t_f-\tau)}Bu(\tau)\,d\tau,
+\label{eq:L11_operatore_phi}
+\end{equation}
+dove \(\mathcal{U}\) è uno spazio di ingressi, ad esempio \(L^2([t_0,t_f],\mathbb{R}^m)\).
+
+Allora
+\begin{equation}
+\mathcal{R}^{t_f}=\operatorname{Im}(\varphi).
+\label{eq:L11_Rtf_immagine_phi}
+\end{equation}
+
+Quindi lo studio della raggiungibilità coincide con lo studio dell’immagine di un operatore lineare.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[>=Latex, node distance=4cm]
+    \node[draw, circle, minimum size=1.7cm] (U) {$\mathcal U$};
+    \node[draw, circle, minimum size=1.7cm, right of=U] (X) {$\mathbb{R}^n$};
+    \draw[->, thick] (U) -- node[above] {$\varphi$} (X);
+    \node[below=0.7cm of X] {\(\operatorname{Im}(\varphi)=\mathcal R^{t_f}\)};
+\end{tikzpicture}
+\caption{L’insieme raggiungibile dall’origine nel continuo è l’immagine dell’operatore di raggiungibilità.}
+\label{fig:L11_phi}
+\end{figure}
+
+\section{Operatore aggiunto e gramiano di raggiungibilità}
+
+Per analizzare meglio \(\operatorname{Im}(\varphi)\), introduciamo l’operatore aggiunto \(\varphi^\ast\).
+
+\subsection{Prodotti scalari}
+
+Sullo spazio di stato usiamo il prodotto scalare euclideo:
+\[
+\langle x_1,x_2\rangle_X=x_1^\top x_2.
+\]
+
+Sullo spazio degli ingressi \(\mathcal U=L^2([t_0,t_f],\mathbb{R}^m)\) usiamo
+\[
+\langle u_1,u_2\rangle_{\mathcal U}
+=
+\int_{t_0}^{t_f} u_1^\top(\tau)u_2(\tau)\,d\tau.
+\]
+
+Per definizione, \(\varphi^\ast:\mathbb{R}^n\to\mathcal U\) è l’operatore tale che
+\[
+\langle \varphi(u),x\rangle_X
+=
+\langle u,\varphi^\ast(x)\rangle_{\mathcal U}
+\qquad
+\forall u\in\mathcal U,\ \forall x\in\mathbb{R}^n.
+\]
+
+\subsection{Calcolo esplicito di \(\varphi^\ast\)}
+
+Partiamo da
+\[
+\varphi(u)=\int_{t_0}^{t_f} e^{A(t_f-\tau)}Bu(\tau)\,d\tau.
+\]
+Allora
+\[
+\langle \varphi(u),x\rangle_X
+=
+x^\top\int_{t_0}^{t_f} e^{A(t_f-\tau)}Bu(\tau)\,d\tau
+=
+\int_{t_0}^{t_f} x^\top e^{A(t_f-\tau)}Bu(\tau)\,d\tau.
+\]
+Usando la proprietà di trasposizione,
+\[
+x^\top e^{A(t_f-\tau)}Bu(\tau)
+=
+u^\top(\tau)B^\top e^{A^\top(t_f-\tau)}x.
+\]
+Quindi
+\[
+\langle \varphi(u),x\rangle_X
+=
+\int_{t_0}^{t_f}
+u^\top(\tau)\,B^\top e^{A^\top(t_f-\tau)}x\,d\tau
+=
+\langle u,\varphi^\ast(x)\rangle_{\mathcal U}.
+\]
+Si riconosce allora
+\begin{equation}
+\varphi^\ast(x)(\tau)=B^\top e^{A^\top(t_f-\tau)}x.
+\label{eq:L11_phi_star}
+\end{equation}
+
+\subsection{Gramiano di raggiungibilità}
+
+Consideriamo ora la composizione \(\varphi\varphi^\ast\):
+\[
+(\varphi\varphi^\ast)(x)
+=
+\int_{t_0}^{t_f}
+e^{A(t_f-\tau)}B\Big(B^\top e^{A^\top(t_f-\tau)}x\Big)\,d\tau.
+\]
+Raccogliendo \(x\), otteniamo
+\[
+(\varphi\varphi^\ast)(x)
+=
+\left(
+\int_{t_0}^{t_f}
+e^{A(t_f-\tau)}BB^\top e^{A^\top(t_f-\tau)}\,d\tau
+\right)x.
+\]
+
+Questo suggerisce di definire il \textbf{gramiano di raggiungibilità}
+\begin{equation}
+G_{\mathcal R}(t_f)
+=
+\int_{t_0}^{t_f}
+e^{A(t_f-\tau)}BB^\top e^{A^\top(t_f-\tau)}\,d\tau.
+\label{eq:L11_gramiano}
+\end{equation}
+
+Allora
+\begin{equation}
+\varphi\varphi^\ast(x)=G_{\mathcal R}(t_f)x.
+\label{eq:L11_phi_phi_star}
+\end{equation}
+
+Poiché in dimensione finita vale
+\[
+\operatorname{Im}(\varphi)=\operatorname{Im}(\varphi\varphi^\ast),
+\]
+concludiamo che
+\begin{equation}
+\mathcal{R}^{t_f}
+=
+\operatorname{Im}(G_{\mathcal R}(t_f)).
+\label{eq:L11_Rtf_gramiano}
+\end{equation}
+
+Quindi nel continuo lo spazio raggiungibile può essere studiato anche tramite il gramiano.
+
+\section{Matrice di raggiungibilità nel continuo}
+
+Introduciamo ora la classica matrice di raggiungibilità:
+\begin{equation}
+R=
+\begin{bmatrix}
+B & AB & A^2B & \cdots & A^{n-1}B
+\end{bmatrix}.
+\label{eq:L11_matrice_raggiungibilita}
+\end{equation}
+
+Il risultato fondamentale è che, per sistemi lineari stazionari,
+\begin{equation}
+\operatorname{Im}(G_{\mathcal R}(t_f))=\operatorname{Im}(R).
+\label{eq:L11_gramiano_matrice}
+\end{equation}
+
+Quindi, nel continuo,
+\begin{equation}
+\mathcal{R}^{t_f}=\operatorname{Im}(R).
+\label{eq:L11_Rtf_uguale_R}
+\end{equation}
+
+\subsection{Commento sul significato}
+
+Questo è un fatto molto importante.  
+Anche se il gramiano contiene un integrale e dipende apparentemente dall’istante finale \(t_f\), il sottospazio degli stati raggiungibili è lo stesso che si ottiene guardando la matrice finita
+\[
+R=
+\begin{bmatrix}
+B & AB & \cdots & A^{n-1}B
+\end{bmatrix}.
+\]
+
+Quindi, in pratica, il problema della raggiungibilità si riduce a un semplice problema di rango.
+
+\section{Sistema completamente raggiungibile}
+
+\subsection*{Definizione}
+La coppia \((A,B)\) si dice \textbf{completamente raggiungibile} se
+\begin{equation}
+\operatorname{rank}(R)=n.
+\label{eq:L11_rank_full}
+\end{equation}
+
+In tal caso
+\[
+\operatorname{Im}(R)=\mathbb{R}^n,
+\]
+e quindi ogni stato è raggiungibile dall’origine in tempo finito.
+
+\subsection{Interpretazione geometrica}
+
+Se \(\operatorname{rank}(R)=r<n\), allora gli stati raggiungibili non riempiono tutto lo spazio di stato, ma solo un sottospazio di dimensione \(r\).
+
+Per esempio:
+\begin{itemize}
+    \item se \(r=1\), gli stati raggiungibili stanno su una retta;
+    \item se \(r=2\) in \(\mathbb{R}^3\), stanno su un piano;
+    \item se \(r=n\), si riempie tutto \(\mathbb{R}^n\).
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[>=Latex, scale=1.0]
+    \draw[->] (0,0) -- (4,0) node[right] {$x_1$};
+    \draw[->] (0,0) -- (0,3.5) node[above] {$x_2$};
+    \draw[->] (0,0) -- (-1.6,-1.2) node[below left] {$x_3$};
+
+    \filldraw[fill=gray!20, draw=black]
+    (0.4,0.4) -- (2.8,0.7) -- (1.7,2.3) -- (-0.6,2.0) -- cycle;
+
+    \node at (2.3,2.1) {\(\operatorname{Im}(R)\)};
+\end{tikzpicture}
+\caption{Se \(\operatorname{rank}(R)=2\) in \(\mathbb{R}^3\), gli stati raggiungibili formano un piano.}
+\label{fig:L11_piano_raggiungibile}
+\end{figure}
+
+\section{Spazio raggiungibile da uno stato iniziale generico}
+
+Se \(x_0\neq 0\), allora dallo sviluppo dello stato segue che
+\[
+x(t_f)=e^{A(t_f-t_0)}x_0+r,
+\qquad r\in\mathcal{R}^{t_f}.
+\]
+Quindi l’insieme degli stati raggiungibili a partire da \(x_0\) è
+\begin{equation}
+\mathcal{R}^{t_f}_{x_0}=e^{A(t_f-t_0)}x_0+\mathcal{R}^{t_f}.
+\label{eq:L11_R_x0}
+\end{equation}
+
+Questo insieme non è, in generale, un sottospazio vettoriale: è una \textbf{traslazione affine} dello spazio raggiungibile dall’origine.
+
+\section{Caso discreto}
+
+Passiamo ora al sistema lineare stazionario a tempo discreto:
+\begin{equation}
+\Sigma_d:
+\begin{cases}
+x(k+1)=Ax(k)+Bu(k),\\
+y(k)=Cx(k)+Du(k).
+\end{cases}
+\label{eq:L11_sistema_td}
+\end{equation}
+
+Iterando la dinamica si ottiene
+\begin{equation}
+x(t)=A^t x_0+\sum_{k=0}^{t-1}A^{t-k-1}Bu(k).
+\label{eq:L11_soluzione_td}
+\end{equation}
+
+Se \(x_0=0\), allora
+\begin{equation}
+x(t)=\sum_{k=0}^{t-1}A^{t-k-1}Bu(k).
+\label{eq:L11_td_zero}
+\end{equation}
+
+Raccogliendo i termini rispetto agli ingressi:
+\begin{equation}
+x(t)=
+\begin{bmatrix}
+B & AB & A^2B & \cdots & A^{t-1}B
+\end{bmatrix}
+\begin{bmatrix}
+u(t-1)\\
+u(t-2)\\
+\vdots\\
+u(0)
+\end{bmatrix}.
+\label{eq:L11_td_fattorizzata}
+\end{equation}
+
+Definiamo allora la \textbf{matrice di raggiungibilità in \(t\) passi}
+\begin{equation}
+R_t=
+\begin{bmatrix}
+B & AB & A^2B & \cdots & A^{t-1}B
+\end{bmatrix}.
+\label{eq:L11_Rt}
+\end{equation}
+
+e il corrispondente insieme degli stati raggiungibili dall’origine in \(t\) passi:
+\begin{equation}
+\mathcal{R}_t=\operatorname{Im}(R_t).
+\label{eq:L11_spazio_Rt}
+\end{equation}
+
+\subsection{Monotonia degli spazi raggiungibili}
+
+Vale la catena crescente
+\begin{equation}
+\mathcal{R}_1\subseteq \mathcal{R}_2\subseteq \cdots \subseteq \mathcal{R}_t\subseteq \mathcal{R}_{t+1}\subseteq \cdots
+\label{eq:L11_catena_Rt}
+\end{equation}
+perché tutto ciò che posso raggiungere in \(t\) passi posso ancora raggiungerlo in \(t+1\) passi, eventualmente scegliendo l’ultimo ingresso nullo.
+
+Poiché lo spazio di stato ha dimensione \(n\), questa catena si stabilizza al più dopo \(n\) passi.
+
+\subsection*{Definizione}
+Il sistema discreto è \textbf{completamente raggiungibile} se esiste \(t\) tale che
+\begin{equation}
+\dim \mathcal{R}_t=n.
+\label{eq:L11_completa_raggiungibilita_td}
+\end{equation}
+
+Per un sistema lineare tempo-invariante basta controllare la matrice
+\[
+R=
+\begin{bmatrix}
+B & AB & \cdots & A^{n-1}B
+\end{bmatrix}.
+\]
+
+\section{Controllabilità all'origine}
+
+Finora abbiamo chiesto: \emph{quali stati posso raggiungere partendo dall’origine?}  
+Ora ribaltiamo il punto di vista: \emph{da quali stati iniziali posso tornare all’origine?}
+
+\subsection{Definizione nel discreto}
+
+Fissato \(t\), definiamo
+\begin{equation}
+\mathcal{C}_t=
+\left\{
+x_0\in\mathbb{R}^n \;:\;
+\exists\,u(0),\dots,u(t-1)\ \text{tali che}\ x(t)=0
+\right\}.
+\label{eq:L11_Ct}
+\end{equation}
+
+Usando \eqref{eq:L11_soluzione_td}, la condizione \(x(t)=0\) diventa
+\[
+A^t x_0+\sum_{k=0}^{t-1}A^{t-k-1}Bu(k)=0.
+\]
+Quindi
+\begin{equation}
+-A^t x_0\in \mathcal{R}_t.
+\label{eq:L11_zero_condition}
+\end{equation}
+
+\subsection{Raggiungibilità implica controllabilità all'origine}
+
+Se il sistema è completamente raggiungibile in \(t\) passi, allora
+\[
+\mathcal{R}_t=\mathbb{R}^n.
+\]
+Quindi per ogni \(x_0\) vale automaticamente
+\[
+-A^t x_0\in\mathcal{R}_t,
+\]
+e dunque ogni stato iniziale può essere portato all’origine.
+
+Perciò nel discreto vale
+\begin{equation}
+\text{raggiungibilità} \;\Longrightarrow\; \text{controllabilità all'origine}.
+\label{eq:L11_ragg_impl_ctrl0_td}
+\end{equation}
+
+\subsection{Nel discreto il viceversa non vale in generale}
+
+Nel discreto può accadere che
+\[
+\operatorname{Im}(A^t)\subseteq \mathcal{R}_t
+\]
+pur senza avere \(\mathcal{R}_t=\mathbb{R}^n\).
+
+In questo caso:
+\begin{itemize}
+    \item ogni stato iniziale può essere portato all’origine;
+    \item ma non ogni stato è raggiungibile partendo dall’origine.
+\end{itemize}
+
+Quindi nel discreto:
+\begin{equation}
+\boxed{
+\text{raggiungibilità} \Longrightarrow \text{controllabilità all'origine},
+\qquad
+\text{ma non viceversa.}
+}
+\label{eq:L11_no_equiv_td}
+\end{equation}
+
+\section{Nel continuo raggiungibilità e controllabilità all'origine coincidono}
+
+Nel continuo la situazione è diversa.  
+Infatti la condizione per arrivare a zero all’istante \(t_f\) è
+\[
+0=e^{A(t_f-t_0)}x_0+\int_{t_0}^{t_f} e^{A(t_f-\tau)}Bu(\tau)\,d\tau,
+\]
+cioè
+\[
+-e^{A(t_f-t_0)}x_0\in \mathcal{R}^{t_f}.
+\]
+Ma la matrice esponenziale è sempre invertibile:
+\[
+e^{A(t_f-t_0)} \ \text{è invertibile}\qquad \forall t_f>t_0.
+\]
+Quindi il cambio di variabile
+\[
+z=e^{A(t_f-t_0)}x_0
+\]
+è biiettivo, e perciò
+
+\begin{equation}
+\boxed{
+\text{nel continuo, controllabilità all'origine e raggiungibilità coincidono.}
+}
+\label{eq:L11_equiv_tc}
+\end{equation}
+
+\subsection{Significato intuitivo}
+
+Nel continuo l’evoluzione libera è governata da una matrice invertibile.  
+Per questo motivo, il problema
+\begin{quote}
+\emph{portare \(x_0\) a zero}
+\end{quote}
+è equivalente al problema
+\begin{quote}
+\emph{raggiungere un certo stato partendo dall’origine.}
+\end{quote}
+
+\section{Lo spazio raggiungibile è \(A\)-invariante}
+
+Una proprietà strutturale molto importante è che lo spazio raggiungibile è \(A\)-invariante.
+
+\subsection*{Proposizione}
+Lo spazio
+\[
+\operatorname{Im}(R)
+\]
+è \(A\)-invariante, cioè
+\[
+x\in\operatorname{Im}(R)\quad\Longrightarrow\quad Ax\in\operatorname{Im}(R).
+\]
+
+\subsection*{Dimostrazione}
+Se \(x\in\operatorname{Im}(R)\), allora esiste \(y\) tale che
+\[
+x=Ry=
+\begin{bmatrix}
+B & AB & A^2B & \cdots & A^{n-1}B
+\end{bmatrix}y.
+\]
+Allora
+\[
+Ax=
+\begin{bmatrix}
+AB & A^2B & A^3B & \cdots & A^nB
+\end{bmatrix}y.
+\]
+Per il teorema di Cayley--Hamilton, \(A^nB\) è combinazione lineare delle colonne
+\[
+B,\ AB,\ \dots,\ A^{n-1}B.
+\]
+Di conseguenza anche \(Ax\) è combinazione lineare delle colonne di \(R\), e quindi
+\[
+Ax\in\operatorname{Im}(R).
+\]
+\hfill\(\square\)
+
+\subsection{Commento}
+
+Questa proprietà sarà decisiva nella lezione successiva, quando riscriveremo il sistema separando:
+\begin{itemize}
+    \item la parte raggiungibile;
+    \item la parte non raggiungibile.
+\end{itemize}
+
+Infatti il fatto che \(\operatorname{Im}(R)\) sia \(A\)-invariante permette di costruire una base di coordinate adatta a questa decomposizione.
+
+\section{Esempio semplice di non completa raggiungibilità}
+
+Consideriamo il sistema discreto
+\[
+A=
+\begin{bmatrix}
+1 & 0 & 0\\
+0 & 0 & 0\\
+1 & 0 & 0
+\end{bmatrix},
+\qquad
+B=
+\begin{bmatrix}
+1\\
+0\\
+1
+\end{bmatrix}.
+\]
+Allora
+\[
+AB=
+\begin{bmatrix}
+1\\
+0\\
+1
+\end{bmatrix}=B,
+\qquad
+A^2B=AB=B.
+\]
+Quindi
+\[
+R=
+\begin{bmatrix}
+B & AB & A^2B
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 & 1 & 1\\
+0 & 0 & 0\\
+1 & 1 & 1
+\end{bmatrix}.
+\]
+Il rango è
+\[
+\operatorname{rank}(R)=1<3.
+\]
+Dunque il sistema non è completamente raggiungibile.
+
+Tuttavia
+\[
+\operatorname{Im}(A)=\operatorname{span}\!\left\{\begin{bmatrix}1\\0\\1\end{bmatrix}\right\}
+=
+\operatorname{Im}(R_1).
+\]
+Questo significa che ogni \(-Ax_0\) appartiene già a \(R_1\), quindi il sistema è controllabile all’origine in un passo, pur non essendo completamente raggiungibile.
+
+Questo esempio mostra in modo molto chiaro la differenza tra i due concetti nel discreto.
+
+\section{Schema riassuntivo finale}
+
+\begin{center}
+\fbox{
+\parbox{0.93\textwidth}{
+\textbf{Tempo continuo}
+\begin{itemize}
+    \item
+    \[
+    x(t)=e^{A(t-t_0)}x_0+\int_{t_0}^{t}e^{A(t-\tau)}Bu(\tau)\,d\tau
+    \]
+    \item
+    \[
+    \mathcal{R}^{t_f}=\operatorname{Im}(R),
+    \qquad
+    R=\begin{bmatrix}B & AB & \cdots & A^{n-1}B\end{bmatrix}
+    \]
+    \item
+    \[
+    \operatorname{rank}(R)=n
+    \iff
+    \text{sistema completamente raggiungibile}
+    \]
+    \item
+    \[
+    \text{raggiungibilità}
+    \iff
+    \text{controllabilità all'origine}
+    \]
+\end{itemize}
+
+\vspace{0.2cm}
+
+\textbf{Tempo discreto}
+\begin{itemize}
+    \item
+    \[
+    x(t)=A^t x_0+\sum_{k=0}^{t-1}A^{t-k-1}Bu(k)
+    \]
+    \item
+    \[
+    \mathcal{R}_t=\operatorname{Im}(R_t),
+    \qquad
+    R_t=\begin{bmatrix}B & AB & \cdots & A^{t-1}B\end{bmatrix}
+    \]
+    \item
+    \[
+    \mathcal{R}_1\subseteq \mathcal{R}_2\subseteq\cdots
+    \]
+    \item
+    \[
+    \text{raggiungibilità}
+    \Longrightarrow
+    \text{controllabilità all'origine}
+    \]
+    ma in generale il viceversa \emph{non} vale.
+\end{itemize}
+}}
+\end{center}
+
+\section{Conclusione}
+
+La lezione ha introdotto il primo vero strumento strutturale della teoria del controllo: lo \textbf{spazio raggiungibile}.  
+Da qui in avanti l’idea sarà sempre la stessa:
+
+\begin{quote}
+capire se l’ingresso riesce a generare tutto lo spazio di stato, oppure solo una sua parte.
+\end{quote}
+
+Questa domanda verrà sviluppata ulteriormente nella prossima lezione, dove useremo l’\(A\)-invarianza dello spazio raggiungibile per costruire la \textbf{forma standard di raggiungibilità}.

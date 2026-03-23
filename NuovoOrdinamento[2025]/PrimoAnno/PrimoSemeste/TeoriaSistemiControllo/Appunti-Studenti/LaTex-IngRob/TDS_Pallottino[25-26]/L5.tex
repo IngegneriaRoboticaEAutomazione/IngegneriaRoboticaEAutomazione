@@ -1,0 +1,920 @@
+\chapter{L5 -- Proprietà dell'esponenziale di matrice, funzioni di matrice, sequenze di Krylov, sottospazi ciclici e forma di Jordan}
+
+\section{Esponenziale di matrice}
+
+Nel caso dei sistemi lineari tempo-invarianti continui, la soluzione libera è
+\[
+x(t)=e^{A(t-t_0)}x(t_0).
+\]
+Per questo motivo è fondamentale capire bene che cosa sia l'esponenziale di matrice e quali proprietà possieda.
+
+\subsection{Definizione}
+
+Data una matrice quadrata
+\[
+A\in\mathbb{R}^{n\times n}
+\qquad
+(\text{o più in generale }A\in\mathbb{C}^{n\times n}),
+\]
+si definisce l'esponenziale di matrice come la serie
+\begin{equation}
+e^{At}
+:=
+\sum_{k=0}^{\infty}\frac{A^k t^k}{k!}.
+\label{eq:L5_def_exp}
+\end{equation}
+
+Più in generale, fissato un istante iniziale $t_0$,
+\begin{equation}
+\Phi(t,t_0)=e^{A(t-t_0)}
+=
+\sum_{k=0}^{\infty}\frac{A^k (t-t_0)^k}{k!}.
+\label{eq:L5_phi_exp}
+\end{equation}
+
+\paragraph{Osservazione.}
+Questa definizione è perfettamente analoga a quella dell'esponenziale scalare:
+\[
+e^z=\sum_{k=0}^{\infty}\frac{z^k}{k!}.
+\]
+La differenza è che ora, al posto di una variabile scalare, compare una matrice.
+
+\section{Proprietà fondamentali dell'esponenziale di matrice}
+
+Le proprietà che seguono sono quelle emerse negli appunti e sono centrali per tutto il resto del corso.
+
+\begin{proposizione}
+Per ogni matrice quadrata $A$ valgono le seguenti proprietà.
+\end{proposizione}
+
+\subsection{Valore all'origine}
+
+Ponendo $t=t_0$ in \eqref{eq:L5_phi_exp}, si ha
+\[
+\Phi(t_0,t_0)=e^{A(t_0-t_0)}=e^{A\cdot 0}=e^{0}.
+\]
+Poiché nella serie tutti i termini con $k\ge 1$ si annullano, resta solo il termine di ordine zero:
+\[
+e^{0}=I.
+\]
+
+Quindi
+\begin{equation}
+e^{A\cdot 0}=I,
+\qquad
+\Phi(t_0,t_0)=I.
+\label{eq:L5_exp_identity}
+\end{equation}
+
+\subsection{Derivata rispetto al tempo}
+
+Derivando termine a termine la serie:
+\[
+\frac{d}{dt}e^{A(t-t_0)}
+=
+\frac{d}{dt}\left(
+\sum_{k=0}^{\infty}\frac{A^k (t-t_0)^k}{k!}
+\right).
+\]
+
+Si ottiene
+\[
+=
+\sum_{k=1}^{\infty}\frac{A^k k (t-t_0)^{k-1}}{k!}
+=
+\sum_{k=1}^{\infty}\frac{A^k (t-t_0)^{k-1}}{(k-1)!}.
+\]
+
+Raccogliendo una $A$:
+\[
+=
+A\sum_{k=1}^{\infty}\frac{A^{k-1}(t-t_0)^{k-1}}{(k-1)!}
+=
+A\sum_{j=0}^{\infty}\frac{A^j (t-t_0)^j}{j!}.
+\]
+
+Dunque
+\begin{equation}
+\frac{d}{dt}e^{A(t-t_0)}=A\,e^{A(t-t_0)}.
+\label{eq:L5_exp_derivative}
+\end{equation}
+
+Poiché ogni potenza di $A$ commuta con $A$, si può anche scrivere
+\[
+\frac{d}{dt}e^{A(t-t_0)}=e^{A(t-t_0)}A.
+\]
+
+\subsection{Non singolarità}
+
+La matrice esponenziale è sempre invertibile. Infatti
+\[
+e^{At}e^{-At}=e^{0}=I.
+\]
+
+Quindi
+\begin{equation}
+\left(e^{At}\right)^{-1}=e^{-At}.
+\label{eq:L5_exp_inverse}
+\end{equation}
+
+In particolare, $e^{At}$ non è mai singolare, per qualunque matrice $A$ e per qualunque $t$.
+
+\subsection{Proprietà di composizione}
+
+Poiché la matrice $A$ commuta con sé stessa, si ha
+\[
+e^{A(t_2-t_1)}e^{A(t_1-t_0)}=e^{A[(t_2-t_1)+(t_1-t_0)]}=e^{A(t_2-t_0)}.
+\]
+
+Quindi
+\begin{equation}
+e^{A(t_2-t_0)}=e^{A(t_2-t_1)}e^{A(t_1-t_0)}.
+\label{eq:L5_exp_composition}
+\end{equation}
+
+Questa è esattamente la proprietà di composizione della matrice di transizione:
+\[
+\Phi(t_2,t_0)=\Phi(t_2,t_1)\Phi(t_1,t_0).
+\]
+
+\paragraph{Osservazione importante.}
+La formula
+\[
+e^{X+Y}=e^Xe^Y
+\]
+\emph{non} è vera in generale per matrici arbitrarie $X$ e $Y$. È vera qui perché stiamo sommando multipli della \emph{stessa} matrice $A$, e quindi i termini commutano.
+
+\subsection{Invarianza per similitudine}
+
+Se $S$ è invertibile, allora
+\begin{equation}
+e^{(S^{-1}AS)t}=S^{-1}e^{At}S.
+\label{eq:L5_similarity_exp}
+\end{equation}
+
+\begin{proof}
+Basta sviluppare la serie:
+\[
+e^{(S^{-1}AS)t}
+=
+\sum_{k=0}^{\infty}\frac{(S^{-1}AS)^k t^k}{k!}.
+\]
+
+Ma
+\[
+(S^{-1}AS)^k=S^{-1}A^kS,
+\]
+per ogni $k\ge 0$. Quindi
+\[
+e^{(S^{-1}AS)t}
+=
+\sum_{k=0}^{\infty}\frac{S^{-1}A^kS\,t^k}{k!}
+=
+S^{-1}\left(\sum_{k=0}^{\infty}\frac{A^k t^k}{k!}\right)S
+=
+S^{-1}e^{At}S.
+\]
+\end{proof}
+
+\paragraph{Significato.}
+Questa proprietà è essenziale perché, se riesco a portare una matrice in una forma più semplice mediante similitudine, posso calcolare l'esponenziale nella forma semplice e poi tornare alla matrice originale.
+
+\section{Funzioni di matrice e matrici polinomiali}
+
+L'esponenziale di matrice è un esempio di \emph{funzione di matrice}. Prima di affrontare i casi pratici di calcolo, è utile introdurre le funzioni polinomiali di una matrice.
+
+\subsection{Polinomio e matrice polinomiale associata}
+
+Sia
+\[
+p(\lambda)=a_m\lambda^m+a_{m-1}\lambda^{m-1}+\cdots+a_1\lambda+a_0
+\]
+un polinomio. Alla matrice $A\in\mathbb{R}^{n\times n}$ si associa la matrice polinomiale
+\begin{equation}
+p(A)=a_mA^m+a_{m-1}A^{m-1}+\cdots+a_1A+a_0I.
+\label{eq:L5_poly_matrix}
+\end{equation}
+
+\paragraph{Caso monico.}
+Spesso si suppone che il polinomio sia \emph{monico}, cioè
+\[
+a_m=1.
+\]
+In tal caso
+\[
+p(\lambda)=\lambda^m+a_{m-1}\lambda^{m-1}+\cdots+a_1\lambda+a_0.
+\]
+
+\subsection{Fattorizzazione del polinomio}
+
+Se il polinomio si scinde su $\mathbb{C}$, allora esistono radici $\lambda_1,\dots,\lambda_m$ tali che
+\[
+p(\lambda)=\prod_{i=1}^{m}(\lambda-\lambda_i).
+\]
+
+Di conseguenza si può scrivere
+\begin{equation}
+p(A)=\prod_{i=1}^{m}(A-\lambda_i I).
+\label{eq:L5_factorized_poly_matrix}
+\end{equation}
+
+\section{Autovalori di una matrice polinomiale}
+
+Una proprietà molto utile è la seguente.
+
+\begin{proposizione}
+Se $\lambda$ è un autovalore di $A$ con autovettore $v\neq 0$, allora $p(\lambda)$ è un autovalore di $p(A)$ con lo stesso autovettore $v$.
+\end{proposizione}
+
+\begin{proof}
+Se
+\[
+Av=\lambda v,
+\]
+allora
+\[
+A^2v=A(Av)=A(\lambda v)=\lambda Av=\lambda^2 v.
+\]
+Per induzione si ottiene
+\[
+A^kv=\lambda^k v\qquad \forall k\ge 0.
+\]
+
+Allora
+\begin{align*}
+p(A)v
+&=
+(a_mA^m+a_{m-1}A^{m-1}+\cdots+a_1A+a_0I)v\\
+&=
+a_mA^mv+a_{m-1}A^{m-1}v+\cdots+a_1Av+a_0v\\
+&=
+a_m\lambda^m v+a_{m-1}\lambda^{m-1}v+\cdots+a_1\lambda v+a_0v\\
+&=
+p(\lambda)v.
+\end{align*}
+
+Quindi $v$ è autovettore di $p(A)$ e l'autovalore associato è proprio $p(\lambda)$.
+\end{proof}
+
+\paragraph{Osservazione.}
+Questa proprietà è una forma elementare della \emph{mappatura spettrale} per i polinomi.
+
+\section{Sequenza di Krylov}
+
+Fissiamo uno stato iniziale
+\[
+x_0\in X.
+\]
+
+Si chiama \emph{sequenza di Krylov generata da $x_0$ rispetto ad $A$} la successione di vettori
+\begin{equation}
+x_0,\ Ax_0,\ A^2x_0,\ A^3x_0,\ \dots
+\label{eq:L5_krylov_sequence}
+\end{equation}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[>=Latex, node distance=1.55cm]
+    \node[draw, circle, minimum size=9mm] (x0) {$x_0$};
+    \node[draw, circle, right=of x0, minimum size=9mm] (x1) {$Ax_0$};
+    \node[draw, circle, right=of x1, minimum size=9mm] (x2) {$A^2x_0$};
+    \node[right=of x2] (dots) {$\cdots$};
+    \draw[->, thick] (x0) -- node[above] {$A$} (x1);
+    \draw[->, thick] (x1) -- node[above] {$A$} (x2);
+    \draw[->, thick] (x2) -- (dots);
+\end{tikzpicture}
+\caption{Schema della sequenza di Krylov generata da $x_0$.}
+\end{figure}
+
+Poiché lo spazio di stato $X$ ha dimensione finita, non è possibile avere infiniti vettori linearmente indipendenti.  
+Dunque esiste un primo indice $p$ tale che
+\[
+A^p x_0
+\]
+sia combinazione lineare dei precedenti:
+\[
+x_0,\ Ax_0,\ \dots,\ A^{p-1}x_0.
+\]
+
+Di conseguenza, per ogni $q\ge p$, anche $A^q x_0$ sarà combinazione lineare dei primi $p$ vettori.
+
+\section{Sottospazio ciclico}
+
+Si definisce \emph{sottospazio ciclico generato da $x_0$} il sottospazio
+\begin{equation}
+S_{x_0}:=\operatorname{span}\{x_0,Ax_0,A^2x_0,\dots,A^{p-1}x_0\},
+\label{eq:L5_cyclic_subspace}
+\end{equation}
+dove $p$ è il numero di vettori linearmente indipendenti nella sequenza di Krylov.
+
+\paragraph{Interpretazione.}
+Questo sottospazio è il ``luogo naturale'' in cui vive l'evoluzione libera che parte da $x_0$.
+
+\subsection{Esempio 1: autovettore}
+
+Se $x_0=v$ è autovettore di $A$:
+\[
+Av=\lambda v,
+\]
+allora
+\[
+A^k v=\lambda^k v,
+\]
+quindi tutti i vettori della sequenza di Krylov sono multipli di $v$.  
+In tal caso
+\[
+S_v=\operatorname{span}\{v\},
+\qquad
+\dim S_v=1.
+\]
+
+\subsection{Esempio 2: dimensione maggiore di uno}
+
+Sia
+\[
+A=
+\begin{pmatrix}
+1 & 1\\
+0 & -1
+\end{pmatrix},
+\qquad
+x_0=
+\begin{pmatrix}
+0\\
+1
+\end{pmatrix}.
+\]
+
+Allora
+\[
+Ax_0=
+\begin{pmatrix}
+1\\
+-1
+\end{pmatrix},
+\]
+che non è multiplo di $x_0$. Quindi
+\[
+S_{x_0}=\operatorname{span}\left\{
+\begin{pmatrix}
+0\\1
+\end{pmatrix},
+\begin{pmatrix}
+1\\-1
+\end{pmatrix}
+\right\}
+=\mathbb{R}^2.
+\]
+
+In questo caso il sottospazio ciclico coincide con tutto lo spazio di stato.
+
+\section{Sottospazi \texorpdfstring{$A$}{A}-invarianti}
+
+Un sottospazio $S\subseteq X$ si dice \emph{$A$-invariante} se
+\begin{equation}
+x\in S \quad \Longrightarrow \quad Ax\in S.
+\label{eq:L5_A_invariant_def}
+\end{equation}
+
+\paragraph{Significato dinamico.}
+Se l'evoluzione libera parte da uno stato contenuto in un sottospazio $A$-invariante, allora tutta l'evoluzione libera rimane in quel sottospazio.
+
+\subsection{Esempio di sottospazio non invariante}
+
+Sia
+\[
+A=
+\begin{pmatrix}
+1 & 1\\
+0 & -1
+\end{pmatrix},
+\qquad
+S=\operatorname{span}\left\{
+\begin{pmatrix}
+1\\
+1
+\end{pmatrix}
+\right\}.
+\]
+
+Un vettore generico di $S$ è
+\[
+v=
+\begin{pmatrix}
+\alpha\\
+\alpha
+\end{pmatrix}.
+\]
+
+Allora
+\[
+Av=
+\begin{pmatrix}
+1 & 1\\
+0 & -1
+\end{pmatrix}
+\begin{pmatrix}
+\alpha\\
+\alpha
+\end{pmatrix}
+=
+\begin{pmatrix}
+2\alpha\\
+-\alpha
+\end{pmatrix},
+\]
+che in generale non appartiene a $S$, perché non ha componenti uguali.
+
+Quindi $S$ non è $A$-invariante.
+
+\section{Il sottospazio ciclico è \texorpdfstring{$A$}{A}-invariante}
+
+Questo è uno dei risultati centrali della lezione.
+
+\begin{teorema}
+Dato $A$ e fissato $x_0$, il sottospazio ciclico $S_{x_0}$ è $A$-invariante.
+\end{teorema}
+
+\begin{proof}
+Sia
+\[
+S_{x_0}=\operatorname{span}\{x_0,Ax_0,\dots,A^{p-1}x_0\}.
+\]
+Prendiamo un vettore arbitrario $x\in S_{x_0}$. Allora esistono coefficienti $\alpha_0,\dots,\alpha_{p-1}$ tali che
+\[
+x=\sum_{i=0}^{p-1}\alpha_i A^i x_0.
+\]
+
+Moltiplicando per $A$:
+\[
+Ax=\sum_{i=0}^{p-1}\alpha_i A^{i+1}x_0
+=
+\alpha_0Ax_0+\alpha_1A^2x_0+\cdots+\alpha_{p-2}A^{p-1}x_0+\alpha_{p-1}A^p x_0.
+\]
+
+Ora, per definizione di $p$, il vettore $A^p x_0$ è combinazione lineare dei precedenti:
+\[
+A^p x_0 \in \operatorname{span}\{x_0,Ax_0,\dots,A^{p-1}x_0\}=S_{x_0}.
+\]
+
+Di conseguenza anche $Ax$ è combinazione lineare di vettori di $S_{x_0}$, quindi
+\[
+Ax\in S_{x_0}.
+\]
+
+Pertanto $S_{x_0}$ è $A$-invariante.
+\end{proof}
+
+\paragraph{Conseguenza dinamica.}
+Se l'evoluzione libera parte da $x_0$, allora resta tutta dentro $S_{x_0}$. Questo riduce il problema dinamico a un sottospazio spesso di dimensione molto più piccola di $n$.
+
+\section{Polinomi annullatori}
+
+\subsection{Per la matrice}
+
+Un polinomio $p(\lambda)$ si dice \emph{annullatore} della matrice $A$ se
+\begin{equation}
+p(A)=0.
+\label{eq:L5_annihilating_poly}
+\end{equation}
+
+Questo significa che la matrice polinomiale associata è la matrice nulla.
+
+\subsection{Per un vettore}
+
+Più in generale, rispetto a un dato vettore $x_0$, si può chiedere che
+\begin{equation}
+p(A)x_0=0.
+\label{eq:L5_annihilating_poly_vector}
+\end{equation}
+
+In questo caso $p$ annulla il vettore $x_0$ attraverso la dinamica indotta da $A$.
+
+\paragraph{Osservazione.}
+Il minimo grado di un polinomio monico che annulla $x_0$ è strettamente collegato alla dimensione del sottospazio ciclico generato da $x_0$.
+
+\section{Teorema di Cayley--Hamilton}
+
+Il teorema chiave è il seguente.
+
+\begin{teorema}[Cayley--Hamilton]
+Sia
+\[
+p_A(\lambda)=\det(\lambda I-A)
+\]
+il polinomio caratteristico di $A$. Allora
+\begin{equation}
+p_A(A)=0.
+\label{eq:L5_CH}
+\end{equation}
+\end{teorema}
+
+Se
+\[
+p_A(\lambda)=\lambda^n+a_{n-1}\lambda^{n-1}+\cdots+a_1\lambda+a_0,
+\]
+allora
+\begin{equation}
+A^n+a_{n-1}A^{n-1}+\cdots+a_1A+a_0I=0.
+\label{eq:L5_CH_expanded}
+\end{equation}
+
+\paragraph{Conseguenza fondamentale.}
+Ogni potenza $A^n$ si può riscrivere come combinazione lineare delle potenze precedenti:
+\[
+I,\ A,\ A^2,\ \dots,\ A^{n-1}.
+\]
+
+Questo è uno dei motivi per cui lo studio delle funzioni di matrice può essere ricondotto a uno spazio finito-dimensionale.
+
+\subsection{Esempio 1}
+
+Sia
+\[
+A=
+\begin{pmatrix}
+1 & 1\\
+0 & -1
+\end{pmatrix}.
+\]
+
+Poiché è triangolare superiore, gli autovalori sono gli elementi sulla diagonale:
+\[
+\lambda_1=1,\qquad \lambda_2=-1.
+\]
+
+Il polinomio caratteristico è
+\[
+p_A(\lambda)=(\lambda-1)(\lambda+1)=\lambda^2-1.
+\]
+
+Quindi Cayley--Hamilton dice che
+\[
+p_A(A)=A^2-I=0.
+\]
+
+Infatti
+\[
+A^2=
+\begin{pmatrix}
+1 & 1\\
+0 & -1
+\end{pmatrix}^2
+=
+\begin{pmatrix}
+1 & 0\\
+0 & 1
+\end{pmatrix}
+=I.
+\]
+
+\subsection{Esempio 2}
+
+Sia
+\[
+A=
+\begin{pmatrix}
+1 & -1\\
+1 & -1
+\end{pmatrix}.
+\]
+
+Si ha
+\[
+\det(A)=0,
+\qquad
+\operatorname{tr}(A)=0.
+\]
+Quindi il polinomio caratteristico è
+\[
+p_A(\lambda)=\lambda^2.
+\]
+
+Pertanto
+\[
+p_A(A)=A^2=0.
+\]
+
+In questo caso il polinomio caratteristico è anche annullatore.
+
+\paragraph{Conseguenza.}
+Se una potenza di $A$ si annulla o si esprime come combinazione delle precedenti, allora anche le successive si esprimono nello stesso modo. Questo semplifica enormemente il calcolo di $e^{At}$.
+
+\section{Evoluzione libera e sottospazi ciclici}
+
+Nel tempo discreto, in assenza di ingresso, l'evoluzione libera è
+\[
+x(k)=A^k x_0.
+\]
+
+Nel tempo continuo, sempre in assenza di ingresso, è
+\[
+x(t)=e^{At}x_0.
+\]
+
+L'idea chiave è che, se conosco bene la struttura del sottospazio ciclico generato da $x_0$, posso comprendere dove vive l'evoluzione libera.
+
+Infatti:
+\begin{itemize}
+    \item nel discreto, $A^k x_0$ appartiene per definizione alla sequenza di Krylov;
+    \item nel continuo, espandendo in serie
+    \[
+    e^{At}x_0=\sum_{k=0}^{\infty}\frac{A^k t^k}{k!}x_0,
+    \]
+    si vede che anche qui l'evoluzione è costruita con combinazioni lineari dei vettori della sequenza di Krylov.
+\end{itemize}
+
+Quindi il sottospazio ciclico contiene l'intera evoluzione libera che parte da $x_0$.
+
+\section{Casi in cui è facile calcolare l'esponenziale}
+
+Dopo aver introdotto le proprietà generali, gli appunti si concentrano sui casi in cui l'esponenziale di matrice si calcola facilmente.
+
+\subsection{Caso 1: matrice diagonale}
+
+Sia
+\[
+A=
+\begin{pmatrix}
+\lambda_1 & 0 & \cdots & 0\\
+0 & \lambda_2 & \cdots & 0\\
+\vdots & \vdots & \ddots & \vdots\\
+0 & 0 & \cdots & \lambda_n
+\end{pmatrix}.
+\]
+
+Allora
+\[
+A^k=
+\begin{pmatrix}
+\lambda_1^k & 0 & \cdots & 0\\
+0 & \lambda_2^k & \cdots & 0\\
+\vdots & \vdots & \ddots & \vdots\\
+0 & 0 & \cdots & \lambda_n^k
+\end{pmatrix}.
+\]
+
+Quindi
+\begin{align}
+e^{At}
+&=
+\sum_{k=0}^{\infty}\frac{A^k t^k}{k!}\nonumber\\
+&=
+\begin{pmatrix}
+\sum_{k=0}^{\infty}\dfrac{\lambda_1^k t^k}{k!} & 0 & \cdots & 0\\
+0 & \sum_{k=0}^{\infty}\dfrac{\lambda_2^k t^k}{k!} & \cdots & 0\\
+\vdots & \vdots & \ddots & \vdots\\
+0 & 0 & \cdots & \sum_{k=0}^{\infty}\dfrac{\lambda_n^k t^k}{k!}
+\end{pmatrix}\nonumber\\
+&=
+\begin{pmatrix}
+e^{\lambda_1 t} & 0 & \cdots & 0\\
+0 & e^{\lambda_2 t} & \cdots & 0\\
+\vdots & \vdots & \ddots & \vdots\\
+0 & 0 & \cdots & e^{\lambda_n t}
+\end{pmatrix}.
+\label{eq:L5_exp_diagonal}
+\end{align}
+
+\paragraph{Conclusione.}
+Se la matrice è diagonale, basta fare l'esponenziale degli elementi diagonali.
+
+\subsection{Caso 2: matrice diagonalizzabile}
+
+Supponiamo che esista una matrice invertibile $S$ tale che
+\[
+SAS^{-1}=D,
+\]
+dove $D$ è diagonale.
+
+Equivalentemente,
+\[
+A=S^{-1}DS.
+\]
+
+Allora, usando l'invarianza per similitudine,
+\begin{equation}
+e^{At}=S^{-1}e^{Dt}S.
+\label{eq:L5_exp_diagonalizable}
+\end{equation}
+
+Poiché $e^{Dt}$ si calcola facilmente tramite \eqref{eq:L5_exp_diagonal}, si conclude che l'esponenziale di qualunque matrice diagonalizzabile si ottiene:
+\begin{enumerate}
+    \item diagonalizzando la matrice;
+    \item facendo l'esponenziale della diagonale;
+    \item tornando indietro mediante la trasformazione di similitudine.
+\end{enumerate}
+
+\paragraph{Osservazione.}
+Questo metodo funziona molto bene, ma solo se la matrice è davvero diagonalizzabile.
+
+\subsection{Caso 3: matrice simile a una matrice di Jordan}
+
+Non tutte le matrici sono diagonalizzabili. Tuttavia, su $\mathbb{C}$, ogni matrice è simile a una matrice in forma di Jordan.
+
+\begin{teorema}[Forma di Jordan]
+Per ogni matrice quadrata $A$ esiste una matrice invertibile $S$ tale che
+\[
+SAS^{-1}=J,
+\]
+dove $J$ è una matrice a blocchi di Jordan.
+\end{teorema}
+
+Una matrice di Jordan ha la forma
+\[
+J=
+\begin{pmatrix}
+J_{\lambda_1}^{(p_1)} & & & 0\\
+& J_{\lambda_2}^{(p_2)} & & \\
+& & \ddots & \\
+0 & & & J_{\lambda_r}^{(p_r)}
+\end{pmatrix},
+\]
+dove ogni blocco di Jordan è del tipo
+\begin{equation}
+J_\lambda^{(p)}=
+\begin{pmatrix}
+\lambda & 1 & 0 & \cdots & 0\\
+0 & \lambda & 1 & \cdots & 0\\
+0 & 0 & \lambda & \ddots & \vdots\\
+\vdots & \vdots & \ddots & \ddots & 1\\
+0 & 0 & \cdots & 0 & \lambda
+\end{pmatrix}.
+\label{eq:L5_jordan_block}
+\end{equation}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=1]
+    \draw (0,0) rectangle (2.7,2.2);
+    \draw (3.2,0.4) rectangle (5.2,2.2);
+    \draw (5.7,0.8) rectangle (8.7,2.2);
+
+    \node at (1.35,1.1) {$J_{\lambda_1}^{(p_1)}$};
+    \node at (4.2,1.3) {$J_{\lambda_2}^{(p_2)}$};
+    \node at (7.2,1.5) {$J_{\lambda_r}^{(p_r)}$};
+
+    \node at (9.4,1.1) {$\cdots$};
+\end{tikzpicture}
+\caption{Schema di una matrice di Jordan a blocchi diagonali.}
+\end{figure}
+
+\paragraph{Osservazione.}
+Gli autovalori della matrice compaiono sulla diagonale dei blocchi, ripetuti secondo la molteplicità.
+
+\section{Esponenziale di una matrice in forma di Jordan}
+
+Se
+\[
+SAS^{-1}=J,
+\]
+allora
+\[
+e^{At}=S^{-1}e^{Jt}S.
+\]
+
+Poiché $J$ è a blocchi diagonali, si ha
+\begin{equation}
+e^{Jt}=
+\begin{pmatrix}
+e^{J_{\lambda_1}^{(p_1)}t} & & & 0\\
+& e^{J_{\lambda_2}^{(p_2)}t} & & \\
+& & \ddots & \\
+0 & & & e^{J_{\lambda_r}^{(p_r)}t}
+\end{pmatrix}.
+\label{eq:L5_exp_Jordan_blocks}
+\end{equation}
+
+Quindi il problema si riduce a calcolare l'esponenziale di un singolo blocco di Jordan.
+
+\subsection{Esponenziale di un blocco di Jordan}
+
+Scriviamo
+\[
+J_\lambda^{(p)}=\lambda I + N,
+\]
+dove $N$ è nilpotente e ha la forma
+\[
+N=
+\begin{pmatrix}
+0 & 1 & 0 & \cdots & 0\\
+0 & 0 & 1 & \cdots & 0\\
+0 & 0 & 0 & \ddots & \vdots\\
+\vdots & \vdots & \vdots & \ddots & 1\\
+0 & 0 & 0 & \cdots & 0
+\end{pmatrix},
+\qquad
+N^p=0.
+\]
+
+Poiché $\lambda I$ e $N$ commutano, si ha
+\[
+e^{J_\lambda^{(p)}t}
+=
+e^{(\lambda I+N)t}
+=
+e^{\lambda t}e^{Nt}.
+\]
+
+Ma, essendo $N$ nilpotente, la serie di $e^{Nt}$ si tronca:
+\[
+e^{Nt}=
+I+Nt+\frac{N^2t^2}{2!}+\cdots+\frac{N^{p-1}t^{p-1}}{(p-1)!}.
+\]
+
+Quindi
+\begin{equation}
+e^{J_\lambda^{(p)}t}
+=
+e^{\lambda t}
+\left(
+I+Nt+\frac{N^2t^2}{2!}+\cdots+\frac{N^{p-1}t^{p-1}}{(p-1)!}
+\right).
+\label{eq:L5_exp_Jordan_block_compact}
+\end{equation}
+
+Esplicitamente:
+\begin{equation}
+e^{J_\lambda^{(p)}t}
+=
+e^{\lambda t}
+\begin{pmatrix}
+1 & t & \dfrac{t^2}{2!} & \cdots & \dfrac{t^{p-1}}{(p-1)!}\\
+0 & 1 & t & \cdots & \dfrac{t^{p-2}}{(p-2)!}\\
+0 & 0 & 1 & \ddots & \vdots\\
+\vdots & \vdots & \ddots & \ddots & t\\
+0 & 0 & \cdots & 0 & 1
+\end{pmatrix}.
+\label{eq:L5_exp_Jordan_block_explicit}
+\end{equation}
+
+\paragraph{Conclusione pratica.}
+Per calcolare l'esponenziale di una matrice generica:
+\begin{enumerate}
+    \item la porto in forma di Jordan;
+    \item calcolo l'esponenziale di ciascun blocco;
+    \item ricompongo i blocchi;
+    \item torno alla matrice originale tramite similitudine.
+\end{enumerate}
+
+\section{Collegamento con la dinamica dei sistemi lineari}
+
+Per i sistemi lineari continui in evoluzione libera:
+\[
+\dot x(t)=Ax(t),\qquad u(t)=0,
+\]
+la soluzione è
+\[
+x(t)=e^{A(t-t_0)}x_0.
+\]
+
+Quindi tutto lo studio della dinamica libera si riduce al calcolo e alla comprensione di $e^{At}$.
+
+Gli strumenti introdotti in questa lezione mostrano che:
+\begin{itemize}
+    \item se $A$ è diagonale, il problema è immediato;
+    \item se $A$ è diagonalizzabile, il problema si riduce al caso diagonale;
+    \item se $A$ non è diagonalizzabile, si passa alla forma di Jordan.
+\end{itemize}
+
+\section{Sintesi finale della lezione}
+
+In questa lezione abbiamo visto che:
+
+\begin{enumerate}
+    \item l'esponenziale di matrice si definisce come serie
+    \[
+    e^{At}=\sum_{k=0}^{\infty}\frac{A^k t^k}{k!};
+    \]
+
+    \item esso soddisfa proprietà analoghe all'esponenziale scalare:
+    \[
+    e^{0}=I,\qquad
+    \frac{d}{dt}e^{At}=Ae^{At},\qquad
+    (e^{At})^{-1}=e^{-At};
+    \]
+
+    \item l'esponenziale è compatibile con la similitudine:
+    \[
+    e^{(S^{-1}AS)t}=S^{-1}e^{At}S;
+    \]
+
+    \item un polinomio $p$ applicato a una matrice si definisce come
+    \[
+    p(A)=a_mA^m+\cdots+a_1A+a_0I;
+    \]
+
+    \item se $\lambda$ è autovalore di $A$, allora $p(\lambda)$ è autovalore di $p(A)$;
+
+    \item la sequenza di Krylov
+    \[
+    x_0,\ Ax_0,\ A^2x_0,\dots
+    \]
+    genera il sottospazio ciclico $S_{x_0}$, che è sempre $A$-invariante;
+
+    \item il teorema di Cayley--Hamilton implica che le potenze alte di $A$ si possono scrivere come combinazioni lineari delle precedenti;
+
+    \item l'esponenziale di una matrice diagonale si calcola diagonalmente, quello di una matrice diagonalizzabile si ricava per similitudine, e il caso generale si affronta tramite forma di Jordan.
+\end{enumerate}
+
+Questi risultati saranno la base per lo studio più fine dell'analisi modale, delle molteplicità algebriche e geometriche, e del legame tra struttura spettrale della matrice $A$ e andamento temporale delle soluzioni.

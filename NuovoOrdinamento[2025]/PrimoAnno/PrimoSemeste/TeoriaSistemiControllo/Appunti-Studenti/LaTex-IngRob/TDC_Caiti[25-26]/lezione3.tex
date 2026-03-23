@@ -1,0 +1,464 @@
+\chapter{Lezione 3 --- Distribuzioni, regolatore digitale, campionamento e teorema di Shannon}
+
+\section{Richiami dalla lezione precedente}
+
+Riprendiamo le tre rappresentazioni introdotte nella lezione precedente:
+\begin{itemize}
+    \item \textbf{Serie di Fourier} per segnali periodici di periodo \(T\):
+    \[
+    f(t)=\sum_{n=-\infty}^{+\infty} C_n e^{j n\omega_0 t},
+    \qquad
+    \omega_0=\frac{2\pi}{T},
+    \]
+    con coefficienti
+    \[
+    C_n=\frac{1}{T}\int_{-T/2}^{T/2} f(t)e^{-j n\omega_0 t}\,dt.
+    \]
+
+    \item \textbf{Trasformata di Fourier}:
+    \[
+    \mathcal{F}\{f(t)\}=F(\omega)=\int_{-\infty}^{+\infty} f(t)e^{-j\omega t}\,dt.
+    \]
+
+    \item \textbf{Trasformata di Laplace unilaterale}:
+    \[
+    \mathcal{L}\{f(t)\}=F(s)=\int_{0^-}^{+\infty} f(t)e^{-st}\,dt.
+    \]
+\end{itemize}
+
+Questi tre strumenti verranno ora usati per introdurre alcune distribuzioni fondamentali
+e per arrivare al problema del campionamento.
+
+\section{Distribuzioni}
+
+Una distribuzione non viene definita come una funzione ``ordinaria'', ma attraverso
+le sue proprietà integrali quando viene moltiplicata per una funzione regolare.
+
+In modo intuitivo, se \(g\) è una distribuzione e \(f\) è una funzione regolare,
+l'oggetto significativo è
+\[
+\int_{-\infty}^{+\infty} f(t)\,g(t)\,dt.
+\]
+
+Questo numero reale o complesso rappresenta l'azione della distribuzione \(g\)
+sulla funzione test \(f\).
+
+\subsection{Distribuzioni fondamentali richiamate a lezione}
+
+Le distribuzioni citate negli appunti sono:
+\[
+\delta(t),\qquad \delta'(t),\qquad \delta''(t),
+\]
+e inoltre il gradino unitario
+\[
+1(t)\equiv H(t),
+\]
+detto anche \textbf{funzione gradino} o \textbf{funzione di Heaviside}.
+
+\section{Delta di Dirac}
+
+La distribuzione fondamentale è la \textbf{delta di Dirac}, definita dalla proprietà
+\[
+\int_{-\infty}^{+\infty} f(t)\,\delta(t)\,dt = f(0).
+\]
+
+Poiché la delta è concentrata nell'origine, si può anche scrivere
+\[
+\int_{0^-}^{+\infty} f(t)\,\delta(t)\,dt = f(0).
+\]
+
+Dal punto di vista intuitivo:
+\begin{itemize}
+    \item \(\delta(t)\) è nulla per \(t\neq 0\);
+    \item la sua area totale vale \(1\);
+    \item il suo effetto ha senso solo sotto segno di integrale.
+\end{itemize}
+
+\section{Derivata della delta di Dirac}
+
+Negli appunti compare la derivata della delta. Con la convenzione standard delle distribuzioni,
+vale
+\[
+\int_{-\infty}^{+\infty} f(t)\,\delta'(t)\,dt = -f'(0).
+\]
+
+Più in generale, per la derivata \(n\)-esima della delta,
+\[
+\int_{-\infty}^{+\infty} f(t)\,\delta^{(n)}(t)\,dt
+=
+(-1)^n f^{(n)}(0).
+\]
+
+Questa relazione si ottiene per integrazione per parti in senso distribuzionale.
+
+\section{Gradino di Heaviside}
+
+Il gradino unitario si definisce come
+\[
+H(t)=1(t)=
+\begin{cases}
+0, & t<0,\\
+1, & t>0.
+\end{cases}
+\]
+
+Dal punto di vista distribuzionale, il gradino è legato alla delta tramite
+\[
+H(t)=\int_{-\infty}^{t}\delta(\tau)\,d\tau,
+\]
+e quindi
+\[
+\frac{d}{dt}H(t)=\delta(t).
+\]
+
+Questo è il collegamento fondamentale tra impulso e gradino.
+
+\section{Tabella elementare di trasformate}
+
+Raccogliamo i segnali richiamati negli appunti e le relative trasformate.
+
+\subsection*{Trasformate di Laplace}
+
+\[
+\mathcal{L}\{\delta(t)\}=1,
+\]
+\[
+\mathcal{L}\{H(t)\}=\frac{1}{s},
+\]
+\[
+\mathcal{L}\{tH(t)\}=\frac{1}{s^2},
+\]
+\[
+\mathcal{L}\{e^{-\sigma t}H(t)\}=\frac{1}{s+\sigma},
+\qquad \Re(s)>-\sigma.
+\]
+
+\subsection*{Trasformate di Fourier}
+
+Nel contesto ingegneristico degli appunti si usano spesso le forme sintetiche:
+\[
+\mathcal{F}\{\delta(t)\}=1,
+\]
+\[
+\mathcal{F}\{H(t)\}\sim \frac{1}{j\omega},
+\]
+\[
+\mathcal{F}\{tH(t)\}\sim -\frac{1}{\omega^2},
+\]
+\[
+\mathcal{F}\{e^{-\sigma t}H(t)\}=\frac{1}{\sigma+j\omega},
+\qquad \sigma>0.
+\]
+
+\medskip
+
+\noindent
+\textbf{Osservazione.}
+In senso pienamente distribuzionale, le trasformate di Fourier di \(H(t)\) e \(tH(t)\)
+contengono anche termini proporzionali a \(\delta(\omega)\) e alle sue derivate.
+Negli appunti il punto centrale è però la forma operativa usata nei calcoli.
+
+\section{Dal regolatore analogico al regolatore digitale}
+
+Nelle applicazioni reali oggi non si usano quasi più regolatori interamente analogici,
+ma regolatori \textbf{digitali}.
+
+Nel caso continuo lo schema classico è:
+\[
+y^\star \longrightarrow \text{sommatore} \longrightarrow e \longrightarrow R(s) \longrightarrow u \longrightarrow G(s) \longrightarrow y,
+\]
+con retroazione negativa dell'uscita.
+
+Nel caso digitale, invece, tra errore e impianto compaiono:
+\begin{itemize}
+    \item un \textbf{ADC} (convertitore analogico-digitale),
+    \item un \textbf{microprocessore / PLC} che implementa il regolatore,
+    \item un \textbf{DAC} (convertitore digitale-analogico).
+\end{itemize}
+
+Quindi il segnale analogico \(e(t)\) viene campionato e trasformato in una sequenza
+\[
+e[k]=e(kT),
+\]
+il controllore elabora
+\[
+u[k],
+\]
+e il DAC ricostruisce un segnale analogico da applicare all'impianto.
+
+\subsection{Osservazione sul modello dell'impianto}
+
+Negli appunti è sottolineato che il modello dell'impianto deve includere anche
+le funzioni di trasferimento dei sensori, se queste sono rilevanti per la dinamica complessiva.
+
+\section{Modello a tempo discreto}
+
+Quando si campiona con periodo \(T\), lo stato viene osservato agli istanti
+\[
+t=kT, \qquad k\in\mathbb{Z}.
+\]
+
+Il modello discreto del sistema assume la forma
+\[
+x(k+1)=Ax(k)+Bu(k),
+\]
+dove
+\[
+x(k)=x(kT).
+\]
+
+Questa è la rappresentazione discreta che si usa per il progetto del regolatore digitale.
+
+\section{Operazione di campionamento}
+
+Dato un segnale continuo \(f(t)\), il campionamento consiste nel prelevarne il valore
+agli istanti \(t=kT\), ottenendo la sequenza
+\[
+f[k]=f(kT).
+\]
+
+Per descrivere il campionamento nel continuo si introduce il \textbf{pettine di Dirac}
+\[
+\operatorname{III}_T(t)=\sum_{k=-\infty}^{+\infty}\delta(t-kT).
+\]
+
+Il segnale campionato si può allora modellare come
+\[
+f_s(t)=f(t)\operatorname{III}_T(t)
+=
+f(t)\sum_{k=-\infty}^{+\infty}\delta(t-kT).
+\]
+
+Usando la proprietà della delta si ottiene anche
+\[
+f_s(t)=\sum_{k=-\infty}^{+\infty} f(kT)\,\delta(t-kT).
+\]
+
+Questa scrittura mette in evidenza che il campionamento produce un treno di impulsi
+pesati con i valori del segnale agli istanti di campionamento.
+
+\section{Trasformata di Fourier del pettine di Dirac}
+
+Una proprietà fondamentale è che la trasformata di Fourier del pettine di Dirac
+è ancora un pettine di Dirac.
+
+Se definiamo
+\[
+\omega_s=\frac{2\pi}{T},
+\]
+allora
+\[
+\mathcal{F}\left\{\operatorname{III}_T(t)\right\}
+=
+\frac{2\pi}{T}\sum_{n=-\infty}^{+\infty}\delta(\omega-n\omega_s).
+\]
+
+Quindi:
+\begin{itemize}
+    \item nel dominio del tempo il pettine ha passo \(T\);
+    \item nel dominio della frequenza il pettine ha passo \(\omega_s=\dfrac{2\pi}{T}\).
+\end{itemize}
+
+Se invece si usa la frequenza ordinaria \(\nu=\omega/(2\pi)\), allora la periodicità in frequenza diventa
+\[
+f_s=\frac{1}{T}.
+\]
+
+\section{Digressione sulla convoluzione}
+
+Per capire l'effetto del campionamento in frequenza è utile richiamare la convoluzione.
+
+\subsection{Definizione}
+
+Per due segnali \(f_1(t)\) e \(f_2(t)\), la convoluzione si definisce come
+\[
+g(t)=f_1(t)\ast f_2(t)=\int_{-\infty}^{+\infty} f_1(\tau)\,f_2(t-\tau)\,d\tau.
+\]
+
+Nel caso di segnali causali si può scrivere anche
+\[
+g(t)=\int_{0}^{t} f_1(\tau)\,f_2(t-\tau)\,d\tau.
+\]
+
+La convoluzione è commutativa:
+\[
+f_1(t)\ast f_2(t)=f_2(t)\ast f_1(t).
+\]
+
+\subsection{Uso nei sistemi dinamici}
+
+Se \(g(t)\) è la risposta impulsiva di un sistema lineare tempo-invariante e \(u(t)\)
+è l'ingresso, allora l'uscita è
+\[
+y(t)=u(t)\ast g(t).
+\]
+
+Se l'ingresso è la delta di Dirac,
+\[
+u(t)=\delta(t),
+\]
+allora
+\[
+y(t)=g(t).
+\]
+
+Questo giustifica il nome di \textbf{risposta impulsiva}.
+
+\subsection{Convoluzione nel dominio di Laplace}
+
+Passando nel dominio di Laplace, la convoluzione diventa prodotto:
+\[
+\mathcal{L}\{g(t)\}=G(s), \qquad \mathcal{L}\{u(t)\}=U(s),
+\]
+e quindi
+\[
+Y(s)=G(s)\,U(s).
+\]
+
+\section{Effetto del campionamento nel dominio della frequenza}
+
+Poiché
+\[
+f_s(t)=f(t)\operatorname{III}_T(t),
+\]
+nel dominio della frequenza otteniamo una convoluzione:
+\[
+F_s(\omega)=\frac{1}{2\pi}F(\omega)\ast
+\mathcal{F}\{\operatorname{III}_T(t)\}.
+\]
+
+Sostituendo la trasformata del pettine:
+\[
+F_s(\omega)
+=
+\frac{1}{2\pi}
+F(\omega)\ast
+\left(
+\frac{2\pi}{T}\sum_{n=-\infty}^{+\infty}\delta(\omega-n\omega_s)
+\right),
+\]
+da cui segue
+\[
+F_s(\omega)
+=
+\frac{1}{T}\sum_{n=-\infty}^{+\infty} F(\omega-n\omega_s).
+\]
+
+Questa è la formula fondamentale del campionamento:
+\begin{itemize}
+    \item lo spettro del segnale campionato è ottenuto replicando periodicamente
+    lo spettro originale;
+    \item le repliche sono centrate in multipli della frequenza di campionamento.
+\end{itemize}
+
+Nel dominio della frequenza ordinaria \(\nu\), la formula si scrive analogamente come
+\[
+F_s(\nu)=\frac{1}{T}\sum_{n=-\infty}^{+\infty}F\!\left(\nu-\frac{n}{T}\right).
+\]
+
+Quindi lo spettro del segnale campionato è \textbf{periodico in frequenza}
+con periodo
+\[
+\frac{1}{T}.
+\]
+
+\section{Interpretazione grafica}
+
+L'effetto geometrico è il seguente:
+\begin{itemize}
+    \item si parte da uno spettro \(F(\nu)\) centrato attorno a \(0\);
+    \item il campionamento genera copie traslate di \(F(\nu)\);
+    \item le copie si ripetono attorno a
+    \[
+    \nu=0,\ \pm \frac{1}{T},\ \pm \frac{2}{T},\dots
+    \]
+\end{itemize}
+
+Se tali copie non si sovrappongono, il segnale originale può essere ricostruito.
+Se invece si sovrappongono, compare aliasing.
+
+\section{Teorema del campionamento}
+
+Supponiamo che \(f(t)\) sia un segnale a banda limitata, cioè che il suo spettro sia nullo
+al di fuori di un intervallo
+\[
+|\nu|\leq \bar{\nu}.
+\]
+
+Se la frequenza di campionamento soddisfa
+\[
+\frac{1}{T}=f_s > 2\bar{\nu},
+\]
+allora le repliche spettrali non si sovrappongono e il segnale può essere ricostruito
+perfettamente con un filtro passa-basso ideale.
+
+La quantità
+\[
+2\bar{\nu}
+\]
+è detta \textbf{frequenza di Nyquist} minima richiesta per evitare aliasing.
+
+\subsection{Caso limite}
+
+Se
+\[
+f_s = 2\bar{\nu},
+\]
+si è nel \textbf{caso critico} o \textbf{limite di Nyquist}:
+le repliche si toccano esattamente ai bordi.
+
+Nella pratica si preferisce lavorare con
+\[
+f_s > 2\bar{\nu},
+\]
+in modo da mantenere un margine di sicurezza.
+
+\subsection{Aliasing}
+
+Se invece
+\[
+f_s < 2\bar{\nu},
+\]
+le repliche dello spettro si sovrappongono e componenti a frequenze diverse
+diventano indistinguibili dopo il campionamento.
+
+Questo fenomeno prende il nome di \textbf{aliasing}.
+
+\section{Significato fisico del teorema}
+
+Il teorema del campionamento dice che un segnale continuo a banda limitata
+può essere rappresentato da una sequenza discreta di campioni, purché i campioni
+siano abbastanza fitti nel tempo.
+
+In altre parole:
+\begin{itemize}
+    \item più il segnale contiene frequenze alte, più bisogna campionare velocemente;
+    \item se si campiona troppo lentamente, si perde informazione in modo irreversibile.
+\end{itemize}
+
+\section{Sintesi della lezione}
+
+I punti chiave della lezione sono:
+\begin{enumerate}
+    \item richiamo a serie di Fourier, trasformata di Fourier e trasformata di Laplace;
+    \item introduzione delle distribuzioni fondamentali:
+    \[
+    \delta(t),\ \delta'(t),\ \delta''(t),\ H(t);
+    \]
+    \item relazione tra gradino e delta:
+    \[
+    \frac{d}{dt}H(t)=\delta(t);
+    \]
+    \item passaggio dal regolatore analogico al regolatore digitale;
+    \item introduzione del modello discreto
+    \[
+    x(k+1)=Ax(k)+Bu(k);
+    \]
+    \item modellazione del campionamento tramite pettine di Dirac;
+    \item periodicizzazione dello spettro nel dominio della frequenza;
+    \item teorema del campionamento e condizione
+    \[
+    f_s>\,2\bar{\nu};
+    \]
+    \item comparsa dell'aliasing quando il campionamento è insufficiente.
+\end{enumerate}

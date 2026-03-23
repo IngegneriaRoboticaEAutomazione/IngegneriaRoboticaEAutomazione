@@ -1,0 +1,977 @@
+\chapter{L6 -- Blocchi di Jordan, autovalori complessi e autovettori generalizzati}
+
+\section{Esponenziale di un blocco di Jordan nilpotente}
+
+Nella lezione precedente abbiamo visto che, se una matrice è simile a una forma di Jordan, allora il calcolo di $e^{At}$ si riduce al calcolo dell'esponenziale dei singoli blocchi di Jordan.  
+Conviene quindi partire dal caso più semplice: il blocco di Jordan \emph{nilpotente} associato all'autovalore nullo.
+
+\subsection{Blocco nilpotente elementare}
+
+Indichiamo con
+\[
+J_0^{(p)}=
+\begin{pmatrix}
+0 & 1 & 0 & \cdots & 0\\
+0 & 0 & 1 & \cdots & 0\\
+\vdots & \vdots & \vdots & \ddots & \vdots\\
+0 & 0 & 0 & \cdots & 1\\
+0 & 0 & 0 & \cdots & 0
+\end{pmatrix}\in\mathbb{R}^{p\times p}
+\]
+il blocco di Jordan nilpotente di ordine $p$.
+
+Per esempio, per $p=3$:
+\[
+J_0^{(3)}=
+\begin{pmatrix}
+0 & 1 & 0\\
+0 & 0 & 1\\
+0 & 0 & 0
+\end{pmatrix},
+\qquad
+\left(J_0^{(3)}\right)^2=
+\begin{pmatrix}
+0 & 0 & 1\\
+0 & 0 & 0\\
+0 & 0 & 0
+\end{pmatrix},
+\qquad
+\left(J_0^{(3)}\right)^3=0.
+\]
+
+In generale:
+\begin{equation}
+\left(J_0^{(p)}\right)^p=0.
+\label{eq:L6_nilpotent_power_zero}
+\end{equation}
+
+Questa proprietà dice che $J_0^{(p)}$ è \emph{nilpotente} di indice $p$.
+
+\subsection{Esponenziale del blocco nilpotente}
+
+Dalla definizione di esponenziale di matrice:
+\[
+e^{J_0^{(p)}t}
+=
+\sum_{k=0}^{\infty}\frac{\left(J_0^{(p)}\right)^k t^k}{k!}.
+\]
+
+Ma, grazie a \eqref{eq:L6_nilpotent_power_zero}, tutti i termini con $k\ge p$ sono nulli. Quindi la serie si tronca:
+\begin{equation}
+e^{J_0^{(p)}t}
+=
+I+\frac{J_0^{(p)}t}{1!}+\frac{\left(J_0^{(p)}\right)^2 t^2}{2!}+\cdots+\frac{\left(J_0^{(p)}\right)^{p-1} t^{p-1}}{(p-1)!}.
+\label{eq:L6_exp_nilpotent_jordan}
+\end{equation}
+
+Per $p=3$ si ottiene
+\[
+e^{J_0^{(3)}t}
+=
+I+J_0^{(3)}t+\frac{\left(J_0^{(3)}\right)^2t^2}{2!}
+=
+\begin{pmatrix}
+1 & t & \dfrac{t^2}{2}\\
+0 & 1 & t\\
+0 & 0 & 1
+\end{pmatrix}.
+\]
+
+In generale, l'esponenziale del blocco nilpotente ha la forma
+\begin{equation}
+e^{J_0^{(p)}t}
+=
+\begin{pmatrix}
+1 & t & \dfrac{t^2}{2!} & \cdots & \dfrac{t^{p-1}}{(p-1)!}\\
+0 & 1 & t & \cdots & \dfrac{t^{p-2}}{(p-2)!}\\
+0 & 0 & 1 & \ddots & \vdots\\
+\vdots & \vdots & \ddots & \ddots & t\\
+0 & 0 & \cdots & 0 & 1
+\end{pmatrix}.
+\label{eq:L6_exp_nilpotent_general}
+\end{equation}
+
+\paragraph{Interpretazione dinamica.}
+Questo risultato è molto importante: un blocco nilpotente genera fattori polinomiali in $t$.  
+Più il blocco è grande, più compaiono potenze alte di $t$ nella soluzione.
+
+\section{Esponenziale di un blocco di Jordan generico}
+
+Consideriamo ora un blocco di Jordan associato a un autovalore reale $d$:
+\begin{equation}
+J_d^{(p)}=
+\begin{pmatrix}
+d & 1 & 0 & \cdots & 0\\
+0 & d & 1 & \cdots & 0\\
+\vdots & \vdots & \vdots & \ddots & \vdots\\
+0 & 0 & 0 & \cdots & 1\\
+0 & 0 & 0 & \cdots & d
+\end{pmatrix}.
+\label{eq:L6_jordan_block_real}
+\end{equation}
+
+Si può scrivere come
+\[
+J_d^{(p)}=dI+J_0^{(p)}.
+\]
+
+Poiché $dI$ commuta con $J_0^{(p)}$, vale
+\[
+e^{J_d^{(p)}t}=e^{(dI+J_0^{(p)})t}=e^{dt}e^{J_0^{(p)}t}.
+\]
+
+Usando \eqref{eq:L6_exp_nilpotent_general}:
+\begin{equation}
+e^{J_d^{(p)}t}
+=
+e^{dt}
+\begin{pmatrix}
+1 & t & \dfrac{t^2}{2!} & \cdots & \dfrac{t^{p-1}}{(p-1)!}\\
+0 & 1 & t & \cdots & \dfrac{t^{p-2}}{(p-2)!}\\
+0 & 0 & 1 & \ddots & \vdots\\
+\vdots & \vdots & \ddots & \ddots & t\\
+0 & 0 & \cdots & 0 & 1
+\end{pmatrix}.
+\label{eq:L6_exp_jordan_real_block}
+\end{equation}
+
+\paragraph{Conseguenza qualitativa.}
+L'andamento temporale di un blocco di Jordan reale non è governato soltanto da $e^{dt}$, ma da
+\[
+e^{dt},\qquad te^{dt},\qquad \frac{t^2}{2!}e^{dt},\ \dots
+\]
+fino al grado $p-1$.  
+Quindi la dimensione del blocco conta, non solo il valore dell'autovalore.
+
+\section{Potenze di un blocco di Jordan nel tempo discreto}
+
+Nel tempo discreto la dinamica libera è
+\[
+x(k)=A^{k-k_0}x(k_0).
+\]
+Se $A$ è simile a una matrice di Jordan, allora bisogna capire come è fatto $J^k$.
+
+Per un blocco reale
+\[
+J_d^{(p)}=dI+J_0^{(p)},
+\]
+vale il binomio matriciale
+\begin{equation}
+\left(J_d^{(p)}\right)^k
+=
+\sum_{i=0}^{p-1}\binom{k}{i}d^{\,k-i}\left(J_0^{(p)}\right)^i,
+\label{eq:L6_power_jordan_block}
+\end{equation}
+dove la somma si ferma a $p-1$ perché $\left(J_0^{(p)}\right)^p=0$.
+
+\paragraph{Caso $p=2$.}
+Se
+\[
+J_d^{(2)}=
+\begin{pmatrix}
+d & 1\\
+0 & d
+\end{pmatrix},
+\]
+allora
+\[
+\left(J_d^{(2)}\right)^k
+=
+\begin{pmatrix}
+d^k & k d^{k-1}\\
+0 & d^k
+\end{pmatrix}.
+\]
+
+\paragraph{Caso $p=3$.}
+Se
+\[
+J_d^{(3)}=
+\begin{pmatrix}
+d & 1 & 0\\
+0 & d & 1\\
+0 & 0 & d
+\end{pmatrix},
+\]
+allora
+\[
+\left(J_d^{(3)}\right)^k
+=
+\begin{pmatrix}
+d^k & \binom{k}{1}d^{k-1} & \binom{k}{2}d^{k-2}\\
+0 & d^k & \binom{k}{1}d^{k-1}\\
+0 & 0 & d^k
+\end{pmatrix}.
+\]
+
+\paragraph{Interpretazione dinamica nel discreto.}
+Qui compaiono fattori del tipo
+\[
+d^k,\qquad kd^{k-1},\qquad \binom{k}{2}d^{k-2},\dots
+\]
+quindi non ci sono esponenziali continui, ma potenze e fattori polinomiali in $k$.
+
+\paragraph{Conseguenza asintotica.}
+Nel tempo discreto un blocco di Jordan associato a un autovalore reale $d$ converge a zero se
+\[
+|d|<1.
+\]
+Se invece $|d|>1$, diverge.  
+Il caso $|d|=1$ è delicato: la presenza di blocchi di Jordan di ordine superiore a $1$ può generare crescita polinomiale.
+
+\section{Autovalori complessi e necessità di una forma reale}
+
+Fino ad ora abbiamo trattato il caso di autovalori reali.  
+Se però $A\in\mathbb{R}^{n\times n}$ ha autovalori complessi, bisogna fare attenzione: lo stato del sistema è reale, quindi la descrizione finale dell'evoluzione deve restare reale.
+
+\subsection{Coppie coniugate}
+
+Se $A$ è reale e possiede un autovalore complesso
+\[
+\lambda=\sigma+j\omega,
+\]
+allora anche il suo coniugato
+\[
+\bar\lambda=\sigma-j\omega
+\]
+è autovalore di $A$.
+
+Analogamente, se $v$ è autovettore associato a $\lambda$, allora $\bar v$ è autovettore associato a $\bar\lambda$.
+
+Scriviamo
+\[
+v=q_r+jq_i,
+\qquad
+\bar v=q_r-jq_i,
+\]
+dove $q_r,q_i\in\mathbb{R}^n$ sono parte reale e parte immaginaria dell'autovettore.
+
+\subsection{Caso semplice \texorpdfstring{$2\times 2$}{2x2}}
+
+Supponiamo che $A\in\mathbb{R}^{2\times 2}$ abbia autovalori
+\[
+\lambda=\sigma+j\omega,
+\qquad
+\bar\lambda=\sigma-j\omega.
+\]
+
+Se
+\[
+Q=[\,v\ \bar v\,],
+\qquad
+D=
+\begin{pmatrix}
+\lambda & 0\\
+0 & \bar\lambda
+\end{pmatrix},
+\]
+allora
+\[
+AQ=QD.
+\]
+
+Il problema è che $Q$ è complessa. Per costruire una base reale si introduce la matrice
+\[
+E=\frac12
+\begin{pmatrix}
+1 & -j\\
+1 & j
+\end{pmatrix},
+\]
+così che
+\[
+QE=[\,q_r\ q_i\,]\in\mathbb{R}^{2\times 2}.
+\]
+
+Facendo i conti si ottiene
+\[
+E^{-1}DE
+=
+\begin{pmatrix}
+\sigma & \omega\\
+-\omega & \sigma
+\end{pmatrix}
+=:M.
+\]
+
+Quindi
+\[
+AQE=QDE=QE\,(E^{-1}DE)=QE\,M,
+\]
+e pertanto
+\begin{equation}
+A=(QE)\,M\,(QE)^{-1},
+\label{eq:L6_real_reduction_complex}
+\end{equation}
+dove $QE$ è reale e
+\begin{equation}
+M=
+\begin{pmatrix}
+\sigma & \omega\\
+-\omega & \sigma
+\end{pmatrix}.
+\label{eq:L6_real_block_complex_pair}
+\end{equation}
+
+\paragraph{Messaggio importante.}
+Una coppia di autovalori complessi coniugati viene sostituita, in una base reale, con un blocco reale $2\times 2$.
+
+\section{Esponenziale del blocco reale associato a una coppia complessa}
+
+Consideriamo
+\[
+M=
+\begin{pmatrix}
+\sigma & \omega\\
+-\omega & \sigma
+\end{pmatrix}
+=
+\sigma I+
+\begin{pmatrix}
+0 & \omega\\
+-\omega & 0
+\end{pmatrix}.
+\]
+
+Poiché la parte diagonale commuta con la parte antisimmetrica, si ottiene
+\begin{equation}
+e^{Mt}
+=
+e^{\sigma t}
+\begin{pmatrix}
+\cos(\omega t) & \sin(\omega t)\\
+-\sin(\omega t) & \cos(\omega t)
+\end{pmatrix}.
+\label{eq:L6_exp_real_complex_block}
+\end{equation}
+
+\paragraph{Interpretazione.}
+La soluzione è il prodotto di:
+\begin{itemize}
+    \item un fattore esponenziale reale $e^{\sigma t}$, che governa crescita o decadimento;
+    \item una rotazione/oscillazione con pulsazione $\omega$.
+\end{itemize}
+
+Quindi:
+\begin{itemize}
+    \item se $\sigma<0$, si hanno oscillazioni smorzate;
+    \item se $\sigma=0$, si hanno oscillazioni persistenti;
+    \item se $\sigma>0$, si hanno oscillazioni amplificate.
+\end{itemize}
+
+\subsection{Caso discreto}
+
+Nel tempo discreto, se $\lambda=\sigma+j\omega$, è spesso utile passare alla forma polare
+\[
+\lambda=\rho(\cos\theta+j\sin\theta),
+\qquad
+\rho=\sqrt{\sigma^2+\omega^2}.
+\]
+
+Per il blocco reale
+\[
+M=
+\begin{pmatrix}
+\sigma & \omega\\
+-\omega & \sigma
+\end{pmatrix}
+\]
+vale
+\begin{equation}
+M^k
+=
+\rho^k
+\begin{pmatrix}
+\cos(k\theta) & \sin(k\theta)\\
+-\sin(k\theta) & \cos(k\theta)
+\end{pmatrix}.
+\label{eq:L6_power_real_complex_block}
+\end{equation}
+
+\paragraph{Interpretazione discreta.}
+Nel discreto:
+\begin{itemize}
+    \item $\rho$ regola l'ampiezza;
+    \item $\theta$ regola la rotazione a ogni passo.
+\end{itemize}
+
+Quindi:
+\begin{itemize}
+    \item se $\rho<1$, la traiettoria tende a zero;
+    \item se $\rho=1$, rimane limitata e puramente rotante;
+    \item se $\rho>1$, diverge.
+\end{itemize}
+
+\section{Esempio con autovalori complessi}
+
+Consideriamo
+\[
+A=
+\begin{pmatrix}
+3 & -1\\
+2 & 1
+\end{pmatrix}.
+\]
+
+Il polinomio caratteristico è
+\[
+p_A(\lambda)=\det(\lambda I-A)
+=
+(\lambda-3)(\lambda-1)+2
+=
+\lambda^2-4\lambda+5.
+\]
+
+Gli autovalori sono
+\[
+\lambda_{1,2}=2\pm j.
+\]
+
+Per $\lambda=2+j$ risolviamo
+\[
+(A-\lambda I)v=0.
+\]
+
+Si trova un autovettore complesso, per esempio
+\[
+v=
+\begin{pmatrix}
+1\\
+1-j
+\end{pmatrix}.
+\]
+
+Scrivendo
+\[
+v=q_r+jq_i
+\]
+si ha
+\[
+q_r=
+\begin{pmatrix}
+1\\
+1
+\end{pmatrix},
+\qquad
+q_i=
+\begin{pmatrix}
+0\\
+-1
+\end{pmatrix}.
+\]
+
+Quindi la matrice reale di cambio di base è
+\[
+Q_R=[\,q_r\ q_i\,]
+=
+\begin{pmatrix}
+1 & 0\\
+1 & -1
+\end{pmatrix},
+\]
+e il blocco reale associato è
+\[
+M=
+\begin{pmatrix}
+2 & 1\\
+-1 & 2
+\end{pmatrix}.
+\]
+
+Ne segue che
+\[
+A=Q_R\,M\,Q_R^{-1},
+\]
+e quindi
+\[
+e^{At}=Q_R\,e^{Mt}\,Q_R^{-1}
+=
+Q_R\left[
+e^{2t}
+\begin{pmatrix}
+\cos t & \sin t\\
+-\sin t & \cos t
+\end{pmatrix}
+\right]Q_R^{-1}.
+\]
+
+\paragraph{Commento dinamico.}
+Poiché la parte reale degli autovalori è $2>0$, il sistema ha andamento oscillatorio ma con ampiezza crescente: la dinamica libera esplode.
+
+\section{Autovalore nullo e blocchi di Jordan}
+
+Gli appunti insistono molto su un punto importante: l'autovalore da solo non basta, conta anche la dimensione del blocco di Jordan.
+
+\subsection{Caso \texorpdfstring{$\lambda=0$}{lambda=0}}
+
+\paragraph{Blocco semplice.}
+Se
+\[
+J_0^{(1)}=(0),
+\]
+allora
+\[
+e^{J_0^{(1)}t}=1.
+\]
+
+Per la matrice nulla $2\times 2$:
+\[
+J=
+\begin{pmatrix}
+0 & 0\\
+0 & 0
+\end{pmatrix},
+\qquad
+e^{Jt}=I.
+\]
+
+Questa è una dinamica costante nel tempo: la soluzione non diverge ma neppure decade.
+
+\paragraph{Blocco di ordine 2.}
+Se
+\[
+J_0^{(2)}=
+\begin{pmatrix}
+0 & 1\\
+0 & 0
+\end{pmatrix},
+\]
+allora
+\[
+e^{J_0^{(2)}t}
+=
+\begin{pmatrix}
+1 & t\\
+0 & 1
+\end{pmatrix}.
+\]
+
+Qui compare il termine $t$, che cresce senza limite.  
+Quindi un autovalore nullo con blocco di Jordan non banale genera crescita polinomiale.
+
+\paragraph{Messaggio.}
+Nel continuo, per avere stabilità associata a un autovalore con parte reale nulla, è necessario che i blocchi di Jordan associati siano tutti di ordine $1$.
+
+\subsection{Caso \texorpdfstring{$\lambda=-1$}{lambda=-1}}
+
+Se
+\[
+J_{-1}^{(1)}=(-1),
+\]
+allora
+\[
+e^{J_{-1}^{(1)}t}=e^{-t},
+\]
+che tende a zero.
+
+Se invece
+\[
+J_{-1}^{(2)}=
+\begin{pmatrix}
+-1 & 1\\
+0 & -1
+\end{pmatrix},
+\]
+allora
+\[
+e^{J_{-1}^{(2)}t}
+=
+e^{-t}
+\begin{pmatrix}
+1 & t\\
+0 & 1
+\end{pmatrix}
+=
+\begin{pmatrix}
+e^{-t} & te^{-t}\\
+0 & e^{-t}
+\end{pmatrix}.
+\]
+
+Anche in questo caso la soluzione tende a zero, perché il decadimento esponenziale vince sul fattore polinomiale.
+
+\section{Autovettori generalizzati}
+
+Quando una matrice non è diagonalizzabile, gli autovettori non bastano per costruire una base.  
+Per questo si introducono gli \emph{autovettori generalizzati}.
+
+\subsection{Motivazione}
+
+Consideriamo
+\[
+A=
+\begin{pmatrix}
+2 & 1 & 0\\
+0 & 2 & 1\\
+0 & 0 & 2
+\end{pmatrix}
+=
+J_2^{(3)}.
+\]
+
+L'unico autovalore è $\lambda=2$, con molteplicità algebrica $3$.  
+Calcoliamo
+\[
+A-2I=
+\begin{pmatrix}
+0 & 1 & 0\\
+0 & 0 & 1\\
+0 & 0 & 0
+\end{pmatrix}.
+\]
+
+Il nucleo di $A-2I$ è formato dai vettori del tipo
+\[
+v=
+\begin{pmatrix}
+\alpha\\
+0\\
+0
+\end{pmatrix},
+\]
+quindi
+\[
+\dim \ker(A-2I)=1.
+\]
+
+Dunque la molteplicità geometrica è $1$, minore della molteplicità algebrica $3$: la matrice non è diagonalizzabile.
+
+\subsection{Definizione}
+
+Un vettore $q$ si dice \emph{autovettore generalizzato di ordine $p$ associato all'autovalore $\lambda$} se
+\begin{equation}
+(A-\lambda I)^p q=0,
+\qquad
+(A-\lambda I)^{p-1}q\neq 0.
+\label{eq:L6_generalized_eigenvector_def}
+\end{equation}
+
+Quindi:
+\begin{itemize}
+    \item per $p=1$ si ritrova il normale autovettore;
+    \item per $p>1$ si ottengono i vettori necessari per completare le catene di Jordan.
+\end{itemize}
+
+\subsection{Autospazio generalizzato}
+
+L'insieme
+\[
+\ker(A-\lambda I)^p
+\]
+è il sottospazio degli autovettori generalizzati di ordine al più $p$.
+
+Si ha una catena crescente di sottospazi:
+\begin{equation}
+\ker(A-\lambda I)\subseteq \ker(A-\lambda I)^2 \subseteq \cdots \subseteq \ker(A-\lambda I)^p \subseteq \cdots
+\label{eq:L6_chain_kernels}
+\end{equation}
+
+Questa catena si stabilizza quando si raggiunge la molteplicità algebrica dell'autovalore.
+
+\section{Catene di autovettori generalizzati}
+
+Per un blocco di Jordan di ordine $k$ associato all'autovalore $\lambda$, si costruisce una catena
+\[
+q^{(1)},q^{(2)},\dots,q^{(k)}
+\]
+tale che
+\begin{equation}
+(A-\lambda I)q^{(1)}=0,
+\label{eq:L6_chain_1}
+\end{equation}
+\begin{equation}
+(A-\lambda I)q^{(2)}=q^{(1)},
+\label{eq:L6_chain_2}
+\end{equation}
+\[
+\vdots
+\]
+\begin{equation}
+(A-\lambda I)q^{(k)}=q^{(k-1)}.
+\label{eq:L6_chain_k}
+\end{equation}
+
+Equivalentemente:
+\[
+Aq^{(1)}=\lambda q^{(1)},
+\]
+\[
+Aq^{(2)}=q^{(1)}+\lambda q^{(2)},
+\]
+\[
+\vdots
+\]
+\[
+Aq^{(k)}=q^{(k-1)}+\lambda q^{(k)}.
+\]
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[>=Latex, node distance=1.65cm]
+    \node[draw, rounded corners] (qk) {$q^{(k)}$};
+    \node[draw, rounded corners, left=of qk] (qk1) {$q^{(k-1)}$};
+    \node[left=of qk1] (dots) {$\cdots$};
+    \node[draw, rounded corners, left=of dots] (q2) {$q^{(2)}$};
+    \node[draw, rounded corners, left=of q2] (q1) {$q^{(1)}$};
+
+    \draw[->, thick] (qk) -- node[above] {$A-\lambda I$} (qk1);
+    \draw[->, thick] (qk1) -- (dots);
+    \draw[->, thick] (dots) -- (q2);
+    \draw[->, thick] (q2) -- node[above] {$A-\lambda I$} (q1);
+    \draw[->, thick] (q1) -- ++(0,-1.2) node[below] {$0$};
+\end{tikzpicture}
+\caption{Catena di autovettori generalizzati associata a un blocco di Jordan.}
+\end{figure}
+
+\paragraph{Interpretazione.}
+Una catena di ordine $k$ genera un blocco di Jordan di dimensione $k$.
+
+\section{Significato della molteplicità geometrica}
+
+Sia $\lambda_i$ un autovalore di $A$. Allora
+\[
+m_g(\lambda_i)=\dim\ker(A-\lambda_i I)
+\]
+è la molteplicità geometrica dell'autovalore.
+
+\paragraph{Interpretazione strutturale.}
+La molteplicità geometrica dice \emph{quanti blocchi di Jordan} sono associati a quell'autovalore.
+
+In particolare:
+\begin{itemize}
+    \item se $m_g(\lambda_i)=m_a(\lambda_i)$, tutti i blocchi sono di ordine $1$ e la matrice è diagonalizzabile rispetto a quell'autovalore;
+    \item se $m_g(\lambda_i)<m_a(\lambda_i)$, compaiono blocchi di Jordan di ordine superiore a $1$.
+\end{itemize}
+
+\section{Esempio di costruzione di una catena}
+
+Riprendiamo
+\[
+A=
+\begin{pmatrix}
+2 & 1 & 0\\
+0 & 2 & 1\\
+0 & 0 & 2
+\end{pmatrix}.
+\]
+
+Cerchiamo una catena per $\lambda=2$.
+
+\subsection{Autovettore}
+
+Serve
+\[
+(A-2I)q_1=0.
+\]
+Poiché
+\[
+A-2I=
+\begin{pmatrix}
+0 & 1 & 0\\
+0 & 0 & 1\\
+0 & 0 & 0
+\end{pmatrix},
+\]
+si può scegliere
+\[
+q_1=
+\begin{pmatrix}
+1\\
+0\\
+0
+\end{pmatrix}.
+\]
+
+\subsection{Autovettore generalizzato di ordine 2}
+
+Cerchiamo $q_2$ tale che
+\[
+(A-2I)q_2=q_1.
+\]
+Una scelta naturale è
+\[
+q_2=
+\begin{pmatrix}
+0\\
+1\\
+0
+\end{pmatrix},
+\]
+infatti
+\[
+(A-2I)q_2=
+\begin{pmatrix}
+1\\
+0\\
+0
+\end{pmatrix}
+=q_1.
+\]
+
+\subsection{Autovettore generalizzato di ordine 3}
+
+Cerchiamo ora $q_3$ tale che
+\[
+(A-2I)q_3=q_2.
+\]
+Si può prendere
+\[
+q_3=
+\begin{pmatrix}
+0\\
+0\\
+1
+\end{pmatrix},
+\]
+perché
+\[
+(A-2I)q_3=
+\begin{pmatrix}
+0\\
+1\\
+0
+\end{pmatrix}
+=q_2.
+\]
+
+\paragraph{Conclusione.}
+La catena
+\[
+q_1,\ q_2,\ q_3
+\]
+costruisce esattamente il blocco $J_2^{(3)}$.
+
+\section{Esempio con autovalore di molteplicità algebrica 3 e geometrica 2}
+
+Consideriamo una matrice con autovalore $\lambda=5$ di molteplicità algebrica $3$ ma molteplicità geometrica $2$.  
+Allora i possibili schemi di Jordan associati a $\lambda=5$ sono:
+\begin{itemize}
+    \item un blocco di ordine $3$;
+    \item un blocco di ordine $2$ più un blocco di ordine $1$;
+    \item tre blocchi di ordine $1$.
+\end{itemize}
+
+Se
+\[
+\dim\ker(A-5I)=2,
+\]
+allora i blocchi sono due, e quindi la struttura possibile è
+\[
+J=
+\begin{pmatrix}
+5 & 1 & 0\\
+0 & 5 & 0\\
+0 & 0 & 5
+\end{pmatrix},
+\]
+cioè un blocco di ordine $2$ e uno di ordine $1$.
+
+\paragraph{Procedura.}
+\begin{enumerate}
+    \item si trova una base di $\ker(A-5I)$, che fornisce gli autovettori di ordine $1$;
+    \item si cerca poi un vettore in $\ker(A-5I)^2$ ma non in $\ker(A-5I)$;
+    \item applicando $(A-5I)$ a questo vettore si ottiene uno degli autovettori del primo passo;
+    \item questa costruisce una catena di lunghezza $2$.
+\end{enumerate}
+
+\section{Conteggio degli autovettori generalizzati}
+
+Sia
+\[
+M_p:=\dim\ker(A-\lambda I)^p.
+\]
+
+Allora:
+\begin{itemize}
+    \item il numero di autovettori generalizzati di ordine almeno $1$ è $M_1$;
+    \item il numero di autovettori generalizzati di ordine almeno $2$ è $M_2-M_1$;
+    \item il numero di autovettori generalizzati di ordine almeno $3$ è $M_3-M_2$;
+    \item e così via.
+\end{itemize}
+
+Più precisamente, il numero di catene di lunghezza almeno $p$ è
+\[
+M_p-M_{p-1}.
+\]
+
+\paragraph{Interpretazione.}
+Questo permette di ricostruire la dimensione dei blocchi di Jordan semplicemente studiando la crescita delle dimensioni dei nuclei
+\[
+\ker(A-\lambda I),\ \ker(A-\lambda I)^2,\ \ker(A-\lambda I)^3,\dots
+\]
+
+\section{Schema pratico per costruire la forma di Jordan}
+
+Se si vuole costruire una matrice $Q$ tale che
+\[
+Q^{-1}AQ=J,
+\]
+si procede così:
+
+\begin{enumerate}
+    \item si trovano gli autovalori di $A$ e le loro molteplicità algebriche;
+    \item per ogni autovalore $\lambda_i$ si calcola
+    \[
+    \dim\ker(A-\lambda_i I),
+    \quad
+    \dim\ker(A-\lambda_i I)^2,
+    \quad \dots
+    \]
+    fino a stabilizzazione;
+    \item da queste dimensioni si deduce la struttura dei blocchi di Jordan;
+    \item si costruiscono le catene di autovettori generalizzati;
+    \item si mettono come colonne di $Q$ i vettori delle catene, ordinati in modo coerente con i blocchi di Jordan.
+\end{enumerate}
+
+\paragraph{Caso particolare: un solo autovalore e un solo blocco.}
+Se la matrice ha un solo autovalore $\lambda$ con:
+\[
+m_a(\lambda)=n,\qquad m_g(\lambda)=1,
+\]
+allora esiste un unico blocco di Jordan di ordine $n$.  
+In tal caso basta costruire una singola catena completa
+\[
+q_1,\ q_2,\ \dots,\ q_n.
+\]
+
+\section{Sintesi finale della lezione}
+
+In questa lezione abbiamo visto che:
+
+\begin{enumerate}
+    \item l'esponenziale di un blocco nilpotente $J_0^{(p)}$ è un polinomio matriciale che si tronca al grado $p-1$;
+
+    \item l'esponenziale di un blocco di Jordan reale è dato da
+    \[
+    e^{J_d^{(p)}t}=e^{dt}e^{J_0^{(p)}t},
+    \]
+    quindi compaiono fattori del tipo $t^k e^{dt}$;
+
+    \item nel tempo discreto le potenze di un blocco di Jordan generano fattori del tipo
+    \[
+    \binom{k}{i}d^{k-i};
+    \]
+
+    \item per autovalori complessi coniugati, una coppia complessa si traduce in un blocco reale
+    \[
+    \begin{pmatrix}
+    \sigma & \omega\\
+    -\omega & \sigma
+    \end{pmatrix},
+    \]
+    il cui esponenziale descrive oscillazioni smorzate, persistenti o amplificate;
+
+    \item quando la matrice non è diagonalizzabile si introducono gli autovettori generalizzati;
+
+    \item le catene di autovettori generalizzati permettono di costruire i blocchi di Jordan;
+
+    \item la molteplicità geometrica di un autovalore coincide con il numero di blocchi di Jordan associati a quell'autovalore;
+
+    \item studiando i nuclei di
+    \[
+    (A-\lambda I)^p
+    \]
+    si può ricostruire operativamente la forma di Jordan.
+\end{enumerate}
+
+Questa parte è decisiva per comprendere il comportamento dinamico dei sistemi lineari, soprattutto nei casi non diagonalizzabili e nei casi oscillatori con autovalori complessi.

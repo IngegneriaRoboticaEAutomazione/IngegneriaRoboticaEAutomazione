@@ -1,0 +1,510 @@
+\chapter{Lezione 16 --- Osservatore asintotico, dualità e principio di separazione}
+
+\section{Richiamo: osservatore dello stato}
+
+Consideriamo il sistema lineare tempo-invariante
+\[
+\begin{cases}
+\dot x = Ax + Bu,\\[4pt]
+y = Cx,
+\end{cases}
+\]
+dove:
+\[
+x(t)\in\mathbb{R}^n,\qquad
+u(t)\in\mathbb{R}^m,\qquad
+y(t)\in\mathbb{R}^\ell,
+\]
+e
+\[
+A\in\mathbb{R}^{n\times n},\qquad
+B\in\mathbb{R}^{n\times m},\qquad
+C\in\mathbb{R}^{\ell\times n}.
+\]
+
+Lo stato \(x(t)\) non è direttamente accessibile. Per questo si introduce uno
+\textbf{stato osservato} o \textbf{stimato}
+\[
+\hat x(t),
+\]
+costruito mediante un osservatore dinamico.
+
+\section{Equazioni dell'osservatore}
+
+L'osservatore considerato a lezione è del tipo di Luenberger:
+\[
+\begin{cases}
+\dot{\hat x} = A\hat x + Bu + L(y-\hat y),\\[4pt]
+\hat y = C\hat x,
+\end{cases}
+\]
+dove
+\[
+L\in\mathbb{R}^{n\times \ell}
+\]
+è la matrice di guadagno dell'osservatore.
+
+L'idea è semplice:
+\begin{itemize}
+    \item copio la dinamica del sistema;
+    \item confronto l'uscita vera \(y\) con l'uscita stimata \(\hat y\);
+    \item correggo la stima mediante il termine \(L(y-\hat y)\).
+\end{itemize}
+
+\section{Errore di osservazione}
+
+Definiamo l'errore di osservazione:
+\[
+e := x-\hat x.
+\]
+
+Allora
+\[
+\dot e = \dot x - \dot{\hat x}.
+\]
+
+Sostituendo le equazioni del sistema e dell'osservatore:
+\[
+\dot e
+=
+(Ax+Bu)-\bigl(A\hat x+Bu+L(y-\hat y)\bigr).
+\]
+
+Poiché
+\[
+y-\hat y = Cx-C\hat x = C(x-\hat x)=Ce,
+\]
+si ottiene
+\[
+\dot e = A(x-\hat x)-LC(x-\hat x),
+\]
+cioè
+\[
+\dot e = (A-LC)e.
+\]
+
+Questa è la \textbf{dinamica dell'errore di osservazione}.
+
+\section{Osservatore asintotico}
+
+Se tutti gli autovalori della matrice
+\[
+A-LC
+\]
+hanno parte reale strettamente negativa, allora
+\[
+e(t)\to 0 \qquad \text{per } t\to+\infty.
+\]
+
+Quindi
+\[
+\hat x(t)\to x(t).
+\]
+
+Per questo motivo l'equazione dell'osservatore viene chiamata
+\textbf{osservatore asintotico}.
+
+\subsection*{Interpretazione}
+
+Non imponiamo che \(\hat x(t)\) coincida subito con \(x(t)\),
+ma facciamo in modo che converga asintoticamente allo stato vero.
+
+\section{Scelta di \(L\) e assegnamento degli autovalori dell'osservatore}
+
+La matrice \(L\) è scelta da noi.  
+Quindi il problema è del tutto analogo a quello già visto per la retroazione di stato:
+\begin{itemize}
+    \item lì si progettava \(K\) per modificare la matrice \(A-BK\);
+    \item qui si progetta \(L\) per modificare la matrice \(A-LC\).
+\end{itemize}
+
+Vale allora il seguente risultato.
+
+\begin{theorem}
+Se la coppia \((A,C)\) è completamente osservabile, allora esiste una matrice
+\[
+L\in\mathbb{R}^{n\times \ell}
+\]
+tale da assegnare arbitrariamente gli autovalori della matrice
+\[
+A-LC.
+\]
+\end{theorem}
+
+Quindi, sotto ipotesi di osservabilità completa, possiamo scegliere la velocità
+di convergenza dell'osservatore.
+
+\section{Dualità tra osservabilità e controllabilità}
+
+Negli appunti si sottolinea che \textbf{osservabilità e controllabilità sono concetti duali}.
+
+Dato il sistema
+\[
+\begin{cases}
+\dot x = Ax + Bu,\\
+y = Cx,
+\end{cases}
+\]
+il suo sistema duale è
+\[
+\begin{cases}
+\dot z = A^T z + C^T w,\\[4pt]
+\rho = B^T z.
+\end{cases}
+\]
+
+La proprietà chiave è:
+\[
+(A,C)\ \text{completamente osservabile}
+\quad\Longleftrightarrow\quad
+(A^T,C^T)\ \text{completamente controllabile}.
+\]
+
+Allora, applicando al sistema duale il teorema di assegnamento degli autovalori
+mediante retroazione completa dello stato, sappiamo che esiste una matrice \(K_d\)
+tale che gli autovalori di
+\[
+A^T-C^T K_d
+\]
+siano arbitrari.
+
+Ma
+\[
+A^T-C^T K_d = (A-K_d^T C)^T,
+\]
+e una matrice ha gli stessi autovalori della sua trasposta. Dunque
+\[
+\lambda(A^T-C^T K_d)=\lambda(A-K_d^T C).
+\]
+
+Questo mostra che possiamo porre
+\[
+L = K_d^T,
+\]
+e assegnare arbitrariamente gli autovalori di
+\[
+A-LC.
+\]
+
+Questa è la giustificazione teorica del progetto dell'osservatore tramite dualità.
+
+\section{Schema a blocchi dell'osservatore}
+
+Dal punto di vista strutturale:
+\begin{itemize}
+    \item il sistema vero evolve con stato \(x\) e uscita \(y\);
+    \item l'osservatore evolve con stato \(\hat x\) e uscita \(\hat y=C\hat x\);
+    \item la differenza \(y-\hat y\) viene amplificata da \(L\) e reiniettata nell'osservatore.
+\end{itemize}
+
+Un punto concettuale importante è che lo \textbf{stato osservato} \(\hat x\)
+è sempre accessibile, perché l'osservatore è un algoritmo che costruiamo noi.
+Quindi, anche se lo stato vero \(x\) non è misurabile, lo stato \(\hat x\) lo è.
+
+\section{Retroazione sullo stato osservato}
+
+Poiché \(\hat x\) è disponibile, possiamo usarlo nella legge di controllo:
+\[
+u=-K\hat x.
+\]
+
+Questa è la soluzione pratica al problema della non accessibilità dello stato:
+invece di retroazionare lo stato vero, retroazioniamo il suo stimatore.
+
+\section{Equazioni del sistema accoppiato}
+
+Consideriamo quindi il sistema vero
+\[
+\begin{cases}
+\dot x = Ax + Bu,\\
+y = Cx,
+\end{cases}
+\]
+e l'osservatore
+\[
+\begin{cases}
+\dot{\hat x} = A\hat x + Bu + L(y-\hat y),\\
+\hat y = C\hat x,
+\end{cases}
+\]
+con legge di controllo
+\[
+u=-K\hat x.
+\]
+
+\subsection{Dinamica del sistema vero}
+
+Sostituendo \(u=-K\hat x\) nella dinamica del sistema:
+\[
+\dot x = Ax - BK\hat x.
+\]
+
+Poiché
+\[
+\hat x = x-e,
+\]
+segue
+\[
+\dot x = A x - BK(x-e)
+= (A-BK)x + BK\,e.
+\]
+
+\subsection{Dinamica dell'osservatore}
+
+L'equazione dell'osservatore diventa
+\[
+\dot{\hat x}
+=
+A\hat x - BK\hat x + L(Cx-C\hat x),
+\]
+cioè
+\[
+\dot{\hat x}
+=
+(A-BK-LC)\hat x + LC\,x.
+\]
+
+\subsection{Dinamica dell'errore}
+
+Calcoliamo ora di nuovo l'errore:
+\[
+e=x-\hat x.
+\]
+
+Derivando:
+\[
+\dot e = \dot x - \dot{\hat x}.
+\]
+
+Sostituendo le espressioni precedenti:
+\[
+\dot e
+=
+\bigl((A-BK)x + BK e\bigr)
+-
+\bigl((A-BK)\hat x + LC(x-\hat x)\bigr).
+\]
+
+Poiché \(x-\hat x=e\), si ottiene
+\[
+\dot e = (A-BK)e + BK e - LC e,
+\]
+e quindi
+\[
+\dot e = (A-LC)e.
+\]
+
+Questo è un risultato fondamentale:
+la dinamica dell'errore di osservazione \textbf{non dipende da \(K\)},
+ma solo da \(L\).
+
+\section{Dinamica congiunta di stato ed errore}
+
+Se come nuovo vettore di stato prendiamo
+\[
+\begin{bmatrix}
+x\\
+e
+\end{bmatrix},
+\]
+la dinamica complessiva diventa
+\[
+\begin{bmatrix}
+\dot x\\
+\dot e
+\end{bmatrix}
+=
+\underbrace{
+\begin{bmatrix}
+A-BK & BK\\
+0 & A-LC
+\end{bmatrix}
+}_{D}
+\begin{bmatrix}
+x\\
+e
+\end{bmatrix}.
+\]
+
+La matrice \(D\) è \textbf{triangolare a blocchi}.
+Quindi il suo polinomio caratteristico è
+\[
+p_D(\lambda)
+=
+\det(\lambda I-D)
+=
+\det\!\bigl(\lambda I-(A-BK)\bigr)\,
+\det\!\bigl(\lambda I-(A-LC)\bigr).
+\]
+
+Ne segue che gli autovalori di \(D\) sono l'unione di:
+\begin{itemize}
+    \item autovalori di \(A-BK\), legati alla dinamica del controllo;
+    \item autovalori di \(A-LC\), legati alla dinamica dell'osservatore.
+\end{itemize}
+
+\section{Principio di separazione}
+
+Il risultato precedente è il \textbf{principio di separazione}.
+
+\begin{quote}
+Gli autovalori del controllore (\(A-BK\)) e quelli dell'osservatore (\(A-LC\))
+sono assegnabili \emph{indipendentemente}.
+\end{quote}
+
+Questo significa che:
+\begin{itemize}
+    \item posso progettare \(K\) come se avessi accesso diretto allo stato;
+    \item posso progettare \(L\) come se stessi costruendo soltanto l'osservatore;
+    \item il sistema complessivo ha come autovalori l'unione dei due insiemi.
+\end{itemize}
+
+\subsection*{Attenzione}
+
+Il principio di separazione \textbf{non} significa che la dinamica effettiva di \(x\)
+sia identica al caso in cui si retroaziona direttamente lo stato vero.
+
+Infatti nella dinamica di \(x\) compare il termine
+\[
+BK\,e,
+\]
+che agisce come perturbazione finché l'errore di osservazione non è ancora nullo.
+
+Quindi:
+\begin{itemize}
+    \item i \emph{modi} del sistema sono assegnabili separatamente;
+    \item ma lo stato vero \(x\) è influenzato dall'errore \(e\) finché questo non si è estinto.
+\end{itemize}
+
+Se però
+\[
+e(t)\to 0,
+\]
+allora asintoticamente la retroazione sullo stato osservato si comporta come
+la retroazione sullo stato vero.
+
+\section{Scelta degli autovalori dell'osservatore}
+
+Poiché vogliamo che l'errore di osservazione si annulli rapidamente,
+conviene scegliere gli autovalori dell'osservatore più veloci di quelli del sistema controllato.
+
+Nel caso continuo questo significa tipicamente scegliere gli autovalori di
+\[
+A-LC
+\]
+più a sinistra nel piano complesso rispetto a quelli di
+\[
+A-BK.
+\]
+
+In altre parole:
+\begin{itemize}
+    \item il sistema vero deve essere stabilizzato e avere la dinamica desiderata;
+    \item l'osservatore deve convergere ancora più rapidamente,
+    così l'errore \(e\) si annulla prima che domini la dinamica del sistema.
+\end{itemize}
+
+\subsection*{Osservazione pratica}
+
+Negli appunti compare una nota importante:
+\begin{itemize}
+    \item sul sistema fisico non posso rendere arbitrariamente veloci gli autovalori, perché rischierei
+    di richiedere segnali di controllo troppo grandi e saturare gli attuatori;
+    \item per l'osservatore questo problema è meno critico, perché è un algoritmo interno.
+\end{itemize}
+
+Quindi in genere si scelgono gli autovalori dell'osservatore significativamente più veloci
+di quelli del controllore.
+
+\section{Interpretazione strutturale}
+
+Dal punto di vista concettuale, il sistema completo è costituito da due sottosistemi:
+\begin{enumerate}
+    \item il \textbf{sistema vero}, con stato \(x\);
+    \item il \textbf{sistema osservato}, con stato \(\hat x\).
+\end{enumerate}
+
+L'osservatore utilizza:
+\begin{itemize}
+    \item l'ingresso \(u\), che è noto;
+    \item l'uscita misurata \(y\), che è nota;
+    \item il proprio stato interno \(\hat x\), che è accessibile.
+\end{itemize}
+
+Una volta che \(\hat x\) converge a \(x\), posso trattare la retroazione
+\[
+u=-K\hat x
+\]
+come un sostituto pratico di
+\[
+u=-Kx.
+\]
+
+\section{Sintesi della lezione}
+
+I punti principali della lezione sono:
+\begin{enumerate}
+    \item l'osservatore asintotico è descritto da
+    \[
+    \dot{\hat x}=A\hat x+Bu+L(y-\hat y),
+    \qquad
+    \hat y=C\hat x;
+    \]
+
+    \item definendo
+    \[
+    e=x-\hat x,
+    \]
+    la dinamica dell'errore è
+    \[
+    \dot e=(A-LC)e;
+    \]
+
+    \item se tutti gli autovalori di \(A-LC\) hanno parte reale negativa,
+    allora
+    \[
+    e(t)\to 0
+    \quad\text{e quindi}\quad
+    \hat x(t)\to x(t);
+    \]
+
+    \item se la coppia \((A,C)\) è completamente osservabile, gli autovalori di \(A-LC\)
+    si possono assegnare arbitrariamente;
+
+    \item questo risultato deriva per dualità dalla teoria della retroazione di stato;
+
+    \item usando la retroazione sullo stato osservato
+    \[
+    u=-K\hat x,
+    \]
+    il sistema vero soddisfa
+    \[
+    \dot x=(A-BK)x + BK\,e;
+    \]
+
+    \item la dinamica complessiva di \((x,e)\) è
+    \[
+    \begin{bmatrix}
+    \dot x\\
+    \dot e
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+    A-BK & BK\\
+    0 & A-LC
+    \end{bmatrix}
+    \begin{bmatrix}
+    x\\
+    e
+    \end{bmatrix};
+    \]
+
+    \item gli autovalori del sistema complessivo sono l'unione di quelli di \(A-BK\)
+    e di quelli di \(A-LC\);
+
+    \item controllore e osservatore si progettano indipendentemente:
+    questo è il principio di separazione;
+
+    \item in pratica conviene scegliere gli autovalori dell'osservatore più veloci
+    di quelli del sistema controllato.
+\end{enumerate}

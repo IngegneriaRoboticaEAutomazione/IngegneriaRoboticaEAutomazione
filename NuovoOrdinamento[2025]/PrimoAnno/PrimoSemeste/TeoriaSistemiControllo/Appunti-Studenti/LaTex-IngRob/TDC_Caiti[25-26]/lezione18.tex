@@ -1,0 +1,559 @@
+\chapter{Lezione 18 --- Controllo ottimo e programmazione dinamica}
+
+\section{Introduzione al controllo ottimo}
+
+Vogliamo impostare un problema di controllo in retroazione che non si limiti a
+stabilizzare il sistema o a imporre certi poli, ma che soddisfi un
+\textbf{criterio di ottimalità}.
+
+L'idea è minimizzare una funzione di costo che tenga conto contemporaneamente di:
+\begin{itemize}
+    \item andamento della traiettoria di stato;
+    \item sforzo di controllo;
+    \item eventuali vincoli o penalità sullo stato finale.
+\end{itemize}
+
+Il controllo ottimo è particolarmente importante per sistemi MIMO e per problemi
+in cui non basta ``chiudere bene il sistema'', ma bisogna anche farlo nel modo
+più conveniente possibile.
+
+Un'applicazione moderna di questa idea è il \textbf{Model Predictive Control} (MPC),
+che può essere visto come uno sviluppo del controllo ottimo.
+
+\section{Due approcci al controllo ottimo}
+
+Negli appunti vengono richiamati due approcci classici:
+\begin{enumerate}
+    \item \textbf{Calcolo delle variazioni / principio di Pontryagin};
+    \item \textbf{Programmazione dinamica / principio di Bellman}.
+\end{enumerate}
+
+Entrambi descrivono lo stesso problema di ottimo, ma con strumenti diversi.
+In questa lezione ci concentriamo sulla \textbf{programmazione dinamica} per sistemi
+a tempo discreto.
+
+\section{Principio di Bellman e idea del cost-to-go}
+
+Per introdurre il metodo si considera il classico esempio del percorso ottimo:
+si deve andare da un punto iniziale \(x_A\) a un punto finale \(x_B\), attraversando
+eventuali punti di transito organizzati per \emph{stadi}.
+
+Ogni arco del grafo ha un costo, che può rappresentare:
+\begin{itemize}
+    \item tempo di percorrenza;
+    \item consumo di carburante;
+    \item rischio;
+    \item una qualsiasi grandezza da minimizzare.
+\end{itemize}
+
+Il \textbf{principio di Bellman} dice che:
+
+\begin{quote}
+Se un percorso è ottimo, allora ogni suo tratto finale è a sua volta ottimo
+rispetto al punto da cui parte.
+\end{quote}
+
+Questo porta al concetto di \textbf{cost-to-go}:
+
+\begin{quote}
+il cost-to-go è il costo minimo necessario per andare dallo stato attuale fino
+alla destinazione finale.
+\end{quote}
+
+La strategia consiste quindi nel lavorare \emph{all'indietro}, dallo stadio finale
+verso lo stadio iniziale.
+
+\section{Problema dinamico discreto generale}
+
+Consideriamo un sistema discreto generico
+\[
+x(i+1)=f(x(i),u(i)),
+\]
+e una funzione di costo additiva del tipo
+\[
+J=\sum_{i=0}^{N-1} h_i(x(i),u(i)).
+\]
+
+Il problema è:
+
+\begin{quote}
+determinare la sequenza di controlli
+\[
+u(0),u(1),\dots,u(N-1)
+\]
+che minimizza il costo \(J\), compatibilmente con la dinamica del sistema.
+\end{quote}
+
+\subsection{Definizione di cost-to-go ottimo}
+
+Si definisce il costo ottimo a partire dallo stadio \(i\) come
+\[
+J_i^o(x(i))
+=
+\min_{u(i),u(i+1),\dots,u(N-1)}
+\sum_{k=i}^{N-1} h_k(x(k),u(k)).
+\]
+
+In particolare:
+\[
+J_0^o(x(0))=\min J.
+\]
+
+\subsection{Equazione di Bellman}
+
+Poiché il costo è additivo, vale la ricorsione
+\[
+J_i^o(x(i))
+=
+\min_{u(i)}
+\left[
+h_i(x(i),u(i))
++
+J_{i+1}^o\bigl(f(x(i),u(i))\bigr)
+\right].
+\]
+
+Questa è la \textbf{equazione di Bellman}.
+
+L'inizializzazione è data dalla condizione terminale. Nel caso più semplice:
+\[
+J_N^o(x(N))=0,
+\]
+oppure, più in generale, si può assegnare una penalità terminale.
+
+\subsection{Osservazione}
+
+In generale non esiste una soluzione analitica esplicita del problema.
+La strategia ottima dipende dallo stato in cui il sistema si trova, quindi il controllo
+ottimo è in generale una legge di retroazione
+\[
+u(i)=\mu_i(x(i)).
+\]
+
+\section{Caso particolare: controllo ottimo LQ}
+
+Un caso molto importante, e in effetti uno dei pochi con soluzione analitica,
+è il problema \textbf{LQ}:
+\begin{itemize}
+    \item \textbf{L} = sistema lineare;
+    \item \textbf{Q} = costo quadratico.
+\end{itemize}
+
+\subsection{Sistema}
+
+Consideriamo il sistema lineare discreto
+\[
+x_{k+1}=Ax_k+Bu_k,
+\qquad
+x_0=\hat x,
+\]
+dove
+\[
+x_k\in\mathbb{R}^n,\qquad
+u_k\in\mathbb{R}^m.
+\]
+
+\subsection{Indice di costo}
+
+Il costo è scelto nella forma
+\[
+J
+=
+\sum_{k=0}^{N-1}
+\left(
+x_k^T V x_k + u_k^T P u_k
+\right)
++
+x_N^T V_N x_N,
+\]
+dove:
+\begin{itemize}
+    \item \(V=V^T\succeq 0\): penalità sullo stato;
+    \item \(P=P^T\succ 0\): penalità sul controllo;
+    \item \(V_N=V_N^T\succeq 0\): penalità sullo stato finale.
+\end{itemize}
+
+L'ultimo termine penalizza lo stato di arrivo al tempo \(N\).
+
+\section{Forma attesa della soluzione}
+
+Cerchiamo una legge ottima del tipo
+\[
+u_k^o=-H_k x_k,
+\]
+cioè una retroazione lineare sullo stato.
+
+La cosa non è banale a priori, ma la programmazione dinamica mostrerà che,
+nel caso LQ, questa forma è effettivamente ottima.
+
+\section{Richiamo utile: minimo di una forma quadratica}
+
+Negli appunti compare il seguente fatto elementare.
+
+Se
+\[
+Q\succ 0,
+\]
+allora la funzione
+\[
+\phi(z)=z^TQz+2c^Tz
+\]
+ha minimo unico nel punto
+\[
+z^\star=-Q^{-1}c.
+\]
+
+Questo risultato verrà usato ripetutamente nella minimizzazione rispetto a \(u_k\).
+
+\section{Passo finale della ricorsione: stadio \(N-1\)}
+
+Partiamo dallo stadio finale utile, cioè \(k=N-1\).
+
+Poiché
+\[
+x_N=Ax_{N-1}+Bu_{N-1},
+\]
+si ha
+\[
+J_{N-1}^o(x_{N-1})
+=
+\min_{u_{N-1}}
+\left[
+x_{N-1}^T V x_{N-1}
++
+u_{N-1}^T P u_{N-1}
++
+x_N^T V_N x_N
+\right].
+\]
+
+Sostituendo \(x_N=Ax_{N-1}+Bu_{N-1}\):
+\[
+\begin{aligned}
+J_{N-1}^o(x_{N-1})
+&=
+\min_{u_{N-1}}
+\Big[
+x_{N-1}^T V x_{N-1}
++
+u_{N-1}^T P u_{N-1}\\
+&\qquad\qquad
++
+(Ax_{N-1}+Bu_{N-1})^T
+V_N
+(Ax_{N-1}+Bu_{N-1})
+\Big].
+\end{aligned}
+\]
+
+Sviluppando:
+\[
+\begin{aligned}
+J_{N-1}^o(x_{N-1})
+&=
+x_{N-1}^T(V+A^TV_NA)x_{N-1}\\
+&\quad+
+\min_{u_{N-1}}
+\Big[
+u_{N-1}^T(P+B^TV_NB)u_{N-1}
++
+2x_{N-1}^T A^TV_NBu_{N-1}
+\Big].
+\end{aligned}
+\]
+
+Ponendo
+\[
+Q=P+B^TV_NB,
+\qquad
+c=B^TV_NA\,x_{N-1},
+\]
+e usando il risultato precedente, si ottiene
+\[
+u_{N-1}^o(x_{N-1})
+=
+-(P+B^TV_NB)^{-1}B^TV_NA\,x_{N-1}.
+\]
+
+Definendo
+\[
+H_{N-1}
+=
+(P+B^TV_NB)^{-1}B^TV_NA,
+\]
+si ha
+\[
+u_{N-1}^o=-H_{N-1}x_{N-1}.
+\]
+
+Sostituendo il valore ottimo, il costo ottimo allo stadio \(N-1\) assume forma quadratica:
+\[
+J_{N-1}^o(x_{N-1})=x_{N-1}^T T_{N-1}x_{N-1},
+\]
+con
+\[
+T_{N-1}
+=
+V+A^TV_NA
+-
+A^TV_NB(P+B^TV_NB)^{-1}B^TV_NA.
+\]
+
+\section{Passo ricorsivo generale}
+
+Supponiamo ora che, a uno stadio generico \(k+1\), il cost-to-go ottimo sia già noto
+nella forma quadratica
+\[
+J_{k+1}^o(x_{k+1})=x_{k+1}^T T_{k+1}x_{k+1}.
+\]
+
+Allora allo stadio \(k\):
+\[
+J_k^o(x_k)
+=
+\min_{u_k}
+\left[
+x_k^TVx_k+u_k^TPu_k+J_{k+1}^o(x_{k+1})
+\right],
+\]
+con
+\[
+x_{k+1}=Ax_k+Bu_k.
+\]
+
+Sostituendo:
+\[
+\begin{aligned}
+J_k^o(x_k)
+&=
+\min_{u_k}
+\Big[
+x_k^TVx_k
++
+u_k^TPu_k
++
+(Ax_k+Bu_k)^TT_{k+1}(Ax_k+Bu_k)
+\Big].
+\end{aligned}
+\]
+
+Sviluppando:
+\[
+\begin{aligned}
+J_k^o(x_k)
+&=
+x_k^T(V+A^TT_{k+1}A)x_k\\
+&\quad+
+\min_{u_k}
+\Big[
+u_k^T(P+B^TT_{k+1}B)u_k
++
+2x_k^TA^TT_{k+1}Bu_k
+\Big].
+\end{aligned}
+\]
+
+Usando di nuovo il minimo della forma quadratica:
+\[
+u_k^o(x_k)
+=
+-(P+B^TT_{k+1}B)^{-1}B^TT_{k+1}A\,x_k.
+\]
+
+Definendo
+\[
+H_k
+=
+(P+B^TT_{k+1}B)^{-1}B^TT_{k+1}A,
+\]
+si ottiene la legge ottima
+\[
+u_k^o=-H_kx_k.
+\]
+
+Sostituendo nel costo:
+\[
+J_k^o(x_k)=x_k^TT_kx_k,
+\]
+dove
+\[
+T_k
+=
+V
++
+A^TT_{k+1}A
+-
+A^TT_{k+1}B
+(P+B^TT_{k+1}B)^{-1}
+B^TT_{k+1}A.
+\]
+
+\section{Ricorsione di Riccati discreta}
+
+La ricorsione
+\[
+T_k
+=
+V
++
+A^TT_{k+1}A
+-
+A^TT_{k+1}B
+(P+B^TT_{k+1}B)^{-1}
+B^TT_{k+1}A
+\]
+è l'\textbf{equazione di Riccati a tempo discreto} (all'indietro).
+
+L'inizializzazione è
+\[
+T_N=V_N.
+\]
+
+Quindi l'algoritmo di soluzione del problema LQ su orizzonte finito è:
+
+\begin{enumerate}
+    \item fissare la condizione terminale
+    \[
+    T_N=V_N;
+    \]
+    \item calcolare all'indietro
+    \[
+    T_{N-1},T_{N-2},\dots,T_0;
+    \]
+    \item ad ogni passo ricavare
+    \[
+    H_k=(P+B^TT_{k+1}B)^{-1}B^TT_{k+1}A;
+    \]
+    \item applicare il controllo ottimo
+    \[
+    u_k^o=-H_kx_k.
+    \]
+\end{enumerate}
+
+\section{Forma finale della soluzione}
+
+Riassumendo, la soluzione del problema LQ discreto a orizzonte finito è:
+\[
+u_k^o=-H_kx_k,
+\]
+con
+\[
+H_k=(P+B^TT_{k+1}B)^{-1}B^TT_{k+1}A,
+\]
+e
+\[
+J_k^o(x_k)=x_k^TT_kx_k,
+\]
+dove \(T_k\) soddisfa la ricorsione di Riccati
+\[
+T_k
+=
+V
++
+A^TT_{k+1}A
+-
+A^TT_{k+1}B
+(P+B^TT_{k+1}B)^{-1}
+B^TT_{k+1}A,
+\qquad
+T_N=V_N.
+\]
+
+\section{Osservazioni importanti}
+
+\subsection{Controllo in retroazione}
+
+La soluzione ottima non è una sequenza aperta di controlli, ma una \textbf{retroazione}
+lineare sullo stato:
+\[
+u_k^o=-H_kx_k.
+\]
+
+Questa è una delle ragioni del successo del metodo:
+il controllo ottimo è robusto rispetto a perturbazioni e incertezze sullo stato,
+perché viene ricalcolato a ogni istante a partire da \(x_k\).
+
+\subsection{Guadagno tempo-variante}
+
+Anche se il sistema di partenza è tempo-invariante, il guadagno ottimo
+\[
+H_k
+\]
+dipende in generale da \(k\), perché dipende da \(T_{k+1}\) e quindi
+dalla distanza dal tempo finale \(N\).
+
+Dunque, su orizzonte finito, il controllo ottimo è in generale \textbf{tempo-variante}.
+
+\subsection{Stabilità}
+
+Negli appunti compare giustamente la domanda:
+
+\begin{quote}
+\emph{Ma siamo sicuri che il sistema sia stabile?}
+\end{quote}
+
+A questo stadio della trattazione la risposta non è ancora automatica:
+la ricorsione fornisce il controllo ottimo su orizzonte finito, ma la stabilità
+asintotica del sistema chiuso richiede un'analisi ulteriore.
+
+Questo porterà naturalmente, nelle lezioni successive, al caso a orizzonte infinito,
+in cui il guadagno tende a una matrice costante e compare l'equazione algebrica di Riccati.
+
+\section{Interpretazione dei pesi \(V\), \(P\), \(V_N\)}
+
+I tre pesi del problema hanno significato fisico chiaro:
+\begin{itemize}
+    \item \(V\): penalizza deviazioni dello stato lungo tutta la traiettoria;
+    \item \(P\): penalizza lo sforzo di controllo;
+    \item \(V_N\): penalizza lo stato finale.
+\end{itemize}
+
+Se aumento \(P\), il controllo ottimo diventa più prudente:
+si cerca di usare meno attuazione.
+
+Se aumento \(V\) o \(V_N\), si privilegia il rispetto della traiettoria e/o del target finale,
+accettando anche uno sforzo di controllo maggiore.
+
+\section{Sintesi della lezione}
+
+I risultati principali della lezione sono:
+
+\begin{itemize}
+    \item il controllo ottimo si può affrontare con il principio di Bellman;
+    \item si definisce il cost-to-go ottimo
+    \[
+    J_i^o(x(i));
+    \]
+    \item nel caso lineare-quadratico discreto:
+    \[
+    x_{k+1}=Ax_k+Bu_k,
+    \qquad
+    J=\sum_{k=0}^{N-1}(x_k^TVx_k+u_k^TPu_k)+x_N^TV_Nx_N;
+    \]
+    \item il cost-to-go ottimo è quadratico:
+    \[
+    J_k^o(x_k)=x_k^TT_kx_k;
+    \]
+    \item il controllo ottimo è lineare nello stato:
+    \[
+    u_k^o=-H_kx_k;
+    \]
+    \item il guadagno ottimo è
+    \[
+    H_k=(P+B^TT_{k+1}B)^{-1}B^TT_{k+1}A;
+    \]
+    \item la matrice \(T_k\) soddisfa la ricorsione di Riccati all'indietro:
+    \[
+    T_k
+    =
+    V
+    +
+    A^TT_{k+1}A
+    -
+    A^TT_{k+1}B
+    (P+B^TT_{k+1}B)^{-1}
+    B^TT_{k+1}A,
+    \qquad
+    T_N=V_N.
+    \]
+\end{itemize}

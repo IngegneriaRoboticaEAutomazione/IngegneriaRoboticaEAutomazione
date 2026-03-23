@@ -1,0 +1,424 @@
+\chapter{Lezione 20 --- Controllo ottimo LQ continuo, equazioni di Riccati e valori singolari}
+
+\section{Dal cost-to-go all'equazione di Bellman nel continuo}
+
+Consideriamo un sistema dinamico non lineare in tempo continuo
+\[
+\dot x = f(x,u),
+\]
+e un indice di ottimalità su orizzonte infinito
+\[
+J=\int_{t_0}^{+\infty}\ell(x(\tau),u(\tau))\,d\tau.
+\]
+
+Definiamo il \emph{cost-to-go} ottimo
+\[
+\psi(x_0)=\min_{u(\cdot)} J
+\qquad\text{con } x(t_0)=x_0.
+\]
+
+Ragionando come nella programmazione dinamica, il costo ottimo a partire da \(x(t)\) deve soddisfare
+\[
+\psi(x(t))
+=
+\min_{u(\cdot)}
+\left[
+\int_t^{t+h}\ell(x(\tau),u(\tau))\,d\tau
++
+\psi(x(t+h))
+\right].
+\]
+
+Portando \(\psi(x(t))\) a destra, dividendo per \(h\) e facendo tendere \(h\to 0^+\), si ottiene
+\[
+\min_u\left[\dot\psi(x(t))+\ell(x(t),u(t))\right]=0.
+\]
+
+Usando la regola della catena,
+\[
+\dot\psi(x(t))
+=
+\nabla_x \psi(x(t))^T \dot x(t)
+=
+\nabla_x \psi(x(t))^T f(x(t),u(t)),
+\]
+segue l'\textbf{equazione di Bellman}:
+\[
+\boxed{
+\min_u\left[\nabla_x\psi(x)^T f(x,u)+\ell(x,u)\right]=0.
+}
+\]
+
+\section{Caso LQ continuo su orizzonte infinito}
+
+Consideriamo ora il caso lineare-quadratico:
+\[
+\dot x = Ax+Bu,
+\]
+con funzionale di costo
+\[
+J=\frac12\int_0^{+\infty}\left(x^TQx+u^TRu\right)\,d\tau,
+\]
+dove
+\[
+Q=Q^T\succeq 0,
+\qquad
+R=R^T\succ 0.
+\]
+
+Cerchiamo una soluzione del cost-to-go nella forma quadratica
+\[
+\psi(x)=\frac12 x^T P x,
+\qquad
+P=P^T.
+\]
+
+Poiché \(P\) è simmetrica,
+\[
+\nabla_x\psi(x)=Px.
+\]
+
+Sostituendo nell'equazione di Bellman si ottiene
+\[
+\min_u
+\left[
+x^TP(Ax+Bu)+\frac12 x^TQx+\frac12 u^TRu
+\right]=0.
+\]
+
+\subsection{Calcolo del controllo ottimo}
+
+Per trovare il minimo rispetto a \(u\), imponiamo la condizione del primo ordine:
+\[
+\nabla_u\!\left(
+x^TPBu+\frac12 u^TRu
+\right)=0.
+\]
+
+Essendo
+\[
+\nabla_u(x^TPBu)=B^TPx,
+\qquad
+\nabla_u\!\left(\frac12 u^TRu\right)=Ru,
+\]
+segue
+\[
+B^TPx+Ru=0,
+\]
+cioè
+\[
+\boxed{
+u^\star=-R^{-1}B^TPx.
+}
+\]
+
+Quindi il controllo ottimo è una retroazione lineare dello stato, con guadagno
+\[
+K=R^{-1}B^TP.
+\]
+
+\section{Equazione algebrica di Riccati nel continuo}
+
+Sostituiamo \(u^\star\) nell'equazione di Bellman:
+\[
+x^TPAx
+-\,
+x^TPBR^{-1}B^TPx
++
+\frac12 x^TQx
++
+\frac12 x^TPBR^{-1}B^TPx
+=0.
+\]
+
+Riordinando:
+\[
+x^TPAx
++\frac12 x^TQx
+-\frac12 x^TPBR^{-1}B^TPx
+=0.
+\]
+
+Ora osserviamo che lo scalare \(x^TPAx\) può essere simmetrizzato:
+\[
+x^TPAx
+=
+\frac12 x^T(PA+A^TP)x.
+\]
+
+Otteniamo dunque
+\[
+\frac12 x^T
+\left(
+A^TP+PA-PBR^{-1}B^TP+Q
+\right)x=0
+\qquad \forall x.
+\]
+
+Perciò la matrice tra parentesi deve annullarsi:
+\[
+\boxed{
+A^TP+PA-PBR^{-1}B^TP+Q=0.
+}
+\]
+
+Questa è l'\textbf{equazione algebrica di Riccati a tempo continuo}.
+
+\subsection{Sistema in ciclo chiuso}
+
+Ponendo
+\[
+u^\star=-Kx,
+\qquad
+K=R^{-1}B^TP,
+\]
+la dinamica in ciclo chiuso diventa
+\[
+\dot x=(A-BK)x.
+\]
+
+Quindi la matrice di stato del sistema controllato ottimamente è
+\[
+A_{cc}=A-BR^{-1}B^TP.
+\]
+
+\section{Stabilità e legame con Lyapunov}
+
+Partiamo dall'equazione di Riccati
+\[
+A^TP+PA-PBR^{-1}B^TP+Q=0.
+\]
+
+Poiché
+\[
+K=R^{-1}B^TP,
+\]
+si ha
+\[
+A_{cc}=A-BK=A-BR^{-1}B^TP.
+\]
+
+Sostituendo, l'equazione di Riccati può essere riscritta come
+\[
+(A-BK)^TP + P(A-BK) + \widetilde Q = 0,
+\]
+dove
+\[
+\widetilde Q = Q + PBR^{-1}B^TP \succeq 0.
+\]
+
+Cioè
+\[
+\boxed{
+A_{cc}^TP + PA_{cc} = -\widetilde Q.
+}
+\]
+
+Questa è una \textbf{equazione di Lyapunov} per il sistema in ciclo chiuso.
+
+Se \(P\succ 0\) e \(\widetilde Q \succ 0\), allora la funzione
+\[
+V(x)=\frac12 x^TPx
+\]
+è una funzione di Lyapunov e il sistema in ciclo chiuso è asintoticamente stabile.
+
+\paragraph{Interpretazione}
+La soluzione \(P\) dell'equazione di Riccati non serve solo a scrivere il controllo ottimo:
+essa codifica anche una funzione energia/costo che certifica la stabilità del sistema controllato.
+
+\section{Ipotesi standard: stabilizzabilità e rilevabilità}
+
+Negli appunti compare la seguente idea fondamentale.
+
+\begin{itemize}
+    \item \textbf{Stabilizzabile}: gli autovalori non controllabili di \(A\) hanno parte reale strettamente negativa.
+    \item \textbf{Rilevabile} (detectable): gli autovalori non osservabili hanno parte reale strettamente negativa.
+\end{itemize}
+
+Per il problema LQ continuo, sotto le ipotesi standard
+\[
+(A,B)\ \text{stabilizzabile},
+\qquad
+(A,\sqrt Q)\ \text{rilevabile},
+\]
+l'equazione algebrica di Riccati ammette una \emph{soluzione stabilizzante} \(P=P^T\succeq 0\), e il feedback
+\[
+u^\star=-R^{-1}B^TPx
+\]
+rende stabile il sistema in ciclo chiuso.
+
+\medskip
+
+\noindent
+\textbf{Nota.}
+Negli appunti la conclusione è espressa in forma forte come esistenza di una soluzione \(P>0\).
+Per essere più precisi, la formulazione standard parla di soluzione simmetrica positiva semidefinita stabilizzante; nei casi ``ben posti'' trattati a lezione essa è spesso positiva definita.
+
+\section{Caso LQ continuo su orizzonte finito}
+
+Se invece considero un orizzonte finito \([0,t_f]\), il funzionale di costo diventa
+\[
+J=
+\int_0^{t_f}
+\left(
+\frac12 x^TQx+\frac12 u^TRu
+\right)d\tau
++
+\frac12 x^T(t_f)Sx(t_f),
+\]
+con
+\[
+S=S^T\succ 0.
+\]
+
+In questo caso il cost-to-go dipende anche dal tempo:
+\[
+\psi(x,t)=\frac12 x^T P(t)x.
+\]
+
+La legge di controllo ottimo conserva la stessa forma
+\[
+\boxed{
+u^\star(t)=-R^{-1}B^TP(t)x(t),
+\qquad 0<t<t_f,
+}
+\]
+ma il guadagno non è più costante: dipende dal tempo tramite \(P(t)\).
+
+La matrice \(P(t)\) soddisfa l'\textbf{equazione differenziale di Riccati}:
+\[
+\boxed{
+-\dot P(t)=A^TP(t)+P(t)A-P(t)BR^{-1}B^TP(t)+Q,
+}
+\]
+con condizione terminale
+\[
+\boxed{
+P(t_f)=S.
+}
+\]
+
+\paragraph{Osservazione sul segno}
+L'equazione è scritta con il segno ``\(-\dot P\)'' perché la si integra all'indietro, partendo dal tempo finale \(t_f\) e tornando verso \(0\).  
+Negli appunti questa dipendenza all'indietro è il punto concettuale importante.
+
+\section{Richiamo di algebra lineare: decomposizione ai valori singolari}
+
+Nella seconda parte della lezione compare un richiamo sui \textbf{valori singolari}, utile per ragionare sul condizionamento numerico delle matrici.
+
+Sia
+\[
+M\in\mathbb R^{m\times k},
+\qquad m\ge k.
+\]
+Allora esistono matrici ortogonali
+\[
+U\in\mathbb R^{m\times m},
+\qquad
+V\in\mathbb R^{k\times k},
+\]
+tali che
+\[
+U^TU=I,
+\qquad
+V^TV=I,
+\]
+e una matrice \(\Sigma\in\mathbb R^{m\times k}\) della forma
+\[
+\Sigma=
+\begin{bmatrix}
+\Sigma'\\
+0
+\end{bmatrix},
+\qquad
+\Sigma'=
+\operatorname{diag}(\sigma_1,\sigma_2,\dots,\sigma_k),
+\]
+con
+\[
+\sigma_1\ge \sigma_2\ge \cdots \ge \sigma_k\ge 0,
+\]
+tale che
+\[
+\boxed{
+M=U\Sigma V^T.
+}
+\]
+
+Questa è la \textbf{SVD} (Singular Value Decomposition).
+
+\subsection{Interpretazione dei valori singolari}
+
+I numeri \(\sigma_i\) sono i \textbf{valori singolari} di \(M\).
+Possono essere visti come una generalizzazione degli autovalori al caso di matrici non necessariamente quadrate.
+
+Essi misurano anche quanto la matrice sia vicina alla singolarità.
+
+\begin{itemize}
+    \item Se \(M\) è quadrata e invertibile, allora il più piccolo valore singolare è positivo:
+    \[
+    \sigma_k>0.
+    \]
+    \item Se \(\sigma_k=0\), la matrice perde rango.
+\end{itemize}
+
+\subsection{Numero di condizionamento}
+
+La distanza dalla non invertibilità si misura tramite il rapporto
+\[
+\kappa(M)=\frac{\sigma_1}{\sigma_k},
+\]
+detto \textbf{numero di condizionamento}.
+
+\begin{itemize}
+    \item Se
+    \[
+    \frac{\sigma_1}{\sigma_k}\approx 1,
+    \]
+    la matrice è ben condizionata e lontana dalla singolarità.
+    \item Se
+    \[
+    \frac{\sigma_1}{\sigma_k}\gg 1,
+    \]
+    la matrice è male condizionata, cioè quasi non invertibile.
+\end{itemize}
+
+\paragraph{Perché compare qui?}
+Nel controllo ottimo e, più in generale, nei problemi di calcolo numerico del controllo, si invertono spesso matrici come
+\[
+R,\qquad P+B^TT_{k+1}B,\qquad \text{ecc.}
+\]
+Perciò il condizionamento numerico è importante: una matrice formalmente invertibile può essere problematica dal punto di vista computazionale se è molto vicina alla singolarità.
+
+\section{Sintesi finale della lezione}
+
+In questa lezione abbiamo visto che:
+
+\begin{enumerate}
+    \item dal cost-to-go nel continuo si ottiene l'equazione di Bellman
+    \[
+    \min_u\left[\nabla_x\psi(x)^Tf(x,u)+\ell(x,u)\right]=0;
+    \]
+    \item nel caso LQ continuo, cercando \(\psi(x)=\tfrac12 x^TPx\), si ricava il controllo ottimo
+    \[
+    u^\star=-R^{-1}B^TPx;
+    \]
+    \item la matrice \(P\) deve soddisfare l'equazione algebrica di Riccati
+    \[
+    A^TP+PA-PBR^{-1}B^TP+Q=0;
+    \]
+    \item tale equazione si collega a una Lyapunov del sistema in ciclo chiuso
+    \[
+    A_{cc}^TP+PA_{cc}=-\widetilde Q;
+    \]
+    \item su orizzonte finito compare invece l'equazione differenziale di Riccati
+    \[
+    -\dot P=A^TP+PA-PBR^{-1}B^TP+Q,
+    \qquad
+    P(t_f)=S;
+    \]
+    \item i valori singolari permettono di capire se una matrice è ben o mal condizionata, tramite
+    \[
+    \kappa(M)=\frac{\sigma_1}{\sigma_k}.
+    \]
+\end{enumerate}

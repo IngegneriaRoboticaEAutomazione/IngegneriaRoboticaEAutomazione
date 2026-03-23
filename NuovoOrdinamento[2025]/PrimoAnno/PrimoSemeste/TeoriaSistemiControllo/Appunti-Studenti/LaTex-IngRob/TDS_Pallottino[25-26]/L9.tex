@@ -1,0 +1,772 @@
+\chapter{L9 -- Analisi modale e stabilità a partire dalla forma di Jordan}
+
+\section{Obiettivo della lezione}
+
+Dopo aver introdotto la forma di Jordan e le catene di autovettori generalizzati, il passo naturale successivo è capire \emph{che cosa si vede nel tempo}.
+
+L'idea fondamentale è questa:
+
+\begin{quote}
+se porto la matrice di stato in forma di Jordan, allora nell'evoluzione libera del sistema compaiono in modo esplicito tutti i possibili andamenti temporali.
+\end{quote}
+
+Questi andamenti temporali elementari vengono chiamati \textbf{modi del sistema}.  
+La struttura dei modi dipende da:
+\begin{itemize}
+    \item il valore degli autovalori;
+    \item il fatto che siano reali oppure complessi;
+    \item la dimensione del blocco di Jordan più grande associato a ciascun autovalore.
+\end{itemize}
+
+Questa lezione serve quindi a collegare in modo chiaro:
+\[
+\text{autovalori e blocchi di Jordan}
+\qquad \Longleftrightarrow \qquad
+\text{modi temporali del sistema}
+\qquad \Longleftrightarrow \qquad
+\text{stabilità / instabilità}.
+\]
+
+\section{Perché i blocchi di Jordan sono importanti}
+
+Nel tempo continuo, l'evoluzione libera è
+\[
+x(t)=e^{At}x(0),
+\]
+mentre nel tempo discreto è
+\[
+x(k)=A^k x(0).
+\]
+
+Se $A$ è simile a una forma di Jordan $J$, cioè
+\[
+A=QJQ^{-1},
+\]
+allora
+\[
+e^{At}=Qe^{Jt}Q^{-1}
+\qquad \text{(tempo continuo)},
+\]
+e
+\[
+A^k=QJ^kQ^{-1}
+\qquad \text{(tempo discreto)}.
+\]
+
+Questo significa che:
+\begin{itemize}
+    \item le matrici $Q$ e $Q^{-1}$ fanno solo un cambio di coordinate;
+    \item i veri andamenti nel tempo compaiono dentro $e^{Jt}$ oppure dentro $J^k$.
+\end{itemize}
+
+Di conseguenza, per fare analisi modale, bisogna guardare i blocchi di Jordan.
+
+\section{Modi critici: perché compaiono i termini polinomiali}
+
+Supponiamo di avere, nel continuo, un blocco di Jordan reale associato a un autovalore critico.  
+Se ad esempio compare il blocco
+\[
+J_0^{(3)}=
+\begin{pmatrix}
+0 & 1 & 0\\
+0 & 0 & 1\\
+0 & 0 & 0
+\end{pmatrix},
+\]
+allora
+\[
+e^{J_0^{(3)}t}
+=
+I + J_0^{(3)}t + \frac{(J_0^{(3)})^2 t^2}{2!}
+=
+\begin{pmatrix}
+1 & t & \dfrac{t^2}{2}\\
+0 & 1 & t\\
+0 & 0 & 1
+\end{pmatrix}.
+\]
+
+Quindi i modi che compaiono sono:
+\[
+1,\qquad t,\qquad t^2.
+\]
+
+\paragraph{Interpretazione.}
+\begin{itemize}
+    \item Il modo $1$ è un andamento costante: non esplode, ma nemmeno converge a zero.
+    \item Il modo $t$ diverge lentamente, in modo polinomiale.
+    \item Il modo $t^2$ diverge ancora più rapidamente.
+\end{itemize}
+
+Per questo motivo, quando un autovalore è \emph{critico} (nel continuo $\Re(\lambda)=0$, nel discreto $|\lambda|=1$), non basta conoscere il suo valore: bisogna sapere anche la dimensione del blocco di Jordan più grande a esso associato.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[>=Latex, node distance=1.4cm]
+    \node[draw, rounded corners, align=center] (b1) {$J^{(1)}_0$};
+    \node[draw, rounded corners, align=center, right=of b1] (m1) {$1$};
+
+    \node[draw, rounded corners, align=center, below=1.1cm of b1] (b2) {$J^{(2)}_0$};
+    \node[draw, rounded corners, align=center, right=of b2] (m2) {$1,\; t$};
+
+    \node[draw, rounded corners, align=center, below=1.1cm of b2] (b3) {$J^{(3)}_0$};
+    \node[draw, rounded corners, align=center, right=of b3] (m3) {$1,\; t,\; t^2$};
+
+    \draw[->, thick] (b1) -- (m1);
+    \draw[->, thick] (b2) -- (m2);
+    \draw[->, thick] (b3) -- (m3);
+\end{tikzpicture}
+\caption{Un blocco di Jordan critico di ordine crescente genera modi polinomiali di grado crescente.}
+\end{figure}
+
+\section{Esempio strutturale: lettura dei modi da una matrice a blocchi}
+
+Consideriamo una matrice a blocchi triangolare superiore del tipo
+\begin{equation}
+A=
+\begin{pmatrix}
+A_1^\star & B_{12}\\
+0 & A_2
+\end{pmatrix},
+\label{eq:L9_Ablock}
+\end{equation}
+con
+\[
+A_1^\star=
+\begin{pmatrix}
+1 & 0 & 0\\
+-1 & -1 & 1\\
+-3 & -1 & -1
+\end{pmatrix},
+\qquad
+A_2=
+\begin{pmatrix}
+1 & 0 & 0\\
+-1 & -2 & 0\\
+0 & 1 & -2
+\end{pmatrix}.
+\]
+
+Il blocco di accoppiamento $B_{12}$ può essere non nullo, ma gli autovalori della matrice triangolare a blocchi sono comunque l'unione degli autovalori dei blocchi diagonali.
+
+\subsection{Autovalori dei blocchi diagonali}
+
+Per $A_1^\star$ si riconoscono:
+\begin{itemize}
+    \item un autovalore reale $\lambda=1$;
+    \item una coppia complessa coniugata $\lambda=-1\pm j$.
+\end{itemize}
+
+Per $A_2$ si hanno:
+\begin{itemize}
+    \item un autovalore reale $\lambda=1$;
+    \item l'autovalore $\lambda=-2$ con molteplicità algebrica $2$.
+\end{itemize}
+
+Quindi, per l'intera matrice $A$, gli autovalori sono:
+\[
+\lambda_1 = 1 \quad \text{con } m_a(1)=2,
+\]
+\[
+\lambda_2 = -2 \quad \text{con } m_a(-2)=2,
+\]
+\[
+\lambda_{3,4} = -1\pm j \quad \text{con molteplicità }1.
+\]
+
+\paragraph{Primo commento importante.}
+Sapere gli autovalori non basta ancora.  
+Dobbiamo capire \emph{quanto sono grandi i blocchi di Jordan} associati a ciascuno di essi.
+
+\subsection{Autovalore \texorpdfstring{$\lambda=1$}{lambda=1}}
+
+Dallo studio del rango di $A-I$ si trova
+\[
+\rank(A-I)=5,
+\]
+quindi
+\[
+\mu_1(1)=\dim\ker(A-I)=6-5=1.
+\]
+
+Poiché la molteplicità algebrica di $\lambda=1$ è $2$, ma la molteplicità geometrica è $1$, segue che per $\lambda=1$ c'è \emph{un solo blocco di Jordan}, necessariamente di ordine $2$:
+\[
+J^{(2)}_{1}=
+\begin{pmatrix}
+1 & 1\\
+0 & 1
+\end{pmatrix}.
+\]
+
+\subsection{Autovalore \texorpdfstring{$\lambda=-2$}{lambda=-2}}
+
+In modo analogo, studiando $A+2I$ si trova
+\[
+\rank(A+2I)=5,
+\]
+quindi
+\[
+\mu_1(-2)=\dim\ker(A+2I)=1.
+\]
+
+Anche qui la molteplicità algebrica è $2$ ma la molteplicità geometrica è $1$, dunque per $\lambda=-2$ compare un solo blocco di Jordan di ordine $2$:
+\[
+J^{(2)}_{-2}=
+\begin{pmatrix}
+-2 & 1\\
+0 & -2
+\end{pmatrix}.
+\]
+
+\subsection{Coppia complessa \texorpdfstring{$-1\pm j$}{-1 +- j}}
+
+La coppia complessa coniugata $-1\pm j$ compare una sola volta, quindi nel formalismo reale è associata a un unico blocco reale $2\times 2$:
+\[
+M=
+\begin{pmatrix}
+-1 & 1\\
+-1 & -1
+\end{pmatrix}.
+\]
+
+\paragraph{Conclusione.}
+La forma di Jordan reale della matrice avrà la struttura
+\begin{equation}
+J=
+\operatorname{diag}
+\left(
+J_1^{(2)},
+J_{-2}^{(2)},
+M
+\right),
+\label{eq:L9_J_example}
+\end{equation}
+a meno di una diversa permutazione dei blocchi sulla diagonale.
+
+\section{Modi che compaiono nell'esempio}
+
+Una volta trovata la struttura di Jordan \eqref{eq:L9_J_example}, i modi si leggono immediatamente.
+
+\subsection{Contributo del blocco \texorpdfstring{$J_1^{(2)}$}{J1}}
+
+Nel continuo:
+\[
+e^{J_1^{(2)}t}
+=
+e^t
+\begin{pmatrix}
+1 & t\\
+0 & 1
+\end{pmatrix},
+\]
+quindi i modi associati sono
+\[
+e^t,
+\qquad
+t e^t.
+\]
+
+\subsection{Contributo del blocco \texorpdfstring{$J_{-2}^{(2)}$}{J-2}}
+
+Si ha
+\[
+e^{J_{-2}^{(2)}t}
+=
+e^{-2t}
+\begin{pmatrix}
+1 & t\\
+0 & 1
+\end{pmatrix},
+\]
+quindi i modi associati sono
+\[
+e^{-2t},
+\qquad
+t e^{-2t}.
+\]
+
+\subsection{Contributo del blocco complesso reale \texorpdfstring{$M$}{M}}
+
+Per il blocco
+\[
+M=
+\begin{pmatrix}
+-1 & 1\\
+-1 & -1
+\end{pmatrix}
+=
+- I + 
+\begin{pmatrix}
+0 & 1\\
+-1 & 0
+\end{pmatrix},
+\]
+si ottiene
+\[
+e^{Mt}
+=
+e^{-t}
+\begin{pmatrix}
+\cos t & \sin t\\
+-\sin t & \cos t
+\end{pmatrix}.
+\]
+
+Dunque i modi associati alla coppia complessa sono:
+\[
+e^{-t}\cos t,
+\qquad
+e^{-t}\sin t.
+\]
+
+\paragraph{Riassumendo.}
+I modi dell'esempio sono:
+\begin{equation}
+e^t,\qquad te^t,\qquad e^{-2t},\qquad te^{-2t},\qquad e^{-t}\cos t,\qquad e^{-t}\sin t.
+\label{eq:L9_modes_example}
+\end{equation}
+
+\paragraph{Interpretazione.}
+\begin{itemize}
+    \item $e^t$ e $te^t$ divergono;
+    \item $e^{-2t}$ e $te^{-2t}$ convergono a zero;
+    \item $e^{-t}\cos t$ ed $e^{-t}\sin t$ sono oscillazioni smorzate.
+\end{itemize}
+
+Quindi il sistema dell'esempio è instabile, perché compaiono modi divergenti.
+
+\section{Osservazione importante: non sempre serve costruire tutte le catene}
+
+Se l'obiettivo è capire gli \emph{andamenti nel tempo}, spesso non è necessario costruire esplicitamente tutte le catene di autovettori generalizzati.
+
+Infatti:
+\begin{itemize}
+    \item per sapere quali modi compaiono, basta conoscere gli autovalori e la dimensione del blocco di Jordan più grande a essi associato;
+    \item la costruzione delle catene serve invece quando si vuole anche esplicitare il cambio di coordinate $Q$ e quindi scrivere in dettaglio le componenti dello stato nelle coordinate originali.
+\end{itemize}
+
+\section{Esempio: come ottenere una traiettoria costante}
+
+Consideriamo il sistema continuo
+\begin{equation}
+\dot{x}(t)=Ax(t),
+\qquad
+A=
+\begin{pmatrix}
+6 & -3\\
+2 & -1
+\end{pmatrix}.
+\label{eq:L9_Asmall}
+\end{equation}
+
+Vogliamo trovare $x(0)$ tale che la traiettoria sia costante, cioè
+\[
+x(t)=
+\begin{pmatrix}
+k_1\\
+k_2
+\end{pmatrix}
+\qquad \forall t.
+\]
+
+\subsection*{Autovalori}
+
+Si ha
+\[
+\det(A-\lambda I)=
+\det\begin{pmatrix}
+6-\lambda & -3\\
+2 & -1-\lambda
+\end{pmatrix}
+=
+(6-\lambda)(-1-\lambda)+6
+=
+\lambda(\lambda-5).
+\]
+
+Quindi gli autovalori sono
+\[
+\lambda_1=0,
+\qquad
+\lambda_2=5.
+\]
+
+\subsection*{Autovettori}
+
+Per $\lambda=0$:
+\[
+Ax=0
+\quad \Longrightarrow \quad
+\ker A = \operatorname{span}\left\{
+\begin{pmatrix}
+1\\
+2
+\end{pmatrix}
+\right\}.
+\]
+
+Per $\lambda=5$:
+\[
+(A-5I)x=0
+\quad \Longrightarrow \quad
+\ker(A-5I)=\operatorname{span}\left\{
+\begin{pmatrix}
+3\\
+1
+\end{pmatrix}
+\right\}.
+\]
+
+Possiamo quindi scegliere
+\[
+Q=
+\begin{pmatrix}
+1 & 3\\
+2 & 1
+\end{pmatrix},
+\qquad
+J=
+\begin{pmatrix}
+0 & 0\\
+0 & 5
+\end{pmatrix}.
+\]
+
+Allora
+\[
+e^{At}=Qe^{Jt}Q^{-1}
+=
+Q
+\begin{pmatrix}
+1 & 0\\
+0 & e^{5t}
+\end{pmatrix}
+Q^{-1}.
+\]
+
+\paragraph{Idea chiave.}
+Per ottenere una traiettoria costante, devo eliminare il modo $e^{5t}$ e lasciare solo il modo associato all'autovalore nullo.
+
+Questo accade se la condizione iniziale appartiene all'autospazio di $\lambda=0$, cioè se
+\[
+x(0)=\alpha
+\begin{pmatrix}
+1\\
+2
+\end{pmatrix}.
+\]
+
+\paragraph{Conclusione.}
+Tutte e sole le condizioni iniziali del tipo
+\begin{equation}
+x(0)=\alpha
+\begin{pmatrix}
+1\\
+2
+\end{pmatrix},
+\qquad \alpha\in\R,
+\label{eq:L9_constant_traj}
+\end{equation}
+generano traiettorie costanti.
+
+\paragraph{Interpretazione modale.}
+Se scelgo una condizione iniziale nel sottospazio associato al modo $1=e^{0t}$, allora lo stato non vede il modo esponenziale $e^{5t}$ e rimane costante nel tempo.
+
+\section{Analisi modale generale nel tempo continuo}
+
+\subsection{Autovalore reale}
+
+Sia $\lambda_i \in \R$ un autovalore e sia $p_i$ la dimensione del blocco di Jordan \emph{più grande} associato a $\lambda_i$.
+
+Allora i modi associati a $\lambda_i$ sono del tipo
+\begin{equation}
+e^{\lambda_i t},\qquad
+t e^{\lambda_i t},\qquad
+t^2 e^{\lambda_i t},\qquad
+\dots,\qquad
+t^{p_i-1} e^{\lambda_i t}.
+\label{eq:L9_modes_real_CT}
+\end{equation}
+
+\paragraph{Commento.}
+\begin{itemize}
+    \item Se $p_i=1$, compare solo il modo esponenziale puro.
+    \item Se $p_i>1$, compaiono anche fattori polinomiali in $t$.
+\end{itemize}
+
+\subsection{Autovalore complesso}
+
+Se invece
+\[
+\lambda_i = \sigma_i + j\omega_i,
+\qquad
+\overline{\lambda_i} = \sigma_i - j\omega_i,
+\]
+allora nel formalismo reale i modi compaiono a coppie:
+\begin{equation}
+e^{\sigma_i t}\cos(\omega_i t),
+\qquad
+e^{\sigma_i t}\sin(\omega_i t).
+\label{eq:L9_modes_complex_CT_base}
+\end{equation}
+
+Se il blocco reale di Jordan associato ha dimensione $q_i$ (equivalentemente, se nel complesso il blocco associato ha ordine $q_i$), allora compaiono anche i fattori polinomiali:
+\begin{equation}
+e^{\sigma_i t}\cos(\omega_i t),\;
+e^{\sigma_i t}\sin(\omega_i t),\;
+t e^{\sigma_i t}\cos(\omega_i t),\;
+t e^{\sigma_i t}\sin(\omega_i t),\;
+\dots,\;
+t^{q_i-1} e^{\sigma_i t}\cos(\omega_i t),\;
+t^{q_i-1} e^{\sigma_i t}\sin(\omega_i t).
+\label{eq:L9_modes_complex_CT}
+\end{equation}
+
+\paragraph{Interpretazione.}
+Questi modi rappresentano oscillazioni:
+\begin{itemize}
+    \item smorzate se $\sigma_i<0$;
+    \item amplificate se $\sigma_i>0$;
+    \item non smorzate se $\sigma_i=0$.
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[>=Latex, node distance=1.25cm]
+    \node[draw, rounded corners, align=center] (r1) {$J_{\lambda}^{(1)}$\\$\lambda\in\R$};
+    \node[draw, rounded corners, align=center, right=3.8cm of r1] (m1) {$e^{\lambda t}$};
+
+    \node[draw, rounded corners, align=center, below=1.2cm of r1] (r2) {$J_{\lambda}^{(3)}$\\$\lambda\in\R$};
+    \node[draw, rounded corners, align=center, right=3.8cm of r2] (m2) {$e^{\lambda t},\; t e^{\lambda t},\; t^2 e^{\lambda t}$};
+
+    \node[draw, rounded corners, align=center, below=1.2cm of r2] (c1) {$\text{blocco reale }M$\\$\lambda=\sigma\pm j\omega$};
+    \node[draw, rounded corners, align=center, right=3.8cm of c1] (m3) {$e^{\sigma t}\cos(\omega t),\; e^{\sigma t}\sin(\omega t)$};
+
+    \draw[->, thick] (r1) -- (m1);
+    \draw[->, thick] (r2) -- (m2);
+    \draw[->, thick] (c1) -- (m3);
+\end{tikzpicture}
+\caption{Ogni blocco di Jordan genera una famiglia caratteristica di modi temporali.}
+\end{figure}
+
+\section{Analisi modale generale nel tempo discreto}
+
+Nel discreto, se
+\[
+x(k+1)=Ax(k),
+\]
+allora
+\[
+x(k)=A^k x(0)=QJ^kQ^{-1}x(0).
+\]
+
+\subsection{Autovalore reale}
+
+Se $\lambda_i\in\R$ e il blocco di Jordan più grande associato ha dimensione $p_i$, allora i modi sono del tipo
+\begin{equation}
+\lambda_i^k,\qquad
+k\lambda_i^k,\qquad
+k^2\lambda_i^k,\qquad
+\dots,\qquad
+k^{p_i-1}\lambda_i^k,
+\label{eq:L9_modes_real_DT}
+\end{equation}
+a meno di costanti moltiplicative o equivalenze del tipo $\binom{k}{r}\lambda_i^{k-r}$.
+
+\paragraph{Commento.}
+Per l'analisi qualitativa, quello che conta davvero è la presenza del fattore polinomiale in $k$.
+
+\subsection{Autovalore complesso}
+
+Se
+\[
+\lambda_i=\sigma_i+j\omega_i=\rho_i e^{j\theta_i},
+\qquad
+\overline{\lambda_i}=\rho_i e^{-j\theta_i},
+\]
+allora i modi reali di base sono
+\begin{equation}
+\rho_i^k \cos(k\theta_i),
+\qquad
+\rho_i^k \sin(k\theta_i).
+\label{eq:L9_modes_complex_DT_base}
+\end{equation}
+
+Se il blocco reale di Jordan più grande associato alla coppia ha ordine $q_i$, allora compaiono anche i fattori polinomiali:
+\begin{equation}
+\rho_i^k \cos(k\theta_i),\;
+\rho_i^k \sin(k\theta_i),\;
+k\rho_i^k \cos(k\theta_i),\;
+k\rho_i^k \sin(k\theta_i),\;
+\dots,\;
+k^{q_i-1}\rho_i^k \cos(k\theta_i),\;
+k^{q_i-1}\rho_i^k \sin(k\theta_i).
+\label{eq:L9_modes_complex_DT}
+\end{equation}
+
+\paragraph{Osservazione.}
+In formule più precise, nei blocchi discreti possono comparire anche potenze del tipo $\rho_i^{k-r}$; tuttavia, dal punto di vista asintotico, la struttura è quella di un termine oscillatorio-amplificato/smorzato moltiplicato per un polinomio in $k$.
+
+\section{Tutti questi andamenti sono i modi del sistema}
+
+Possiamo ora formulare chiaramente il concetto.
+
+\paragraph{Definizione operativa.}
+Le funzioni di tempo che compaiono nelle componenti di
+\[
+e^{Jt}
+\qquad \text{oppure} \qquad
+J^k
+\]
+sono i \textbf{modi propri del sistema}.
+
+Nel continuo i modi sono funzioni di $t$; nel discreto sono successioni in $k$.
+
+\paragraph{Messaggio chiave.}
+Una volta nota la forma di Jordan, i modi si leggono direttamente e quindi si può prevedere qualitativamente l'evoluzione dello stato senza risolvere ogni volta il sistema da zero.
+
+\section{Stabilità letta direttamente dai modi}
+
+Adesso usiamo i modi per capire quando il sistema converge, diverge oppure resta limitato.
+
+\subsection{Tempo continuo}
+
+Sia $\lambda_i$ un autovalore di $A$.
+
+\paragraph{Caso 1: \texorpdfstring{$\Re(\lambda_i)<0$}{Re(lambda)<0}.}
+Tutti i modi associati hanno il fattore
+\[
+e^{\Re(\lambda_i)t},
+\]
+che tende a zero esponenzialmente. Anche se compaiono fattori polinomiali $t^r$, il decadimento esponenziale domina, quindi i modi convergono a zero.
+
+\paragraph{Caso 2: \texorpdfstring{$\Re(\lambda_i)>0$}{Re(lambda)>0}.}
+I modi divergono esponenzialmente. Eventuali fattori polinomiali rendono solo più marcata la divergenza, ma il comportamento qualitativo è già deciso dal segno positivo della parte reale.
+
+\paragraph{Caso 3: \texorpdfstring{$\Re(\lambda_i)=0$}{Re(lambda)=0}.}
+Questo è il caso critico.
+
+\begin{itemize}
+    \item Se il blocco di Jordan massimo associato a $\lambda_i$ ha dimensione $1$, allora compaiono solo modi costanti oppure oscillatori limitati, per esempio
+    \[
+    1,\qquad \cos(\omega t),\qquad \sin(\omega t).
+    \]
+    \item Se invece il blocco massimo ha dimensione maggiore di $1$, compaiono modi con fattori polinomiali:
+    \[
+    t,\; t^2,\; \dots,\; t^r,
+    \qquad
+    t\cos(\omega t),\; t\sin(\omega t),\; \dots
+    \]
+    e quindi il sistema diventa polinomialmente divergente.
+\end{itemize}
+
+\paragraph{Riassunto per il continuo.}
+\begin{itemize}
+    \item $\Re(\lambda_i)<0$ $\Rightarrow$ modi convergenti;
+    \item $\Re(\lambda_i)>0$ $\Rightarrow$ modi divergenti;
+    \item $\Re(\lambda_i)=0$ $\Rightarrow$ bisogna guardare la dimensione del blocco di Jordan massimo.
+\end{itemize}
+
+\subsection{Tempo discreto}
+
+Nel discreto il ruolo di $\Re(\lambda_i)$ è svolto dal modulo $|\lambda_i|$.
+
+\paragraph{Caso 1: \texorpdfstring{$|\lambda_i|<1$}{|lambda|<1}.}
+Tutti i modi convergono a zero. Se $\lambda_i$ è complesso, possono esserci oscillazioni, ma con ampiezza decrescente.
+
+\paragraph{Caso 2: \texorpdfstring{$|\lambda_i|>1$}{|lambda|>1}.}
+I modi divergono esponenzialmente. Se $\lambda_i$ è complesso, la divergenza può essere oscillatoria.
+
+\paragraph{Caso 3: \texorpdfstring{$|\lambda_i|=1$}{|lambda|=1}.}
+Anche qui siamo nel caso critico.
+
+\begin{itemize}
+    \item Se il blocco di Jordan massimo ha dimensione $1$, i modi restano limitati:
+    \[
+    1,\qquad \cos(k\theta),\qquad \sin(k\theta).
+    \]
+    \item Se il blocco ha dimensione $>1$, compaiono modi con fattori $k$, $k^2$, \dots, quindi il sistema diventa polinomialmente divergente.
+\end{itemize}
+
+\paragraph{Riassunto per il discreto.}
+\begin{itemize}
+    \item $|\lambda_i|<1$ $\Rightarrow$ modi convergenti;
+    \item $|\lambda_i|>1$ $\Rightarrow$ modi divergenti;
+    \item $|\lambda_i|=1$ $\Rightarrow$ bisogna guardare la dimensione del blocco di Jordan massimo.
+\end{itemize}
+
+\section{Schema riassuntivo finale}
+
+\subsection*{Tempo continuo}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{>{\raggedright\arraybackslash}p{4.2cm} >{\raggedright\arraybackslash}p{9.5cm}}
+\toprule
+Condizione sugli autovalori & Comportamento dei modi \\
+\midrule
+$\Re(\lambda_i)<0$ &
+Convergenza esponenziale a zero, indipendentemente dalla dimensione dei blocchi di Jordan associati. \\
+\addlinespace
+$\Re(\lambda_i)>0$ &
+Divergenza esponenziale, indipendentemente dalla dimensione dei blocchi di Jordan associati. \\
+\addlinespace
+$\Re(\lambda_i)=0$ e blocco massimo di dimensione $1$ &
+Modi costanti oppure oscillatori limitati e non smorzati. \\
+\addlinespace
+$\Re(\lambda_i)=0$ e blocco massimo di dimensione $>1$ &
+Modi polinomialmente divergenti: compaiono termini del tipo $t, t^2, \dots$. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection*{Tempo discreto}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{>{\raggedright\arraybackslash}p{4.2cm} >{\raggedright\arraybackslash}p{9.5cm}}
+\toprule
+Condizione sugli autovalori & Comportamento dei modi \\
+\midrule
+$|\lambda_i|<1$ &
+Convergenza a zero; se $\lambda_i$ è complesso possono esserci oscillazioni smorzate. \\
+\addlinespace
+$|\lambda_i|>1$ &
+Divergenza esponenziale; se $\lambda_i$ è complesso possono esserci oscillazioni amplificate. \\
+\addlinespace
+$|\lambda_i|=1$ e blocco massimo di dimensione $1$ &
+Modi costanti oppure oscillatori a ampiezza costante. \\
+\addlinespace
+$|\lambda_i|=1$ e blocco massimo di dimensione $>1$ &
+Modi polinomialmente divergenti: compaiono termini del tipo $k, k^2, \dots$. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Conclusione della lezione}
+
+Il contenuto concettuale della lezione può essere riassunto in una frase:
+
+\begin{quote}
+gli andamenti temporali di un sistema lineare sono completamente determinati dagli autovalori e dalla struttura dei blocchi di Jordan associati.
+\end{quote}
+
+Più precisamente:
+\begin{itemize}
+    \item gli autovalori fissano il tipo base di andamento (esponenziale, oscillatorio, crescente, decrescente);
+    \item la dimensione dei blocchi di Jordan introduce eventualmente fattori polinomiali in $t$ oppure in $k$;
+    \item nei casi critici, questi fattori polinomiali sono decisivi per distinguere tra comportamento limitato e comportamento divergente.
+\end{itemize}
+
+Per questo motivo la forma di Jordan non è soltanto uno strumento algebrico: è lo strumento che rende visibile, in modo immediato, la struttura modale del sistema.
+
+\vspace{0.5cm}
+
+Nel seguito del corso, questa idea tornerà continuamente:
+\[
+\text{spettro + Jordan}
+\quad \Longrightarrow \quad
+\text{modi}
+\quad \Longrightarrow \quad
+\text{stabilità, risposta libera, comportamento asintotico}.
+\]

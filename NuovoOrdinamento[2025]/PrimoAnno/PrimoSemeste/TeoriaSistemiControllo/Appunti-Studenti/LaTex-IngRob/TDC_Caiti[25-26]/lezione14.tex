@@ -1,0 +1,659 @@
+\chapter{Lezione 14 --- Formula di Ackermann e assegnamento dell'autostruttura}
+
+\section{Impostazione del problema}
+
+Consideriamo un sistema lineare tempo-invariante in forma di stato
+\[
+\begin{cases}
+\dot x(t)=Ax(t)+Bu(t),\\[4pt]
+y(t)=Cx(t),
+\end{cases}
+\]
+con
+\[
+x(t)\in\mathbb{R}^n,\qquad
+u(t)\in\mathbb{R}^m,\qquad
+y(t)\in\mathbb{R}^\ell,
+\]
+e
+\[
+A\in\mathbb{R}^{n\times n},\qquad
+B\in\mathbb{R}^{n\times m},\qquad
+C\in\mathbb{R}^{\ell\times n}.
+\]
+
+Vogliamo assegnare la dinamica del sistema in ciclo chiuso mediante una
+\textbf{retroazione completa dello stato}
+\[
+u(t)=-Kx(t),
+\]
+dove
+\[
+K\in\mathbb{R}^{m\times n}.
+\]
+
+Sostituendo nella dinamica di stato si ottiene
+\[
+\dot x(t)=Ax(t)+B(-Kx(t))=(A-BK)x(t).
+\]
+
+Quindi la matrice di stato del sistema retroazionato è
+\[
+A_{\text{cl}}=A-BK.
+\]
+
+Il problema consiste nello scegliere \(K\) in modo che \(A-BK\) abbia gli autovalori,
+e possibilmente anche gli autovettori, desiderati.
+
+\section{Richiamo: assegnamento degli autovalori}
+
+Dalla lezione precedente sappiamo che:
+\begin{itemize}
+    \item nel caso SISO, se \((A,b)\) è completamente controllabile,
+    si possono assegnare arbitrariamente tutti gli autovalori della matrice \(A-bk^T\);
+    \item nel caso MIMO, se \((A,B)\) è completamente controllabile,
+    si possono assegnare arbitrariamente gli autovalori della matrice \(A-BK\).
+\end{itemize}
+
+Nel caso MIMO, tuttavia, la soluzione non è unica, perché \(K\) ha più gradi di libertà.
+Questo apre la possibilità di assegnare non solo gli autovalori, ma anche, entro certi limiti,
+gli autovettori associati: cioè l'\textbf{autostruttura} del sistema in ciclo chiuso.
+
+\section{Caso SISO: formula di Ackermann}
+
+Consideriamo dapprima il caso SISO:
+\[
+\dot x=Ax+bu,\qquad y=c^T x,
+\]
+con
+\[
+b\in\mathbb{R}^n,\qquad c\in\mathbb{R}^n,
+\]
+e legge di retroazione
+\[
+u=-k^T x,
+\qquad
+k\in\mathbb{R}^n.
+\]
+
+La matrice chiusa è
+\[
+A-bk^T.
+\]
+
+\subsection{Polinomio caratteristico desiderato}
+
+Supponiamo di voler assegnare gli autovalori desiderati
+\[
+\lambda_1,\lambda_2,\dots,\lambda_n.
+\]
+
+Il polinomio caratteristico desiderato è allora
+\[
+p_{\text{cl}}(\lambda)=
+(\lambda-\lambda_1)(\lambda-\lambda_2)\cdots(\lambda-\lambda_n).
+\]
+
+Scrivendolo in forma espansa:
+\[
+p_{\text{cl}}(\lambda)=
+\lambda^n+\alpha_{n-1}\lambda^{n-1}+\cdots+\alpha_1\lambda+\alpha_0.
+\]
+
+\subsection{Matrice di controllabilità}
+
+Nel caso SISO la matrice di controllabilità è
+\[
+\mathcal{R}=
+\begin{bmatrix}
+b & Ab & A^2b & \cdots & A^{n-1}b
+\end{bmatrix}.
+\]
+
+Se la coppia \((A,b)\) è completamente controllabile, allora \(\mathcal{R}\) è quadrata e invertibile:
+\[
+\mathcal{R}\in\mathbb{R}^{n\times n},
+\qquad
+\rank(\mathcal{R})=n.
+\]
+
+\subsection{Formula di Ackermann}
+
+La \textbf{formula di Ackermann} permette di scrivere direttamente il guadagno di retroazione
+senza passare esplicitamente per la forma canonica di controllo:
+\[
+k^T=
+\begin{bmatrix}
+0 & \cdots & 0 & 1
+\end{bmatrix}
+\mathcal{R}^{-1}\,p_{\text{cl}}(A),
+\]
+dove
+\[
+p_{\text{cl}}(A)=A^n+\alpha_{n-1}A^{n-1}+\cdots+\alpha_1A+\alpha_0 I.
+\]
+
+Questa formula è molto utile nel caso SISO, perché fornisce immediatamente il guadagno \(k\)
+che assegna gli autovalori scelti.
+
+\subsection*{Osservazione}
+
+La formula di Ackermann è concettualmente equivalente al passaggio in forma canonica di controllo,
+ma è più rapida dal punto di vista del calcolo simbolico o numerico.
+
+\section{Caso MIMO: più gradi di libertà}
+
+Passiamo ora al caso MIMO:
+\[
+\dot x=Ax+Bu,
+\qquad
+u=-Kx,
+\qquad
+K\in\mathbb{R}^{m\times n}.
+\]
+
+Anche qui la matrice chiusa è
+\[
+A-BK.
+\]
+
+Se la coppia \((A,B)\) è completamente controllabile,
+allora è possibile assegnare arbitrariamente gli autovalori del sistema in ciclo chiuso.
+
+Tuttavia, a differenza del caso SISO, qui:
+\begin{itemize}
+    \item la matrice \(K\) ha \(mn\) coefficienti;
+    \item il numero di vincoli imposti dal solo polinomio caratteristico è \(n\).
+\end{itemize}
+
+Quindi, in generale, rimangono dei gradi di libertà.
+Questi possono essere sfruttati per cercare di assegnare anche gli autovettori,
+cioè l'autostruttura del sistema chiuso.
+
+\section{Assegnamento dell'autostruttura}
+
+Supponiamo di voler assegnare a \(A-BK\) gli autovalori
+\[
+\lambda_1,\lambda_2,\dots,\lambda_n
+\]
+e, per quanto possibile, anche gli autovettori
+\[
+v_1,v_2,\dots,v_n.
+\]
+
+Se \(\lambda_i\) è autovalore di \(A-BK\) e \(v_i\) è il corrispondente autovettore,
+allora deve valere
+\[
+(A-BK)v_i=\lambda_i v_i.
+\]
+
+Portando tutto a sinistra:
+\[
+(\lambda_i I-A+B K)v_i=0.
+\]
+
+Scrivendo
+\[
+q_i:=Kv_i\in\mathbb{R}^m,
+\]
+la relazione precedente diventa
+\[
+(\lambda_i I-A)v_i+Bq_i=0.
+\]
+
+Questa equazione si può riscrivere in forma matriciale come
+\[
+\begin{bmatrix}
+\lambda_i I-A & B
+\end{bmatrix}
+\begin{bmatrix}
+v_i\\
+q_i
+\end{bmatrix}
+=0.
+\]
+
+Definiamo quindi
+\[
+T_i:=
+\begin{bmatrix}
+\lambda_i I-A & B
+\end{bmatrix}
+\in\mathbb{R}^{n\times (n+m)}.
+\]
+
+Dobbiamo allora cercare vettori
+\[
+p_i=
+\begin{bmatrix}
+v_i\\
+q_i
+\end{bmatrix}
+\in \ker(T_i).
+\]
+
+\section{Dimensione del nucleo di \(T_i\)}
+
+Poiché \((A,B)\) è completamente controllabile, per il criterio di Hautus si ha
+\[
+\rank\!\begin{bmatrix}
+\lambda I-A & B
+\end{bmatrix}=n
+\qquad
+\forall \lambda\in\mathbb{C}.
+\]
+
+Quindi, per ogni \(\lambda_i\),
+\[
+\rank(T_i)=n.
+\]
+
+Essendo \(T_i\in\mathbb{R}^{n\times (n+m)}\), segue
+\[
+\dim\ker(T_i)=(n+m)-n=m.
+\]
+
+Dunque, per ciascun autovalore scelto \(\lambda_i\),
+esistono \(m\) vettori linearmente indipendenti nel nucleo di \(T_i\).
+
+\section{Costruzione dei vettori \(p_i\)}
+
+Sia
+\[
+\{m_{i1},m_{i2},\dots,m_{im}\}
+\]
+una base di \(\ker(T_i)\).
+
+Allora ogni vettore del nucleo si può scrivere come combinazione lineare
+\[
+p_i=\sum_{j=1}^{m}\alpha_{ij}\,m_{ij}.
+\]
+
+Poiché vogliamo che le prime \(n\) componenti di \(p_i\) coincidano con l'autovettore desiderato \(v_i\),
+scriviamo
+\[
+p_i=
+\begin{bmatrix}
+v_i\\
+q_i
+\end{bmatrix}.
+\]
+
+La scelta dei coefficienti \(\alpha_{ij}\) viene fatta proprio in modo che
+la parte alta del vettore \(p_i\) sia il vettore \(v_i\) desiderato.
+La parte bassa fornisce automaticamente il vettore
+\[
+q_i=Kv_i.
+\]
+
+Ripetendo questa procedura per tutti gli autovalori \(\lambda_i\),
+si ottengono i vettori
+\[
+p_1,p_2,\dots,p_n.
+\]
+
+\section{Costruzione di \(K\)}
+
+A questo punto costruiamo le matrici
+\[
+V=
+\begin{bmatrix}
+v_1 & v_2 & \cdots & v_n
+\end{bmatrix},
+\qquad
+Q=
+\begin{bmatrix}
+q_1 & q_2 & \cdots & q_n
+\end{bmatrix}.
+\]
+
+Poiché per ciascun \(i\) vale
+\[
+q_i=Kv_i,
+\]
+mettendo insieme tutte le colonne si ottiene
+\[
+KV=Q.
+\]
+
+Se \(V\) è invertibile, allora
+\[
+K=QV^{-1}.
+\]
+
+Questa è la formula finale che permette di ricavare la matrice di guadagno
+a partire dagli autovettori desiderati e dai corrispondenti vettori \(q_i\).
+
+\section{Algoritmo operativo}
+
+Riassumendo, l'algoritmo per l'assegnamento dell'autostruttura nel caso MIMO è:
+
+\begin{enumerate}
+    \item fissare gli autovalori desiderati
+    \[
+    \lambda_1,\lambda_2,\dots,\lambda_n;
+    \]
+
+    \item per ogni \(i=1,\dots,n\), costruire la matrice
+    \[
+    T_i=
+    \begin{bmatrix}
+    \lambda_i I-A & B
+    \end{bmatrix};
+    \]
+
+    \item calcolare una base del nucleo \(\ker(T_i)\);
+
+    \item scegliere una combinazione lineare dei vettori della base in modo che
+    la parte alta del vettore risultante sia l'autovettore desiderato \(v_i\);
+
+    \item leggere la parte bassa come \(q_i\), cioè
+    \[
+    p_i=
+    \begin{bmatrix}
+    v_i\\
+    q_i
+    \end{bmatrix};
+    \]
+
+    \item costruire le matrici
+    \[
+    V=
+    \begin{bmatrix}
+    v_1 & \cdots & v_n
+    \end{bmatrix},
+    \qquad
+    Q=
+    \begin{bmatrix}
+    q_1 & \cdots & q_n
+    \end{bmatrix};
+    \]
+
+    \item se \(V\) è invertibile, porre
+    \[
+    K=QV^{-1}.
+    \]
+\end{enumerate}
+
+\section{Esempio}
+
+Consideriamo il sistema
+\[
+\dot x=
+\begin{bmatrix}
+-1 & 1\\
+0 & -1
+\end{bmatrix}x
++
+\begin{bmatrix}
+1 & 0\\
+0 & 1
+\end{bmatrix}u.
+\]
+
+Qui:
+\[
+n=2,\qquad m=2.
+\]
+
+Vogliamo assegnare in ciclo chiuso gli autovalori
+\[
+\lambda_1=-5,\qquad \lambda_2=-10.
+\]
+
+\subsection{Primo autovalore}
+
+Per \(\lambda_1=-5\):
+\[
+T_1=
+\begin{bmatrix}
+-4 & -1 & 1 & 0\\
+0 & -4 & 0 & 1
+\end{bmatrix}.
+\]
+
+Una base del nucleo è, ad esempio,
+\[
+m_{11}=
+\begin{bmatrix}
+1\\0\\4\\0
+\end{bmatrix},
+\qquad
+m_{12}=
+\begin{bmatrix}
+0\\1\\1\\4
+\end{bmatrix}.
+\]
+
+Scegliamo come autovettore desiderato
+\[
+v_1=
+\begin{bmatrix}
+1\\0
+\end{bmatrix}.
+\]
+
+Allora basta prendere
+\[
+p_1=m_{11}=
+\begin{bmatrix}
+1\\0\\4\\0
+\end{bmatrix},
+\]
+da cui
+\[
+q_1=
+\begin{bmatrix}
+4\\0
+\end{bmatrix}.
+\]
+
+\subsection{Secondo autovalore}
+
+Per \(\lambda_2=-10\):
+\[
+T_2=
+\begin{bmatrix}
+-9 & -1 & 1 & 0\\
+0 & -9 & 0 & 1
+\end{bmatrix}.
+\]
+
+Una base del nucleo è
+\[
+m_{21}=
+\begin{bmatrix}
+1\\0\\9\\0
+\end{bmatrix},
+\qquad
+m_{22}=
+\begin{bmatrix}
+0\\1\\1\\9
+\end{bmatrix}.
+\]
+
+Scegliamo come autovettore desiderato
+\[
+v_2=
+\begin{bmatrix}
+0\\1
+\end{bmatrix}.
+\]
+
+Allora possiamo prendere
+\[
+p_2=m_{22}=
+\begin{bmatrix}
+0\\1\\1\\9
+\end{bmatrix},
+\]
+da cui
+\[
+q_2=
+\begin{bmatrix}
+1\\9
+\end{bmatrix}.
+\]
+
+\subsection{Costruzione finale di \(K\)}
+
+Si ottiene quindi
+\[
+V=
+\begin{bmatrix}
+1 & 0\\
+0 & 1
+\end{bmatrix},
+\qquad
+Q=
+\begin{bmatrix}
+4 & 1\\
+0 & 9
+\end{bmatrix}.
+\]
+
+Poiché \(V=I\), segue immediatamente
+\[
+K=QV^{-1}=Q=
+\begin{bmatrix}
+4 & 1\\
+0 & 9
+\end{bmatrix}.
+\]
+
+Verifica:
+\[
+A-BK=
+\begin{bmatrix}
+-1 & 1\\
+0 & -1
+\end{bmatrix}
+-
+\begin{bmatrix}
+4 & 1\\
+0 & 9
+\end{bmatrix}
+=
+\begin{bmatrix}
+-5 & 0\\
+0 & -10
+\end{bmatrix}.
+\]
+
+Quindi gli autovalori assegnati sono effettivamente
+\[
+-5,\qquad -10,
+\]
+e in questo caso si è assegnata completamente anche l'autostruttura.
+
+\section{Osservazioni numeriche e robustezza}
+
+Nell'esempio precedente l'inversione di \(V\) è banale.
+In generale, però, la costruzione
+\[
+K=QV^{-1}
+\]
+può essere numericamente delicata.
+
+Se \(V\) è invertibile ma mal condizionata, cioè con determinante molto piccolo o colonne quasi dipendenti,
+l'inversione numerica può introdurre errori rilevanti.
+In tal caso il guadagno calcolato potrebbe non collocare gli autovalori esattamente dove previsto.
+
+Per migliorare la robustezza numerica conviene, quando possibile, scegliere autovettori
+il più possibile ortogonali o comunque ben condizionati.
+
+\section{Quando si può assegnare tutta l'autostruttura?}
+
+Nel caso dell'esempio avevamo
+\[
+n=m.
+\]
+
+Quindi il numero di ingressi indipendenti era uguale al numero di stati,
+e questo ha permesso di assegnare completamente l'autostruttura:
+non solo gli autovalori, ma anche tutti gli autovettori scelti.
+
+In generale:
+\begin{itemize}
+    \item gli autovalori si possono assegnare se \((A,B)\) è completamente controllabile;
+    \item l'assegnamento completo degli autovettori dipende dal numero di ingressi e dalla struttura del sistema;
+    \item in MIMO ci sono più gradi di libertà, ma non sempre è possibile assegnare arbitrariamente \emph{ogni} autovettore.
+\end{itemize}
+
+\section{Caso tempo discreto}
+
+Negli appunti si osserva che nei sistemi a tempo discreto tutto funziona in modo del tutto analogo.
+
+Consideriamo
+\[
+x(k+1)=Ax(k)+Bu(k),
+\]
+con retroazione di stato
+\[
+u(k)=-Kx(k).
+\]
+
+Il sistema chiuso diventa
+\[
+x(k+1)=(A-BK)x(k).
+\]
+
+La teoria, le formule e la procedura sono le stesse del caso continuo,
+con l'unica differenza concettuale che nel tempo discreto l'ipotesi corretta è che
+la coppia \((A,B)\) sia \textbf{completamente raggiungibile}.
+
+Nel caso tempo discreto:
+\begin{itemize}
+    \item si assegnano autovalori desiderati nel piano \(z\);
+    \item per la stabilità, tali autovalori devono stare dentro il cerchio unitario;
+    \item la formula di Ackermann e l'algoritmo MIMO si applicano nello stesso modo,
+    sostituendo al polinomio in \(\lambda\) il polinomio desiderato in \(z\).
+\end{itemize}
+
+\section{Sintesi della lezione}
+
+I punti principali della lezione sono:
+\begin{enumerate}
+    \item nel caso SISO, il guadagno di retroazione può essere calcolato direttamente con la formula di Ackermann:
+    \[
+    k^T=
+    \begin{bmatrix}
+    0 & \cdots & 0 & 1
+    \end{bmatrix}
+    \mathcal{R}^{-1}p_{\text{cl}}(A);
+    \]
+
+    \item nel caso MIMO, la soluzione non è unica perché \(K\) ha più gradi di libertà;
+
+    \item questi gradi di libertà possono essere sfruttati per assegnare non solo gli autovalori,
+    ma anche gli autovettori, cioè l'autostruttura;
+
+    \item per ogni autovalore desiderato \(\lambda_i\), si costruisce
+    \[
+    T_i=
+    \begin{bmatrix}
+    \lambda_i I-A & B
+    \end{bmatrix};
+    \]
+
+    \item il vettore
+    \[
+    p_i=
+    \begin{bmatrix}
+    v_i\\
+    q_i
+    \end{bmatrix}
+    \]
+    deve appartenere al nucleo di \(T_i\);
+
+    \item ripetendo la costruzione per tutti gli autovalori si ottengono
+    \[
+    KV=Q,
+    \qquad
+    K=QV^{-1};
+    \]
+
+    \item in presenza di matrici mal condizionate, l'inversione di \(V\) può creare problemi numerici;
+
+    \item nel caso tempo discreto la teoria è la stessa del continuo, purché la coppia \((A,B)\) sia completamente raggiungibile.
+\end{enumerate}

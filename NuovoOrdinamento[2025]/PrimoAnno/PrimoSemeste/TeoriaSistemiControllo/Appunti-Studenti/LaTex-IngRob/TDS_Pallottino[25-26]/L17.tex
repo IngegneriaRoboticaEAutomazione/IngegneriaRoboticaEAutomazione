@@ -1,0 +1,1273 @@
+\chapter{L17 -- Recap su decomposizione di Kalman, esercizi su raggiungibilità/osservabilità e forma minima}
+\label{chap:L17}
+
+\section{Obiettivo della lezione}
+
+Questa lezione fa da raccordo tra i risultati già visti su:
+\begin{itemize}
+    \item sottospazio di raggiungibilità \(\mathcal R\),
+    \item sottospazio di inosservabilità \(\bar{\mathcal O}\),
+    \item forma standard di raggiungibilità,
+    \item forma standard di osservabilità,
+    \item decomposizione di Kalman,
+\end{itemize}
+e una serie di esercizi nei quali questi concetti vengono usati in modo operativo.
+
+L'idea di fondo è sempre la stessa:
+\begin{quote}
+\emph{la dinamica interna del sistema può essere scomposta in parti che l'ingresso riesce o non riesce ad eccitare, e in parti che l'uscita riesce o non riesce a vedere.}
+\end{quote}
+
+In particolare, questa lezione insiste su tre aspetti:
+\begin{enumerate}
+    \item come si costruisce concretamente l'intersezione \(\mathcal R\cap\bar{\mathcal O}\);
+    \item come si riconoscono i modi raggiungibili e osservabili in esercizi concreti;
+    \item perché la funzione di trasferimento ``vede'' solo la parte minima, cioè quella sia raggiungibile sia osservabile.
+\end{enumerate}
+
+\bigskip
+
+\section{Richiamo: costruzione dell'intersezione \(\mathcal R\cap\bar{\mathcal O}\)}
+
+Riprendiamo un esempio già discusso nella lezione precedente, nel quale erano note due basi:
+
+\[
+T_R=
+\begin{bmatrix}
+2 & -1\\
+3 & -3\\
+1 & -1
+\end{bmatrix},
+\qquad
+T_{\bar O}=
+\begin{bmatrix}
+2\\
+0\\
+0
+\end{bmatrix}.
+\]
+
+Le colonne di \(T_R\) generano il sottospazio di raggiungibilità \(\mathcal R\), mentre le colonne di \(T_{\bar O}\) generano il sottospazio di inosservabilità \(\bar{\mathcal O}\).
+
+Vogliamo trovare
+\[
+\mathcal R\cap\bar{\mathcal O}.
+\]
+
+\subsection{Metodo generale}
+
+Un vettore \(v\) appartiene all'intersezione se e solo se può essere scritto sia come combinazione lineare delle colonne di \(T_R\), sia come combinazione lineare delle colonne di \(T_{\bar O}\). Dunque dobbiamo imporre
+
+\[
+T_R y = T_{\bar O} z,
+\]
+dove in questo caso
+\[
+y=
+\begin{bmatrix}
+y_1\\y_2
+\end{bmatrix},
+\qquad
+z=
+\begin{bmatrix}
+z_1
+\end{bmatrix}.
+\]
+
+Equivalentemente:
+
+\[
+\begin{bmatrix}
+T_R & -T_{\bar O}
+\end{bmatrix}
+\begin{bmatrix}
+y\\z
+\end{bmatrix}
+=0.
+\]
+
+Sostituendo i dati:
+
+\[
+\begin{bmatrix}
+2 & -1 & -2\\
+3 & -3 & 0\\
+1 & -1 & 0
+\end{bmatrix}
+\begin{bmatrix}
+y_1\\y_2\\z_1
+\end{bmatrix}
+=0.
+\]
+
+Il sistema lineare associato è
+
+\[
+\begin{cases}
+2y_1-y_2-2z_1=0,\\
+3y_1-3y_2=0,\\
+y_1-y_2=0.
+\end{cases}
+\]
+
+Le ultime due equazioni danno subito
+\[
+y_1=y_2.
+\]
+Sostituendo nella prima si ottiene
+\[
+2y_1-y_1-2z_1=0
+\quad\Longrightarrow\quad
+z_1=\frac{y_1}{2}.
+\]
+
+Scegliendo, ad esempio, \(y_1=y_2=1\), si ha
+\[
+z_1=\frac12.
+\]
+
+Quindi un vettore dell'intersezione è
+
+\[
+v=T_R
+\begin{bmatrix}
+1\\1
+\end{bmatrix}
+=
+\begin{bmatrix}
+2 & -1\\
+3 & -3\\
+1 & -1
+\end{bmatrix}
+\begin{bmatrix}
+1\\1
+\end{bmatrix}
+=
+\begin{bmatrix}
+1\\0\\0
+\end{bmatrix}.
+\]
+
+D'altra parte
+
+\[
+T_{\bar O}\frac12
+=
+\begin{bmatrix}
+2\\0\\0
+\end{bmatrix}\frac12
+=
+\begin{bmatrix}
+1\\0\\0
+\end{bmatrix},
+\]
+quindi è tutto coerente.
+
+\subsection{Conclusione}
+
+Abbiamo trovato
+
+\[
+\mathcal R\cap\bar{\mathcal O}
+=
+\operatorname{span}\left\{
+\begin{bmatrix}
+1\\0\\0
+\end{bmatrix}
+\right\}.
+\]
+
+Questa procedura è importante perché nella decomposizione di Kalman bisogna prima individuare proprio questa intersezione, cioè la parte del sistema che è:
+\begin{itemize}
+    \item raggiungibile,
+    \item ma non osservabile.
+\end{itemize}
+
+\bigskip
+
+\section{Esercizio 1: prova del 18/12/2023, sistema SISO a tempo discreto}
+
+Consideriamo il sistema a tempo discreto
+
+\[
+\Sigma:
+\begin{cases}
+x(k+1)=Ax(k)+Bu(k),\\
+y(k)=Cx(k)+Du(k),
+\end{cases}
+\]
+con
+
+\[
+A=
+\begin{bmatrix}
+0 & 1 & 1 & 0\\
+0 & 1 & 0 & 1\\
+1 & 0 & 0 & 1\\
+1 & 0 & 1 & 0
+\end{bmatrix},
+\qquad
+B=
+\begin{bmatrix}
+1\\
+1\\
+0\\
+0
+\end{bmatrix},
+\qquad
+C=
+\begin{bmatrix}
+0 & 1 & 0 & 0
+\end{bmatrix},
+\qquad
+D=0.
+\]
+
+Il compito consiste nel determinare:
+\begin{enumerate}
+    \item gli stati raggiungibili dall'origine in \(1,2,3,4\) passi;
+    \item gli stati non distinguibili dall'origine in \(1,2,3,4\) passi, cioè il sottospazio di inosservabilità progressiva;
+    \item una forma di Kalman del sistema;
+    \item gli spazi nei quali evolve l'evoluzione libera per certe condizioni iniziali assegnate.
+\end{enumerate}
+
+\subsection{Stati raggiungibili dall'origine in \(1,2,3,4\) passi}
+
+Nel tempo discreto, gli stati raggiungibili in \(t\) passi dall'origine sono generati dalle colonne della matrice
+
+\[
+R_t=
+\begin{bmatrix}
+B & AB & A^2B & \cdots & A^{t-1}B
+\end{bmatrix}.
+\]
+
+\paragraph{Passo 1.}
+Si ha
+
+\[
+R_1 = \operatorname{Im}(B)
+=
+\operatorname{span}\left\{
+\begin{bmatrix}
+1\\1\\0\\0
+\end{bmatrix}
+\right\}.
+\]
+
+\paragraph{Passo 2.}
+Calcoliamo
+
+\[
+AB=
+\begin{bmatrix}
+1\\1\\1\\1
+\end{bmatrix}.
+\]
+
+Quindi
+
+\[
+R_2=
+\operatorname{Im}
+\begin{bmatrix}
+1 & 1\\
+1 & 1\\
+0 & 1\\
+0 & 1
+\end{bmatrix}
+=
+\operatorname{span}\left\{
+\begin{bmatrix}
+1\\1\\0\\0
+\end{bmatrix},
+\begin{bmatrix}
+0\\0\\1\\1
+\end{bmatrix}
+\right\}.
+\]
+
+Infatti
+\[
+\begin{bmatrix}
+1\\1\\1\\1
+\end{bmatrix}
+=
+\begin{bmatrix}
+1\\1\\0\\0
+\end{bmatrix}
++
+\begin{bmatrix}
+0\\0\\1\\1
+\end{bmatrix}.
+\]
+
+\paragraph{Passo 3.}
+Calcoliamo
+
+\[
+A^2B=
+A(AB)=
+A
+\begin{bmatrix}
+1\\1\\1\\1
+\end{bmatrix}
+=
+\begin{bmatrix}
+2\\2\\2\\2
+\end{bmatrix}.
+\]
+
+Questa colonna è combinazione lineare delle precedenti, quindi
+
+\[
+R_3 = R_2.
+\]
+
+\paragraph{Passo 4.}
+Di conseguenza anche
+
+\[
+R_4 = R_3 = R_2.
+\]
+
+\paragraph{Conclusione sul sottospazio di raggiungibilità.}
+Lo spazio di raggiungibilità è
+
+\[
+\mathcal R = R_2 = R_3 = R_4
+=
+\operatorname{span}\left\{
+\begin{bmatrix}
+1\\1\\0\\0
+\end{bmatrix},
+\begin{bmatrix}
+0\\0\\1\\1
+\end{bmatrix}
+\right\},
+\]
+e quindi
+\[
+\dim \mathcal R = 2.
+\]
+
+Il sistema \emph{non} è completamente raggiungibile, perché lo spazio di stato è \(\mathbb R^4\).
+
+\bigskip
+
+\subsection{Stati non osservabili in \(1,2,3,4\) passi}
+
+Nel tempo discreto, la matrice di osservabilità in \(t\) passi è
+
+\[
+O_t=
+\begin{bmatrix}
+C\\
+CA\\
+CA^2\\
+\vdots\\
+CA^{t-1}
+\end{bmatrix},
+\]
+e il sottospazio di inosservabilità in \(t\) passi è
+
+\[
+\bar O_t = \ker(O_t).
+\]
+
+\paragraph{Passo 1.}
+Poiché
+
+\[
+C=
+\begin{bmatrix}
+0 & 1 & 0 & 0
+\end{bmatrix},
+\]
+si ha
+
+\[
+\bar O_1
+=
+\ker(C)
+=
+\left\{
+x\in\mathbb R^4 : x_2=0
+\right\}
+=
+\operatorname{span}\left\{
+\begin{bmatrix}
+1\\0\\0\\0
+\end{bmatrix},
+\begin{bmatrix}
+0\\0\\1\\0
+\end{bmatrix},
+\begin{bmatrix}
+0\\0\\0\\1
+\end{bmatrix}
+\right\}.
+\]
+
+\paragraph{Passo 2.}
+Calcoliamo
+
+\[
+CA=
+\begin{bmatrix}
+0 & 1 & 0 & 1
+\end{bmatrix}.
+\]
+
+Quindi
+
+\[
+O_2=
+\begin{bmatrix}
+0 & 1 & 0 & 0\\
+0 & 1 & 0 & 1
+\end{bmatrix}.
+\]
+
+Le condizioni \(O_2x=0\) diventano
+
+\[
+\begin{cases}
+x_2=0,\\
+x_2+x_4=0.
+\end{cases}
+\]
+
+Dunque
+\[
+x_2=0,\qquad x_4=0,
+\]
+e quindi
+
+\[
+\bar O_2
+=
+\operatorname{span}\left\{
+\begin{bmatrix}
+1\\0\\0\\0
+\end{bmatrix},
+\begin{bmatrix}
+0\\0\\1\\0
+\end{bmatrix}
+\right\}.
+\]
+
+\paragraph{Passo 3.}
+Calcoliamo
+
+\[
+CA^2=
+\begin{bmatrix}
+1 & 1 & 1 & 1
+\end{bmatrix}.
+\]
+
+Allora
+
+\[
+O_3=
+\begin{bmatrix}
+0 & 1 & 0 & 0\\
+0 & 1 & 0 & 1\\
+1 & 1 & 1 & 1
+\end{bmatrix}.
+\]
+
+Le equazioni \(O_3x=0\) sono
+
+\[
+\begin{cases}
+x_2=0,\\
+x_2+x_4=0,\\
+x_1+x_2+x_3+x_4=0.
+\end{cases}
+\]
+
+Dalle prime due:
+\[
+x_2=0,\qquad x_4=0.
+\]
+Sostituendo nella terza:
+\[
+x_1+x_3=0.
+\]
+
+Quindi
+
+\[
+\bar O_3
+=
+\operatorname{span}\left\{
+\begin{bmatrix}
+1\\0\\-1\\0
+\end{bmatrix}
+\right\}.
+\]
+
+\paragraph{Passo 4.}
+Poiché
+\[
+CA^3=
+\begin{bmatrix}
+2 & 2 & 2 & 2
+\end{bmatrix}
+\]
+è multiplo di \(CA^2\), non si ottiene alcuna informazione nuova. Dunque
+
+\[
+\bar O_4 = \bar O_3.
+\]
+
+\paragraph{Conclusione sul sottospazio di inosservabilità.}
+Si ha
+
+\[
+\bar{\mathcal O}
+=
+\bar O_3
+=
+\operatorname{span}\left\{
+\begin{bmatrix}
+1\\0\\-1\\0
+\end{bmatrix}
+\right\},
+\qquad
+\dim \bar{\mathcal O}=1.
+\]
+
+\bigskip
+
+\subsection{Forma di Kalman del sistema}
+
+Abbiamo trovato:
+
+\[
+\mathcal R
+=
+\operatorname{span}\left\{
+\begin{bmatrix}
+1\\1\\0\\0
+\end{bmatrix},
+\begin{bmatrix}
+0\\0\\1\\1
+\end{bmatrix}
+\right\},
+\qquad
+\bar{\mathcal O}
+=
+\operatorname{span}\left\{
+\begin{bmatrix}
+1\\0\\-1\\0
+\end{bmatrix}
+\right\}.
+\]
+
+Per costruire la forma di Kalman bisogna prima controllare l'intersezione
+
+\[
+\mathcal R\cap\bar{\mathcal O}.
+\]
+
+Cerchiamo dunque se
+\[
+\alpha
+\begin{bmatrix}
+1\\1\\0\\0
+\end{bmatrix}
++
+\beta
+\begin{bmatrix}
+0\\0\\1\\1
+\end{bmatrix}
+=
+\gamma
+\begin{bmatrix}
+1\\0\\-1\\0
+\end{bmatrix}.
+\]
+
+Confrontando le componenti:
+
+\[
+\begin{cases}
+\alpha=\gamma,\\
+\alpha=0,\\
+\beta=-\gamma,\\
+\beta=0.
+\end{cases}
+\]
+
+Ne segue
+\[
+\alpha=\beta=\gamma=0,
+\]
+quindi
+
+\[
+\mathcal R\cap\bar{\mathcal O}=\{0\}.
+\]
+
+Questo vuol dire che \emph{non esiste una parte del sistema che sia contemporaneamente raggiungibile e non osservabile}.
+
+\medskip
+
+Possiamo allora scegliere una base adattata nel modo seguente:
+\[
+T_{RO}=T_R
+=
+\begin{bmatrix}
+1 & 0\\
+1 & 0\\
+0 & 1\\
+0 & 1
+\end{bmatrix},
+\qquad
+T_{\bar R\bar O}=T_{\bar O}
+=
+\begin{bmatrix}
+1\\
+0\\
+-1\\
+0
+\end{bmatrix},
+\qquad
+T_{\bar R O}=
+\begin{bmatrix}
+1\\0\\0\\0
+\end{bmatrix}.
+\]
+
+Una possibile matrice di cambiamento di base è dunque
+
+\[
+T=
+\begin{bmatrix}
+1 & 0 & 1 & 1\\
+1 & 0 & 0 & 0\\
+0 & 1 & -1 & 0\\
+0 & 1 & 0 & 0
+\end{bmatrix}.
+\]
+
+In queste coordinate il sistema assume una forma di Kalman nella quale compaiono:
+\begin{itemize}
+    \item un blocco raggiungibile e osservabile di dimensione \(2\);
+    \item un blocco non raggiungibile ma osservabile di dimensione \(1\);
+    \item un blocco non raggiungibile e non osservabile di dimensione \(1\).
+\end{itemize}
+
+Poiché l'intersezione \(\mathcal R\cap\bar{\mathcal O}\) è nulla, il blocco ``raggiungibile e non osservabile'' non compare.
+
+\bigskip
+
+\subsection{Sottospazi di evoluzione libera per alcune condizioni iniziali}
+
+Per un sistema a tempo discreto l'evoluzione libera è
+
+\[
+x(k)=A^k x_0.
+\]
+
+Il sottospazio generato dall'evoluzione libera a partire da \(x_0\) è il sottospazio ciclico
+
+\[
+S(x_0)=\operatorname{span}\{x_0,Ax_0,A^2x_0,\dots\}.
+\]
+
+Consideriamo tre condizioni iniziali.
+
+\paragraph{Caso 1:}
+\[
+x_{0a}=
+\begin{bmatrix}
+-1\\0\\1\\0
+\end{bmatrix}.
+\]
+
+Si calcola
+
+\[
+Ax_{0a}=
+\begin{bmatrix}
+1\\0\\-1\\0
+\end{bmatrix}
+=
+-x_{0a}.
+\]
+
+Quindi \(x_{0a}\) è autovettore associato all'autovalore \(-1\), e pertanto
+
+\[
+S(x_{0a})=\operatorname{span}\{x_{0a}\}.
+\]
+
+\paragraph{Caso 2:}
+\[
+x_{0b}=
+\begin{bmatrix}
+1\\1\\-1\\-1
+\end{bmatrix}.
+\]
+
+Si verifica che
+
+\[
+Ax_{0b}=0.
+\]
+
+Quindi per \(k\ge 1\) l'evoluzione si annulla, e il sottospazio generato è
+
+\[
+S(x_{0b})=\operatorname{span}\{x_{0b}\}.
+\]
+
+\paragraph{Caso 3:}
+\[
+x_{0c}=
+\begin{bmatrix}
+1\\-1\\0\\0
+\end{bmatrix}.
+\]
+
+Si ottiene
+
+\[
+Ax_{0c}=
+\begin{bmatrix}
+-1\\-1\\1\\1
+\end{bmatrix},
+\qquad
+A^2x_{0c}=0.
+\]
+
+Quindi
+
+\[
+S(x_{0c})=\operatorname{span}\{x_{0c},Ax_{0c}\}.
+\]
+
+Questo terzo caso è importante perché mostra una dinamica \emph{nilpotente}: dopo due passi l'evoluzione libera si annulla.
+
+\bigskip
+
+\section{Esercizio 2: modi del sistema, forma di Jordan e criteri PBH}
+
+Consideriamo ora il sistema
+
+\[
+A=
+\begin{bmatrix}
+-1 & 0 & 1\\
+-1 & 0 & 0\\
+0 & 0 & -1
+\end{bmatrix},
+\qquad
+B=
+\begin{bmatrix}
+1\\
+0\\
+-1
+\end{bmatrix},
+\qquad
+C=
+\begin{bmatrix}
+-2 & 2 & 0
+\end{bmatrix}.
+\]
+
+L'esercizio chiede di:
+\begin{enumerate}
+    \item determinare i modi del sistema;
+    \item costruire una base di Jordan;
+    \item stabilire quali autovalori sono interni al sottospazio di raggiungibilità e quali sono interni al sottospazio di inosservabilità.
+\end{enumerate}
+
+\subsection{Autovalori e struttura di Jordan}
+
+Poiché \(A\) è triangolare a blocchi, i suoi autovalori si leggono facilmente:
+
+\[
+\sigma(A)=\{0,-1,-1\}.
+\]
+
+Quindi:
+\begin{itemize}
+    \item l'autovalore \(0\) ha molteplicità algebrica \(1\);
+    \item l'autovalore \(-1\) ha molteplicità algebrica \(2\).
+\end{itemize}
+
+Studiamo la geometricità di \(-1\). Si ha
+
+\[
+A+I=
+\begin{bmatrix}
+0 & 0 & 1\\
+-1 & 1 & 0\\
+0 & 0 & 0
+\end{bmatrix}.
+\]
+
+Il rango è \(2\), quindi
+
+\[
+\dim\ker(A+I)=1.
+\]
+
+Dunque l'autovalore \(-1\) ha \emph{un solo autovettore} e quindi è associato a un unico blocco di Jordan di ordine \(2\).
+
+Un autovettore è
+
+\[
+q_1=
+\begin{bmatrix}
+1\\1\\0
+\end{bmatrix},
+\qquad
+(A+I)q_1=0.
+\]
+
+Serve poi un autovettore generalizzato \(q_2\) tale che
+
+\[
+(A+I)q_2=q_1.
+\]
+
+Una possibile scelta è
+
+\[
+q_2=
+\begin{bmatrix}
+0\\1\\1
+\end{bmatrix},
+\]
+infatti
+
+\[
+(A+I)
+\begin{bmatrix}
+0\\1\\1
+\end{bmatrix}
+=
+\begin{bmatrix}
+1\\1\\0
+\end{bmatrix}
+=q_1.
+\]
+
+Per l'autovalore \(0\) possiamo prendere un autovettore \(q_3\) soluzione di
+\[
+Aq_3=0.
+\]
+Ad esempio:
+
+\[
+q_3=
+\begin{bmatrix}
+1\\
+1\\
+1
+\end{bmatrix}.
+\]
+
+Quindi una possibile base di Jordan è
+
+\[
+T=
+\begin{bmatrix}
+1 & 0 & 1\\
+1 & 1 & 1\\
+0 & 1 & 1
+\end{bmatrix}.
+\]
+
+\bigskip
+
+\subsection{Autovalori interni al sottospazio di raggiungibilità}
+
+Usiamo il criterio PBH per la raggiungibilità.
+
+La coppia \((A,B)\) è raggiungibile su un autovalore \(\lambda\) se
+
+\[
+\operatorname{rank}\begin{bmatrix}
+A-\lambda I & B
+\end{bmatrix}=n.
+\]
+
+\paragraph{Caso \(\lambda=0\).}
+Si ha
+
+\[
+\begin{bmatrix}
+A & B
+\end{bmatrix}
+=
+\begin{bmatrix}
+-1 & 0 & 1 & 1\\
+-1 & 0 & 0 & 0\\
+0 & 0 & -1 & -1
+\end{bmatrix}.
+\]
+
+Il rango è \(2<3\), quindi l'autovalore \(0\) \emph{non è raggiungibile}.
+
+\paragraph{Caso \(\lambda=-1\).}
+Si ha
+
+\[
+\begin{bmatrix}
+A+I & B
+\end{bmatrix}
+=
+\begin{bmatrix}
+0 & 0 & 1 & 1\\
+-1 & 1 & 0 & 0\\
+0 & 0 & 0 & -1
+\end{bmatrix},
+\]
+che ha rango \(3\). Quindi l'autovalore \(-1\) è raggiungibile.
+
+\paragraph{Conclusione.}
+L'unico autovalore \emph{interno al sottospazio di raggiungibilità} è
+
+\[
+\boxed{\lambda=-1.}
+\]
+
+L'autovalore \(0\) è esterno a \(\mathcal R\).
+
+\bigskip
+
+\subsection{Autovalori interni al sottospazio di inosservabilità}
+
+Usiamo ora il criterio PBH per l'osservabilità.
+
+La coppia \((A,C)\) è osservabile su \(\lambda\) se
+
+\[
+\operatorname{rank}
+\begin{bmatrix}
+A-\lambda I\\
+C
+\end{bmatrix}=n.
+\]
+
+\paragraph{Caso \(\lambda=0\).}
+Si ottiene
+
+\[
+\begin{bmatrix}
+A\\
+C
+\end{bmatrix}
+=
+\begin{bmatrix}
+-1 & 0 & 1\\
+-1 & 0 & 0\\
+0 & 0 & -1\\
+-2 & 2 & 0
+\end{bmatrix},
+\]
+che ha rango \(3\). Quindi \(0\) è osservabile.
+
+\paragraph{Caso \(\lambda=-1\).}
+Si ottiene
+
+\[
+\begin{bmatrix}
+A+I\\
+C
+\end{bmatrix}
+=
+\begin{bmatrix}
+0 & 0 & 1\\
+-1 & 1 & 0\\
+0 & 0 & 0\\
+-2 & 2 & 0
+\end{bmatrix}.
+\]
+
+La quarta riga è multiplo della seconda, quindi il rango è \(2<3\). Dunque \(-1\) \emph{non è osservabile}.
+
+\paragraph{Conclusione.}
+L'autovalore \(-1\) è interno al sottospazio di inosservabilità:
+
+\[
+\boxed{\lambda=-1 \text{ è inosservabile}.}
+\]
+
+In sintesi:
+\begin{itemize}
+    \item \(0\) è osservabile ma non raggiungibile;
+    \item \(-1\) è raggiungibile ma non osservabile.
+\end{itemize}
+
+Questo è un esempio molto istruttivo, perché mostra che un autovalore può essere presente nel sistema ma non comparire nella parte ingresso--uscita a seconda di come si combinano raggiungibilità e osservabilità.
+
+\bigskip
+
+\section{Esercizio 3: equazione differenziale, realizzazione e modi visibili in uscita}
+
+Consideriamo l'equazione differenziale ingresso--uscita
+
+\[
+y^{(4)}(t)+y^{(3)}(t)-\ddot y(t)-\dot y(t)=\dot u(t)-u(t).
+\]
+
+\subsection{Funzione di trasferimento}
+
+Applicando la trasformata di Laplace in condizioni iniziali nulle otteniamo
+
+\[
+\left(s^4+s^3-s^2-s\right)Y(s)=(s-1)U(s),
+\]
+da cui
+
+\[
+G(s)=\frac{Y(s)}{U(s)}=
+\frac{s-1}{s^4+s^3-s^2-s}.
+\]
+
+Fattorizzando il denominatore:
+
+\[
+s^4+s^3-s^2-s
+=
+s(s^3+s^2-s-1)
+=
+s(s+1)^2(s-1).
+\]
+
+Quindi
+
+\[
+G(s)=\frac{s-1}{s(s+1)^2(s-1)}.
+\]
+
+Dal punto di vista della funzione di trasferimento minima si può cancellare il fattore \((s-1)\), ottenendo
+
+\[
+G_{\min}(s)=\frac{1}{s(s+1)^2}.
+\]
+
+\paragraph{Interpretazione.}
+Questo significa che il modo \(\lambda=1\):
+\begin{itemize}
+    \item è presente in una realizzazione non minima,
+    \item ma non compare nella dinamica ingresso--uscita,
+    \item quindi è o non raggiungibile, o non osservabile, o entrambe le cose.
+\end{itemize}
+
+Nel caso della forma canonica di controllo che costruiremo tra poco, la realizzazione è completamente raggiungibile per costruzione, quindi il modo \(\lambda=1\) sarà necessariamente \emph{non osservabile}.
+
+\bigskip
+
+\subsection{Una realizzazione in forma canonica di controllo}
+
+Poiché il denominatore \emph{non ridotto} è
+
+\[
+d(s)=s^4+s^3-s^2-s,
+\]
+i coefficienti sono
+
+\[
+a_0=0,\qquad a_1=-1,\qquad a_2=-1,\qquad a_3=1.
+\]
+
+Una forma canonica di controllo è
+
+\[
+A_c=
+\begin{bmatrix}
+0 & 1 & 0 & 0\\
+0 & 0 & 1 & 0\\
+0 & 0 & 0 & 1\\
+0 & 1 & 1 & -1
+\end{bmatrix},
+\qquad
+B_c=
+\begin{bmatrix}
+0\\0\\0\\1
+\end{bmatrix}.
+\]
+
+Poiché il numeratore è
+\[
+n(s)=s-1=-1+s+0s^2+0s^3,
+\]
+si può scegliere
+
+\[
+C_c=
+\begin{bmatrix}
+-1 & 1 & 0 & 0
+\end{bmatrix},
+\qquad
+D=0.
+\]
+
+\paragraph{Osservazione.}
+Questa realizzazione è:
+\begin{itemize}
+    \item completamente raggiungibile, per costruzione;
+    \item non completamente osservabile, perché nella funzione di trasferimento è presente una cancellazione polo-zero.
+\end{itemize}
+
+Gli autovalori della matrice \(A_c\) sono
+
+\[
+0,\,-1,\,-1,\,1.
+\]
+
+Dopo la cancellazione nella FDT, resta solo
+
+\[
+0,\,-1,\,-1.
+\]
+
+Quindi il modo \(\lambda=1\) è un modo interno non osservabile.
+
+\bigskip
+
+\subsection{Quali andamenti possono comparire nell'uscita forzata?}
+
+Dalla funzione di trasferimento minima
+
+\[
+G_{\min}(s)=\frac{1}{s(s+1)^2}
+\]
+deduciamo che i modi ingresso--uscita sono associati ai poli:
+\[
+0,\quad -1 \text{ con molteplicità } 2.
+\]
+
+Quindi gli andamenti fondamentali che possono comparire nell'uscita forzata sono
+
+\[
+1,\qquad e^{-t},\qquad t e^{-t}.
+\]
+
+Questo perché:
+\begin{itemize}
+    \item il polo in \(0\) genera il modo costante \(1\);
+    \item il polo doppio in \(-1\) genera i modi \(e^{-t}\) e \(t e^{-t}\).
+\end{itemize}
+
+\paragraph{Conclusioni sui tre casi tipici.}
+\begin{enumerate}
+    \item \(\sin t\) e \(1\): \emph{non} può comparire \(\sin t\), perché richiederebbe autovalori complessi puri \(\pm j\), che qui non ci sono. Il modo costante \(1\), invece, è possibile.
+    \item \(t e^{-t}\) e \(1\): entrambi sono possibili, perché corrispondono ai poli \(0\) e \(-1\) doppio.
+    \item \(e^{t}\) ed \(e^{-t}\): il modo \(e^t\) corrisponde all'autovalore \(1\), ma quel polo è cancellato nella FDT, quindi non è visibile in uscita. Il modo \(e^{-t}\) è invece possibile.
+\end{enumerate}
+
+\medskip
+
+La regola generale da ricordare è questa:
+
+\begin{quote}
+\emph{nell'uscita forzata compaiono solo i modi associati agli autovalori che sono contemporaneamente raggiungibili e osservabili.}
+\end{quote}
+
+\bigskip
+
+\section{Realizzazione dei sistemi e forma minima}
+
+Questa lezione si chiude con una domanda naturale:
+
+\begin{quote}
+\emph{dati numeratore e denominatore di una funzione di trasferimento, quale realizzazione in forma di stato conviene scegliere?}
+\end{quote}
+
+Sia
+
+\[
+G(s)=\frac{n(s)}{d(s)},
+\qquad
+\deg d(s)=n.
+\]
+
+Una \emph{realizzazione minima} di \(G(s)\) è una realizzazione in forma di stato:
+\begin{itemize}
+    \item con il minimo numero di stati possibile;
+    \item completamente raggiungibile;
+    \item completamente osservabile.
+\end{itemize}
+
+La decomposizione di Kalman spiega esattamente come si ottiene la forma minima: basta eliminare tutti i modi che non sono contemporaneamente raggiungibili e osservabili.
+
+Se il sistema in forma di Kalman è scritto come
+
+\[
+\tilde A=
+\begin{bmatrix}
+A_{RO} & * & * & *\\
+0 & A_{R\bar O} & * & *\\
+0 & 0 & A_{\bar R O} & *\\
+0 & 0 & 0 & A_{\bar R\bar O}
+\end{bmatrix},
+\qquad
+\tilde B=
+\begin{bmatrix}
+B_{RO}\\
+B_{R\bar O}\\
+0\\
+0
+\end{bmatrix},
+\qquad
+\tilde C=
+\begin{bmatrix}
+C_{RO} & 0 & C_{\bar R O} & 0
+\end{bmatrix},
+\]
+allora la funzione di trasferimento dipende solo dal blocco
+\[
+(A_{RO},B_{RO},C_{RO}).
+\]
+
+Più precisamente,
+
+\[
+G(s)=C_{RO}(sI-A_{RO})^{-1}B_{RO}+D.
+\]
+
+Questa è la \emph{forma minima} ottenuta eliminando i modi nascosti dall'ingresso o dall'uscita.
+
+\bigskip
+
+\section{Messaggio finale della lezione}
+
+Questa lezione, anche se fatta in gran parte di esercizi, contiene un messaggio teorico molto importante:
+
+\begin{enumerate}
+    \item lo stato completo di un modello può contenere più modi di quelli che la funzione di trasferimento mostra;
+    \item la funzione di trasferimento vede solo i modi contemporaneamente raggiungibili e osservabili;
+    \item la decomposizione di Kalman è lo strumento che separa sistematicamente:
+    \begin{itemize}
+        \item parte raggiungibile e osservabile,
+        \item parte raggiungibile ma non osservabile,
+        \item parte non raggiungibile ma osservabile,
+        \item parte non raggiungibile e non osservabile;
+    \end{itemize}
+    \item la forma minima si ottiene mantenendo solo il sottosistema raggiungibile e osservabile.
+\end{enumerate}
+
+\bigskip
+
+\section*{Promemoria operativo per gli esercizi}
+
+Quando in un esercizio ti chiedono di studiare il sistema, la scaletta più efficiente è spesso questa:
+
+\begin{enumerate}
+    \item calcolare \(\mathcal R\) oppure \(R_t\) se il sistema è a tempo discreto;
+    \item calcolare \(\bar{\mathcal O}\) oppure \(\bar O_t\);
+    \item verificare se ci sono intersezioni \(\mathcal R\cap \bar{\mathcal O}\);
+    \item usare PBH per associare i singoli autovalori ai sottospazi;
+    \item ricostruire la forma di Kalman;
+    \item leggere da lì quali modi compaiono nella funzione di trasferimento;
+    \item ridurre il sistema alla sua forma minima.
+\end{enumerate}

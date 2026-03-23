@@ -1,0 +1,433 @@
+\chapter{Lezione 21 --- Bande di Gershgorin, criterio di Nyquist per sistemi MIMO, SVD e minimi quadrati}
+
+\section{Sistemi MIMO e dominanza diagonale}
+
+Consideriamo un sistema dinamico MIMO descritto in frequenza da
+\[
+X(s)=G(s)U(s),
+\qquad
+X(s)\in\mathbb{C}^m,\quad U(s)\in\mathbb{C}^m,
+\]
+dove
+\[
+G(s)\in\mathbb{C}^{m\times m}.
+\]
+
+Se il sistema fosse completamente disaccoppiato, cioè con matrice di trasferimento diagonale,
+\[
+G(s)=
+\begin{bmatrix}
+g_{11}(s) & 0 & \cdots & 0\\
+0 & g_{22}(s) & \cdots & 0\\
+\vdots & \vdots & \ddots & \vdots\\
+0 & 0 & \cdots & g_{mm}(s)
+\end{bmatrix},
+\]
+potremmo studiare ogni canale separatamente, analizzando ciascun elemento diagonale.
+
+Se invece il sistema non è diagonale ma \emph{a dominanza diagonale}, allora gli elementi fuori diagonale possono essere interpretati come perturbazioni rispetto ai termini diagonali dominanti.
+
+\medskip
+
+\noindent
+\textbf{Dominanza diagonale per righe.}
+Una matrice \(A\in\mathbb{R}^{m\times m}\) si dice diagonalmente dominante per righe se, per ogni \(i=1,\dots,m\),
+\[
+|a_{ii}| \gg \sum_{\substack{j=1\\j\neq i}}^{m}|a_{ij}|.
+\]
+
+\noindent
+\textbf{Dominanza diagonale per colonne.}
+Analogamente, si può richiedere che, per ogni \(i=1,\dots,m\),
+\[
+|a_{ii}| \gg \sum_{\substack{j=1\\j\neq i}}^{m}|a_{ji}|.
+\]
+
+Nel seguito usiamo la convenzione degli appunti, cioè quella associata alle \emph{colonne}.
+
+\section{Teorema di Gershgorin per matrici di trasferimento}
+
+Per ogni frequenza \(\omega\), la matrice
+\[
+G(j\omega)
+\]
+è una matrice complessa \(m\times m\). Possiamo quindi applicare il teorema di Gershgorin.
+
+\begin{theorem}[Gershgorin]
+Sia \(G(j\omega)\in\mathbb{C}^{m\times m}\). Allora tutti gli autovalori di \(G(j\omega)\) appartengono all'unione dei cerchi del piano complesso centrati nei termini diagonali \(g_{ii}(j\omega)\) e di raggio
+\[
+r_i(j\omega)=\sum_{\substack{j=1\\j\neq i}}^{m}|g_{ji}(j\omega)|,
+\qquad i=1,\dots,m.
+\]
+\end{theorem}
+
+I cerchi di raggio \(r_i(j\omega)\) sono detti \textbf{cerchi di Gershgorin}.  
+Al variare di \(\omega\), il centro \(g_{ii}(j\omega)\) si muove lungo il diagramma polare del termine diagonale, mentre il raggio cambia con la frequenza.
+
+L'inviluppo di tali cerchi al variare di \(\omega\) genera le cosiddette \textbf{bande di Gershgorin}.
+
+\section{Criterio di Nyquist formulato sulle bande di Gershgorin}
+
+Per un sistema MIMO diagonalmente dominante, si può usare il criterio di Nyquist non direttamente sugli autovalori della matrice, ma sulle bande di Gershgorin.
+
+L'idea è la seguente:
+
+\begin{itemize}
+    \item per ogni \(\omega\), gli autovalori di \(G(j\omega)\) stanno dentro i cerchi di Gershgorin;
+    \item quindi, al variare della frequenza, le traiettorie degli autovalori sono contenute dentro le bande di Gershgorin;
+    \item se tali bande \emph{non avvolgono} il punto critico \(-1\), allora anche il sistema accoppiato risulta stabile in ciclo chiuso.
+\end{itemize}
+
+Questa è una \textbf{condizione sufficiente} di stabilità del sistema in ciclo chiuso.
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[scale=1.05,>=Latex]
+    % axes
+    \draw[->] (-3.8,0)--(3.8,0) node[right] {$\Re$};
+    \draw[->] (0,-2.8)--(0,2.8) node[above] {$\Im$};
+
+    % point -1
+    \fill (-2,0) circle (1.4pt);
+    \node[below] at (-2,0) {$-1$};
+
+    % Nyquist-like curve
+    \draw[very thick,green!50!black]
+        (2.0,0.1)
+        .. controls (1.0,-0.2) and (0.6,-1.7) ..
+        (-0.8,-1.9)
+        .. controls (-1.6,-1.8) and (-1.8,-0.5) ..
+        (-1.2,-0.2)
+        .. controls (-0.7,0.0) and (0.4,0.15) ..
+        (1.8,0.1);
+
+    % representative centers
+    \coordinate (c1) at (1.3,0.05);
+    \coordinate (c2) at (0.4,-0.7);
+    \coordinate (c3) at (-0.5,-1.5);
+    \coordinate (c4) at (-1.1,-1.2);
+    \coordinate (c5) at (-1.25,-0.45);
+    \coordinate (c6) at (-0.4,-0.15);
+
+    % Gershgorin circles
+    \draw[red!75!black] (c1) circle (0.32);
+    \draw[red!75!black] (c2) circle (0.42);
+    \draw[red!75!black] (c3) circle (0.35);
+    \draw[red!75!black] (c4) circle (0.28);
+    \draw[red!75!black] (c5) circle (0.22);
+    \draw[red!75!black] (c6) circle (0.18);
+
+    \node[green!50!black,right] at (1.7,-0.5) {$g_{ii}(j\omega)$};
+    \node[red!75!black,left] at (-2.9,-1.7) {cerchi di Gershgorin};
+\end{tikzpicture}
+\caption{Idea qualitativa: il centro di ciascun cerchio si muove sul diagramma polare di \(g_{ii}(j\omega)\), mentre il raggio è dato dalla somma dei moduli dei termini fuori diagonale associati.}
+\end{figure}
+
+\section{Esempio qualitativo}
+
+Negli appunti compare un esempio in cui si prende un termine diagonale del tipo
+\[
+g_{11}(s)=\frac{10}{1+\frac{\sqrt{2}}{4}s+\frac{1}{16}s^2}
+\]
+e un termine fuori diagonale del tipo
+\[
+g_{21}(s)=\frac{5}{s+2}.
+\]
+
+In tal caso il centro dei cerchi di Gershgorin è il diagramma polare di \(g_{11}(j\omega)\), mentre il raggio vale
+\[
+r_1(j\omega)=|g_{21}(j\omega)|=\left|\frac{5}{2+j\omega}\right|
+=\frac{5}{\sqrt{4+\omega^2}}.
+\]
+
+Quindi, ad esempio,
+\[
+r_1(0)=\frac{5}{2}=2.5,
+\qquad
+r_1(10)=\frac{5}{\sqrt{104}}\approx 0.49.
+\]
+
+Per \(\omega=0\), se \(g_{11}(0)=10\), il cerchio iniziale taglia l'asse reale nel punto
+\[
+10-\frac{5}{2}=7.5.
+\]
+
+Questo spiega il disegno negli appunti: a bassa frequenza i cerchi sono più grandi, poi diventano progressivamente più piccoli all'aumentare della frequenza.
+
+\section{SVD: decomposizione ai valori singolari}
+
+Sia ora
+\[
+A\in\mathbb{R}^{n\times m},
+\qquad n\ge m.
+\]
+Allora esistono matrici ortogonali
+\[
+U\in\mathbb{R}^{n\times n},
+\qquad
+V\in\mathbb{R}^{m\times m},
+\]
+e una matrice diagonale ``rettangolare'' \(\Sigma\in\mathbb{R}^{n\times m}\) tali che
+\[
+A=U\Sigma V^T,
+\]
+con
+\[
+\Sigma=
+\begin{bmatrix}
+\widetilde\Sigma\\
+0
+\end{bmatrix},
+\qquad
+\widetilde\Sigma=
+\operatorname{diag}(\sigma_1,\dots,\sigma_m),
+\qquad
+\sigma_1\ge \sigma_2\ge \cdots \ge \sigma_m\ge 0.
+\]
+
+I numeri \(\sigma_1,\dots,\sigma_m\) sono i \textbf{valori singolari} di \(A\).
+
+Se
+\[
+\sigma_m>0,
+\]
+allora \(A\) ha rango pieno.
+
+\subsection{Interpretazione dei valori singolari}
+
+I valori singolari forniscono una misura di quanto una matrice sia vicina alla singolarità:
+
+\begin{itemize}
+    \item se tutti i valori singolari sono ``lontani da zero'', la matrice è ben condizionata;
+    \item se almeno uno è molto piccolo, la matrice è vicina alla non invertibilità.
+\end{itemize}
+
+In particolare, il rapporto
+\[
+\frac{\sigma_1}{\sigma_m}
+\]
+misura il condizionamento della matrice.
+
+\section{Problema dei minimi quadrati}
+
+Consideriamo il problema
+\[
+Ax \approx y,
+\qquad
+A\in\mathbb{R}^{n\times m},
+\quad
+x\in\mathbb{R}^m,
+\quad
+y\in\mathbb{R}^n,
+\]
+con \(n\ge m\).
+
+In generale il sistema può essere sovradeterminato e non avere soluzione esatta. Si cerca allora \(x\) che minimizza lo scostamento tra \(Ax\) e \(y\), cioè
+\[
+\min_x \frac12\|Ax-y\|^2.
+\]
+
+Nel caso di errore gaussiano, questa scelta coincide con la stima ottima nel senso dei minimi quadrati.
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[scale=0.95,>=Latex]
+    \draw[->] (0,0)--(6.5,0) node[right] {$x$};
+    \draw[->] (0,0)--(0,4.8) node[above] {$y$};
+
+    % fitted line
+    \draw[thick,teal!70!black] (0.5,0.9)--(6.0,4.2);
+    \node[teal!70!black,right] at (5.2,4.0) {$y^\star=Kx$};
+
+    % points
+    \foreach \p/\q in {
+        0.8/1.4,
+        1.3/1.1,
+        2.0/1.8,
+        2.7/2.4,
+        3.1/2.2,
+        3.8/3.1,
+        4.3/2.9,
+        5.0/3.8,
+        5.6/3.6
+    }{
+        \fill (\p,\q) circle (1.5pt);
+    }
+
+    % residuals
+    \draw[densely dashed] (0.8,1.4)--($(0.8,0.9)!0.12!(6.0,4.2)$);
+    \draw[densely dashed] (2.7,2.4)--($(2.7,0.9)!0.42!(6.0,4.2)$);
+    \draw[densely dashed] (4.3,2.9)--($(4.3,0.9)!0.70!(6.0,4.2)$);
+
+    \node[below right] at (3.0,1.45) {residui};
+\end{tikzpicture}
+\caption{Interpretazione geometrica del problema dei minimi quadrati: si cerca la retta/modello che minimizza gli scarti.}
+\end{figure}
+
+\subsection{Equazioni normali}
+
+Scriviamo il funzionale:
+\[
+J(x)=\frac12(Ax-y)^T(Ax-y)
+=\frac12\left(x^TA^TAx+y^Ty-2x^TA^Ty\right).
+\]
+
+La condizione di ottimo del primo ordine è
+\[
+\nabla_x J(x)=0
+\quad\Longrightarrow\quad
+A^TAx-A^Ty=0.
+\]
+
+Quindi
+\[
+\boxed{
+A^TAx=A^Ty.
+}
+\]
+
+Se \(A^TA\) è invertibile, la soluzione dei minimi quadrati è
+\[
+\boxed{
+x=(A^TA)^{-1}A^Ty.
+}
+\]
+
+La matrice
+\[
+\boxed{
+A^+=(A^TA)^{-1}A^T
+}
+\]
+è la \textbf{pseudo-inversa} di \(A\) (nel caso di rango pieno sulle colonne).
+
+\section{Pseudo-inversa tramite SVD}
+
+Se
+\[
+A=U\Sigma V^T,
+\]
+allora
+\[
+A^TA = V\Sigma^T\Sigma V^T
+      = V\widetilde\Sigma^2V^T.
+\]
+
+Perciò gli autovalori di \(A^TA\) sono
+\[
+\sigma_1^2,\dots,\sigma_m^2,
+\]
+cioè \textbf{i quadrati dei valori singolari} di \(A\).
+
+La pseudo-inversa si può allora scrivere come
+\[
+\boxed{
+A^+=V\widetilde\Sigma^{-1}U^T.
+}
+\]
+
+Quindi la soluzione dei minimi quadrati diventa
+\[
+\boxed{
+x=A^+y=V\widetilde\Sigma^{-1}U^Ty.
+}
+\]
+
+\subsection{Interpretazione in coordinate ortonormali}
+
+Se definiamo
+\[
+\theta = U^Ty,
+\qquad
+z = V^Tx,
+\]
+allora il problema si diagonalizza e diventa, componente per componente,
+\[
+z_i = \frac{\theta_i}{\sigma_i},
+\qquad i=1,\dots,m.
+\]
+
+Questa lettura è molto utile:
+\begin{itemize}
+    \item \(U^Ty\) sono le coordinate di \(y\) nella base delle colonne di \(U\);
+    \item \(V^Tx\) sono le coordinate di \(x\) nella base delle colonne di \(V\);
+    \item il passaggio da \(\theta_i\) a \(z_i\) consiste nel dividere per il valore singolare \(\sigma_i\).
+\end{itemize}
+
+Se un \(\sigma_i\) è molto piccolo, il corrispondente coefficiente viene fortemente amplificato: questo spiega la sensibilità numerica del problema.
+
+\section{Condizionamento numerico}
+
+Supponiamo ora di avere una matrice quadrata invertibile
+\[
+Fx=y.
+\]
+
+Se il dato \(y\) è perturbato,
+\[
+y=y^\star+\delta y,
+\]
+allora anche la soluzione sarà perturbata:
+\[
+x=x^\star+\delta x,
+\qquad
+\delta x = F^{-1}\delta y.
+\]
+
+L'errore sulla soluzione dipende quindi da \(F^{-1}\).  
+Una misura della sensibilità del problema è il \textbf{numero di condizionamento}
+\[
+\kappa(F)=\|F\|\,\|F^{-1}\|.
+\]
+
+Nel caso della norma \(2\),
+\[
+\boxed{
+\kappa_2(F)=\frac{\sigma_{\max}(F)}{\sigma_{\min}(F)}.
+}
+\]
+
+Se \(\kappa_2(F)\approx 1\), il problema è ben condizionato; se invece \(\kappa_2(F)\gg 1\), piccoli errori nei dati possono produrre grandi errori nella soluzione.
+
+Nel caso della matrice \(A^TA\),
+\[
+\kappa_2(A^TA)=\frac{\sigma_1^2}{\sigma_m^2}=\kappa_2(A)^2.
+\]
+
+Questa è la ragione per cui le equazioni normali peggiorano il condizionamento.
+
+\section{Sintesi della lezione}
+
+In questa lezione abbiamo visto due blocchi di argomenti.
+
+\subsection*{1. Stabilità di sistemi MIMO mediante Gershgorin e Nyquist}
+\begin{itemize}
+    \item Se un sistema MIMO è diagonalmente dominante, si può approssimare il comportamento considerando la diagonale come parte principale e i termini fuori diagonale come perturbazioni.
+    \item Per ogni frequenza \(\omega\), gli autovalori di \(G(j\omega)\) stanno nei cerchi di Gershgorin.
+    \item L'inviluppo dei cerchi al variare di \(\omega\) costituisce le bande di Gershgorin.
+    \item Se tali bande non circondano il punto critico \(-1\), allora si ha una condizione sufficiente di stabilità in ciclo chiuso.
+\end{itemize}
+
+\subsection*{2. SVD, minimi quadrati e pseudo-inversa}
+\begin{itemize}
+    \item La SVD scrive una matrice come
+    \[
+    A=U\Sigma V^T.
+    \]
+    \item I valori singolari misurano quanto la matrice sia vicina alla singolarità.
+    \item Il problema dei minimi quadrati
+    \[
+    \min_x \frac12\|Ax-y\|^2
+    \]
+    porta alle equazioni normali
+    \[
+    A^TAx=A^Ty.
+    \]
+    \item La soluzione è
+    \[
+    x=A^+y,
+    \qquad
+    A^+=(A^TA)^{-1}A^T = V\widetilde\Sigma^{-1}U^T.
+    \]
+    \item Il condizionamento dipende dal rapporto tra valore singolare massimo e minimo.
+\end{itemize}

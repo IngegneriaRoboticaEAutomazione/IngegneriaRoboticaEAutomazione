@@ -1,0 +1,928 @@
+% =========================
+% L23.tex
+% =========================
+
+\chapter{L23 -- Principio di invarianza di LaSalle, esercizi ed elementi di sintesi con Lyapunov}
+\label{chap:L23}
+
+\section{Insiemi invarianti}
+
+Prima di enunciare il principio di LaSalle conviene richiamare con precisione il concetto di insieme invariante.
+
+\medskip
+
+\noindent
+\textbf{Definizione.}
+Sia dato un sistema dinamico autonomo.
+
+\begin{itemize}
+    \item Nel caso continuo:
+    \[
+    \dot x = f(x), \qquad x\in\mathbb{R}^n.
+    \]
+    \item Nel caso discreto:
+    \[
+    x(k+1)=f(x(k)).
+    \]
+\end{itemize}
+
+Un insieme \(M\subseteq \mathbb{R}^n\) si dice \textbf{positivamente invariante} se ogni traiettoria che parte in \(M\) rimane in \(M\) per tutti i tempi futuri.
+
+Nel caso continuo questo significa:
+\[
+x(t_0)\in M
+\quad \Longrightarrow \quad
+\varphi(t,t_0,x(t_0))\in M
+\qquad \forall t\ge t_0.
+\]
+
+Nel caso discreto:
+\[
+x(0)\in M
+\quad \Longrightarrow \quad
+x(k)\in M
+\qquad \forall k\ge 0.
+\]
+
+\medskip
+
+\noindent
+In modo intuitivo: un insieme è invariante se, una volta entrati dentro, non se ne esce più.
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[scale=1]
+    \draw[thick] (0,0) ellipse (3 and 2);
+    \node at (0,2.35) {$M$};
+
+    \fill (-1,0.3) circle (1.5pt);
+    \fill (1.2,-0.5) circle (1.5pt);
+
+    \draw[-{Latex[length=3mm]},thick] (-1,0.3) .. controls (-0.2,0.8) and (0.4,0.6) .. (1.2,-0.5);
+    \draw[-{Latex[length=3mm]},thick] (1.2,-0.5) .. controls (1.8,-0.3) and (2.0,0.4) .. (1.4,1.0);
+
+    \draw[-{Latex[length=3mm]},dashed] (-2.7,-0.7) -- (-2.2,-0.1);
+    \node at (-3.2,-0.9) {\small traiettoria};
+\end{tikzpicture}
+\caption{Schema qualitativo: una traiettoria che parte in \(M\) rimane in \(M\).}
+\end{figure}
+
+\section{Perché serve LaSalle}
+
+Il teorema diretto di Lyapunov classico dice:
+
+\begin{itemize}
+    \item se esiste \(V\) positiva definita e \(L_fV\le 0\), allora l'equilibrio è stabile;
+    \item se esiste \(V\) positiva definita e \(L_fV<0\) per ogni \(x\neq 0\), allora l'equilibrio è asintoticamente stabile.
+\end{itemize}
+
+Il punto delicato è il caso intermedio:
+\[
+L_fV(x)\le 0
+\quad \text{ma non strettamente } <0.
+\]
+In questa situazione il teorema diretto, da solo, spesso garantisce soltanto la stabilità, non la convergenza all'equilibrio.
+
+Il principio di invarianza di LaSalle serve esattamente a colmare questo vuoto: ci dice \emph{dove vanno a finire}, nel lungo periodo, le traiettorie di un sistema quando la funzione di Lyapunov non cresce ma può rimanere costante su qualche sottoinsieme.
+
+\section{Enunciato del principio di invarianza di LaSalle}
+
+\subsection{Versione per sistemi a tempo continuo}
+
+Consideriamo il sistema
+\[
+\dot x = f(x), \qquad x\in\mathbb{R}^n,
+\]
+con \(f\) sufficientemente regolare da garantire esistenza e unicità delle soluzioni.
+
+Sia \(\Omega\subseteq \mathbb{R}^n\) un insieme chiuso, limitato e positivamente invariante.  
+Sia inoltre
+\[
+V:\Omega\to\mathbb{R}
+\]
+una funzione di classe \(C^1\) tale che
+\[
+L_fV(x)=\nabla V(x)^\top f(x)\le 0
+\qquad \forall x\in\Omega.
+\]
+
+Definiamo l'insieme
+\[
+E=\{x\in\Omega : L_fV(x)=0\}.
+\]
+Sia poi \(M\) il \textbf{massimo insieme invariante} contenuto in \(E\).
+
+\medskip
+
+\noindent
+\textbf{Teorema di LaSalle.}
+Per ogni traiettoria che parte in \(\Omega\),
+\[
+x(0)\in\Omega,
+\]
+si ha
+\[
+\operatorname{dist}(x(t),M)\to 0
+\qquad \text{per } t\to+\infty.
+\]
+
+\medskip
+
+\noindent
+In parole: la traiettoria converge al massimo insieme invariante contenuto nella zona in cui \(V\) smette di diminuire.
+
+\subsection{Versione per sistemi a tempo discreto}
+
+Per un sistema discreto
+\[
+x(k+1)=f(x(k)),
+\]
+si ragiona in modo del tutto analogo.  
+Se esiste una funzione \(V\) tale che
+\[
+\Delta V(x)=V(f(x))-V(x)\le 0,
+\]
+allora si considera l'insieme
+\[
+E=\{x\in\Omega : \Delta V(x)=0\},
+\]
+e il massimo insieme invariante \(M\subseteq E\).  
+Anche in questo caso le traiettorie convergono a \(M\).
+
+\section{Interpretazione geometrica}
+
+Il principio di LaSalle si capisce bene così.
+
+\begin{itemize}
+    \item La funzione \(V(x)\) si comporta come una ``energia''.
+    \item Se \(L_fV\le 0\), questa energia non aumenta.
+    \item Quindi la traiettoria non può vagare in modo arbitrario: è costretta a scendere, o al massimo a restare sullo stesso livello di energia.
+    \item Nel lungo periodo, allora, il sistema deve finire nella regione in cui la discesa si arresta, cioè in
+    \[
+    E=\{x:L_fV(x)=0\}.
+    \]
+    \item Ma non tutto \(E\) è necessariamente compatibile con la dinamica: la traiettoria può fermarsi solo nel \emph{massimo insieme invariante} contenuto in \(E\).
+\end{itemize}
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[scale=1]
+    \draw[->] (-3.2,0) -- (3.2,0) node[right] {$x_1$};
+    \draw[->] (0,-3.2) -- (0,3.2) node[above] {$x_2$};
+
+    \draw[thick] (0,0) circle (2.4);
+    \draw[thick] (0,0) circle (1.7);
+    \draw[thick] (0,0) circle (1.0);
+
+    \draw[red,thick] (-2.8,0.8) .. controls (-1.6,1.1) and (-0.5,0.8) .. (0.1,0.2);
+    \draw[-{Latex[length=3mm]},red,thick] (-0.05,0.25) -- (0.1,0.2);
+
+    \draw[blue,thick] (-1.3,-1.3) -- (1.3,1.3);
+    \node[blue] at (1.7,1.6) {\small \(E=\{L_fV=0\}\)};
+
+    \fill (0,0) circle (1.7pt);
+    \node at (0.35,-0.3) {\small \(M\)};
+\end{tikzpicture}
+\caption{Idea qualitativa: la traiettoria scende lungo le curve di livello di \(V\) e converge al massimo insieme invariante contenuto in \(E\).}
+\end{figure}
+
+\section{Corollario fondamentale per la stabilità asintotica}
+
+Il caso più importante, in pratica, è questo.
+
+\medskip
+
+\noindent
+\textbf{Corollario.}
+Se l'origine è un equilibrio, esiste una funzione \(V\) positiva definita e
+\[
+L_fV(x)\le 0,
+\]
+e inoltre il massimo insieme invariante contenuto in
+\[
+E=\{x:L_fV(x)=0\}
+\]
+è il solo punto
+\[
+M=\{0\},
+\]
+allora l'origine è \textbf{asintoticamente stabile}.
+
+\medskip
+
+\noindent
+Questo risultato è estremamente utile perché permette di concludere l'asintotica stabilità anche quando \(L_fV\) è solo semidefinita negativa.
+
+\section{Mini-esempio: convergenza a una retta di equilibri}
+
+Consideriamo il sistema
+\[
+\begin{cases}
+\dot x_1 = -x_1,\\[4pt]
+\dot x_2 = 0.
+\end{cases}
+\]
+Scegliamo
+\[
+V(x)=\frac{1}{2}x_1^2.
+\]
+Allora
+\[
+L_fV=x_1\dot x_1=-x_1^2\le 0.
+\]
+Quindi
+\[
+E=\{x:L_fV=0\}=\{x_1=0\}.
+\]
+Ma l'insieme \(\{x_1=0\}\) è esso stesso invariante, perché se \(x_1(0)=0\), allora \(x_1(t)=0\) per ogni \(t\), mentre \(x_2\) resta costante.
+
+Dunque il massimo insieme invariante contenuto in \(E\) è
+\[
+M=\{(0,x_2):x_2\in\mathbb{R}\}.
+\]
+Per LaSalle, le traiettorie convergono a questa retta, non necessariamente all'origine.
+
+Questo esempio è importante perché mostra bene che:
+\begin{center}
+LaSalle non dice automaticamente che si converge a un punto; dice che si converge al massimo insieme invariante contenuto in \(E\).
+\end{center}
+
+\section{Collegamento con l'esercizio della lezione precedente}
+
+Riprendiamo il sistema già studiato in precedenza, nel caso \(k=0\):
+\[
+\begin{cases}
+\dot z_1 = -z_1-z_2^2,\\[4pt]
+\dot z_2 = 4z_1z_2.
+\end{cases}
+\]
+Scegliamo
+\[
+V(z)=\frac{1}{2}\left(4z_1^2+z_2^2\right).
+\]
+Allora
+\[
+L_fV = -4z_1^2\le 0.
+\]
+Quindi
+\[
+E=\{z:L_fV(z)=0\}=\{z_1=0\}.
+\]
+
+Per capire il massimo insieme invariante contenuto in \(E\), imponiamo \(z_1(t)=0\) per tutti i tempi.  
+Ma allora dalla prima equazione segue
+\[
+\dot z_1 = -z_2^2.
+\]
+Affinché \(z_1\) resti identicamente nullo, deve valere necessariamente
+\[
+-z_2^2=0 \quad \Longrightarrow \quad z_2=0.
+\]
+Quindi l'unico insieme invariante contenuto in \(E\) è il solo punto
+\[
+M=\{(0,0)\}.
+\]
+Per il corollario di LaSalle segue allora che l'origine è \textbf{asintoticamente stabile}.
+
+Questo è esattamente il tipo di situazione in cui LaSalle è più potente del teorema diretto classico.
+
+\section{Esercizio 1: studio di un sistema non lineare}
+\label{sec:L23-es1}
+
+Studiamo il sistema
+\begin{equation}
+\label{eq:L23-es1}
+\begin{cases}
+\dot x_1 = -x_1^3 + x_2,\\[4pt]
+\dot x_2 = -x_1^3 - x_2^3.
+\end{cases}
+\end{equation}
+
+\subsection{Equilibri}
+
+Gli equilibri si trovano imponendo
+\[
+\begin{cases}
+0 = -x_1^3 + x_2,\\[4pt]
+0 = -x_1^3 - x_2^3.
+\end{cases}
+\]
+Dalla prima equazione:
+\[
+x_2=x_1^3.
+\]
+Sostituendo nella seconda:
+\[
+0=-x_1^3-(x_1^3)^3=-x_1^3-x_1^9=-x_1^3(1+x_1^6).
+\]
+Poiché
+\[
+1+x_1^6>0 \qquad \forall x_1\in\mathbb{R},
+\]
+segue
+\[
+x_1=0.
+\]
+Di conseguenza, anche
+\[
+x_2=0.
+\]
+L'unico equilibrio è quindi
+\[
+(0,0).
+\]
+
+\subsection{Metodo indiretto}
+
+Il Jacobiano è
+\[
+A(x)=
+\begin{pmatrix}
+-3x_1^2 & 1\\[4pt]
+-3x_1^2 & -3x_2^2
+\end{pmatrix}.
+\]
+Valutando nell'origine:
+\[
+A(0,0)=
+\begin{pmatrix}
+0 & 1\\
+0 & 0
+\end{pmatrix}.
+\]
+Il polinomio caratteristico è
+\[
+\lambda^2=0,
+\]
+quindi gli autovalori sono entrambi nulli. Il metodo indiretto è dunque inconcludente.
+
+\subsection{Scelta di una funzione di Lyapunov}
+
+Una scelta quadratica standard,
+\[
+V=\frac{1}{2}(x_1^2+x_2^2),
+\]
+non è conveniente perché genera termini misti difficili da controllare:
+\[
+L_fV=x_1(-x_1^3+x_2)+x_2(-x_1^3-x_2^3).
+\]
+Per eliminare i termini misti e adattarsi alle potenze del sistema conviene scegliere una funzione di Lyapunov \emph{non quadratica}.
+
+Una scelta efficace è
+\[
+V(x)=\frac{1}{4}x_1^4+\frac{1}{2}x_2^2.
+\]
+Essa è positiva definita e radialmente illimitata.
+
+Calcoliamo la derivata lungo le traiettorie:
+\[
+L_fV = x_1^3\dot x_1 + x_2\dot x_2.
+\]
+Sostituendo \eqref{eq:L23-es1}:
+\begin{align*}
+L_fV
+&= x_1^3(-x_1^3+x_2)+x_2(-x_1^3-x_2^3)\\
+&= -x_1^6 + x_1^3x_2 - x_1^3x_2 - x_2^4\\
+&= -x_1^6 - x_2^4.
+\end{align*}
+Quindi
+\[
+L_fV(x)<0
+\qquad \forall x\neq 0.
+\]
+Essendo \(V\) positiva definita e radialmente illimitata, e \(L_fV\) negativa definita, concludiamo che l'origine è \textbf{globalmente asintoticamente stabile}.
+
+\medskip
+
+\noindent
+\textbf{Osservazione metodologica.}
+Questo esercizio è istruttivo perché mostra che, nei sistemi non lineari, la funzione di Lyapunov non deve per forza essere quadratica: spesso bisogna scegliere le potenze giuste per adattarsi alla struttura del campo vettoriale.
+
+\section{Esercizio 2: pendolo smorzato}
+\label{sec:L23-pendolo}
+
+Consideriamo il pendolo smorzato
+\begin{equation}
+\label{eq:L23-pendolo}
+\begin{cases}
+\dot x_1 = x_2,\\[4pt]
+\dot x_2 = -\dfrac{c}{m\ell^2}x_2 - \dfrac{g}{\ell}\sin x_1,
+\end{cases}
+\end{equation}
+dove:
+\begin{itemize}
+    \item \(x_1=\theta\) è l'angolo,
+    \item \(x_2=\dot\theta\) è la velocità angolare,
+    \item \(m\) è la massa,
+    \item \(\ell\) la lunghezza,
+    \item \(c\ge 0\) il coefficiente di smorzamento.
+\end{itemize}
+
+\subsection{Linearizzazione nell'origine}
+
+L'origine \((0,0)\) è un equilibrio perché
+\[
+x_2=0, \qquad \sin x_1 = 0 \text{ per } x_1=0.
+\]
+Il Jacobiano nell'origine è
+\[
+A(0,0)=
+\begin{pmatrix}
+0 & 1\\[4pt]
+-\dfrac{g}{\ell} & -\dfrac{c}{m\ell^2}
+\end{pmatrix}.
+\]
+
+\begin{itemize}
+    \item Se \(c>0\), il sistema linearizzato è asintoticamente stabile.
+    \item Se \(c=0\), il linearizzato ha autovalori puramente immaginari e il metodo indiretto non conclude.
+\end{itemize}
+
+\subsection{Funzione energia}
+
+La funzione naturale da provare è l'energia meccanica:
+\[
+V(x)=mg\ell\bigl(1-\cos x_1\bigr)+\frac{m\ell^2}{2}x_2^2.
+\]
+Vicino all'origine questa funzione è positiva definita, perché:
+\[
+1-\cos x_1 \sim \frac{x_1^2}{2}
+\qquad \text{per } x_1\to 0.
+\]
+
+La derivata lungo le traiettorie è
+\[
+L_fV
+=
+mg\ell\sin x_1\,\dot x_1 + m\ell^2 x_2\dot x_2.
+\]
+Sostituendo \eqref{eq:L23-pendolo}:
+\begin{align*}
+L_fV
+&=
+mg\ell\sin x_1\,x_2
++
+m\ell^2x_2\left(
+-\frac{c}{m\ell^2}x_2 - \frac{g}{\ell}\sin x_1
+\right)\\
+&=
+mg\ell\sin x_1\,x_2
+-cx_2^2
+-mg\ell x_2\sin x_1\\
+&=
+-cx_2^2.
+\end{align*}
+Quindi:
+\[
+L_fV = -cx_2^2 \le 0.
+\]
+
+\subsection{Caso \(c>0\): applicazione di LaSalle}
+
+Se \(c>0\), allora
+\[
+L_fV=0 \iff x_2=0.
+\]
+Quindi
+\[
+E=\{(x_1,x_2):x_2=0\}.
+\]
+
+Per applicare bene LaSalle conviene limitarsi a un sottolivello di energia che non includa il punto alto del pendolo, cioè scegliere
+\[
+\Omega_\rho = \{x: V(x)\le \rho\}
+\qquad \text{con } 0<\rho<2mg\ell.
+\]
+In questo modo restiamo in una regione attorno all'origine e non includiamo l'equilibrio instabile in \(x_1=\pi\).
+
+Se una traiettoria resta in \(E\), allora \(x_2(t)=0\) per ogni \(t\). Ma dalla seconda equazione di \eqref{eq:L23-pendolo} segue
+\[
+\dot x_2 = -\frac{g}{\ell}\sin x_1.
+\]
+Affinché \(x_2\) resti identicamente nullo, deve essere
+\[
+\sin x_1 = 0.
+\]
+Nel sottolivello scelto, l'unico punto che soddisfa questa condizione è
+\[
+x_1=0.
+\]
+Dunque il massimo insieme invariante contenuto in \(E\cap \Omega_\rho\) è il solo punto
+\[
+M=\{(0,0)\}.
+\]
+Per LaSalle, l'origine è \textbf{asintoticamente stabile}.
+
+\subsection{Caso \(c=0\): solo stabilità}
+
+Se \(c=0\), allora
+\[
+L_fV=0
+\qquad \forall x.
+\]
+Quindi il teorema di LaSalle non può dare convergenza all'origine, perché tutto l'insieme considerato appartiene a \(E\). In effetti il sistema è conservativo: l'energia si conserva e le traiettorie, in generale, non convergono all'equilibrio.
+
+Quindi:
+\[
+c=0
+\quad \Longrightarrow \quad
+(0,0) \text{ è stabile, ma non asintoticamente stabile.}
+\]
+
+\section{Esercizio 3: sistema discreto}
+\label{sec:L23-TD}
+
+Consideriamo il sistema discreto
+\begin{equation}
+\label{eq:L23-TD}
+\begin{cases}
+x_1(k+1)=\alpha x_2(k)-x_1^2(k)x_2(k),\\[4pt]
+x_2(k+1)=-\alpha x_1(k)+x_1(k)x_2^2(k).
+\end{cases}
+\end{equation}
+
+\subsection{Linearizzazione nell'origine}
+
+L'origine è un equilibrio.  
+Il linearizzato nell'origine è
+\[
+x(k+1)=Ax(k),
+\qquad
+A=
+\begin{pmatrix}
+0 & \alpha\\
+-\alpha & 0
+\end{pmatrix}.
+\]
+Gli autovalori sono
+\[
+\lambda_{1,2}=\pm j\alpha,
+\]
+quindi il loro modulo è
+\[
+|\lambda_{1,2}|=|\alpha|.
+\]
+
+Da qui segue:
+\[
+|\alpha|<1 \Rightarrow (0,0)\text{ asintoticamente stabile},
+\]
+\[
+|\alpha|>1 \Rightarrow (0,0)\text{ instabile},
+\]
+\[
+|\alpha|=1 \Rightarrow \text{metodo indiretto inconcludente}.
+\]
+
+\subsection{Caso critico \(\alpha=1\)}
+
+Poniamo ora \(\alpha=1\).  
+Proviamo con
+\[
+V(x)=x_1^2+x_2^2.
+\]
+Calcoliamo
+\[
+\Delta V(x)=V(x(k+1))-V(x(k)).
+\]
+Sostituendo la dinamica:
+\begin{align*}
+\Delta V
+&=
+\bigl(x_2-x_1^2x_2\bigr)^2+\bigl(-x_1+x_1x_2^2\bigr)^2-x_1^2-x_2^2\\
+&=
+x_1^2x_2^2\bigl(x_1^2+x_2^2-4\bigr).
+\end{align*}
+Quindi, in un intorno sufficientemente piccolo dell'origine,
+\[
+\Delta V \le 0.
+\]
+Per esempio, nel disco
+\[
+x_1^2+x_2^2<4
+\]
+si ha effettivamente \(\Delta V\le 0\).
+
+Tuttavia
+\[
+\Delta V=0
+\]
+non si verifica solo nell'origine, ma anche sugli assi \(x_1=0\) e \(x_2=0\). Bisogna quindi studiare il massimo insieme invariante contenuto in tale insieme.
+
+Se partiamo da un punto dell'asse \(x_1\), per esempio
+\[
+x(0)=(a,0),
+\]
+si ottiene:
+\[
+x(1)=(0,-a),
+\qquad
+x(2)=(-a,0),
+\qquad
+x(3)=(0,a),
+\qquad
+x(4)=(a,0).
+\]
+Quindi compare un'orbita periodica di periodo \(4\).
+
+Dunque il massimo insieme invariante contenuto in \(\{\Delta V=0\}\) non è il solo punto \((0,0)\).  
+Perciò LaSalle non dà asintotica stabilità. In effetti l'origine risulta soltanto \textbf{stabile}, non asintoticamente stabile.
+
+\medskip
+
+\noindent
+Questo esempio è importante perché mostra una differenza sostanziale tra:
+\begin{itemize}
+    \item ``\(\Delta V\le 0\)'',
+    \item ``\(\Delta V<0\)''.
+\end{itemize}
+Nel primo caso, senza studiare l'insieme invariante, non si può concludere la convergenza all'equilibrio.
+
+\section{Lyapunov e sintesi del controllo}
+
+Una delle idee più importanti della lezione è che i metodi di Lyapunov non servono solo per \emph{analizzare} la stabilità, ma anche per \emph{progettare} controlli stabilizzanti.
+
+\subsection{Idea di fondo}
+
+Supponiamo di avere un sistema non lineare controllato:
+\[
+\dot x = f(x,u).
+\]
+Se vogliamo stabilizzare un equilibrio \((\bar x,\bar u)\), conviene traslare il sistema:
+\[
+z=x-\bar x,
+\qquad
+v=u-\bar u.
+\]
+In queste coordinate l'equilibrio da stabilizzare diventa l'origine:
+\[
+z=0,\qquad v=0.
+\]
+
+L'idea è allora cercare una funzione \(V(z)\) positiva definita e scegliere una legge di controllo
+\[
+v=\alpha(z)
+\]
+in modo che
+\[
+L_fV(z)\le 0
+\quad \text{o meglio} \quad
+L_fV(z)<0.
+\]
+
+In questo modo il controllo è \emph{stabilizzante per costruzione}.
+
+\subsection{Perché il controllo non deve spostare l'equilibrio}
+
+Se il controllo serve a stabilizzare l'equilibrio, è essenziale che nel punto di equilibrio esso si annulli in coordinate traslate:
+\[
+v(0)=0.
+\]
+Equivalentemente, in coordinate originali deve valere
+\[
+u(\bar x)=\bar u.
+\]
+Se così non fosse, il controllo introdurrebbe una forza costante anche nel punto che vogliamo mantenere come equilibrio, spostandolo.
+
+\section{Controllare prima e linearizzare dopo, o viceversa}
+
+Per un sistema non lineare
+\[
+\dot x=f(x,u),
+\]
+sia \((\bar x,\bar u)\) un equilibrio, cioè
+\[
+f(\bar x,\bar u)=0.
+\]
+Linearizzando attorno a \((\bar x,\bar u)\), otteniamo
+\[
+\dot z = Az+Bv,
+\]
+dove
+\[
+A=\left.\frac{\partial f}{\partial x}\right|_{(\bar x,\bar u)},
+\qquad
+B=\left.\frac{\partial f}{\partial u}\right|_{(\bar x,\bar u)}.
+\]
+
+Se imponiamo una retroazione lineare locale
+\[
+v=Kz,
+\]
+il linearizzato in anello chiuso diventa
+\[
+\dot z = (A+BK)z.
+\]
+
+Questa osservazione è fondamentale: localmente, progettare il feedback sul sistema linearizzato equivale a linearizzare il sistema già controllato.  
+Perciò, se \(A+BK\) è Hurwitz, il sistema non lineare controllato è localmente asintoticamente stabile attorno all'equilibrio, per il metodo indiretto di Lyapunov.
+
+\section{Esempio di sintesi con Lyapunov}
+
+Consideriamo il sistema
+\begin{equation}
+\label{eq:L23-controllo}
+\begin{cases}
+\dot x_1 = (x_2+1)^3,\\[4pt]
+\dot x_2 = (x_1-1)^3 + u + 2.
+\end{cases}
+\end{equation}
+
+Vogliamo scegliere \(u(t)\) in modo da rendere stabile l'equilibrio
+\[
+(\bar x_1,\bar x_2)=(1,-1).
+\]
+
+\subsection{Traslazione}
+
+Poniamo
+\[
+z_1=x_1-1,\qquad z_2=x_2+1,
+\qquad
+v=u+2.
+\]
+In questo modo l'equilibrio desiderato diventa l'origine:
+\[
+z=0,\qquad v=0.
+\]
+Il sistema si riscrive come
+\[
+\begin{cases}
+\dot z_1 = z_2^3,\\[4pt]
+\dot z_2 = z_1^3 + v.
+\end{cases}
+\]
+
+\subsection{Scelta della funzione di Lyapunov}
+
+Proviamo con
+\[
+V(z)=\frac12(z_1^2+z_2^2).
+\]
+Allora
+\[
+L_fV=z_1\dot z_1+z_2\dot z_2
+= z_1 z_2^3 + z_2(z_1^3+v).
+\]
+Sviluppando:
+\[
+L_fV = z_1z_2^3 + z_1^3z_2 + z_2v.
+\]
+I primi due termini hanno segno indefinito, quindi da soli non consentono di concludere nulla.  
+L'idea è usare il controllo per cancellarli e aggiungere un termine dissipativo.
+
+Scegliamo
+\[
+v = -z_1z_2^2 - z_1^3 - z_2.
+\]
+Allora
+\begin{align*}
+L_fV
+&= z_1z_2^3 + z_1^3z_2 + z_2\bigl(-z_1z_2^2-z_1^3-z_2\bigr)\\
+&= -z_2^2 \le 0.
+\end{align*}
+Quindi il sistema controllato è stabile.
+
+Per vedere l'asintotica stabilità, osserviamo che
+\[
+L_fV=0 \iff z_2=0.
+\]
+Se \(z_2=0\), allora
+\[
+\dot z_1=0,
+\qquad
+\dot z_2=z_1^3.
+\]
+Affinché la traiettoria resti in \(\{z_2=0\}\), deve essere
+\[
+z_1^3=0 \quad \Longrightarrow \quad z_1=0.
+\]
+Quindi il massimo insieme invariante contenuto in \(\{L_fV=0\}\) è il solo punto
+\[
+M=\{0\}.
+\]
+Per LaSalle, l'origine del sistema controllato è asintoticamente stabile.
+
+\subsection{Legge di controllo in coordinate originali}
+
+Ricordando che
+\[
+z_1=x_1-1,\qquad z_2=x_2+1,\qquad v=u+2,
+\]
+si ottiene
+\[
+u = v-2,
+\]
+quindi una legge di controllo stabilizzante è
+\[
+\boxed{
+u(x)= -2 - (x_1-1)(x_2+1)^2 - (x_1-1)^3 - (x_2+1).
+}
+\]
+
+\section{Cicli limite: cenno qualitativo}
+
+Nella parte finale della lezione compare un'osservazione importante sui sistemi non lineari: oltre agli equilibri, possono esistere anche \textbf{cicli limite}.
+
+\medskip
+
+\noindent
+\textbf{Definizione informale.}
+Un ciclo limite è una traiettoria periodica isolata nello spazio delle fasi.  
+In altre parole, il sistema torna periodicamente sugli stessi stati e la traiettoria descrive una curva chiusa.
+
+\medskip
+
+\noindent
+Questo fenomeno è tipico dei sistemi non lineari.  
+Nei sistemi lineari autonomi non banali, infatti, le traiettorie periodiche non sono isolate nello stesso senso: se esiste una traiettoria chiusa, tipicamente ne esiste un'intera famiglia.
+
+\medskip
+
+\noindent
+Un ciclo limite può essere:
+\begin{itemize}
+    \item attrattivo,
+    \item repulsivo,
+    \item semistabile.
+\end{itemize}
+
+Talvolta, per studiarne l'attrattività, si costruisce una funzione del tipo
+\[
+V(x)=C(x)^2,
+\]
+dove la curva
+\[
+C(x)=0
+\]
+descrive il ciclo o una curva invariante candidata.  
+L'idea è che \(V\) sia nulla sulla curva e positiva fuori, così da misurare la distanza energetica dalla traiettoria chiusa.
+
+\section{Schema operativo per gli esercizi di fine lezione}
+
+Gli esercizi di questa lezione si risolvono in genere seguendo questo schema.
+
+\subsection*{A. Trovare gli equilibri}
+Si impone:
+\[
+f(x)=0
+\]
+oppure, nel caso controllato,
+\[
+f(x,u)=0
+\]
+con l'ingresso assegnato o da scegliere.
+
+\subsection*{B. Provare il linearizzato}
+Si calcola il Jacobiano:
+\[
+A=\frac{\partial f}{\partial x}.
+\]
+Se tutti gli autovalori hanno parte reale negativa (o modulo minore di \(1\) nel discreto), allora si conclude subito la stabilità asintotica locale.
+
+\subsection*{C. Se il linearizzato è inconcludente, usare Lyapunov}
+Si prova una funzione:
+\begin{itemize}
+    \item quadratica, se il sistema lo suggerisce;
+    \item energetica, se c'è una struttura meccanica;
+    \item con potenze adattate alla non linearità, se compaiono monomi di grado alto.
+\end{itemize}
+
+\subsection*{D. Se \(L_fV\) o \(\Delta V\) è solo semidefinita, usare LaSalle}
+Si calcola
+\[
+E=\{x:L_fV(x)=0\}
+\qquad \text{oppure} \qquad
+E=\{x:\Delta V(x)=0\},
+\]
+poi si cerca il massimo insieme invariante contenuto in \(E\).
+
+\subsection*{E. Nei problemi di controllo, traslare prima l'equilibrio}
+Se l'equilibrio desiderato non è l'origine:
+\[
+z=x-\bar x,\qquad v=u-\bar u.
+\]
+Poi si progetta il controllo in \((z,v)\), imponendo
+\[
+v(0)=0.
+\]
+
+\section{Riassunto finale}
+
+La lezione porta a quattro idee chiave.
+
+\begin{enumerate}
+    \item \textbf{LaSalle completa Lyapunov:} se \(V\) non cresce, la traiettoria converge al massimo insieme invariante contenuto in \(\{L_fV=0\}\).
+    \item \textbf{Per concludere l'asintotica stabilità} basta spesso mostrare che tale massimo insieme invariante è il solo equilibrio.
+    \item \textbf{Le funzioni di Lyapunov si possono progettare}, non solo usare a posteriori: questo apre direttamente alla sintesi del controllo.
+    \item \textbf{Nei sistemi non lineari} compaiono fenomeni più ricchi degli equilibri, come i cicli limite, che richiedono strumenti qualitativi più raffinati.
+\end{enumerate}
+
+\medskip
+
+\noindent
+In forma compatta, il messaggio da ricordare è:
+
+\begin{center}
+\emph{Se trovi una funzione \(V\) che non aumenta, non hai ancora finito: devi chiederti dove il sistema può restare quando \(V\) smette di diminuire. La risposta la dà il massimo insieme invariante di LaSalle.}
+\end{center}

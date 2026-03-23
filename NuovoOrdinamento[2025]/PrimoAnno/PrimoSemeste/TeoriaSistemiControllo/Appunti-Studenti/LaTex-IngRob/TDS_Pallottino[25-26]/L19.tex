@@ -1,0 +1,678 @@
+% =========================
+% L19.tex
+% =========================
+
+\chapter{L19 -- Realizzazione in forma di stato di sistemi MIMO, zeri di trasmissione e stabilità}
+\label{chap:L19}
+
+\section{Dalla matrice di trasferimento alla forma di stato}
+
+In questa lezione affrontiamo tre temi collegati tra loro:
+\begin{enumerate}
+    \item come leggere la struttura di un sistema \textbf{MIMO} a partire dalla sua matrice di trasferimento;
+    \item come individuare i \textbf{poli}, gli \textbf{zeri di trasmissione} e l'\textbf{ordine minimo} della realizzazione;
+    \item come distinguere \textbf{stabilità interna} e \textbf{stabilità esterna (BIBO)}.
+\end{enumerate}
+
+Partiamo da una matrice di trasferimento razionale
+\[
+G(s)\in \mathbb{R}(s)^{\ell\times m},
+\]
+dove \(m\) è il numero di ingressi e \(\ell\) il numero di uscite.
+
+L'obiettivo finale è sempre quello di costruire una realizzazione in forma di stato
+\[
+\begin{cases}
+\dot x = Ax + Bu,\\
+y = Cx + Du,
+\end{cases}
+\qquad
+B\in\mathbb{R}^{n\times m},\quad
+C\in\mathbb{R}^{\ell\times n},
+\]
+che rappresenti il sistema dato.
+
+Nel caso MIMO, però, non basta guardare una singola funzione di trasferimento: la struttura del sistema è contenuta nell'intera matrice \(G(s)\). Per questo diventa naturale introdurre la \textbf{forma canonica di Smith} per matrici polinomiali e, di conseguenza, la \textbf{forma di Smith--McMillan} per matrici razionali.
+
+\bigskip
+
+\section{Forma canonica di Smith per matrici polinomiali}
+
+Sia
+\[
+P(s)\in \mathbb{R}[s]^{\ell\times m}
+\]
+una matrice a coefficienti polinomiali. Allora esistono due matrici unimodulari \(U_1(s)\) e \(U_2(s)\) tali che
+\[
+P(s)=U_1(s)\,\Lambda(s)\,U_2(s),
+\]
+dove \(\Lambda(s)\) è diagonale della forma
+\[
+\Lambda(s)=
+\operatorname{diag}\bigl(\delta_1(s),\delta_2(s),\dots,\delta_r(s),0,\dots,0\bigr),
+\]
+con:
+\begin{itemize}
+    \item \(r=\operatorname{rk}P(s)\) (rango normale della matrice polinomiale);
+    \item ogni \(\delta_i(s)\) monico;
+    \item \(\delta_i(s)\mid \delta_{i+1}(s)\) per ogni \(i\).
+\end{itemize}
+
+Questa è la \textbf{forma canonica di Smith}. I polinomi \(\delta_i(s)\) sono i \textbf{fattori invarianti} della matrice \(P(s)\).
+
+\medskip
+
+\noindent
+\textbf{Osservazione importante.}
+La forma di Smith si applica a una \emph{matrice polinomiale}, non direttamente a una matrice razionale. Per questo, quando partiamo da \(G(s)\), prima la riscriviamo come rapporto tra una matrice polinomiale e un denominatore comune.
+
+\bigskip
+
+\section{Dalla forma di Smith alla forma di Smith--McMillan}
+
+Supponiamo che la matrice di trasferimento possa essere scritta come
+\[
+G(s)=\frac{1}{d(s)}\,P(s),
+\]
+dove:
+\begin{itemize}
+    \item \(d(s)\) è un polinomio scalare comune ai denominatori;
+    \item \(P(s)\in\mathbb{R}[s]^{\ell\times m}\).
+\end{itemize}
+
+Se per \(P(s)\) calcoliamo la forma di Smith
+\[
+P(s)=U_1(s)\,\Lambda(s)\,U_2(s),
+\]
+allora
+\[
+G(s)=U_1(s)\,\Pi(s)\,U_2(s),
+\qquad
+\Pi(s)=\frac{\Lambda(s)}{d(s)}.
+\]
+
+Esplicitamente,
+\[
+\Pi(s)=
+\operatorname{diag}\!\left(
+\frac{\delta_1(s)}{d(s)},
+\frac{\delta_2(s)}{d(s)},
+\dots,
+\frac{\delta_r(s)}{d(s)},
+0,\dots,0
+\right).
+\]
+
+Ora ogni rapporto \(\delta_i(s)/d(s)\) va semplificato. Dopo aver eseguito \emph{tutte} le cancellazioni possibili, si ottiene la \textbf{forma di Smith--McMillan}
+\[
+\Pi_{SM}(s)=
+\operatorname{diag}\!\left(
+\frac{\alpha_1(s)}{\beta_1(s)},
+\dots,
+\frac{\alpha_r(s)}{\beta_r(s)},
+0,\dots,0
+\right),
+\]
+dove:
+\begin{itemize}
+    \item i polinomi \(\alpha_i(s)\) e \(\beta_i(s)\) sono coprimi;
+    \item i \(\beta_i(s)\) raccolgono i poli strutturali del sistema;
+    \item gli \(\alpha_i(s)\) raccolgono gli zeri strutturali, cioè gli \textbf{zeri di trasmissione}.
+\end{itemize}
+
+\medskip
+
+\noindent
+\textbf{Informazioni che si leggono dalla forma di Smith--McMillan.}
+\begin{itemize}
+    \item I \textbf{poli} della matrice di trasferimento sono le radici dei \(\beta_i(s)\).
+    \item Gli \textbf{zeri di trasmissione} sono le radici degli \(\alpha_i(s)\).
+    \item L'\textbf{ordine minimo di una realizzazione} è la somma dei gradi dei denominatori dopo cancellazione:
+    \[
+    n_{\min}=\sum_{i=1}^r \deg \beta_i(s).
+    \]
+    Questo numero è il \textbf{grado di McMillan}.
+\end{itemize}
+
+\bigskip
+
+\section{Esempio sulla forma di Smith--McMillan}
+
+Consideriamo la matrice polinomiale
+\[
+P(s)=
+\begin{bmatrix}
+1 & -1\\
+s^2+s-4 & 2s^2-s-8\\
+s^2-4 & 2s^2-8
+\end{bmatrix}.
+\]
+
+Dai calcoli della lezione precedente si sa che la sua forma di Smith è
+\[
+\Lambda(s)=
+\begin{bmatrix}
+1 & 0\\
+0 & (s+2)(s-2)\\
+0 & 0
+\end{bmatrix}.
+\]
+
+Supponiamo ora di avere la matrice di trasferimento
+\[
+G(s)=\frac{1}{s^2+3s+2}\,P(s).
+\]
+Poiché
+\[
+s^2+3s+2=(s+1)(s+2),
+\]
+otteniamo
+\[
+\Pi(s)=\frac{\Lambda(s)}{s^2+3s+2}
+=
+\begin{bmatrix}
+\dfrac{1}{(s+1)(s+2)} & 0\\[1.1em]
+0 & \dfrac{(s+2)(s-2)}{(s+1)(s+2)}\\[1.1em]
+0 & 0
+\end{bmatrix}.
+\]
+
+Semplificando il secondo elemento diagonale:
+\[
+\Pi_{SM}(s)=
+\begin{bmatrix}
+\dfrac{1}{(s+1)(s+2)} & 0\\[1.1em]
+0 & \dfrac{s-2}{s+1}\\[1.1em]
+0 & 0
+\end{bmatrix}.
+\]
+
+A questo punto possiamo leggere direttamente:
+
+\subsection*{Poli}
+I denominatori non banali sono
+\[
+(s+1)(s+2),\qquad s+1.
+\]
+Quindi i poli sono:
+\[
+s=-1 \quad \text{(doppio nel grado complessivo)},\qquad s=-2.
+\]
+
+Infatti il prodotto dei denominatori diagonali è
+\[
+(s+1)(s+2)\cdot (s+1)=(s+1)^2(s+2).
+\]
+
+\subsection*{Zeri di trasmissione}
+I numeratori non banali sono
+\[
+1,\qquad s-2.
+\]
+Dunque compare un solo zero di trasmissione:
+\[
+s=2.
+\]
+
+\subsection*{Ordine minimo}
+L'ordine minimo della realizzazione è
+\[
+n_{\min}=\deg\big((s+1)(s+2)\big)+\deg(s+1)=2+1=3.
+\]
+
+Questa è un'informazione molto importante:
+\begin{quote}
+\emph{anche se una qualunque realizzazione non minima può avere più stati, la forma minima del sistema ha dimensione \(3\).}
+\end{quote}
+
+\bigskip
+
+\section{Interpretazione degli zeri di trasmissione}
+
+Negli appunti compare la domanda fondamentale:
+
+\begin{quote}
+Dato un ingresso non nullo, può esistere una condizione iniziale tale che l'uscita sia identicamente nulla?
+\end{quote}
+
+Questa è proprio l'idea intuitiva di \textbf{zero di trasmissione}.
+
+\subsection{Caso SISO continuo}
+
+Consideriamo un sistema SISO in tempo continuo:
+\[
+\begin{cases}
+\dot x = Ax + Bu,\\
+y = Cx + Du.
+\end{cases}
+\]
+
+Cerchiamo un ingresso del tipo
+\[
+u(t)=e^{\delta t}
+\]
+e una traiettoria dello stato della forma
+\[
+x(t)=x_0 e^{\delta t},
+\]
+con \(\delta\in\mathbb{C}\).
+
+Sostituendo nell'equazione di stato:
+\[
+\delta x_0 e^{\delta t}=Ax_0 e^{\delta t}+B e^{\delta t}.
+\]
+Dividendo per \(e^{\delta t}\neq 0\),
+\[
+(\delta I-A)x_0=B.
+\]
+
+Se \(\delta\) non è autovalore di \(A\), possiamo invertire \(\delta I-A\) e scrivere
+\[
+x_0=(\delta I-A)^{-1}B.
+\]
+
+Allora l'uscita vale
+\[
+y(t)=C x(t)+D u(t)
+= C(\delta I-A)^{-1}B\,e^{\delta t}+D e^{\delta t},
+\]
+cioè
+\[
+y(t)=\bigl(C(\delta I-A)^{-1}B+D\bigr)e^{\delta t}.
+\]
+
+Ma il termine tra parentesi è proprio
+\[
+G(\delta)=C(\delta I-A)^{-1}B+D.
+\]
+
+Quindi
+\[
+y(t)=G(\delta)e^{\delta t}.
+\]
+
+\medskip
+
+\noindent
+Se \(\delta\) è uno zero di \(G(s)\), allora
+\[
+G(\delta)=0
+\quad\Longrightarrow\quad
+y(t)\equiv 0,
+\]
+pur con ingresso non nullo.
+
+\medskip
+
+\noindent
+\textbf{Interpretazione.}
+Uno zero di trasmissione è un valore dell'esponenziale d'ingresso per cui è possibile scegliere opportunamente lo stato iniziale in modo da annullare completamente l'uscita.
+
+\subsection{Generalizzazione MIMO}
+
+Nel caso MIMO l'idea è analoga, ma l'ingresso ha una \emph{direzione}:
+\[
+u(t)=v e^{\delta t},\qquad v\neq 0.
+\]
+Si cercano quindi \(x_0\neq 0\) e \(v\neq 0\) tali che
+\[
+\begin{cases}
+(\delta I-A)x_0-Bv=0,\\
+Cx_0+Dv=0.
+\end{cases}
+\]
+
+In forma compatta:
+\[
+\begin{bmatrix}
+\delta I-A & -B\\
+C & D
+\end{bmatrix}
+\begin{bmatrix}
+x_0\\
+v
+\end{bmatrix}
+=0.
+\]
+
+La matrice
+\[
+\mathcal{R}(\delta)=
+\begin{bmatrix}
+\delta I-A & -B\\
+C & D
+\end{bmatrix}
+\]
+è la \textbf{matrice di Rosenbrock}. I suoi valori \(\delta\) per cui il rango cala sono gli zeri di trasmissione del sistema.
+
+\bigskip
+
+\section{Stabilità interna}
+
+La \textbf{stabilità interna} riguarda l'evoluzione dello \emph{stato}, quindi dipende dagli autovalori di \(A\), non direttamente dalla funzione di trasferimento.
+
+\medskip
+
+\noindent
+Per il sistema autonomo
+\[
+\dot x = Ax,
+\]
+le componenti della soluzione sono costruite a partire dai modi associati agli autovalori di \(A\).
+
+\subsection{Modi elementari nel caso continuo}
+
+Se \(\lambda\in\mathbb{R}\) è autovalore reale di \(A\), i modi associati sono del tipo
+\[
+e^{\lambda t},\quad
+t e^{\lambda t},\quad
+t^2 e^{\lambda t},\quad \dots
+\]
+a seconda della dimensione dei blocchi di Jordan.
+
+Se invece \(\lambda=\sigma\pm j\omega\) è complesso, compaiono modi del tipo
+\[
+e^{\sigma t}\cos(\omega t),\qquad
+e^{\sigma t}\sin(\omega t),
+\]
+eventualmente moltiplicati per potenze di \(t\) nel caso di blocchi di Jordan non banali:
+\[
+t^k e^{\sigma t}\cos(\omega t),\qquad
+t^k e^{\sigma t}\sin(\omega t).
+\]
+
+\subsection{Modi elementari nel caso discreto}
+
+Per il sistema
+\[
+x(k+1)=Ax(k),
+\]
+i modi associati a un autovalore \(\lambda\) sono del tipo
+\[
+\lambda^k,\qquad
+k\lambda^k,\qquad
+k^2\lambda^k,\qquad \dots
+\]
+sempre a seconda della struttura di Jordan.
+
+\subsection{Condizioni di stabilità interna asintotica}
+
+\paragraph{Tempo continuo.}
+Il sistema è asintoticamente stabile se e solo se
+\[
+\Re(\lambda_i)<0
+\qquad \forall\, \lambda_i\in\sigma(A).
+\]
+
+\paragraph{Tempo discreto.}
+Il sistema è asintoticamente stabile se e solo se
+\[
+|\lambda_i|<1
+\qquad \forall\, \lambda_i\in\sigma(A).
+\]
+
+\medskip
+
+\noindent
+\textbf{Osservazione.}
+Se un autovalore ha parte reale nulla (TC) o modulo unitario (TD), si possono avere oscillazioni persistenti: il sistema non diverge, ma non converge neppure a zero. Questo è esattamente ciò che succede nell'oscillatore armonico non smorzato.
+
+\bigskip
+
+\section{Stabilità esterna o BIBO}
+
+La \textbf{stabilità esterna} riguarda invece il legame ingresso--uscita.
+
+\medskip
+
+\noindent
+\textbf{Definizione (BIBO).}
+Un sistema è \emph{Bounded Input Bounded Output} se, per ogni ingresso limitato, l'uscita corrispondente a stato iniziale nullo rimane limitata.
+
+In simboli:
+\[
+\|u(t)\|\le M_u\ \forall t\ge 0
+\quad\Longrightarrow\quad
+\exists M_y>0:\ \|y(t)\|\le M_y\ \forall t\ge 0.
+\]
+
+Nel caso LTI, la stabilità BIBO si legge dai poli della funzione di trasferimento, non dagli autovalori nascosti di una realizzazione non minima.
+
+\subsection{Condizione sui poli}
+
+\paragraph{Tempo continuo.}
+Un sistema razionale proprio è BIBO stabile se tutti i poli della funzione di trasferimento hanno parte reale strettamente negativa:
+\[
+\Re(p_i)<0.
+\]
+
+\paragraph{Tempo discreto.}
+Un sistema razionale proprio è BIBO stabile se tutti i poli stanno strettamente dentro il cerchio unitario:
+\[
+|p_i|<1.
+\]
+
+\medskip
+
+\noindent
+\textbf{Punto chiave.}
+I poli della funzione di trasferimento corrispondono solo agli autovalori di \(A\) che sono \textbf{sia raggiungibili sia osservabili}. Per questo:
+\begin{itemize}
+    \item la stabilità interna guarda \emph{tutti} gli autovalori di \(A\);
+    \item la stabilità esterna guarda solo i modi che compaiono effettivamente in ingresso--uscita.
+\end{itemize}
+
+\bigskip
+
+\section{Esempio: un sistema non BIBO stabile}
+
+Consideriamo
+\[
+G(s)=\frac{1}{s},
+\qquad
+U(s)=\frac{1}{s}.
+\]
+Allora
+\[
+Y(s)=G(s)U(s)=\frac{1}{s^2}.
+\]
+
+Nel tempo, questo corrisponde a una rampa:
+\[
+y(t)=t.
+\]
+L'ingresso \(u(t)=1\) è limitato, ma l'uscita cresce senza limite. Dunque il sistema \(\frac{1}{s}\) \textbf{non è BIBO stabile}.
+
+\medskip
+
+Questo esempio chiarisce bene che, per avere BIBO stabilità, non basta che i modi non esplodano immediatamente: serve che l'uscita resti limitata per ogni ingresso limitato.
+
+\bigskip
+
+\section{Oscillatore armonico non smorzato}
+
+Consideriamo il sistema
+\[
+\ddot y + y = u.
+\]
+
+Introduciamo le variabili di stato
+\[
+x_1=y,\qquad x_2=\dot y.
+\]
+Allora
+\[
+\begin{cases}
+\dot x_1 = x_2,\\
+\dot x_2 = -x_1 + u,
+\end{cases}
+\]
+ossia
+\[
+\dot x =
+\begin{bmatrix}
+0 & 1\\
+-1 & 0
+\end{bmatrix}x+
+\begin{bmatrix}
+0\\
+1
+\end{bmatrix}u,
+\qquad
+y=
+\begin{bmatrix}
+1 & 0
+\end{bmatrix}x.
+\]
+
+\subsection{Stabilità interna}
+
+La matrice di stato è
+\[
+A=
+\begin{bmatrix}
+0 & 1\\
+-1 & 0
+\end{bmatrix},
+\]
+i cui autovalori sono
+\[
+\lambda_{1,2}=\pm j.
+\]
+
+Quindi il sistema autonomo non è asintoticamente stabile: i modi sono sinusoidali puri. Con \(u=0\), le traiettorie sono chiuse e non convergono all'origine.
+
+Infatti:
+\[
+\frac{d}{dt}(x_1^2+x_2^2)
+=2x_1\dot x_1+2x_2\dot x_2
+=2x_1x_2+2x_2(-x_1)=0,
+\]
+quindi
+\[
+x_1^2(t)+x_2^2(t)=\text{costante}.
+\]
+
+Dunque le traiettorie stanno su circonferenze concentriche.
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[scale=1.1]
+    % assi
+    \draw[->] (-2.6,0) -- (2.6,0) node[right] {$x_1$};
+    \draw[->] (0,-2.6) -- (0,2.6) node[above] {$x_2$};
+
+    % orbite
+    \draw[dashed] (0,0) circle (1.1);
+    \draw (0,0) circle (2.0);
+
+    % frecce orbita esterna (senso orario)
+    \draw[->] (2.0,0) arc[start angle=0,end angle=-30,radius=2.0];
+    \draw[->] (0,-2.0) arc[start angle=-90,end angle=-120,radius=2.0];
+    \draw[->] (-2.0,0) arc[start angle=180,end angle=150,radius=2.0];
+    \draw[->] (0,2.0) arc[start angle=90,end angle=60,radius=2.0];
+
+    % frecce orbita interna
+    \draw[->] (1.1,0) arc[start angle=0,end angle=-35,radius=1.1];
+    \draw[->] (0,-1.1) arc[start angle=-90,end angle=-125,radius=1.1];
+    \draw[->] (-1.1,0) arc[start angle=180,end angle=145,radius=1.1];
+    \draw[->] (0,1.1) arc[start angle=90,end angle=55,radius=1.1];
+
+    \node at (1.55,1.6) {\small \(x_1^2+x_2^2=c\)};
+\end{tikzpicture}
+\caption{Ritratto di fase dell'oscillatore armonico non smorzato.}
+\end{figure}
+
+\subsection{Stabilità esterna}
+
+Calcoliamo la funzione di trasferimento:
+\[
+G(s)=C(sI-A)^{-1}B
+=
+\begin{bmatrix}
+1 & 0
+\end{bmatrix}
+\left(
+\begin{bmatrix}
+s & -1\\
+1 & s
+\end{bmatrix}^{-1}
+\right)
+\begin{bmatrix}
+0\\
+1
+\end{bmatrix}
+=
+\frac{1}{s^2+1}.
+\]
+
+I poli sono in
+\[
+s=\pm j.
+\]
+Essendo poli sull'asse immaginario, il sistema \textbf{non è BIBO stabile}. Infatti un ingresso sinusoidale in risonanza produce un'uscita non limitata.
+
+Ad esempio, con
+\[
+u(t)=\sin t,
+\]
+si ottiene una risposta contenente un termine del tipo
+\[
+t\cos t,
+\]
+che cresce in modulo e quindi non resta limitato.
+
+\medskip
+
+\noindent
+Questo esempio è molto istruttivo:
+\begin{itemize}
+    \item il sistema non è asintoticamente stabile internamente;
+    \item il sistema non è BIBO stabile esternamente;
+    \item le due nozioni però restano concettualmente distinte.
+\end{itemize}
+
+\bigskip
+
+\section{Ricapitolazione finale}
+
+Raccogliamo i messaggi centrali della lezione.
+
+\subsection*{1. Realizzazione MIMO}
+Per un sistema MIMO si parte dalla matrice di trasferimento \(G(s)\). Per capirne la struttura conviene scriverla come
+\[
+G(s)=\frac{1}{d(s)}P(s),
+\]
+studiare la forma di Smith di \(P(s)\) e poi la forma di Smith--McMillan di \(G(s)\).
+
+\subsection*{2. Poli, zeri e ordine minimo}
+Dalla forma di Smith--McMillan si leggono:
+\begin{itemize}
+    \item i poli della matrice di trasferimento;
+    \item gli zeri di trasmissione;
+    \item il grado di McMillan, cioè la dimensione minima di una realizzazione.
+\end{itemize}
+
+\subsection*{3. Zeri di trasmissione}
+Uno zero di trasmissione è un valore \(\delta\) tale che esiste un ingresso esponenziale \(e^{\delta t}\) e una opportuna condizione iniziale che rendono l'uscita identicamente nulla.
+
+\subsection*{4. Stabilità interna}
+Dipende dagli autovalori di \(A\), quindi dai modi dello stato.
+
+\subsection*{5. Stabilità esterna}
+Dipende dai poli della funzione di trasferimento, cioè solo dai modi raggiungibili e osservabili.
+
+\subsection*{6. Differenza tra le due}
+In una realizzazione non minima si può avere:
+\begin{itemize}
+    \item sistema internamente instabile;
+    \item ma esternamente stabile,
+\end{itemize}
+se il modo instabile è nascosto perché non raggiungibile o non osservabile.
+
+\medskip
+
+In altre parole:
+\begin{quote}
+\emph{la funzione di trasferimento non racconta tutto dello stato interno: racconta solo ciò che è visibile dall'ingresso e dall'uscita.}
+\end{quote}

@@ -1,0 +1,448 @@
+\chapter{Lezione 15 --- Dead-beat control, sistemi stabilizzabili, stato aumentato e introduzione all'osservatore}
+
+\section{Dead-beat controller}
+
+La prima osservazione della lezione riguarda un sistema a tempo discreto
+\[
+x(k+1)=Ax(k)+Bu(k),
+\]
+controllato con una retroazione completa dello stato
+\[
+u(k)=-Kx(k).
+\]
+
+La dinamica in ciclo chiuso è quindi
+\[
+x(k+1)=(A-BK)x(k).
+\]
+
+Nel tempo discreto è possibile scegliere gli autovalori della matrice \(A-BK\) \emph{tutti in zero}.
+Questo porta al cosiddetto \textbf{dead-beat controller}.
+
+\subsection{Idea fondamentale}
+
+Se riesco ad assegnare
+\[
+\lambda_1=\lambda_2=\cdots=\lambda_n=0,
+\]
+allora il polinomio caratteristico del sistema chiuso è
+\[
+p_{cl}(z)=z^n.
+\]
+
+In questo caso la matrice \(A-BK\) è nilpotente e, per un sistema di ordine \(n\),
+lo stato va esattamente a zero in un numero finito di passi (al più \(n\), nel caso genericamente controllabile).
+
+Questa è una differenza importante rispetto al tempo continuo:
+nel continuo ``mandare un autovalore a \(-\infty\)'' non ha significato fisico,
+mentre nel discreto
+\[
+z=0
+\]
+è un valore perfettamente lecito e corrisponde a un modo che si annulla in tempo finito.
+
+\subsection{Interpretazione nel caso SISO}
+
+Nel caso SISO, un sistema con tutti i poli in zero ha funzione di trasferimento del tipo
+\[
+G(z)=\frac{N(z)}{z^n}.
+\]
+
+Questa è la struttura tipica di un \textbf{filtro FIR} (\emph{Finite Impulse Response}),
+cioè un sistema la cui risposta all'impulso si esaurisce in un tempo finito.
+
+Per questo motivo un controllo dead-beat è molto rapido, ma presenta un problema pratico importante:
+può richiedere azioni di controllo molto intense, quindi
+\begin{itemize}
+    \item si rischia di superare i limiti dell'attuatore;
+    \item si può andare in saturazione;
+    \item si perde la validità del modello lineare.
+\end{itemize}
+
+Quindi il dead-beat controller è concettualmente molto elegante,
+ma spesso è troppo aggressivo per l'implementazione fisica.
+
+\section{Sistemi stabilizzabili}
+
+Si passa poi al caso in cui la coppia \((A,B)\) non sia completamente controllabile.
+
+Consideriamo il sistema continuo
+\[
+\dot x=Ax+Bu.
+\]
+
+Se il sistema non è completamente controllabile, esiste un cambio di coordinate che separa
+la parte controllabile da quella non controllabile:
+\[
+\dot z=
+\begin{bmatrix}
+A_c & A_{12}\\
+0 & A_{nc}
+\end{bmatrix}z
++
+\begin{bmatrix}
+B_c\\
+0
+\end{bmatrix}u,
+\]
+dove:
+\begin{itemize}
+    \item \(A_c\) descrive la parte controllabile;
+    \item \(A_{nc}\) descrive la parte non controllabile.
+\end{itemize}
+
+Applicando una retroazione di stato
+\[
+u=-Kz,
+\]
+si può agire solo sulla parte controllabile, cioè sugli autovalori di
+\[
+A_c-B_cK_c.
+\]
+
+Gli autovalori della parte non controllabile, cioè quelli di \(A_{nc}\), \textbf{non possono essere spostati}.
+
+\subsection{Definizione di stabilizzabilità}
+
+Un sistema non completamente controllabile si dice \textbf{stabilizzabile} se tutti i modi non controllabili sono già stabili.
+
+Nel caso tempo continuo:
+\[
+(A,B)\ \text{stabilizzabile}
+\quad\Longleftrightarrow\quad
+\Re(\lambda)<0\ \text{per tutti gli autovalori non controllabili}.
+\]
+
+Nel caso tempo discreto:
+\[
+(A,B)\ \text{stabilizzabile}
+\quad\Longleftrightarrow\quad
+|\lambda|<1\ \text{per tutti gli autovalori non raggiungibili/non controllabili}.
+\]
+
+Quindi:
+\begin{itemize}
+    \item la controllabilità completa permette di assegnare \emph{tutti} gli autovalori;
+    \item la stabilizzabilità richiede solo che quelli non assegnabili siano già stabili.
+\end{itemize}
+
+\section{Perché la sola retroazione di stato non basta per il tracking perfetto}
+
+Riprendiamo ora un sistema continuo
+\[
+\begin{cases}
+\dot x=Ax+Bu,\\
+y=Cx,
+\end{cases}
+\]
+e consideriamo una legge di controllo del tipo
+\[
+u=-Kx+\bar r,
+\]
+dove \(\bar r\) rappresenta un riferimento costante.
+
+Allora la dinamica diventa
+\[
+\dot x=(A-BK)x+B\bar r.
+\]
+
+All'equilibrio, imponendo \(\dot x=0\), si ottiene
+\[
+(A-BK)\bar x+B\bar r=0.
+\]
+
+Se la matrice
+\[
+N:=A-BK
+\]
+è invertibile, allora
+\[
+\bar x=-N^{-1}B\bar r.
+\]
+
+L'uscita a regime vale quindi
+\[
+\bar y=C\bar x=-CN^{-1}B\bar r.
+\]
+
+In generale \(\bar y\neq \bar r\), quindi la sola retroazione di stato \(-Kx\) non garantisce,
+da sola, errore nullo a regime per un riferimento costante.
+
+\section{Introduzione dell'integratore dell'errore}
+
+Per eliminare l'errore a regime si introduce uno \textbf{stato integratore}.
+
+Definiamo l'errore
+\[
+e(t)=r(t)-y(t)=r(t)-Cx(t),
+\]
+e introduciamo una nuova variabile di stato \(x_i(t)\) tale che
+\[
+\dot x_i(t)=e(t)=r(t)-Cx(t).
+\]
+
+Negli appunti compare prima la struttura in cui l'uscita dell'integratore entra come nuovo segnale di comando:
+\[
+u(t)=-Kx(t)+x_i(t).
+\]
+
+Sostituendo nella dinamica del sistema,
+\[
+\dot x=(A-BK)x+Bx_i.
+\]
+
+Quindi il sistema aumentato, con stato
+\[
+w=
+\begin{bmatrix}
+x\\
+x_i
+\end{bmatrix},
+\]
+si scrive
+\[
+\dot w
+=
+\begin{bmatrix}
+A-BK & B\\
+-C & 0
+\end{bmatrix}
+w
++
+\begin{bmatrix}
+0\\
+I
+\end{bmatrix}r.
+\]
+
+\subsection{Versione con ulteriore feedback sullo stato integratore}
+
+Negli appunti compare poi una generalizzazione in cui si aggiunge un termine di retroazione anche sullo stato integratore:
+\[
+\dot x_i=r-Cx-K_i x_i.
+\]
+
+In questo caso il sistema aumentato diventa
+\[
+\dot w
+=
+\begin{bmatrix}
+A-BK & B\\
+-C & -K_i
+\end{bmatrix}
+w
++
+\begin{bmatrix}
+0\\
+I
+\end{bmatrix}r.
+\]
+
+L'idea è che anche la dinamica dell'integratore può essere modellata e ``chiusa''
+attraverso un opportuno guadagno \(K_i\), così da permettere l'assegnamento
+degli autovalori della matrice aumentata.
+
+\section{Interpretazione dello stato aumentato}
+
+L'introduzione di \(x_i\) ha due scopi:
+\begin{itemize}
+    \item memorizzare l'errore accumulato;
+    \item forzare il sistema a correggere eventuali offset a regime.
+\end{itemize}
+
+Dal punto di vista del progetto, questo significa passare da un sistema di ordine \(n\)
+a un sistema di ordine \(n+\ell\) (oppure \(n+1\) nel caso SISO),
+su cui si può poi tentare una nuova retroazione di stato.
+
+\section{Problema di osservazione dello stato}
+
+La seconda grande parte della lezione introduce il problema dell'osservazione.
+
+Finora si è sempre ipotizzato di conoscere tutto lo stato \(x(t)\),
+ma nella pratica spesso sono misurabili solo:
+\begin{itemize}
+    \item l'ingresso \(u(t)\);
+    \item l'uscita \(y(t)\).
+\end{itemize}
+
+Il sistema è
+\[
+\begin{cases}
+\dot x=Ax+Bu,\\
+y=Cx.
+\end{cases}
+\]
+
+La domanda è:
+
+\begin{quote}
+\emph{Se lo stato non è direttamente accessibile, cosa posso ricostruire di \(x(t)\)
+a partire da \(u(t)\), \(y(t)\) e dal modello \((A,B,C)\)?}
+\end{quote}
+
+\section{Primo tentativo: copia del modello}
+
+Un primo tentativo consiste nel costruire una copia del sistema:
+\[
+\dot{\hat x}=A\hat x+Bu,
+\]
+dove \(\hat x(t)\) è una stima dello stato vero.
+
+Se conoscessi esattamente:
+\begin{itemize}
+    \item il modello \(A,B\);
+    \item la condizione iniziale \(x(0)\);
+\end{itemize}
+e scegliessi
+\[
+\hat x(0)=x(0),
+\]
+allora la stima coinciderebbe sempre con lo stato reale.
+
+Infatti, definendo l'errore di stima
+\[
+e(t)=x(t)-\hat x(t),
+\]
+si ottiene
+\[
+\dot e=Ae.
+\]
+
+Se inizialmente \(e(0)=0\), allora \(e(t)\equiv 0\).
+
+\subsection*{Problema pratico}
+
+Questa idea però non è sufficiente nella realtà, perché:
+\begin{itemize}
+    \item non conosco esattamente la condizione iniziale;
+    \item il modello può non essere perfetto;
+    \item rumore e incertezze possono rendere l'errore non nullo.
+\end{itemize}
+
+Se ad esempio si usano matrici stimate \(\hat A,\hat B\), l'errore non soddisfa più una dinamica autonoma semplice,
+e in generale non si può garantire che tenda a zero.
+
+\section{Osservatore di Luenberger: idea}
+
+Per correggere la stima si introduce una retroazione aggiuntiva basata sull'errore di uscita.
+
+Poiché
+\[
+y=Cx,
+\qquad
+\hat y=C\hat x,
+\]
+la differenza
+\[
+y-\hat y = Cx-C\hat x = C(x-\hat x)=Ce
+\]
+contiene informazione sull'errore di stima.
+
+Si costruisce allora un osservatore del tipo
+\[
+\dot{\hat x}=A\hat x+Bu+L\bigl(y-\hat y\bigr),
+\]
+cioè
+\[
+\dot{\hat x}=A\hat x+Bu+L\bigl(y-C\hat x\bigr),
+\]
+dove \(L\) è il guadagno dell'osservatore.
+
+Negli appunti la stessa idea compare anche nella forma equivalente
+\[
+\dot{\hat x}=A\hat x+Bu-\mu(C\hat x-y),
+\]
+dove il simbolo del guadagno può cambiare, ma il significato resta lo stesso.
+
+\section{Dinamica dell'errore di osservazione}
+
+Definendo ancora
+\[
+e=x-\hat x,
+\]
+si ha
+\[
+\dot e
+=
+(Ax+Bu)-\bigl(A\hat x+Bu+L(y-C\hat x)\bigr).
+\]
+
+Poiché \(y=Cx\),
+\[
+\dot e=A(x-\hat x)-LC(x-\hat x),
+\]
+quindi
+\[
+\dot e=(A-LC)e.
+\]
+
+Questo è il punto chiave:
+scegliendo \(L\), posso modificare gli autovalori della matrice
+\[
+A-LC.
+\]
+
+Quindi il problema dell'osservazione è duale a quello della retroazione di stato:
+\begin{itemize}
+    \item nella retroazione di stato si progettava \(K\) per agire su \(A-BK\);
+    \item nell'osservatore si progetta \(L\) per agire su \(A-LC\).
+\end{itemize}
+
+\section{Commento finale sulla lezione}
+
+La lezione mette insieme tre idee importanti:
+
+\begin{enumerate}
+    \item nel discreto è possibile progettare un \emph{dead-beat controller},
+    assegnando tutti gli autovalori in zero;
+
+    \item anche se un sistema non è completamente controllabile,
+    può comunque essere \emph{stabilizzabile}, purché i modi non controllabili siano già stabili;
+
+    \item quando la sola retroazione di stato non basta a garantire tracking perfetto,
+    si introduce uno stato integratore e si passa a un sistema aumentato;
+
+    \item quando lo stato non è interamente misurabile,
+    nasce il problema dell'osservazione, che porta all'introduzione dell'osservatore dinamico.
+\end{enumerate}
+
+\section{Sintesi della lezione}
+
+I punti principali sono:
+\begin{itemize}
+    \item per un sistema discreto
+    \[
+    x(k+1)=Ax(k)+Bu(k),
+    \qquad
+    u(k)=-Kx(k),
+    \]
+    è possibile assegnare gli autovalori del sistema chiuso in
+    \[
+    z=0,
+    \]
+    ottenendo un \textbf{dead-beat controller};
+
+    \item il dead-beat controllo è molto rapido, ma può richiedere azioni di controllo troppo elevate;
+
+    \item un sistema non completamente controllabile è \textbf{stabilizzabile}
+    se i modi non controllabili sono già stabili;
+
+    \item per eliminare l'errore a regime si introduce un integratore dell'errore,
+    ottenendo un sistema aumentato;
+
+    \item se lo stato non è direttamente misurabile, si introduce una stima \(\hat x\);
+
+    \item una semplice copia del modello non basta in presenza di incertezze;
+
+    \item usando l'errore di uscita \(y-\hat y\) si costruisce un osservatore dinamico:
+    \[
+    \dot{\hat x}=A\hat x+Bu+L(y-C\hat x);
+    \]
+
+    \item l'errore di osservazione evolve secondo
+    \[
+    \dot e=(A-LC)e,
+    \]
+    e quindi il progetto dell'osservatore consiste nello scegliere \(L\)
+    in modo che questa dinamica sia stabile e sufficientemente veloce.
+\end{itemize}

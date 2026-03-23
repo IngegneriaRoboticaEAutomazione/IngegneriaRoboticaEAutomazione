@@ -1,0 +1,443 @@
+\chapter{Lezione 19 --- Riccati a regime, orizzonte infinito, MPC e programmazione dinamica in tempo continuo}
+
+\section{Richiamo: controllo ottimo LQ a tempo discreto}
+
+Consideriamo il sistema lineare discreto
+\[
+x_{k+1}=Ax_k+Bu_k,
+\qquad x_0=\hat x,
+\]
+con funzionale di costo
+\[
+J=\sum_{k=0}^{N-1}\left(x_k^T V x_k+u_k^T P u_k\right)+x_N^T V_N x_N.
+\]
+
+Le matrici di costo soddisfano le ipotesi:
+\[
+V=V^T\succeq 0,
+\qquad
+P=P^T\succ 0,
+\qquad
+V_N=V_N^T\succeq 0.
+\]
+
+Dalle lezioni precedenti abbiamo dimostrato che il controllo ottimo ha la forma
+\[
+u_k^\circ=-H_k x_k,
+\]
+dove
+\[
+H_k=\left(P+B^T T_{k+1}B\right)^{-1}B^T T_{k+1}A,
+\]
+e il costo ottimo a partire dal passo \(k\) è
+\[
+J_k^\circ=x_k^T T_k x_k.
+\]
+
+La matrice \(T_k\) soddisfa la ricorsione all'indietro di Riccati:
+\[
+T_k
+=
+V
++
+A^T
+\left[
+T_{k+1}
+-
+T_{k+1}B\left(P+B^T T_{k+1}B\right)^{-1}B^T T_{k+1}
+\right]
+A,
+\]
+con condizione terminale
+\[
+T_N=V_N.
+\]
+
+\section{Osservazioni sulla soluzione del problema LQ}
+
+La soluzione del problema di controllo ottimo dipende dalla conoscenza del modello,
+cioè delle matrici \(A\) e \(B\), e dalle matrici di peso \(V\), \(P\), \(V_N\).
+
+Quindi, per poter implementare il controllo ottimo, è necessario:
+\begin{itemize}
+    \item disporre di un modello in equazioni di stato del sistema;
+    \item scegliere le matrici di costo in base alle prestazioni desiderate;
+    \item risolvere \emph{prima} dell'evoluzione del processo la ricorsione di Riccati.
+\end{itemize}
+
+In pratica, la ricorsione di Riccati viene risolta offline, partendo dall'istante finale
+e andando all'indietro fino all'istante iniziale; una volta calcolati i guadagni
+\(
+H_k
+\),
+si può implementare online la legge di controllo
+\[
+u_k^\circ=-H_k x_k.
+\]
+
+\section{La ricorsione di Riccati e il concetto di regime}
+
+Una particolarità della ricorsione di Riccati è che essa si risolve \emph{all'indietro}:
+si parte da \(T_N\) e si ricavano \(T_{N-1},T_{N-2},\dots,T_0\).
+
+Questo è diverso da ciò che accade per le normali equazioni di stato di un sistema stabile,
+le cui soluzioni vengono tipicamente studiate in avanti nel tempo:
+\[
+x_0 \to x_1 \to x_2 \to \cdots
+\]
+e, nei sistemi asintoticamente stabili, si tende al regime per \(k\to+\infty\).
+
+Nel caso di Riccati, essendo la ricorsione all'indietro, il concetto di regime va inteso
+come \emph{punto fisso} della ricorsione:
+\[
+T_k=T_{k+1}=T.
+\]
+
+Sostituendo questa condizione nella ricorsione di Riccati si ottiene
+l'\textbf{equazione algebrica di Riccati a tempo discreto}:
+\[
+T
+=
+V
++
+A^T
+\left[
+T
+-
+TB\left(P+B^T T B\right)^{-1}B^T T
+\right]A.
+\]
+
+Questa equazione non è più una ricorsione alle differenze, ma una
+\textbf{equazione matriciale algebrica}.
+
+\section{Orizzonte finito e orizzonte infinito}
+
+L'orizzonte \(N\) ha un ruolo fondamentale.
+
+\subsection{Orizzonte finito}
+
+Se \(N\) è finito e fissato, si parla di \textbf{controllo ottimo su orizzonte finito}.
+In questo caso:
+\begin{itemize}
+    \item bisogna calcolare una successione finita di matrici \(T_k\);
+    \item si ottiene una successione finita di guadagni \(H_k\);
+    \item il controllo ottimo è in generale \emph{tempo-variante}.
+\end{itemize}
+
+\subsection{Orizzonte infinito}
+
+Se invece \(N\to+\infty\), si parla di \textbf{controllo ottimo su orizzonte infinito}.
+In questo caso, sotto opportune ipotesi, la successione \(T_k\) converge a una matrice
+costante \(T\), e quindi anche il guadagno converge a una matrice costante:
+\[
+H=\left(P+B^T T B\right)^{-1}B^T T A.
+\]
+
+Il controllo ottimo diventa allora
+\[
+u_k^\circ=-Hx_k,
+\]
+cioè una retroazione lineare a guadagno costante.
+
+\subsection{Interpretazione}
+
+Con orizzonte finito si ottimizza tenendo conto anche di come il sistema deve arrivare
+al tempo finale fissato \(N\).
+
+Con orizzonte infinito, invece, si rinuncia a un vincolo finale preciso:
+si privilegia il comportamento complessivo su tempi lunghi.
+In questo senso, l'ottimo a orizzonte infinito può essere meno raffinato sul transitorio
+iniziale, ma produce una legge di controllo stazionaria molto più semplice da implementare.
+
+\section{Implementazione pratica del controllo LQ}
+
+Dal punto di vista implementativo:
+\begin{enumerate}
+    \item si costruisce il modello discreto del sistema;
+    \item si scelgono le matrici \(V\), \(P\), \(V_N\);
+    \item si risolve la ricorsione di Riccati all'indietro;
+    \item si memorizzano i guadagni \(H_k\) oppure, nel caso a regime, il solo guadagno \(H\);
+    \item durante il funzionamento si applica
+    \[
+    u_k^\circ=-H_kx_k
+    \quad\text{oppure}\quad
+    u_k^\circ=-Hx_k.
+    \]
+\end{enumerate}
+
+\section{Dal controllo ottimo all'MPC}
+
+L'idea dell'\textbf{MPC (Model Predictive Control)} nasce proprio dal controllo ottimo
+su orizzonte finito.
+
+In un regolatore MPC si fa, concettualmente, così:
+\begin{enumerate}
+    \item al tempo corrente si considera un orizzonte finito \(N\);
+    \item si risolve il problema di controllo ottimo su tale orizzonte;
+    \item si applica solo il primo tratto del controllo ottimo;
+    \item si misura il nuovo stato;
+    \item si sposta in avanti l'orizzonte e si ripete tutto da capo.
+\end{enumerate}
+
+Questa tecnica è detta anche \textbf{receding horizon control}.
+
+\subsection{Idea operativa}
+
+Negli appunti la logica è:
+\begin{description}
+    \item[Passo 1:] si linearizza il sistema attorno alle condizioni iniziali, si risolve
+    Riccati su orizzonte \(N\), si applica il controllo LQ per un tempo \(H\ll N\);
+    \item[Passo 2:] si osserva dove il sistema è arrivato, si rilinearizza attorno al nuovo
+    punto di lavoro, si risolve di nuovo il problema LQ e si riapplica il controllo.
+\end{description}
+
+\section{Perché nasce l'MPC: impianti tempo-varianti}
+
+Nella pratica gli impianti reali sono spesso:
+\begin{itemize}
+    \item non lineari;
+    \item linearizzabili solo localmente;
+    \item descrivibili da modelli che cambiano lungo la traiettoria.
+\end{itemize}
+
+Se il sistema evolve lungo una traiettoria, la linearizzazione locale può produrre matrici
+tempo-varianti:
+\[
+A \to A_k,
+\qquad
+B \to B_k.
+\]
+
+In questo caso cambia anche la Riccati:
+\[
+T_k \to T_k \ \text{calcolata usando } A_k,B_k.
+\]
+
+Non esiste più, in generale, un'unica equazione algebrica di regime.
+Bisogna invece risolvere una Riccati alle differenze con coefficienti variabili nel tempo.
+
+Questo richiede di conoscere, a ogni istante, il modello locale del sistema.
+Nella realtà questo è complesso, sia perché il modello è sempre approssimato,
+sia perché possono agire disturbi e incertezze.
+
+L'MPC è allora una soluzione pratica:
+si ricalcola periodicamente il problema ottimo usando il modello locale più aggiornato.
+
+\subsection{Condizione pratica}
+
+Per fare funzionare questa strategia occorre che il processo non sia troppo veloce:
+tra un aggiornamento e l'altro bisogna avere il tempo di
+\begin{itemize}
+    \item stimare o misurare lo stato;
+    \item linearizzare il modello;
+    \item risolvere il problema di Riccati;
+    \item applicare il nuovo controllo.
+\end{itemize}
+
+\section{Programmazione dinamica nel caso a tempo continuo}
+
+Passiamo ora al caso continuo, in forma più generale.
+
+Consideriamo un impianto non lineare
+\[
+\dot x = F(x(t),u(t)),
+\]
+e supponiamo, per semplicità, che l'origine sia un equilibrio:
+\[
+F(0,0)=0.
+\]
+
+Vogliamo minimizzare, su orizzonte infinito, il funzionale di costo
+\[
+J=\int_{t_0}^{+\infty} \ell(x(\tau),u(\tau))\,d\tau.
+\]
+
+Siamo quindi interessati a trovare un controllo ottimo
+\[
+u^\circ(t)=\arg\min_{u(t)} J.
+\]
+
+\section{Richiamo del concetto di cost-to-go}
+
+Nel tempo discreto avevamo introdotto il \textbf{cost-to-go}:
+se un sistema si trova lungo una traiettoria ottima e arriva in un certo stato,
+allora anche il tratto successivo della traiettoria deve restare ottimo.
+
+Lo stesso concetto si usa qui.
+
+Definiamo
+\[
+\psi(x_0)=J^\circ,
+\]
+cioè il costo ottimo associato alla condizione iniziale \(x_0\).
+
+Più in generale, se al tempo \(t\) il sistema si trova nello stato \(x(t)\),
+definiamo
+\[
+\psi(x(t))
+=
+\min_u \int_t^{+\infty}\ell(x(\tau),u(\tau))\,d\tau.
+\]
+
+\section{Scomposizione del costo su un intervallo breve}
+
+Prendiamo un piccolo intervallo \(h>0\). Allora, per il principio di Bellman,
+si può scrivere
+\[
+\psi(x(t))
+=
+\min_u
+\left[
+\int_t^{t+h}\ell(x(\tau),u(\tau))\,d\tau
++
+\psi(x(t+h))
+\right].
+\]
+
+Sottraendo \(\psi(x(t))\) da entrambi i membri:
+\[
+0
+=
+\min_u
+\left[
+\psi(x(t+h))-\psi(x(t))
++
+\int_t^{t+h}\ell(x(\tau),u(\tau))\,d\tau
+\right].
+\]
+
+Dividendo per \(h\):
+\[
+0
+=
+\min_u
+\left[
+\frac{\psi(x(t+h))-\psi(x(t))}{h}
++
+\frac{1}{h}\int_t^{t+h}\ell(x(\tau),u(\tau))\,d\tau
+\right].
+\]
+
+Passando al limite per \(h\to 0^+\), il secondo termine tende a
+\[
+\ell(x(t),u(t)),
+\]
+mentre il primo tende a
+\[
+\dot\psi(x(t)).
+\]
+
+Quindi otteniamo
+\[
+\min_u\left[\dot\psi(x(t))+\ell(x(t),u(t))\right]=0.
+\]
+
+\section{Regola della catena}
+
+Poiché \(\psi\) dipende dallo stato e lo stato dipende dal tempo,
+per la regola della catena:
+\[
+\dot\psi(x(t))
+=
+\nabla_x\psi(x(t))^T \dot x(t).
+\]
+
+Essendo
+\[
+\dot x(t)=F(x(t),u(t)),
+\]
+si ha
+\[
+\dot\psi(x(t))
+=
+\nabla_x\psi(x(t))^T F(x(t),u(t)).
+\]
+
+Sostituendo nella relazione precedente si ottiene la
+\textbf{equazione di Bellman} (o, più precisamente, l'equazione di Hamilton--Jacobi--Bellman):
+\[
+\min_u
+\left[
+\nabla_x\psi(x)^T F(x,u)+\ell(x,u)
+\right]
+=0.
+\]
+
+Questa è una condizione necessaria che il costo ottimo deve soddisfare.
+
+\section{Interpretazione dell'equazione di Bellman}
+
+L'equazione
+\[
+\min_u
+\left[
+\nabla_x\psi(x)^T F(x,u)+\ell(x,u)
+\right]
+=0
+\]
+esprime il fatto che, in ogni stato \(x\), il controllo ottimo è quello che minimizza
+la somma di:
+\begin{itemize}
+    \item costo istantaneo \(\ell(x,u)\);
+    \item variazione istantanea del costo residuo \(\psi\) dovuta alla dinamica del sistema.
+\end{itemize}
+
+In altre parole, il controllo ottimo sceglie in ogni istante il miglior compromesso
+tra costo immediato e costo futuro.
+
+\section{Collegamento con il caso discreto}
+
+Nel caso discreto avevamo:
+\[
+J_k^\circ(x_k)=\min_{u_k}\Bigl[h(x_k,u_k)+J_{k+1}^\circ(x_{k+1})\Bigr].
+\]
+
+Nel caso continuo, facendo tendere a zero il passo temporale,
+questa relazione diventa la Bellman continua:
+\[
+\min_u
+\left[
+\nabla_x\psi(x)^T F(x,u)+\ell(x,u)
+\right]=0.
+\]
+
+Quindi la programmazione dinamica continua è l'analogo infinitesimo
+della ricorsione di Bellman discreta.
+
+\section{Sintesi della lezione}
+
+In questa lezione abbiamo visto che:
+
+\begin{itemize}
+    \item nel problema LQ discreto a orizzonte finito la soluzione si ottiene
+    tramite la ricorsione all'indietro di Riccati;
+    \item se la ricorsione raggiunge un punto fisso \(T\), si ottiene
+    l'equazione algebrica di Riccati:
+    \[
+    T
+    =
+    V
+    +
+    A^T
+    \left[
+    T
+    -
+    TB(P+B^TTB)^{-1}B^TT
+    \right]A;
+    \]
+    \item l'orizzonte finito produce guadagni tempo-varianti \(H_k\),
+    mentre l'orizzonte infinito porta a un guadagno costante;
+    \item l'MPC nasce dall'idea di risolvere ripetutamente problemi LQ su orizzonte finito,
+    applicando ogni volta solo una parte del controllo ottimo;
+    \item questa strategia è particolarmente utile per impianti non lineari o
+    tempo-varianti, che vengono linearizzati localmente;
+    \item nel caso continuo e non lineare, introducendo il cost-to-go
+    \(\psi(x)\), si ottiene l'equazione di Bellman:
+    \[
+    \min_u\left[\nabla_x\psi(x)^T F(x,u)+\ell(x,u)\right]=0.
+    \]
+\end{itemize}
+
+Questa equazione è il punto di partenza teorico della programmazione dinamica
+nel continuo.

@@ -1,0 +1,343 @@
+\chapter{Lezione 9 --- Pre-warping, trasformata di Tustin e spettro discreto tramite FFT}
+
+\section{Dal regolatore continuo \(R(s)\) al regolatore discreto \(\tilde R(z)\)}
+
+L'obiettivo della lezione è capire come passare da un regolatore o da un filtro
+progettato nel continuo a un corrispondente oggetto discreto.
+
+Nel continuo si lavora con
+\[
+R(s),
+\]
+mentre nel discreto si vuole ottenere una funzione di trasferimento
+\[
+\tilde R(z).
+\]
+
+Il legame esatto tra le due descrizioni è dato dalla relazione
+\[
+z=e^{sT},
+\qquad\text{equivalentemente}\qquad
+s=\frac{1}{T}\ln z.
+\]
+
+Tuttavia questa relazione è trascendente e non è comoda da usare direttamente
+per ottenere una funzione razionale in \(z\).
+Per questo si usa una sostituzione approssimata, ma razionale, cioè la
+\textbf{trasformata di Tustin}.
+
+\section{Trasformata di Tustin}
+
+La trasformata di Tustin, o trasformata bilineare, si scrive come
+\[
+s=\frac{2}{T}\frac{z-1}{z+1}.
+\]
+
+In forma inversa, si può anche scrivere
+\[
+z=\frac{\frac{2}{T}+s}{\frac{2}{T}-s}.
+\]
+
+Questa trasformazione ha due proprietà molto importanti:
+\begin{itemize}
+    \item manda il semipiano sinistro del piano \(s\) all'interno del cerchio unitario;
+    \item manda l'asse immaginario del piano \(s\) sul cerchio unitario del piano \(z\).
+\end{itemize}
+
+Quindi:
+\begin{itemize}
+    \item poli stabili nel continuo vengono mappati in poli stabili nel discreto;
+    \item la stabilità viene preservata.
+\end{itemize}
+
+\section{Risposta armonica e problema della distorsione}
+
+Se si discretizza un filtro analogico con Tustin, la risposta armonica del filtro discreto
+non coincide esattamente con quella del filtro continuo: la scala delle frequenze viene distorta.
+
+Per un filtro passa-basso, in genere interessa preservare bene il comportamento
+in una frequenza significativa, tipicamente la frequenza di taglio.
+
+Ad esempio, se nel continuo si ha un filtro del primo ordine,
+alla pulsazione di taglio \(\omega_b=1/\tau\) si ha tipicamente:
+\begin{itemize}
+    \item modulo pari a \(-3\) dB rispetto al valore a bassa frequenza;
+    \item fase pari a \(-45^\circ\).
+\end{itemize}
+
+L'idea è allora imporre che queste caratteristiche siano preservate,
+non ovunque, ma almeno in una pulsazione di interesse.
+
+\section{Pre-warping}
+
+Per correggere la distorsione della scala in frequenza si introduce una costante \(k\)
+nella trasformata bilineare:
+\[
+s=k\frac{z-1}{z+1}.
+\]
+
+Si sceglie \(k\) in modo che la corrispondenza tra filtro analogico e filtro discreto
+sia esatta in una pulsazione \(\omega_0\) prefissata.
+
+Il valore corretto di \(k\) è
+\[
+k=\frac{\omega_0}{\tan\!\left(\frac{\omega_0 T}{2}\right)}.
+\]
+
+Questa scelta prende il nome di \textbf{pre-warping} alla pulsazione \(\omega_0\).
+
+\subsection*{Condizione di progetto}
+
+Con questa scelta si forza l'uguaglianza
+\[
+R(j\omega_0)=\tilde R(e^{j\omega_0 T})
+\]
+nel senso della risposta armonica: il filtro discreto riproduce esattamente
+il comportamento del filtro continuo alla frequenza \(\omega_0\).
+
+\subsection*{Caso limite a bassa frequenza}
+
+Se \(\omega_0\to 0\), si ha
+\[
+\tan\!\left(\frac{\omega_0 T}{2}\right)\sim \frac{\omega_0 T}{2},
+\]
+e quindi
+\[
+k=\frac{\omega_0}{\tan(\omega_0 T/2)}
+\longrightarrow
+\frac{\omega_0}{\omega_0 T/2}
+=
+\frac{2}{T}.
+\]
+
+Quindi la trasformata di Tustin standard è il caso limite del pre-warping
+quando si vuole privilegiare la bassa frequenza.
+
+\section{Più frequenze di interesse}
+
+Negli appunti compare un'osservazione importante:
+se ci sono più frequenze da preservare, non è possibile renderne esatta la corrispondenza
+per tutte contemporaneamente con una sola trasformazione di Tustin pre-warpata.
+
+In pratica:
+\begin{itemize}
+    \item si sceglie una frequenza prioritaria;
+    \item oppure si lavora per tentativi e compromessi;
+    \item spesso si privilegia la frequenza di taglio di un passa-basso.
+\end{itemize}
+
+Questo è coerente con il fatto che la trasformazione resta un'approssimazione,
+non una equivalenza esatta tra continuo e discreto.
+
+\section{Campionamento di una sequenza lunga e calcolo dello spettro}
+
+Nella seconda parte della lezione si passa al problema pratico:
+se si campiona una lunga sequenza di dati e si vuole ricavare lo spettro,
+si calcola la trasformata di Fourier discreta della sequenza campionata.
+
+Se il segnale continuo \(x(t)\) viene campionato con periodo \(T\), si ottiene la successione
+\[
+\tilde x(kT),\qquad k=0,1,\dots,N-1.
+\]
+
+A partire da questi \(N\) campioni si costruisce il vettore dei campioni nel tempo
+e si calcola la trasformata discreta di Fourier:
+\[
+\tilde X(h)=\sum_{k=0}^{N-1}\tilde x(kT)\,e^{-j\frac{2\pi}{N}hk},
+\qquad
+h=0,1,\dots,N-1.
+\]
+
+Il risultato \(\tilde X(h)\) è un vettore di numeri complessi che rappresenta modulo e fase
+dello spettro campionato.
+
+\section{FFT}
+
+Il calcolo diretto della DFT richiederebbe un numero di operazioni dell'ordine di
+\[
+N^2.
+\]
+
+Per rendere il calcolo efficiente si usa la \textbf{FFT} (\emph{Fast Fourier Transform}),
+cioè un algoritmo che calcola la DFT con costo molto minore, tipicamente dell'ordine di
+\[
+N\log N.
+\]
+
+Per questo motivo, quando si devono elaborare sequenze lunghe,
+si preferisce usare la FFT invece della formula diretta della DFT.
+
+\subsection*{Osservazione pratica}
+
+È molto conveniente scegliere un numero di campioni \(N\) che sia una potenza di \(2\),
+perché molti algoritmi FFT lavorano in modo particolarmente efficiente in questo caso.
+
+\section{Asse delle frequenze restituito dalla FFT}
+
+Un punto essenziale della lezione è capire che i valori \(\tilde X(h)\)
+non sono associati a frequenze arbitrarie, ma a frequenze equispaziate.
+
+La pulsazione corrispondente al bin \(h\) è
+\[
+\omega_h = h\,\frac{2\pi}{NT}.
+\]
+
+Quindi:
+\[
+\Delta\omega = \frac{2\pi}{NT}
+\]
+è il passo tra due campioni consecutivi in frequenza.
+
+In particolare:
+\[
+h=0 \quad \Longrightarrow \quad \omega_0=0,
+\]
+\[
+h=\frac{N}{2} \quad \Longrightarrow \quad \omega_{N/2}=\frac{\pi}{T}.
+\]
+
+Quindi il bin \(h=N/2\) corrisponde alla pulsazione di Nyquist.
+
+\subsection*{Osservazione sull'intervallo utile}
+
+Per segnali reali, lo spettro contiene informazione ridondante nella seconda metà,
+per simmetria complessa coniugata.
+Per questo, in molti casi pratici, l'intervallo utile è solo
+\[
+0\le \omega \le \frac{\pi}{T},
+\]
+cioè da \(0\) fino alla metà della pulsazione di campionamento.
+
+In questo intervallo si hanno, a seconda della convenzione di indicizzazione,
+circa \(N/2\) oppure \(N/2+1\) campioni utili.
+
+\section{Interpretazione MATLAB}
+
+Negli appunti si osserva che ambienti come MATLAB, quando si usa \texttt{fft},
+restituiscono il vettore dei bin senza costruire automaticamente la scala fisica delle frequenze.
+
+Di fatto, se non si imposta esplicitamente il periodo di campionamento \(T\),
+la rappresentazione sembra fatta come se \(T=1\).
+
+Quindi, per riportare correttamente l'asse delle pulsazioni,
+bisogna costruire a mano il vettore
+\[
+\omega_h = h\,\frac{2\pi}{NT}.
+\]
+
+\section{Scala lineare e scala logaritmica}
+
+Negli appunti viene poi discusso il problema della rappresentazione grafica dello spettro.
+
+I campioni in frequenza prodotti dalla FFT sono \textbf{equispaziati in scala lineare},
+cioè il passo tra una frequenza e la successiva è costante:
+\[
+\Delta\omega = \frac{2\pi}{NT}.
+\]
+
+Se però lo spettro viene riportato su asse logaritmico, i punti non appaiono più equidistanti.
+
+In particolare:
+\begin{itemize}
+    \item alle basse frequenze i punti si distinguono bene;
+    \item alle alte frequenze i punti si affollano e si distinguono sempre meno.
+\end{itemize}
+
+Questo è un fatto puramente geometrico dovuto al cambio di scala,
+non a una diversa densità dei campioni della FFT.
+
+\section{Limite inferiore della griglia spettrale}
+
+La minima pulsazione positiva rappresentabile con \(N\) campioni e periodo \(T\) è
+\[
+\omega_{\min}=\frac{2\pi}{NT}.
+\]
+
+Questa è la frequenza del primo bin non nullo.
+Per questo, se si vuole vedere bene il comportamento a bassissima frequenza,
+bisogna aumentare \(N\), cioè osservare il segnale per un tempo più lungo.
+
+\section{Normalizzazione dell'ampiezza}
+
+Negli appunti compare un'ultima osservazione importante:
+nel passaggio dal dominio del tempo alla trasformata discreta di Fourier
+possono comparire discrepanze nei valori delle ampiezze se non si usa la corretta normalizzazione.
+
+I coefficienti di scala dipendono dalla convenzione scelta:
+\begin{itemize}
+    \item definizione di trasformata continua;
+    \item definizione di DFT/FFT;
+    \item spettro monolatero o bilatero;
+    \item ampiezza di picco oppure valore efficace (RMS).
+\end{itemize}
+
+Per questo, in applicazioni pratiche, possono comparire fattori del tipo:
+\[
+\frac{1}{N},\qquad
+T,\qquad
+2,\qquad
+\frac{1}{2\pi},\qquad
+\sqrt{2},
+\]
+o combinazioni di essi, a seconda di ciò che si vuole rappresentare.
+
+\subsection*{Interpretazione}
+
+Se si vuole ottenere dallo spettro FFT un'ampiezza fisicamente coerente con il segnale originale,
+bisogna sempre specificare:
+\begin{itemize}
+    \item quale trasformata si sta usando;
+    \item come si sta costruendo l'asse delle frequenze;
+    \item quale normalizzazione si sta adottando.
+\end{itemize}
+
+\section{Modulo in dB}
+
+Quando si vuole rappresentare il modulo dello spettro in forma logaritmica,
+si usa tipicamente
+\[
+20\log_{10}|\tilde X(h)|.
+\]
+
+In questo modo si ottiene il diagramma del modulo in dB,
+analogo a quello usato nei diagrammi di Bode.
+
+\section{Sintesi della lezione}
+
+I punti principali della lezione sono:
+\begin{enumerate}
+    \item il passaggio \(R(s)\mapsto \tilde R(z)\) si fa in pratica tramite la trasformata di Tustin;
+    \item la trasformata di Tustin standard è
+    \[
+    s=\frac{2}{T}\frac{z-1}{z+1};
+    \]
+    \item con il pre-warping si usa
+    \[
+    s=k\frac{z-1}{z+1},
+    \qquad
+    k=\frac{\omega_0}{\tan(\omega_0 T/2)},
+    \]
+    per preservare la risposta armonica alla frequenza \(\omega_0\);
+    \item al limite \(\omega_0\to 0\) si ritrova
+    \[
+    k\to \frac{2}{T};
+    \]
+    \item una sequenza di \(N\) campioni può essere trasformata nel dominio della frequenza
+    tramite DFT o, più efficientemente, tramite FFT;
+    \item il costo computazionale della FFT è molto più basso di quello della DFT diretta;
+    \item i bin spettrali sono equispaziati in scala lineare con passo
+    \[
+    \Delta\omega=\frac{2\pi}{NT};
+    \]
+    \item la pulsazione del bin \(h\) è
+    \[
+    \omega_h=h\frac{2\pi}{NT};
+    \]
+    \item per segnali reali, l'intervallo utile è
+    \[
+    0\le \omega \le \frac{\pi}{T};
+    \]
+    \item su asse logaritmico i punti FFT risultano sempre più fitti alle alte frequenze;
+    \item per rappresentare correttamente le ampiezze occorre usare la normalizzazione coerente
+    con la convenzione adottata.
+\end{enumerate}

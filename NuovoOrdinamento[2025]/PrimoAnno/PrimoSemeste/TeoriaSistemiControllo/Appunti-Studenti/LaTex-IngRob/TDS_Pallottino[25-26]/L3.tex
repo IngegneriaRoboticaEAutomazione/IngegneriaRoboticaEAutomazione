@@ -1,0 +1,711 @@
+\chapter{L3 -- Sistemi lineari: matrice di transizione, evoluzione forzata, rappresentazioni esplicite e implicite}
+
+\section{Forma lineare delle mappe di stato e di uscita}
+
+Nella lezione precedente è emersa la proprietà di decomposizione dei sistemi lineari:
+\[
+\phi(t,t_0,x_0,u)=\phi_\ell(t,t_0,x_0)+\phi_f(t,t_0,u),
+\]
+\[
+g(t,t_0,x_0,u)=g_\ell(t,t_0,x_0)+g_f(t,t_0,u).
+\]
+
+Quando il sistema è lineare e gli spazi
+\[
+X=\mathbb{R}^n,\qquad U=\mathbb{R}^m,\qquad Y=\mathbb{R}^{\ell}
+\]
+sono finito-dimensionali, la parte \emph{libera} e la parte \emph{istantanea di uscita} si possono rappresentare mediante matrici.
+
+\subsection{Trasformazione d'uscita lineare}
+
+La parte libera dell'uscita dipende linearmente dallo stato:
+\[
+g_\ell(x(t),t)=C(t)x(t),
+\qquad
+C(t)\in\mathbb{R}^{\ell\times n}.
+\]
+
+La parte forzata dell'uscita dipende linearmente dall'ingresso:
+\[
+g_f(u(t),t)=D(t)u(t),
+\qquad
+D(t)\in\mathbb{R}^{\ell\times m}.
+\]
+
+Quindi, in forma locale,
+\begin{equation}
+y(t)=C(t)x(t)+D(t)u(t).
+\label{eq:L3_output_local}
+\end{equation}
+
+\paragraph{Interpretazione delle dimensioni.}
+\begin{itemize}
+    \item $x(t)\in \mathbb{R}^n$ è il vettore di stato;
+    \item $u(t)\in \mathbb{R}^m$ è il vettore di ingresso;
+    \item $y(t)\in \mathbb{R}^{\ell}$ è il vettore di uscita;
+    \item $C(t)$ trasforma lo stato in uscita;
+    \item $D(t)$ descrive l'eventuale passaggio istantaneo ingresso--uscita.
+\end{itemize}
+
+\subsection{Parte libera dello stato e matrice di transizione}
+
+Poiché $\phi_\ell$ è una mappa lineare da $X$ in $X$, si può scrivere
+\[
+\phi_\ell(t,t_0,x(t_0))=\Phi(t,t_0)x(t_0),
+\]
+dove
+\[
+\Phi(t,t_0)\in\mathbb{R}^{n\times n}
+\]
+è la \emph{matrice di transizione di stato}.
+
+\paragraph{Significato.}
+La matrice $\Phi(t,t_0)$ trasforma lo stato iniziale $x(t_0)$ nello stato che il sistema avrebbe al tempo $t$ in assenza di ingresso.
+
+\paragraph{Caso tempo-invariante.}
+Se il sistema è lineare tempo-invariante, allora la matrice di transizione dipende solo dal tempo trascorso:
+\[
+\Phi(t,t_0)=\Phi(t-t_0).
+\]
+
+Questa dipendenza solo dalla differenza $t-t_0$ esprime precisamente il fatto che, in un sistema tempo-invariante, non conta \emph{quando} inizio l'evoluzione, ma solo \emph{quanto tempo} è trascorso dall'istante iniziale.
+
+\section{Rappresentazioni esplicite di stato nei sistemi lineari}
+
+\subsection{Tempo continuo}
+
+Nel caso continuo, la rappresentazione esplicita dello stato assume la forma
+\begin{equation}
+x(t)=\Phi(t,t_0)x(t_0)+\int_{t_0}^{t} H(t,\tau)u(\tau)\,d\tau,
+\label{eq:L3_explicit_TC}
+\end{equation}
+dove
+\[
+H(t,\tau)\in\mathbb{R}^{n\times m}
+\]
+è un opportuno \emph{nucleo di evoluzione forzata}.
+
+L'uscita si scrive invece come
+\begin{equation}
+y(t)=C(t)x(t)+D(t)u(t).
+\label{eq:L3_TC_output}
+\end{equation}
+
+\paragraph{Lettura della formula.}
+La \eqref{eq:L3_explicit_TC} si divide in due contributi:
+\begin{itemize}
+    \item \emph{risposta libera}
+    \[
+    \Phi(t,t_0)x(t_0),
+    \]
+    dovuta solo allo stato iniziale;
+    \item \emph{risposta forzata}
+    \[
+    \int_{t_0}^{t} H(t,\tau)u(\tau)\,d\tau,
+    \]
+    dovuta solo all'ingresso.
+\end{itemize}
+
+\subsection{Tempo discreto}
+
+Nel caso discreto, l'integrale viene sostituito da una somma:
+\begin{equation}
+x(K)=\Phi(K,K_0)x(K_0)+\sum_{j=K_0}^{K-1} H(K,j)\,u(j),
+\label{eq:L3_explicit_TD}
+\end{equation}
+con
+\[
+H(K,j)\in\mathbb{R}^{n\times m}.
+\]
+
+L'uscita si scrive
+\begin{equation}
+y(K)=C(K)x(K)+D(K)u(K).
+\label{eq:L3_TD_output}
+\end{equation}
+
+\paragraph{Interpretazione.}
+Per calcolare lo stato al tempo $K$:
+\begin{itemize}
+    \item porto avanti lo stato iniziale tramite $\Phi(K,K_0)$;
+    \item sommo poi tutti i contributi degli ingressi applicati agli istanti
+    \[
+    j=K_0,K_0+1,\dots,K-1.
+    \]
+\end{itemize}
+
+\section{Perché nel tempo discreto compare la somma}
+
+Negli appunti questa parte è centrale: si vuole capire da dove nasce in modo naturale la formula
+\[
+x(K)=\Phi(K,K_0)x(K_0)+\sum_{j=K_0}^{K-1}H(K,j)u(j).
+\]
+
+L'idea consiste nel decomporre un ingresso discreto generico in una somma di \emph{ingressi elementari}.
+
+\subsection{Un ingresso discreto su un intervallo finito}
+
+Consideriamo l'ingresso ristretto all'intervallo
+\[
+[K_0,K)\cap \mathbb{Z}.
+\]
+Lo indichiamo con
+\[
+u_{[K_0,K)}(\cdot):T\to U.
+\]
+
+Esso è completamente individuato dai valori
+\[
+u(K_0),\ u(K_0+1),\ \dots,\ u(K-1).
+\]
+
+\paragraph{Osservazione importante.}
+Anche se $u(\cdot)$ appartiene a uno spazio di funzioni, quando lo osservo solo su un intervallo discreto finito esso viene descritto da un numero finito di campioni. È proprio questo che permette di ricondurre l'evoluzione forzata a una somma finita di contributi elementari.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=0.95]
+    \draw[->] (0,0) -- (10.2,0) node[right] {$k$};
+    \draw[->] (0,0) -- (0,4.2) node[above] {$U$};
+
+    \foreach \x in {1,2,3,4,5,6,7,8,9} {
+        \draw (\x,0.12) -- (\x,-0.12);
+    }
+
+    \draw[thick,red] (2,0)--(2,1.0);
+    \fill[red] (2,1.0) circle (2.3pt);
+    \node[red] at (2,-0.45) {$K_0$};
+    \node[red] at (0.9,1.15) {$u(K_0)$};
+
+    \draw[thick,green!60!black] (4,0)--(4,2.5);
+    \fill[green!60!black] (4,2.5) circle (2.3pt);
+    \node[green!60!black] at (4,-0.45) {$K_0+1$};
+    \node[green!60!black] at (2.95,2.7) {$u(K_0+1)$};
+
+    \draw[thick,violet] (5,0)--(5,1.8);
+    \fill[violet] (5,1.8) circle (2.3pt);
+    \node[violet] at (5,-0.45) {$K_0+2$};
+    \node[violet] at (3.9,1.95) {$u(K_0+2)$};
+
+    \draw[thick,orange!85!black] (9,0)--(9,3.3);
+    \fill[orange!85!black] (9,3.3) circle (2.3pt);
+    \node[orange!85!black] at (9,-0.45) {$K-1$};
+    \node[orange!85!black] at (7.8,3.5) {$u(K-1)$};
+
+    \fill (6,1.4) circle (2pt);
+    \fill (7,3.0) circle (2pt);
+    \fill (8,2.4) circle (2pt);
+\end{tikzpicture}
+\caption{Un ingresso discreto generico è completamente determinato dai suoi valori negli istanti $K_0,\dots,K-1$.}
+\end{figure}
+
+\subsection{Decomposizione in ingressi elementari}
+
+Per ogni indice $j\in\{K_0,\dots,K-1\}$ definiamo il segnale elementare
+\[
+u_j(k)=
+\begin{cases}
+u(j), & k=j,\\[4pt]
+0, & k\neq j.
+\end{cases}
+\]
+
+Allora si ha la decomposizione
+\begin{equation}
+u_{[K_0,K)}(\cdot)=\sum_{j=K_0}^{K-1}u_j(\cdot).
+\label{eq:L3_input_decomposition}
+\end{equation}
+
+\paragraph{Perché funziona.}
+Per ogni istante $k$:
+\begin{itemize}
+    \item solo uno dei segnali $u_j$ può essere diverso da zero, precisamente quello con $j=k$;
+    \item quindi la somma dei segnali elementari restituisce esattamente il valore originario $u(k)$.
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=0.9]
+    % asse 1
+    \begin{scope}[yshift=3.8cm]
+        \draw[->] (0,0) -- (7.2,0) node[right] {$k$};
+        \draw[->] (0,0) -- (0,2.4) node[above] {$U$};
+        \foreach \x in {1,2,3,4,5,6} {\draw (\x,0.12)--(\x,-0.12);}
+        \draw[thick,red] (2,0)--(2,1.2);
+        \fill[red] (2,1.2) circle (2.1pt);
+        \node[red] at (2,-0.35) {$K_0$};
+        \node[red] at (0.9,1.45) {$u_{K_0}$};
+        \foreach \x in {1,3,4,5,6} {\fill[red] (\x,0) circle (2pt);}
+    \end{scope}
+
+    % asse 2
+    \begin{scope}[yshift=1.2cm]
+        \draw[->] (0,0) -- (7.2,0) node[right] {$k$};
+        \draw[->] (0,0) -- (0,2.4) node[above] {$U$};
+        \foreach \x in {1,2,3,4,5,6} {\draw (\x,0.12)--(\x,-0.12);}
+        \draw[thick,green!60!black] (3,0)--(3,1.8);
+        \fill[green!60!black] (3,1.8) circle (2.1pt);
+        \node[green!60!black] at (3,-0.35) {$K_0+1$};
+        \node[green!60!black] at (1.6,2.05) {$u_{K_0+1}$};
+        \foreach \x in {1,2,4,5,6} {\fill[green!60!black] (\x,0) circle (2pt);}
+    \end{scope}
+
+    % asse 3
+    \begin{scope}[yshift=-1.4cm]
+        \draw[->] (0,0) -- (7.2,0) node[right] {$k$};
+        \draw[->] (0,0) -- (0,2.4) node[above] {$U$};
+        \foreach \x in {1,2,3,4,5,6} {\draw (\x,0.12)--(\x,-0.12);}
+        \draw[thick,violet] (4,0)--(4,1.4);
+        \fill[violet] (4,1.4) circle (2.1pt);
+        \node[violet] at (4,-0.35) {$K_0+2$};
+        \node[violet] at (2.5,1.65) {$u_{K_0+2}$};
+        \foreach \x in {1,2,3,5,6} {\fill[violet] (\x,0) circle (2pt);}
+    \end{scope}
+\end{tikzpicture}
+\caption{Esempi di ingressi elementari: ciascuno è nullo ovunque tranne che in un solo istante.}
+\end{figure}
+
+\section{Dalla decomposizione dell'ingresso alla risposta forzata nel tempo discreto}
+
+La risposta forzata è lineare rispetto all'ingresso. Applicando la decomposizione \eqref{eq:L3_input_decomposition} si ottiene
+\[
+\phi_f(K,K_0,u)=\sum_{j=K_0}^{K-1}\phi_f(K,K_0,u_j).
+\]
+
+Ora osserviamo che il segnale $u_j$ è nullo fino all'istante $j-1$ e si attiva solo all'istante $j$.  
+Per causalità e composizione, il suo contributo allo stato a tempo $K$ dipende solo da ciò che accade a partire da $j$, quindi
+\[
+\phi_f(K,K_0,u_j)=\phi_f(K,j,u_j).
+\]
+
+Poiché $u_j$ è determinato dal solo vettore $u(j)\in U$, esiste una matrice
+\[
+H(K,j)\in\mathbb{R}^{n\times m}
+\]
+tale che
+\[
+\phi_f(K,j,u_j)=H(K,j)\,u(j).
+\]
+
+Sostituendo:
+\[
+\phi_f(K,K_0,u)=\sum_{j=K_0}^{K-1}H(K,j)\,u(j).
+\]
+
+Infine, sommando risposta libera e risposta forzata:
+\[
+x(K)=\Phi(K,K_0)x(K_0)+\sum_{j=K_0}^{K-1}H(K,j)\,u(j).
+\]
+
+\paragraph{Significato della matrice $H(K,j)$.}
+La matrice $H(K,j)$ descrive come un ingresso applicato all'istante $j$ contribuisce allo stato osservato all'istante finale $K$.
+
+\section{Rappresentazione esplicita discreta e passaggio alla forma ricorsiva}
+
+La formula
+\[
+x(K)=\Phi(K,K_0)x(K_0)+\sum_{j=K_0}^{K-1}H(K,j)\,u(j)
+\]
+è una \emph{rappresentazione esplicita} del sistema a tempo discreto.
+
+Se ora scegliamo
+\[
+K=j+1,
+\]
+otteniamo
+\[
+x(j+1)=\Phi(j+1,j)x(j)+H(j+1,j)u(j).
+\]
+
+Definendo
+\[
+A(j):=\Phi(j+1,j),
+\qquad
+B(j):=H(j+1,j),
+\]
+si ricava la forma ricorsiva standard
+\begin{equation}
+x(j+1)=A(j)x(j)+B(j)u(j).
+\label{eq:L3_TD_implicit}
+\end{equation}
+
+L'uscita rimane
+\begin{equation}
+y(j)=C(j)x(j)+D(j)u(j).
+\label{eq:L3_TD_output_local}
+\end{equation}
+
+\paragraph{Conclusione.}
+Nel tempo discreto:
+\begin{itemize}
+    \item la rappresentazione con $\Phi$ e $H$ è la forma \emph{esplicita};
+    \item la rappresentazione con $A(j)$ e $B(j)$ è la forma \emph{implicita} o ricorsiva.
+\end{itemize}
+
+\section{Proprietà di consistenza e composizione di \texorpdfstring{$\Phi$}{Phi}}
+
+Le proprietà della funzione di transizione $\phi$ si traducono in proprietà matriciali di $\Phi$ e $H$.
+
+\subsection{Consistenza}
+
+Per definizione di consistenza:
+\[
+\phi(t_0,t_0,x(t_0),u)=x(t_0).
+\]
+
+Nel caso lineare e libero:
+\[
+x(t_0)=\Phi(t_0,t_0)x(t_0)\qquad \forall x(t_0).
+\]
+
+Poiché questa relazione deve valere per ogni stato iniziale, segue che
+\begin{equation}
+\Phi(t_0,t_0)=I_n.
+\label{eq:L3_consistency_Phi}
+\end{equation}
+
+La stessa proprietà vale sia nel tempo continuo sia nel tempo discreto:
+\[
+\Phi(t,t)=I_n,
+\qquad
+\Phi(K,K)=I_n.
+\]
+
+\subsection{Composizione per \texorpdfstring{$\Phi$}{Phi}}
+
+Dalla proprietà generale di composizione della dinamica:
+\[
+\phi(t_2,t_0,x_0,u)=\phi\bigl(t_2,t_1,\phi(t_1,t_0,x_0,u),u\bigr),
+\qquad t_0\le t_1\le t_2,
+\]
+e scegliendo ingresso nullo $u=0$, si ottiene
+\[
+\Phi(t_2,t_0)x_0=\Phi(t_2,t_1)\Phi(t_1,t_0)x_0.
+\]
+
+Essendo vero per ogni $x_0$, segue:
+\begin{equation}
+\Phi(t_2,t_0)=\Phi(t_2,t_1)\Phi(t_1,t_0),
+\qquad t_0\le t_1\le t_2.
+\label{eq:L3_composition_Phi_TC}
+\end{equation}
+
+Nel discreto:
+\begin{equation}
+\Phi(K_2,K_0)=\Phi(K_2,K_1)\Phi(K_1,K_0),
+\qquad K_0\le K_1\le K_2.
+\label{eq:L3_composition_Phi_TD}
+\end{equation}
+
+\paragraph{Interpretazione.}
+La matrice di transizione da $t_0$ a $t_2$ si ottiene componendo la transizione da $t_0$ a $t_1$ con quella da $t_1$ a $t_2$.
+
+\section{Proprietà di composizione di \texorpdfstring{$H$}{H}}
+
+Usiamo ora la rappresentazione esplicita discreta in due modi diversi.
+
+Da un lato:
+\[
+x(K_2)=\Phi(K_2,K_0)x(K_0)+\sum_{j=K_0}^{K_2-1}H(K_2,j)u(j).
+\]
+
+Dall'altro, applicando prima la dinamica da $K_0$ a $K_1$ e poi da $K_1$ a $K_2$:
+\[
+x(K_2)=\Phi(K_2,K_1)x(K_1)+\sum_{j=K_1}^{K_2-1}H(K_2,j)u(j).
+\]
+
+Sostituiamo nella seconda formula
+\[
+x(K_1)=\Phi(K_1,K_0)x(K_0)+\sum_{j=K_0}^{K_1-1}H(K_1,j)u(j),
+\]
+ottenendo
+\[
+x(K_2)=
+\Phi(K_2,K_1)\Phi(K_1,K_0)x(K_0)
++
+\sum_{j=K_0}^{K_1-1}\Phi(K_2,K_1)H(K_1,j)u(j)
++
+\sum_{j=K_1}^{K_2-1}H(K_2,j)u(j).
+\]
+
+Confrontando con la formula diretta e usando l'unicità dei coefficienti, si ottengono due risultati:
+
+\begin{enumerate}
+    \item la proprietà di composizione di $\Phi$ già vista;
+    \item la proprietà di composizione di $H$:
+    \begin{equation}
+    \Phi(K_2,K_1)H(K_1,j)=H(K_2,j),
+    \qquad K_0\le j<K_1\le K_2.
+    \label{eq:L3_composition_H_TD}
+    \end{equation}
+\end{enumerate}
+
+Nel tempo continuo l'analogo è
+\begin{equation}
+\Phi(t_2,t_1)H(t_1,\tau)=H(t_2,\tau),
+\qquad t_0\le \tau \le t_1\le t_2.
+\label{eq:L3_composition_H_TC}
+\end{equation}
+
+\paragraph{Interpretazione.}
+Per propagare fino al tempo finale l'effetto di un ingresso applicato in un istante precedente, posso:
+\begin{itemize}
+    \item calcolarne prima l'effetto fino a un tempo intermedio;
+    \item poi trasportare quell'effetto dal tempo intermedio a quello finale con $\Phi$.
+\end{itemize}
+
+\section{Riassunto strutturale delle rappresentazioni esplicite}
+
+Le proprietà appena ricavate permettono di scrivere in modo ordinato le rappresentazioni esplicite dei sistemi lineari.
+
+\subsection{Tempo discreto}
+
+\begin{equation}
+\boxed{
+\begin{aligned}
+x(K) &= \Phi(K,K_0)x(K_0)+\sum_{j=K_0}^{K-1}H(K,j)u(j),\\
+y(K) &= C(K)x(K)+D(K)u(K).
+\end{aligned}
+}
+\label{eq:L3_explicit_discrete_boxed}
+\end{equation}
+
+\subsection{Tempo continuo}
+
+\begin{equation}
+\boxed{
+\begin{aligned}
+x(t) &= \Phi(t,t_0)x(t_0)+\int_{t_0}^{t}H(t,\tau)u(\tau)\,d\tau,\\
+y(t) &= C(t)x(t)+D(t)u(t).
+\end{aligned}
+}
+\label{eq:L3_explicit_continuous_boxed}
+\end{equation}
+
+\section{Come si passa nel continuo alla forma implicita}
+
+Negli appunti vengono poi ricavate due relazioni fondamentali, che permettono di passare dalla rappresentazione esplicita continua a quella implicita.
+
+\subsection{Primo lemma: derivata della matrice di transizione}
+
+Usiamo la proprietà di composizione:
+\[
+\Phi(t+\Delta t,t_0)=\Phi(t+\Delta t,t)\,\Phi(t,t_0).
+\]
+
+Sottraendo $\Phi(t,t_0)$ da entrambi i membri:
+\[
+\Phi(t+\Delta t,t_0)-\Phi(t,t_0)
+=
+\bigl[\Phi(t+\Delta t,t)-I_n\bigr]\Phi(t,t_0).
+\]
+
+Dividendo per $\Delta t$ e passando al limite per $\Delta t\to 0$:
+\[
+\frac{\partial \Phi(t,t_0)}{\partial t}
+=
+\left[
+\frac{\partial \Phi(\zeta,t)}{\partial \zeta}
+\right]_{\zeta=t}
+\Phi(t,t_0).
+\]
+
+Definiamo allora
+\begin{equation}
+A(t):=
+\left[
+\frac{\partial \Phi(\zeta,t)}{\partial \zeta}
+\right]_{\zeta=t}.
+\label{eq:L3_def_A}
+\end{equation}
+
+Quindi il primo lemma diventa
+\begin{equation}
+\frac{\partial \Phi(t,t_0)}{\partial t}=A(t)\Phi(t,t_0).
+\label{eq:L3_lemma1}
+\end{equation}
+
+\subsection{Secondo lemma: derivata del nucleo forzato}
+
+Usando la proprietà di composizione di $H$,
+\[
+H(t+\Delta t,\tau)=\Phi(t+\Delta t,t)\,H(t,\tau),
+\]
+si ottiene in modo analogo:
+\[
+\frac{H(t+\Delta t,\tau)-H(t,\tau)}{\Delta t}
+=
+\frac{\Phi(t+\Delta t,t)-I_n}{\Delta t}\,H(t,\tau).
+\]
+
+Passando al limite:
+\begin{equation}
+\frac{\partial H(t,\tau)}{\partial t}=A(t)H(t,\tau).
+\label{eq:L3_lemma2}
+\end{equation}
+
+\section{Derivazione della forma implicita nel tempo continuo}
+
+Partiamo dalla rappresentazione esplicita
+\[
+x(t)=\Phi(t,t_0)x(t_0)+\int_{t_0}^{t}H(t,\tau)u(\tau)\,d\tau.
+\]
+
+Deriviamo rispetto a $t$.
+
+\subsection{Derivata del primo termine}
+
+Usando il lemma \eqref{eq:L3_lemma1}:
+\[
+\frac{d}{dt}\Bigl(\Phi(t,t_0)x(t_0)\Bigr)=A(t)\Phi(t,t_0)x(t_0).
+\]
+
+\subsection{Derivata del termine integrale}
+
+Applichiamo la regola di Leibniz:
+\[
+\frac{d}{dt}\left(
+\int_{t_0}^{t}H(t,\tau)u(\tau)\,d\tau
+\right)
+=
+H(t,t)u(t)+\int_{t_0}^{t}\frac{\partial H(t,\tau)}{\partial t}u(\tau)\,d\tau.
+\]
+
+Usando il lemma \eqref{eq:L3_lemma2}:
+\[
+=
+H(t,t)u(t)+\int_{t_0}^{t}A(t)H(t,\tau)u(\tau)\,d\tau.
+\]
+
+Poiché $A(t)$ non dipende dalla variabile di integrazione $\tau$, si può portare fuori dall'integrale:
+\[
+=
+H(t,t)u(t)+A(t)\int_{t_0}^{t}H(t,\tau)u(\tau)\,d\tau.
+\]
+
+\subsection{Ricomposizione finale}
+
+Sommiamo i due contributi:
+\[
+\dot x(t)
+=
+A(t)\Phi(t,t_0)x(t_0)
++
+A(t)\int_{t_0}^{t}H(t,\tau)u(\tau)\,d\tau
++
+H(t,t)u(t).
+\]
+
+Raccogliendo $A(t)$:
+\[
+\dot x(t)
+=
+A(t)\left[
+\Phi(t,t_0)x(t_0)+\int_{t_0}^{t}H(t,\tau)u(\tau)\,d\tau
+\right]
++
+H(t,t)u(t).
+\]
+
+Ma la quantità tra parentesi quadre è proprio $x(t)$, quindi
+\[
+\dot x(t)=A(t)x(t)+H(t,t)u(t).
+\]
+
+Definendo
+\begin{equation}
+B(t):=H(t,t),
+\label{eq:L3_def_B}
+\end{equation}
+si ottiene finalmente la forma implicita del sistema lineare continuo:
+\begin{equation}
+\boxed{
+\dot x(t)=A(t)x(t)+B(t)u(t).
+}
+\label{eq:L3_TC_implicit}
+\end{equation}
+
+L'uscita è
+\begin{equation}
+\boxed{
+y(t)=C(t)x(t)+D(t)u(t).
+}
+\label{eq:L3_TC_output_implicit}
+\end{equation}
+
+\section{Relazione tra forma esplicita e forma implicita}
+
+A questo punto il quadro è completo.
+
+\subsection{Tempo discreto}
+
+\paragraph{Forma esplicita}
+\[
+x(K)=\Phi(K,K_0)x(K_0)+\sum_{j=K_0}^{K-1}H(K,j)u(j).
+\]
+
+\paragraph{Forma implicita}
+\[
+x(k+1)=A(k)x(k)+B(k)u(k),
+\]
+con
+\[
+A(k)=\Phi(k+1,k),\qquad B(k)=H(k+1,k).
+\]
+
+\subsection{Tempo continuo}
+
+\paragraph{Forma esplicita}
+\[
+x(t)=\Phi(t,t_0)x(t_0)+\int_{t_0}^{t}H(t,\tau)u(\tau)\,d\tau.
+\]
+
+\paragraph{Forma implicita}
+\[
+\dot x(t)=A(t)x(t)+B(t)u(t),
+\]
+con
+\[
+A(t)=\left[\frac{\partial \Phi(\zeta,t)}{\partial \zeta}\right]_{\zeta=t},
+\qquad
+B(t)=H(t,t).
+\]
+
+\paragraph{Messaggio concettuale della lezione.}
+Le matrici $\Phi$ e $H$ descrivono l'evoluzione \emph{globale} del sistema:
+\begin{itemize}
+    \item $\Phi$ trasporta nel tempo lo stato iniziale;
+    \item $H$ pesa i contributi dell'ingresso applicato ai vari istanti.
+\end{itemize}
+
+Le matrici $A$ e $B$, invece, descrivono la legge \emph{locale} di evoluzione:
+\begin{itemize}
+    \item $A$ governa la dinamica interna;
+    \item $B$ governa il modo in cui l'ingresso agisce istante per istante sullo stato.
+\end{itemize}
+
+\section{Sintesi finale della lezione}
+
+In questa lezione sono stati introdotti e chiariti i seguenti punti:
+\begin{enumerate}
+    \item nei sistemi lineari l'uscita si scrive come
+    \[
+    y=Cx+Du;
+    \]
+    \item la risposta libera dello stato è rappresentata dalla matrice di transizione $\Phi$;
+    \item la risposta forzata è descritta da un nucleo $H$;
+    \item nel tempo discreto l'evoluzione forzata diventa una somma finita grazie alla decomposizione dell'ingresso in segnali elementari;
+    \item $\Phi$ e $H$ soddisfano proprietà di consistenza e composizione;
+    \item nel continuo, derivando la forma esplicita, si ottiene la forma implicita
+    \[
+    \dot x=A(t)x+B(t)u(t).
+    \]
+\end{enumerate}
+
+Questa struttura è fondamentale perché nei capitoli successivi permetterà di studiare:
+\begin{itemize}
+    \item esponenziale di matrice;
+    \item evoluzione libera e forzata;
+    \item stabilità;
+    \item raggiungibilità e osservabilità dei sistemi lineari.
+\end{itemize}

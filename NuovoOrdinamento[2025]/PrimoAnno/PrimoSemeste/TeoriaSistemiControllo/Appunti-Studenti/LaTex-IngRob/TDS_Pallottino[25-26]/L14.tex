@@ -1,0 +1,1055 @@
+\chapter{L14 -- Forma standard di raggiungibilità, forma canonica di controllo e introduzione all'osservabilità}
+
+\section{Obiettivo della lezione}
+
+In questa lezione chiudiamo il blocco sulla raggiungibilità e iniziamo quello sull’osservabilità.
+
+Più precisamente:
+\begin{itemize}
+    \item usiamo un esempio per costruire esplicitamente la \textbf{forma standard di raggiungibilità};
+    \item vediamo quando conviene passare alla \textbf{forma canonica di controllo};
+    \item capiamo che gli \textbf{autovalori non raggiungibili} non possono essere spostati con una retroazione di stato;
+    \item introduciamo il problema duale dell’\textbf{osservabilità}, cioè la ricostruzione dello stato a partire da ingressi e uscite misurate.
+\end{itemize}
+
+\bigskip
+
+Il filo logico è questo:
+\[
+\text{raggiungibilità} \quad \Longleftrightarrow \quad \text{quali componenti dello stato posso muovere con } u,
+\]
+\[
+\text{osservabilità} \quad \Longleftrightarrow \quad \text{quali componenti dello stato posso ricostruire da } (u,y).
+\]
+
+%=========================================================
+\section{Esempio guida: forma standard di raggiungibilità}
+
+Consideriamo il sistema discreto
+\[
+x(k+1)=Ax(k)+Bu(k),\qquad y(k)=Cx(k),
+\]
+con
+\[
+A=
+\begin{bmatrix}
+0 & 0 & 2\\
+0 & \dfrac{\alpha}{10} & 0\\
+0 & 0 & 0
+\end{bmatrix},
+\qquad
+B=
+\begin{bmatrix}
+0\\
+0\\
+1
+\end{bmatrix},
+\qquad
+C=
+\begin{bmatrix}
+0 & 1 & 1
+\end{bmatrix},
+\]
+dove \(\alpha\in\{0,1,\dots,9\}\).
+
+\subsection{Autovalori e struttura di Jordan}
+
+Gli autovalori di \(A\) sono
+\[
+\lambda_1=0,\qquad \lambda_2=0,\qquad \lambda_3=\frac{\alpha}{10}.
+\]
+
+Quindi ci sono due casi distinti.
+
+\subsubsection*{Caso 1: \(\alpha\neq 0\)}
+
+In questo caso:
+\[
+m_a(0)=2,\qquad m_a\!\left(\frac{\alpha}{10}\right)=1.
+\]
+
+Poiché il blocco in alto a destra è non nullo, i due autovalori nulli non corrispondono a due autovettori indipendenti: infatti
+\[
+m_g(0)=\dim\ker(A)=1.
+\]
+Dunque l’autovalore \(0\) è associato a \textbf{un unico blocco di Jordan di ordine 2}.
+
+Per l’autovalore \(\alpha/10\neq 0\) si ha invece
+\[
+m_g\!\left(\frac{\alpha}{10}\right)=1,
+\]
+quindi esso corrisponde a un blocco \(1\times 1\).
+
+In sintesi, per \(\alpha\neq 0\), la forma di Jordan è simile a
+\[
+J=
+\begin{bmatrix}
+0 & 1 & 0\\
+0 & 0 & 0\\
+0 & 0 & \dfrac{\alpha}{10}
+\end{bmatrix}.
+\]
+
+\subsubsection*{Caso 2: \(\alpha=0\)}
+
+Se \(\alpha=0\), allora l’unico autovalore è
+\[
+\lambda=0,\qquad m_a(0)=3.
+\]
+Inoltre
+\[
+m_g(0)=\dim\ker(A)=2,
+\]
+perciò ci sono \textbf{due blocchi di Jordan} associati all’autovalore \(0\): uno di ordine \(2\) e uno di ordine \(1\).
+
+Una possibile forma di Jordan è
+\[
+J=
+\begin{bmatrix}
+0 & 1 & 0\\
+0 & 0 & 0\\
+0 & 0 & 0
+\end{bmatrix}.
+\]
+
+\subsection{Matrice di raggiungibilità}
+
+Calcoliamo
+\[
+R_3=\begin{bmatrix}B & AB & A^2B\end{bmatrix}.
+\]
+
+Poiché
+\[
+B=
+\begin{bmatrix}
+0\\0\\1
+\end{bmatrix},
+\qquad
+AB=
+\begin{bmatrix}
+2\\0\\0
+\end{bmatrix},
+\qquad
+A^2B=A(AB)=
+\begin{bmatrix}
+0\\0\\0
+\end{bmatrix},
+\]
+si ottiene
+\[
+R_3=
+\begin{bmatrix}
+0 & 2 & 0\\
+0 & 0 & 0\\
+1 & 0 & 0
+\end{bmatrix}.
+\]
+
+Dunque
+\[
+\operatorname{Im}(R_3)=\operatorname{span}\!\left\{
+\begin{bmatrix}0\\0\\1\end{bmatrix},
+\begin{bmatrix}1\\0\\0\end{bmatrix}
+\right\},
+\qquad
+\operatorname{rank}(R_3)=2.
+\]
+
+Ne segue che il sistema \textbf{non è completamente raggiungibile}, perché lo spazio di stato ha dimensione \(3\) ma lo spazio raggiungibile ha dimensione \(2\).
+
+\subsection{Catena degli spazi raggiungibili}
+
+Si ha
+\[
+\mathcal R_1=\operatorname{Im}(B)=
+\operatorname{span}\!\left\{
+\begin{bmatrix}0\\0\\1\end{bmatrix}
+\right\},
+\]
+e
+\[
+\mathcal R_2=\operatorname{Im}\!\begin{bmatrix}B & AB\end{bmatrix}
+=
+\operatorname{span}\!\left\{
+\begin{bmatrix}0\\0\\1\end{bmatrix},
+\begin{bmatrix}1\\0\\0\end{bmatrix}
+\right\}.
+\]
+Poiché \(A^2B=0\), si ha già
+\[
+\mathcal R_2=\mathcal R_3.
+\]
+
+Quindi la parte raggiungibile è il piano
+\[
+\mathcal R=\operatorname{span}\{e_1,e_3\}.
+\]
+
+\subsection{Scelta di una base adattata}
+
+Scegliamo come base di \(\mathcal R\)
+\[
+T_R=\begin{bmatrix}e_1 & e_3\end{bmatrix},
+\]
+e completiamola con un vettore della parte non raggiungibile, ad esempio
+\[
+T_N=\begin{bmatrix}e_2\end{bmatrix}.
+\]
+Allora una matrice di cambio di base è
+\[
+T=\begin{bmatrix}T_R & T_N\end{bmatrix}
+=
+\begin{bmatrix}
+1 & 0 & 0\\
+0 & 0 & 1\\
+0 & 1 & 0
+\end{bmatrix}.
+\]
+Essendo una matrice di permutazione, vale
+\[
+T^{-1}=T^\top.
+\]
+
+Passando alle nuove coordinate \(x=Tz\), otteniamo
+\[
+\widetilde A=T^{-1}AT,
+\qquad
+\widetilde B=T^{-1}B,
+\qquad
+\widetilde C=CT.
+\]
+
+Un calcolo diretto fornisce
+\[
+\widetilde A=
+\begin{bmatrix}
+0 & 2 & 0\\
+0 & 0 & 0\\
+0 & 0 & \dfrac{\alpha}{10}
+\end{bmatrix},
+\qquad
+\widetilde B=
+\begin{bmatrix}
+0\\1\\0
+\end{bmatrix},
+\qquad
+\widetilde C=
+\begin{bmatrix}
+0 & 1 & 1
+\end{bmatrix}.
+\]
+
+Questa è esattamente la \textbf{forma standard di raggiungibilità}:
+\[
+\widetilde A=
+\begin{bmatrix}
+A_R & A_{RN}\\
+0 & A_N
+\end{bmatrix},
+\qquad
+\widetilde B=
+\begin{bmatrix}
+B_R\\
+0
+\end{bmatrix}.
+\]
+
+Nel nostro caso:
+\[
+A_R=
+\begin{bmatrix}
+0 & 2\\
+0 & 0
+\end{bmatrix},
+\qquad
+A_N=
+\begin{bmatrix}
+\dfrac{\alpha}{10}
+\end{bmatrix}.
+\]
+
+Quindi:
+\begin{itemize}
+    \item la dinamica su \(z_R\) è la parte raggiungibile;
+    \item la dinamica su \(z_N\) è la parte non raggiungibile.
+\end{itemize}
+
+\subsection{Interpretazione degli autovalori}
+
+In questa decomposizione:
+\begin{itemize}
+    \item gli autovalori di \(A_R\) sono gli \textbf{autovalori raggiungibili};
+    \item gli autovalori di \(A_N\) sono gli \textbf{autovalori non raggiungibili}.
+\end{itemize}
+
+Nel nostro esempio:
+\begin{itemize}
+    \item l’autovalore \(0\) associato al blocco \(A_R\) è raggiungibile;
+    \item l’autovalore \(\alpha/10\) è non raggiungibile.
+\end{itemize}
+
+Se \(\alpha=0\), allora anche uno dei modi nulli è non raggiungibile: infatti un autovalore può comparire sia nella parte raggiungibile sia nella parte non raggiungibile.
+
+%=========================================================
+\section{Verifica rapida con PBH}
+
+Il lemma di Popov--Belevitch--Hautus (PBH) dice che la coppia \((A,B)\) è completamente raggiungibile se e solo se
+\[
+\operatorname{rank}\!\begin{bmatrix}A-\lambda I & B\end{bmatrix}=n
+\qquad
+\forall \lambda\in\mathbb C.
+\]
+
+Nel nostro esempio, l’autovalore sospetto è
+\[
+\lambda=\frac{\alpha}{10}.
+\]
+Infatti
+\[
+A-\frac{\alpha}{10}I=
+\begin{bmatrix}
+-\frac{\alpha}{10} & 0 & 2\\
+0 & 0 & 0\\
+0 & 0 & -\frac{\alpha}{10}
+\end{bmatrix},
+\]
+e quindi
+\[
+\begin{bmatrix}
+A-\frac{\alpha}{10}I & B
+\end{bmatrix}
+=
+\begin{bmatrix}
+-\frac{\alpha}{10} & 0 & 2 & 0\\
+0 & 0 & 0 & 0\\
+0 & 0 & -\frac{\alpha}{10} & 1
+\end{bmatrix}.
+\]
+Il rango è \(2\), non \(3\), dunque \(\alpha/10\) è effettivamente \textbf{non raggiungibile}.
+
+\bigskip
+
+Questa verifica conferma quanto avevamo già visto dalla forma standard di raggiungibilità.
+
+%=========================================================
+\section{Ricostruzione di \(x(0)\) dalle uscite: un esempio in tempo discreto}
+
+Restiamo nello stesso esempio, e fissiamo
+\[
+\alpha=5,
+\qquad
+u(0)=u(1)=-1.
+\]
+Supponiamo di volere trovare gli stati iniziali \(x(0)\) tali che
+\[
+y(0)=3,\qquad y(1)=1,\qquad y(2)=0.
+\]
+
+\subsection{Espansione delle uscite}
+
+Poiché il sistema è discreto e \(D=0\), si ha
+\[
+y(k)=Cx(k).
+\]
+Inoltre
+\[
+x(1)=Ax(0)+Bu(0),
+\]
+\[
+x(2)=A^2x(0)+ABu(0)+Bu(1).
+\]
+Di conseguenza
+\[
+y(0)=Cx(0),
+\]
+\[
+y(1)=CAx(0)+CB\,u(0),
+\]
+\[
+y(2)=CA^2x(0)+CAB\,u(0)+CB\,u(1).
+\]
+
+Portando a sinistra i termini noti legati agli ingressi, otteniamo
+\[
+\begin{bmatrix}
+y(0)\\
+y(1)-CBu(0)\\
+y(2)-CABu(0)-CBu(1)
+\end{bmatrix}
+=
+\begin{bmatrix}
+C\\
+CA\\
+CA^2
+\end{bmatrix}
+x(0).
+\]
+
+\subsection{Calcolo esplicito}
+
+Per \(\alpha=5\), cioè \(\alpha/10=1/2\), si ha
+\[
+A=
+\begin{bmatrix}
+0 & 0 & 2\\
+0 & \frac12 & 0\\
+0 & 0 & 0
+\end{bmatrix},
+\qquad
+C=
+\begin{bmatrix}
+0 & 1 & 1
+\end{bmatrix},
+\qquad
+B=
+\begin{bmatrix}
+0\\0\\1
+\end{bmatrix}.
+\]
+Calcoliamo:
+\[
+CB=
+\begin{bmatrix}
+0 & 1 & 1
+\end{bmatrix}
+\begin{bmatrix}
+0\\0\\1
+\end{bmatrix}=1,
+\]
+\[
+CAB=CAB=0.
+\]
+Quindi il vettore corretto delle uscite è
+\[
+\Delta y=
+\begin{bmatrix}
+3\\
+1-1\cdot(-1)\\
+0-0\cdot(-1)-1\cdot(-1)
+\end{bmatrix}
+=
+\begin{bmatrix}
+3\\2\\1
+\end{bmatrix}.
+\]
+
+La matrice di osservabilità ai primi tre istanti è
+\[
+\mathcal O=
+\begin{bmatrix}
+C\\CA\\CA^2
+\end{bmatrix}
+=
+\begin{bmatrix}
+0 & 1 & 1\\
+0 & \frac12 & 0\\
+0 & \frac14 & 0
+\end{bmatrix}.
+\]
+Dobbiamo quindi risolvere
+\[
+\begin{bmatrix}
+0 & 1 & 1\\
+0 & \frac12 & 0\\
+0 & \frac14 & 0
+\end{bmatrix}
+x(0)=
+\begin{bmatrix}
+3\\2\\1
+\end{bmatrix}.
+\]
+
+Se scriviamo
+\[
+x(0)=
+\begin{bmatrix}
+x_1(0)\\x_2(0)\\x_3(0)
+\end{bmatrix},
+\]
+le equazioni diventano
+\[
+x_2(0)+x_3(0)=3,
+\]
+\[
+\frac12 x_2(0)=2,
+\]
+\[
+\frac14 x_2(0)=1.
+\]
+Le ultime due sono coerenti e forniscono
+\[
+x_2(0)=4.
+\]
+Sostituendo nella prima:
+\[
+x_3(0)=3-4=-1.
+\]
+La variabile \(x_1(0)\) non compare mai, quindi resta libera.
+
+Conclusione:
+\[
+x(0)=
+\begin{bmatrix}
+\xi\\
+4\\
+-1
+\end{bmatrix},
+\qquad \xi\in\mathbb R.
+\]
+
+\subsection{Interpretazione}
+
+Questo esempio è molto istruttivo:
+\begin{itemize}
+    \item le misure di uscita permettono di ricostruire \(x_2(0)\) e \(x_3(0)\);
+    \item non permettono invece di ricostruire \(x_1(0)\).
+\end{itemize}
+
+Quindi il sistema \emph{non è completamente osservabile}: esiste almeno una direzione dello stato che non lascia traccia sull’uscita.
+
+%=========================================================
+\section{Osservazione strutturale: autovalori multipli e numero minimo di ingressi}
+
+Un punto importante, che negli appunti compare come osservazione sui blocchi di Jordan, è il seguente.
+
+\subsection*{Osservazione}
+Se un autovalore \(\lambda\) è associato a \(\nu\) blocchi di Jordan distinti, allora la sua molteplicità geometrica è
+\[
+m_g(\lambda)=\nu.
+\]
+
+Perché la coppia \((A,B)\) possa essere completamente raggiungibile, la matrice
+\[
+\begin{bmatrix}
+A-\lambda I & B
+\end{bmatrix}
+\]
+deve avere rango massimo.
+
+Ma in forma di Jordan, il blocco \(J-\lambda I\) perde rango esattamente di \(\nu\), cioè di tanti quanti sono i blocchi di Jordan associati a \(\lambda\). Per recuperare quel rango servono abbastanza colonne in \(B\) che agiscano in modo indipendente sulle direzioni giuste.
+
+Ne segue la regola pratica:
+
+\begin{quote}
+\textbf{se per un autovalore \(\lambda\) ci sono \(\nu\) blocchi di Jordan, allora servono almeno \(\nu\) ingressi indipendenti per avere la possibilità di rendere raggiungibile quel modo.}
+\end{quote}
+
+In particolare, se il numero di ingressi è troppo piccolo rispetto al numero di blocchi associati a uno stesso autovalore, la completa raggiungibilità è impossibile.
+
+Questa osservazione non sostituisce PBH, ma lo rende intuitivo.
+
+%=========================================================
+\section{Se \((A,B)\) non è completamente raggiungibile e se \((A,B)\) è completamente raggiungibile}
+
+A questo punto si chiarisce bene il significato pratico delle due forme.
+
+\begin{itemize}
+    \item Se \((A,B)\) \textbf{non è completamente raggiungibile}, la forma utile è la
+    \[
+    \boxed{\text{forma standard di raggiungibilità}}
+    \]
+    perché separa esplicitamente la parte raggiungibile dalla parte non raggiungibile.
+
+    \item Se \((A,B)\) \textbf{è completamente raggiungibile}, la forma più utile è la
+    \[
+    \boxed{\text{forma canonica di controllo}}
+    \]
+    perché permette di leggere direttamente il polinomio caratteristico e di progettare la retroazione in modo naturale.
+\end{itemize}
+
+%=========================================================
+\section{Forma canonica di controllo}
+
+\subsection{Punto di partenza: un’equazione scalare di ordine \(n\)}
+
+Consideriamo una sequenza scalare \(z(k)\) che soddisfa
+\begin{equation}
+D^n z(k)+\sum_{i=0}^{n-1} a_i D^i z(k)=u(k),
+\label{eq:L14_eq_scalare}
+\end{equation}
+dove \(D\) è l’operatore di avanzamento:
+\[
+Dz(k)=z(k+1),\qquad D^2z(k)=z(k+2),\quad \dots
+\]
+
+Introduciamo lo stato
+\[
+x_1=z,\qquad
+x_2=Dz,\qquad
+x_3=D^2z,\qquad \dots,\qquad
+x_n=D^{n-1}z.
+\]
+Allora
+\[
+x_1^+=x_2,\qquad
+x_2^+=x_3,\qquad
+\dots,\qquad
+x_{n-1}^+=x_n.
+\]
+Inoltre, dalla \eqref{eq:L14_eq_scalare},
+\[
+x_n^+=D^n z
+=
+-\sum_{i=0}^{n-1} a_i D^i z + u
+=
+-a_0x_1-a_1x_2-\cdots-a_{n-1}x_n+u.
+\]
+
+Quindi il sistema in forma di stato è
+\[
+x^+=A_cx+B_cu,
+\]
+con
+\[
+A_c=
+\begin{bmatrix}
+0 & 1 & 0 & \cdots & 0\\
+0 & 0 & 1 & \cdots & 0\\
+\vdots & \vdots & \vdots & \ddots & \vdots\\
+0 & 0 & 0 & \cdots & 1\\
+-a_0 & -a_1 & -a_2 & \cdots & -a_{n-1}
+\end{bmatrix},
+\qquad
+B_c=
+\begin{bmatrix}
+0\\0\\\vdots\\0\\1
+\end{bmatrix}.
+\]
+
+Questa è la \textbf{forma canonica di controllo}.
+
+\subsection{Uscita associata}
+
+Se l’uscita è della forma
+\[
+y(k)=\sum_{j=0}^{p} b_j D^j z(k),
+\qquad p\le n-1,
+\]
+allora, per come sono state definite le variabili di stato,
+\[
+y(k)=b_0x_1(k)+b_1x_2(k)+\cdots+b_p x_{p+1}(k).
+\]
+Quindi
+\[
+C_c=
+\begin{bmatrix}
+b_0 & b_1 & \dots & b_p & 0 & \dots & 0
+\end{bmatrix},
+\qquad
+D_c=0.
+\]
+
+\subsection{Polinomio caratteristico}
+
+La scelta dei coefficienti nell’ultima riga di \(A_c\) non è casuale.  
+Infatti
+\[
+p(\lambda)=\det(\lambda I-A_c)
+=
+\lambda^n+a_{n-1}\lambda^{n-1}+\cdots+a_1\lambda+a_0.
+\]
+Quindi i coefficienti del polinomio caratteristico compaiono direttamente in \(A_c\).
+
+%=========================================================
+\section{La forma canonica di controllo è sempre completamente raggiungibile}
+
+Calcoliamo la matrice di raggiungibilità della forma canonica di controllo:
+\[
+R_c=
+\begin{bmatrix}
+B_c & A_cB_c & A_c^2B_c & \cdots & A_c^{n-1}B_c
+\end{bmatrix}.
+\]
+
+Questa matrice ha sempre rango massimo.  
+Infatti, osservando le colonne:
+\begin{itemize}
+    \item la prima è \(e_n\);
+    \item la seconda contiene \(e_{n-1}\) più combinazioni delle precedenti;
+    \item la terza contiene \(e_{n-2}\) più combinazioni delle precedenti;
+    \item e così via.
+\end{itemize}
+
+Con una semplice eliminazione si vede che le colonne sono linearmente indipendenti. Quindi
+\[
+\det(R_c)\neq 0,
+\qquad
+\operatorname{rank}(R_c)=n.
+\]
+
+Conclusione:
+\[
+\boxed{\text{la forma canonica di controllo è sempre completamente raggiungibile.}}
+\]
+
+%=========================================================
+\section{Come costruire il cambio di base verso la forma canonica di controllo}
+
+Se il sistema \((A,B)\) è completamente raggiungibile, allora può essere portato in forma canonica di controllo.
+
+Sia
+\[
+R=\begin{bmatrix}B & AB & \cdots & A^{n-1}B\end{bmatrix}
+\]
+la matrice di raggiungibilità del sistema dato, e sia
+\[
+R_c
+\]
+la matrice di raggiungibilità della forma canonica di controllo avente lo stesso polinomio caratteristico.
+
+Poiché entrambe sono invertibili, il cambio di base si può scegliere come
+\begin{equation}
+T=RR_c^{-1}.
+\label{eq:L14_T_RRc}
+\end{equation}
+
+Allora, ponendo \(x=Tz\), si ottiene
+\[
+A_c=T^{-1}AT,\qquad
+B_c=T^{-1}B.
+\]
+
+\subsection{Perché questa formula funziona}
+
+L’idea è semplice:
+\begin{itemize}
+    \item \(R\) descrive la catena dei vettori di raggiungibilità del sistema originale;
+    \item \(R_c\) descrive la stessa catena per la forma canonica.
+\end{itemize}
+
+Moltiplicare per \(R_c^{-1}\) e poi per \(R\) significa costruire il cambio di coordinate che manda la base canonica della forma di controllo nella base di raggiungibilità del sistema originario.
+
+\subsection{Esempio}
+
+Consideriamo
+\[
+A=
+\begin{bmatrix}
+-1 & 1 & 0\\
+0 & -1 & 1\\
+0 & 0 & 2
+\end{bmatrix},
+\qquad
+B=
+\begin{bmatrix}
+0\\1\\1
+\end{bmatrix}.
+\]
+Il polinomio caratteristico è
+\[
+p(\lambda)=(\lambda+1)^2(\lambda-2)=\lambda^3-3\lambda-2.
+\]
+Quindi la corrispondente forma canonica di controllo è
+\[
+A_c=
+\begin{bmatrix}
+0 & 1 & 0\\
+0 & 0 & 1\\
+2 & 3 & 0
+\end{bmatrix},
+\qquad
+B_c=
+\begin{bmatrix}
+0\\0\\1
+\end{bmatrix}.
+\]
+
+La matrice di raggiungibilità del sistema originale è
+\[
+R=
+\begin{bmatrix}
+0 & 1 & -1\\
+1 & 0 & 2\\
+1 & 2 & 4
+\end{bmatrix},
+\]
+mentre
+\[
+R_c=
+\begin{bmatrix}
+0 & 0 & 1\\
+0 & 1 & 0\\
+1 & 0 & 3
+\end{bmatrix}.
+\]
+Da cui
+\[
+R_c^{-1}=
+\begin{bmatrix}
+-3 & 0 & 1\\
+0 & 1 & 0\\
+1 & 0 & 0
+\end{bmatrix}.
+\]
+Quindi
+\[
+T=RR_c^{-1}
+=
+\begin{bmatrix}
+-1 & 1 & 0\\
+-1 & 0 & 1\\
+-1 & 2 & 1
+\end{bmatrix}.
+\]
+
+Questo è il cambio di base che porta il sistema in forma canonica di controllo.
+
+%=========================================================
+\section{Retroazione di stato e autovalori non raggiungibili}
+
+Supponiamo ora di avere il sistema già in forma standard di raggiungibilità:
+\[
+\begin{cases}
+z_R^+=A_R z_R + A_{RN} z_N + B_R u,\\
+z_N^+=A_N z_N.
+\end{cases}
+\]
+
+Se imponiamo una retroazione di stato
+\[
+u=Kx,
+\qquad
+K=\begin{bmatrix}K_R & K_N\end{bmatrix},
+\]
+allora la matrice di stato a ciclo chiuso diventa
+\[
+A+BK
+=
+\begin{bmatrix}
+A_R & A_{RN}\\
+0 & A_N
+\end{bmatrix}
++
+\begin{bmatrix}
+B_R\\0
+\end{bmatrix}
+\begin{bmatrix}
+K_R & K_N
+\end{bmatrix}
+=
+\begin{bmatrix}
+A_R+B_RK_R & A_{RN}+B_RK_N\\
+0 & A_N
+\end{bmatrix}.
+\]
+
+La cosa fondamentale è che il blocco \(A_N\) \textbf{non cambia}.  
+Quindi gli autovalori della parte non raggiungibile restano invariati sotto retroazione di stato.
+
+\begin{quote}
+In altre parole: con una retroazione di stato puoi spostare solo gli autovalori raggiungibili.
+\end{quote}
+
+Questo è uno dei motivi più profondi per cui ha senso distinguere la parte raggiungibile da quella non raggiungibile.
+
+%=========================================================
+\section{Introduzione all’osservabilità}
+
+Passiamo ora al problema duale.
+
+\subsection{Domanda fondamentale}
+
+Dato il modello del sistema
+\[
+(A,B,C,D),
+\]
+e supponendo noti:
+\begin{itemize}
+    \item l’ingresso \(u(\cdot)\),
+    \item l’uscita misurata \(y(\cdot)\),
+\end{itemize}
+si possono ricostruire informazioni sullo stato iniziale \(x(0)\)?  
+E più in generale sullo stato \(x(t)\)?
+
+Questo è il \textbf{problema di osservazione dello stato}.
+
+\subsection{Stati indistinguibili}
+
+Due stati iniziali \(x_0\) e \(\bar x_0\) si dicono \textbf{indistinguibili} in un intervallo \([0,t_f]\) se, a parità di ingresso, producono la stessa uscita per tutto l’intervallo:
+\[
+y(\tau; x_0,u)=y(\tau; \bar x_0,u)
+\qquad
+\forall \tau\in[0,t_f],\ \forall u.
+\]
+
+Indichiamo con
+\[
+\mathcal N_{t_f}(x_0)
+=
+\left\{
+\bar x_0\in\mathbb R^n:
+y(\tau; x_0,u)=y(\tau; \bar x_0,u)\ \ \forall \tau,\forall u
+\right\}
+\]
+l’insieme degli stati indistinguibili da \(x_0\).
+
+Il sistema è \textbf{completamente osservabile} se l’unico stato indistinguibile da \(x_0\) è \(x_0\) stesso, cioè se l’unico stato indistinguibile dall’origine è l’origine:
+\[
+\mathcal N_{t_f}(0)=\{0\}.
+\]
+
+%=========================================================
+\section{Caso continuo: formula esplicita del sottospazio di inosservabilità}
+
+Per il sistema continuo
+\[
+\dot x=Ax+Bu,\qquad y=Cx+Du,
+\]
+con stato iniziale \(x(0)=x_0\), si ha
+\[
+y(\tau)=Ce^{A\tau}x_0+\int_0^\tau Ce^{A(\tau-\sigma)}Bu(\sigma)\,d\sigma + Du(\tau).
+\]
+
+Se \(x_0\) e \(\bar x_0\) sono indistinguibili, allora, sottraendo le due uscite a parità di ingresso, i termini forzati si cancellano e rimane
+\[
+Ce^{A\tau}(x_0-\bar x_0)=0
+\qquad
+\forall \tau\in[0,t_f].
+\]
+
+Dunque
+\[
+x_0-\bar x_0 \in \ker\!\big(Ce^{A\tau}\big)\qquad \forall \tau\in[0,t_f].
+\]
+Ne segue che
+\begin{equation}
+\mathcal N_{t_f}(0)=\bigcap_{\tau\in[0,t_f]} \ker\!\big(Ce^{A\tau}\big).
+\label{eq:L14_Ntf}
+\end{equation}
+
+Questo è il \textbf{sottospazio di inosservabilità}.
+
+%=========================================================
+\section{Operatore di osservazione e gramiano di osservabilità}
+
+Definiamo l’operatore
+\[
+\psi : \mathbb R^n \to L^2([0,t_f],\mathbb R^p),
+\qquad
+\psi(x)=Ce^{A(\cdot)}x.
+\]
+Questo operatore associa a uno stato iniziale la corrispondente \emph{uscita libera}.
+
+L’operatore aggiunto soddisfa
+\[
+\langle \psi(x), y\rangle=\langle x,\psi^\ast(y)\rangle,
+\]
+e si calcola come
+\[
+\psi^\ast(y)=\int_0^{t_f} e^{A^\top \tau} C^\top y(\tau)\,d\tau.
+\]
+
+La composizione \(\psi^\ast\psi\) è allora
+\[
+\psi^\ast\psi(x)
+=
+\int_0^{t_f} e^{A^\top \tau}C^\top C e^{A\tau}\,d\tau \, x.
+\]
+Introduciamo quindi il \textbf{gramiano di osservabilità}
+\begin{equation}
+G_O(0,t_f)=\int_0^{t_f} e^{A^\top \tau}C^\top C e^{A\tau}\,d\tau.
+\label{eq:L14_gramiano_oss}
+\end{equation}
+
+Poiché
+\[
+\psi^\ast\psi=G_O(0,t_f),
+\]
+vale
+\[
+\ker(\psi)=\ker(G_O(0,t_f)).
+\]
+Ma \(\ker(\psi)\) coincide proprio con il sottospazio degli stati che non lasciano traccia in uscita. Quindi
+\[
+\boxed{
+\mathcal N_{t_f}(0)=\ker(G_O(0,t_f)).
+}
+\]
+
+Ne segue che il sistema è completamente osservabile se e solo se
+\[
+G_O(0,t_f)\ \text{è invertibile}.
+\]
+
+%=========================================================
+\section{Matrice di osservabilità e parallelismo con la raggiungibilità}
+
+Come per la raggiungibilità, esiste anche una caratterizzazione puramente algebrica.
+
+Definiamo la \textbf{matrice di osservabilità}
+\[
+\mathcal O=
+\begin{bmatrix}
+C\\
+CA\\
+CA^2\\
+\vdots\\
+CA^{n-1}
+\end{bmatrix}.
+\]
+
+Allora vale il parallelo perfetto con la parte precedente:
+\[
+\ker(G_O(0,t_f))=\ker(\mathcal O).
+\]
+Quindi il sistema è completamente osservabile se e solo se
+\[
+\operatorname{rank}(\mathcal O)=n.
+\]
+
+\bigskip
+
+Confronto diretto:
+
+\[
+\text{raggiungibilità}
+\quad\longleftrightarrow\quad
+R=\begin{bmatrix}B & AB & \cdots & A^{n-1}B\end{bmatrix},
+\]
+\[
+\text{osservabilità}
+\quad\longleftrightarrow\quad
+\mathcal O=
+\begin{bmatrix}
+C\\CA\\ \vdots\\ CA^{n-1}
+\end{bmatrix}.
+\]
+
+Questo forte parallelismo è il preludio alla \textbf{dualità} tra raggiungibilità e osservabilità.
+
+%=========================================================
+\section{Conclusione della lezione}
+
+In questa lezione abbiamo visto quattro idee fondamentali.
+
+\begin{enumerate}
+    \item La \textbf{forma standard di raggiungibilità} separa lo stato in una parte raggiungibile e una non raggiungibile.
+
+    \item La \textbf{forma canonica di controllo} è il modello di riferimento dei sistemi completamente raggiungibili:
+    \[
+    A_c=
+    \begin{bmatrix}
+    0 & 1 & 0 & \cdots & 0\\
+    0 & 0 & 1 & \cdots & 0\\
+    \vdots & \vdots & \vdots & \ddots & \vdots\\
+    0 & 0 & 0 & \cdots & 1\\
+    -a_0 & -a_1 & -a_2 & \cdots & -a_{n-1}
+    \end{bmatrix},
+    \qquad
+    B_c=e_n.
+    \]
+
+    \item Gli \textbf{autovalori non raggiungibili} non possono essere spostati tramite retroazione di stato.
+
+    \item L’\textbf{osservabilità} è il problema duale: capire se dallo storico di ingressi e uscite è possibile ricostruire lo stato.
+\end{enumerate}
+
+\bigskip
+
+La prossima lezione potrà riprendere naturalmente da qui, sviluppando:
+\begin{itemize}
+    \item la forma standard di osservabilità;
+    \item la dualità con la raggiungibilità;
+    \item gli osservatori di stato.
+\end{itemize}

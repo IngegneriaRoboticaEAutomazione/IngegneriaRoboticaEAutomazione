@@ -1,0 +1,778 @@
+\chapter{L13 -- Criterio di Popov--Belevitch--Hautus per la raggiungibilità}
+
+\section{Obiettivo della lezione}
+
+Nella lezione precedente abbiamo visto che, dopo aver separato il sistema nella sua parte raggiungibile e nella sua parte non raggiungibile, gli autovalori del blocco non raggiungibile non possono essere influenzati dall’ingresso.  
+Nasce allora una domanda naturale:
+
+\begin{quote}
+\emph{Esiste un criterio puramente algebrico che permetta di capire, guardando \(A\) e \(B\), se un sistema è completamente raggiungibile?}
+\end{quote}
+
+La risposta è sì, ed è data dal \textbf{criterio PBH} (Popov--Belevitch--Hautus).
+
+L’idea profonda del criterio è la seguente:
+\begin{itemize}
+    \item non basta sapere quali sono gli autovalori di \(A\);
+    \item bisogna capire se l’ingresso \(B\) riesce davvero ad agire su tutti i modi associati a quegli autovalori;
+    \item questo controllo si fa studiando il rango della matrice aumentata
+    \[
+    \begin{bmatrix}
+    A-\lambda I & B
+    \end{bmatrix}.
+    \]
+\end{itemize}
+
+In questa lezione vedremo:
+\begin{enumerate}
+    \item l’enunciato del criterio PBH;
+    \item il suo significato geometrico e modale;
+    \item il ruolo della forma di Jordan;
+    \item esempi in cui il test si applica in modo molto rapido.
+\end{enumerate}
+
+\section{Richiamo: forma standard di raggiungibilità}
+
+Ricordiamo che, se il sistema non è completamente raggiungibile, esiste un cambio di coordinate che porta la coppia \((A,B)\) nella forma standard di raggiungibilità:
+\begin{equation}
+\tilde A=
+\begin{bmatrix}
+A_R & A_{RN}\\
+0 & A_N
+\end{bmatrix},
+\qquad
+\tilde B=
+\begin{bmatrix}
+B_R\\
+0
+\end{bmatrix},
+\label{eq:L13_standard_reach}
+\end{equation}
+dove:
+\begin{itemize}
+    \item \((A_R,B_R)\) descrive il sottosistema raggiungibile;
+    \item \(A_N\) descrive il sottosistema non raggiungibile.
+\end{itemize}
+
+Questa scrittura è importantissima, perché ci dice che la parte non raggiungibile evolve da sola e non può essere modificata dall’ingresso.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[>=Latex, node distance=3.4cm]
+    \node[draw, rounded corners, minimum width=3.4cm, minimum height=1.2cm, fill=blue!8] (zr) {$z_R$};
+    \node[draw, rounded corners, minimum width=3.4cm, minimum height=1.2cm, fill=gray!10, right of=zr] (zn) {$z_N$};
+
+    \draw[->, thick] (-2.2,0) -- (zr.west) node[midway, above] {$u$};
+    \draw[loop above, thick] (zr) to node[above] {$A_R$} (zr);
+    \draw[loop above, thick] (zn) to node[above] {$A_N$} (zn);
+    \draw[->, thick] (zr.east) -- (zn.west) node[midway, above] {$A_{RN}$};
+
+    \node[below=0.7cm of zr] {\small parte raggiungibile};
+    \node[below=0.7cm of zn] {\small parte non raggiungibile};
+\end{tikzpicture}
+\caption{Forma standard di raggiungibilità: l’ingresso agisce solo sul sottosistema raggiungibile.}
+\end{figure}
+
+\section{Enunciato del criterio PBH}
+
+\begin{lemma}[Criterio PBH per la raggiungibilità]
+Sia data la coppia \((A,B)\), con
+\[
+A\in\R^{n\times n}, \qquad B\in\R^{n\times m}.
+\]
+La coppia \((A,B)\) è \textbf{completamente raggiungibile} se e solo se
+\begin{equation}
+\operatorname{rank}
+\begin{bmatrix}
+A-\lambda I & B
+\end{bmatrix}
+=n
+\qquad \forall \lambda\in\C.
+\label{eq:L13_PBH}
+\end{equation}
+\end{lemma}
+
+\begin{osservazione}
+Anche se \(A\) e \(B\) sono reali, il test va formulato per \(\lambda\in\C\), perché gli autovalori di \(A\) possono essere complessi.
+\end{osservazione}
+
+\begin{osservazione}
+Questo criterio è spesso chiamato anche \emph{criterio PBH di controllabilità}.  
+Nel contesto di queste lezioni lo leggiamo come criterio di \textbf{raggiungibilità} della coppia \((A,B)\).
+\end{osservazione}
+
+\section{Perché il criterio ha senso}
+
+La matrice
+\[
+\begin{bmatrix}
+A-\lambda I & B
+\end{bmatrix}
+\]
+controlla simultaneamente due cose:
+\begin{itemize}
+    \item la struttura modale associata a \(\lambda\), tramite \(A-\lambda I\);
+    \item la capacità dell’ingresso di agire su quella struttura, tramite \(B\).
+\end{itemize}
+
+Se questa matrice perde rango, significa che esiste almeno una direzione modale associata a \(\lambda\) che l’ingresso non riesce a eccitare.
+
+In altre parole:
+\begin{quote}
+\emph{un autovalore è problematico non solo perché esiste, ma perché può essere associato a un modo che l’ingresso non riesce a raggiungere.}
+\end{quote}
+
+\section{Solo gli autovalori sono critici}
+
+Il primo fatto utile è che non serve davvero controllare \eqref{eq:L13_PBH} per tutti i complessi in modo cieco.
+
+\begin{proposizione}
+Se \(\lambda\notin\sigma(A)\), allora
+\[
+\operatorname{rank}
+\begin{bmatrix}
+A-\lambda I & B
+\end{bmatrix}=n.
+\]
+\end{proposizione}
+
+\begin{proof}
+Se \(\lambda\notin\sigma(A)\), allora \(A-\lambda I\) è invertibile, quindi ha già rango \(n\).  
+Aggiungere le colonne di \(B\) non può diminuire il rango. Dunque la matrice aumentata ha rango \(n\).
+\end{proof}
+
+\begin{osservazione}
+Quindi, in pratica, il criterio PBH si controlla solo sugli \textbf{autovalori di \(A\)}.
+\end{osservazione}
+
+\section{Dimostrazione del criterio PBH}
+
+\subsection{Necessità}
+
+Supponiamo che il sistema sia completamente raggiungibile.  
+Vogliamo dimostrare che allora \eqref{eq:L13_PBH} vale per ogni \(\lambda\in\C\).
+
+Procediamo per assurdo. Supponiamo che esista \(\hat\lambda\in\C\) tale che
+\[
+\operatorname{rank}
+\begin{bmatrix}
+A-\hat\lambda I & B
+\end{bmatrix}
+<n.
+\]
+Allora esiste un vettore riga non nullo \(w^\top\in\C^{1\times n}\) tale che
+\begin{equation}
+w^\top
+\begin{bmatrix}
+A-\hat\lambda I & B
+\end{bmatrix}
+=0.
+\label{eq:L13_left_annihilator}
+\end{equation}
+Questo equivale a scrivere il sistema
+\begin{equation}
+\begin{cases}
+w^\top(A-\hat\lambda I)=0,\\
+w^\top B=0.
+\end{cases}
+\label{eq:L13_left_eig_system}
+\end{equation}
+La prima relazione dice che
+\[
+w^\top A=\hat\lambda\, w^\top,
+\]
+cioè \(w^\top\) è un \textbf{autovettore sinistro} di \(A\) associato a \(\hat\lambda\).
+
+A questo punto, moltiplicando ripetutamente per \(A\), otteniamo:
+\[
+w^\top AB=\hat\lambda\, w^\top B=0,
+\]
+\[
+w^\top A^2B=\hat\lambda\, w^\top AB=0,
+\]
+e in generale
+\[
+w^\top A^kB=0
+\qquad \forall k\ge 0.
+\]
+Dunque \(w^\top\) annulla tutte le colonne della matrice di raggiungibilità
+\[
+R=\begin{bmatrix}
+B & AB & A^2B & \cdots & A^{n-1}B
+\end{bmatrix},
+\]
+cioè
+\[
+w^\top R=0.
+\]
+Ma se il sistema è completamente raggiungibile, allora \(\operatorname{rank}(R)=n\), quindi le colonne di \(R\) generano tutto \(\R^n\), e non può esistere un vettore riga non nullo che le annulli tutte.
+
+Assurdo.  
+Quindi necessariamente
+\[
+\operatorname{rank}
+\begin{bmatrix}
+A-\lambda I & B
+\end{bmatrix}=n
+\qquad \forall \lambda\in\C.
+\]
+
+\subsection{Sufficienza}
+
+Supponiamo ora che
+\[
+\operatorname{rank}
+\begin{bmatrix}
+A-\lambda I & B
+\end{bmatrix}=n
+\qquad \forall \lambda\in\C.
+\]
+Vogliamo mostrare che il sistema è completamente raggiungibile.
+
+Procediamo ancora per assurdo. Supponiamo che il sistema \emph{non} sia completamente raggiungibile.  
+Allora, per la lezione precedente, esiste un cambio di coordinate che porta il sistema nella forma standard di raggiungibilità \eqref{eq:L13_standard_reach}:
+\[
+\tilde A=
+\begin{bmatrix}
+A_R & A_{RN}\\
+0 & A_N
+\end{bmatrix},
+\qquad
+\tilde B=
+\begin{bmatrix}
+B_R\\
+0
+\end{bmatrix},
+\]
+con \(\dim(A_N)>0\).
+
+Sia \(\hat\lambda\) un autovalore di \(A_N\).  
+Allora esiste un vettore riga non nullo \(\hat x^\top\) tale che
+\[
+\hat x^\top A_N=\hat\lambda\,\hat x^\top.
+\]
+Consideriamo allora il vettore riga
+\[
+\begin{bmatrix}
+0^\top & \hat x^\top
+\end{bmatrix}.
+\]
+Moltiplicandolo per la matrice PBH del sistema trasformato otteniamo
+\[
+\begin{bmatrix}
+0^\top & \hat x^\top
+\end{bmatrix}
+\begin{bmatrix}
+\tilde A-\hat\lambda I & \tilde B
+\end{bmatrix}
+=
+\begin{bmatrix}
+0^\top & \hat x^\top(A_N-\hat\lambda I) & 0
+\end{bmatrix}
+=0.
+\]
+Quindi
+\[
+\operatorname{rank}
+\begin{bmatrix}
+\tilde A-\hat\lambda I & \tilde B
+\end{bmatrix}<n.
+\]
+Ma il rango è invariante per similitudine, dunque anche per il sistema originario si avrebbe
+\[
+\operatorname{rank}
+\begin{bmatrix}
+A-\hat\lambda I & B
+\end{bmatrix}<n,
+\]
+in contraddizione con l’ipotesi.
+
+Quindi il sistema deve essere completamente raggiungibile.
+\qed
+
+\section{Lettura modale del criterio}
+
+Il criterio PBH ci dice che un modo associato all’autovalore \(\lambda\) è \emph{raggiungibile} se e solo se le colonne di \(B\) riescono a rompere la dipendenza lineare eventualmente presente in \(A-\lambda I\).
+
+Dal punto di vista intuitivo:
+\begin{itemize}
+    \item \(A-\lambda I\) perde rango esattamente quando \(\lambda\) è un autovalore;
+    \item allora compaiono direzioni modali “speciali”;
+    \item se \(B\) non riesce ad agire in quelle direzioni, l’autovalore corrispondente genera un modo non raggiungibile.
+\end{itemize}
+
+Questo collega direttamente il criterio PBH al linguaggio degli autovalori raggiungibili e non raggiungibili visto nella lezione precedente.
+
+\section{Legame con la forma di Jordan}
+
+Per capire ancora meglio il criterio, è utile ragionare in forma di Jordan.
+
+Supponiamo di avere una matrice in forma di Jordan
+\[
+J=\operatorname{diag}\!\bigl(
+J_{\lambda}^{(q_1)},
+J_{\lambda}^{(q_2)},
+\dots,
+J_{\lambda}^{(q_k)},
+J_{\mu_1}^{(p_1)},
+\dots
+\bigr),
+\]
+dove i primi \(k\) blocchi sono associati allo stesso autovalore \(\lambda\).
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=1.7cm]
+    \node[draw, minimum width=1.8cm, minimum height=1.8cm] (j1) {$J_\lambda^{(q_1)}$};
+    \node[draw, minimum width=1.6cm, minimum height=1.6cm, right=of j1] (j2) {$J_\lambda^{(q_2)}$};
+    \node[right=0.9cm of j2] (dots) {$\cdots$};
+    \node[draw, minimum width=1.8cm, minimum height=1.8cm, right=0.9cm of dots] (jk) {$J_\lambda^{(q_k)}$};
+
+    \draw[rounded corners, thick]
+    ($(j1.north west)+(-0.5,0.5)$) rectangle ($(jk.south east)+(0.5,-0.5)$);
+
+    \node[above=0.4cm of dots] {\(\lambda\)};
+\end{tikzpicture}
+\caption{Più blocchi di Jordan associati allo stesso autovalore \(\lambda\). Il loro numero è \(m_g(\lambda)\).}
+\end{figure}
+
+Allora
+\[
+J-\lambda I=
+\operatorname{diag}\!\bigl(
+J_\lambda^{(q_1)}-\lambda I,
+J_\lambda^{(q_2)}-\lambda I,
+\dots,
+J_\lambda^{(q_k)}-\lambda I,
+J_{\mu_1}^{(p_1)}-\lambda I,
+\dots
+\bigr).
+\]
+Ora:
+\begin{itemize}
+    \item se \(\mu_i\neq \lambda\), il blocco \(J_{\mu_i}^{(p_i)}-\lambda I\) è invertibile;
+    \item se il blocco è \(J_\lambda^{(q)}\), allora
+    \[
+    J_\lambda^{(q)}-\lambda I
+    =
+    \begin{bmatrix}
+    0 & 1 & 0 & \cdots & 0\\
+    0 & 0 & 1 & \cdots & 0\\
+    \vdots & \vdots & \ddots & \ddots & \vdots\\
+    0 & 0 & \cdots & 0 & 1\\
+    0 & 0 & \cdots & 0 & 0
+    \end{bmatrix},
+    \]
+    che ha rango \(q-1\).
+\end{itemize}
+
+Quindi ciascun blocco di Jordan associato a \(\lambda\) fa perdere esattamente \emph{un’unità} di rango.
+
+\begin{proposizione}
+Se \(\lambda\) è autovalore di \(A\) con molteplicità geometrica \(m_g(\lambda)=k\), allora
+\begin{equation}
+\operatorname{rank}(A-\lambda I)=n-k.
+\label{eq:L13_rank_deficiency}
+\end{equation}
+\end{proposizione}
+
+\begin{proof}
+La quantità \(k\) coincide col numero di blocchi di Jordan associati a \(\lambda\).  
+Ogni blocco \(J_\lambda^{(q_i)}-\lambda I\) ha rango \(q_i-1\), mentre tutti gli altri blocchi hanno rango pieno. Sommando i contributi si ottiene una perdita totale di rango pari a \(k\), cioè
+\[
+\operatorname{rank}(A-\lambda I)=n-k.
+\]
+\end{proof}
+
+\begin{osservazione}
+La perdita di rango di \(A-\lambda I\) non dipende dalla molteplicità algebrica di \(\lambda\), ma dalla sua \textbf{molteplicità geometrica}, cioè dal numero di blocchi di Jordan associati a \(\lambda\).
+\end{osservazione}
+
+\section{Conseguenza importante: numero minimo di ingressi}
+
+Supponiamo che \(\lambda\) sia un autovalore con
+\[
+m_g(\lambda)=k.
+\]
+Allora \(A-\lambda I\) ha rango \(n-k\). Per fare in modo che la matrice aumentata
+\[
+\begin{bmatrix}
+A-\lambda I & B
+\end{bmatrix}
+\]
+raggiunga rango \(n\), bisogna recuperare almeno \(k\) direzioni indipendenti.
+
+Questo implica il seguente fatto molto utile.
+
+\begin{proposizione}
+Se esiste un autovalore \(\lambda\) di \(A\) con molteplicità geometrica \(k\), allora per poter sperare che il sistema sia completamente raggiungibile è necessario avere almeno \(k\) ingressi indipendenti.
+\end{proposizione}
+
+\begin{proof}
+Ogni colonna di \(B\) può aumentare il rango della matrice aumentata di al più una unità.  
+Se \(A-\lambda I\) parte da rango \(n-k\), per arrivare a rango \(n\) occorre recuperare almeno \(k\) unità di rango, quindi servono almeno \(k\) colonne efficaci di \(B\).
+\end{proof}
+
+\begin{osservazione}
+In particolare, con \textbf{un solo ingresso} è impossibile avere completa raggiungibilità se esiste un autovalore con molteplicità geometrica maggiore di \(1\).
+\end{osservazione}
+
+\section{Esempio 1: sistema già in forma standard di raggiungibilità}
+
+Consideriamo
+\begin{equation}
+A=
+\begin{bmatrix}
+-1 & 0 & 2\\
+0 & 3 & 1\\
+0 & 0 & 2
+\end{bmatrix},
+\qquad
+B=
+\begin{bmatrix}
+1\\
+0\\
+0
+\end{bmatrix}.
+\label{eq:L13_es1}
+\end{equation}
+
+La matrice \(A\) è già triangolare superiore, e anzi è già nella forma standard di raggiungibilità: l’ingresso agisce soltanto sul primo stato, mentre gli autovalori \(3\) e \(2\) stanno nella parte non raggiungibile.
+
+\subsection*{Test PBH sugli autovalori}
+
+Gli autovalori sono
+\[
+\lambda_1=-1,\qquad \lambda_2=3,\qquad \lambda_3=2.
+\]
+
+\paragraph{Per \(\lambda=-1\):}
+\[
+\begin{bmatrix}
+A+I & B
+\end{bmatrix}
+=
+\begin{bmatrix}
+0 & 0 & 2 & 1\\
+0 & 4 & 1 & 0\\
+0 & 0 & 3 & 0
+\end{bmatrix}.
+\]
+Questa matrice ha rango \(3\).
+
+\paragraph{Per \(\lambda=3\):}
+\[
+\begin{bmatrix}
+A-3I & B
+\end{bmatrix}
+=
+\begin{bmatrix}
+-4 & 0 & 2 & 1\\
+0 & 0 & 1 & 0\\
+0 & 0 & -1 & 0
+\end{bmatrix}.
+\]
+Questa matrice ha rango \(2\).
+
+\paragraph{Per \(\lambda=2\):}
+\[
+\begin{bmatrix}
+A-2I & B
+\end{bmatrix}
+=
+\begin{bmatrix}
+-3 & 0 & 2 & 1\\
+0 & 1 & 1 & 0\\
+0 & 0 & 0 & 0
+\end{bmatrix}.
+\]
+Questa matrice ha rango \(2\).
+
+\subsection*{Conclusione}
+
+Il criterio PBH fallisce per \(\lambda=3\) e per \(\lambda=2\).  
+Dunque il sistema \eqref{eq:L13_es1} \textbf{non è completamente raggiungibile}.
+
+Più precisamente:
+\begin{itemize}
+    \item il modo associato a \(-1\) è raggiungibile;
+    \item i modi associati a \(3\) e \(2\) non sono raggiungibili.
+\end{itemize}
+
+\section{Esempio 2: due blocchi di Jordan associati allo stesso autovalore}
+
+Consideriamo ora
+\begin{equation}
+A=
+\begin{bmatrix}
+-1 & 1 & 0\\
+0 & -1 & 0\\
+0 & 0 & -1
+\end{bmatrix},
+\qquad
+B_1=
+\begin{bmatrix}
+0\\
+0\\
+1
+\end{bmatrix}.
+\label{eq:L13_es2}
+\end{equation}
+
+La matrice \(A\) ha un autovalore unico \(-1\), con:
+\[
+m_a(-1)=3,
+\qquad
+m_g(-1)=2.
+\]
+Infatti i blocchi di Jordan associati a \(-1\) sono due: uno di ordine \(2\) e uno di ordine \(1\).
+
+\subsection*{Test PBH}
+
+Poiché l’unico autovalore è \(-1\), basta controllare
+\[
+\begin{bmatrix}
+A+I & B_1
+\end{bmatrix}
+=
+\begin{bmatrix}
+0 & 1 & 0 & 0\\
+0 & 0 & 0 & 0\\
+0 & 0 & 0 & 1
+\end{bmatrix}.
+\]
+Il rango è
+\[
+\operatorname{rank}
+\begin{bmatrix}
+A+I & B_1
+\end{bmatrix}
+=2<3.
+\]
+Quindi il sistema non è completamente raggiungibile.
+
+\subsection*{Interpretazione}
+
+Qui il problema non è l’autovalore in sé, ma il fatto che \(-1\) ha due blocchi di Jordan distinti, cioè due catene indipendenti. Con un solo ingresso non si riesce a pilotare entrambe.
+
+\begin{osservazione}
+Questo esempio mostra bene la differenza tra:
+\begin{itemize}
+    \item \emph{molteplicità algebrica} dell’autovalore;
+    \item \emph{numero di catene modali indipendenti} associate a quell’autovalore.
+\end{itemize}
+Nel criterio PBH conta la seconda, cioè la molteplicità geometrica.
+\end{osservazione}
+
+\section{Esempio 3: scegliere un altro ingresso non basta necessariamente}
+
+Riprendiamo la stessa matrice \(A\), ma scegliamo ora
+\[
+B_2=
+\begin{bmatrix}
+0\\
+1\\
+0
+\end{bmatrix}.
+\]
+Allora
+\[
+\begin{bmatrix}
+A+I & B_2
+\end{bmatrix}
+=
+\begin{bmatrix}
+0 & 1 & 0 & 0\\
+0 & 0 & 0 & 1\\
+0 & 0 & 0 & 0
+\end{bmatrix}.
+\]
+Anche in questo caso
+\[
+\operatorname{rank}
+\begin{bmatrix}
+A+I & B_2
+\end{bmatrix}
+=2<3.
+\]
+Quindi il sistema continua a non essere completamente raggiungibile.
+
+\subsection*{Commento}
+
+Con \(B_2\) si riesce a influenzare una catena diversa, ma rimane comunque una direzione modale fuori portata.  
+Il punto cruciale è che con un solo ingresso non si possono recuperare le due unità di rango perse da \(A+I\).
+
+\section{Esempio 4: un caso completamente raggiungibile}
+
+Consideriamo ora
+\begin{equation}
+A=
+\begin{bmatrix}
+-1 & 0 & 2\\
+0 & 3 & 1\\
+0 & 0 & 2
+\end{bmatrix},
+\qquad
+B=
+\begin{bmatrix}
+1\\
+0\\
+1
+\end{bmatrix}.
+\label{eq:L13_es4}
+\end{equation}
+
+Gli autovalori sono ancora
+\[
+-1,\quad 3,\quad 2.
+\]
+Ma il diverso ingresso cambia radicalmente la situazione.
+
+\paragraph{Per \(\lambda=-1\):}
+\[
+\begin{bmatrix}
+A+I & B
+\end{bmatrix}
+=
+\begin{bmatrix}
+0 & 0 & 2 & 1\\
+0 & 4 & 1 & 0\\
+0 & 0 & 3 & 1
+\end{bmatrix},
+\qquad
+\operatorname{rank}=3.
+\]
+
+\paragraph{Per \(\lambda=3\):}
+\[
+\begin{bmatrix}
+A-3I & B
+\end{bmatrix}
+=
+\begin{bmatrix}
+-4 & 0 & 2 & 1\\
+0 & 0 & 1 & 0\\
+0 & 0 & -1 & 1
+\end{bmatrix},
+\qquad
+\operatorname{rank}=3.
+\]
+
+\paragraph{Per \(\lambda=2\):}
+\[
+\begin{bmatrix}
+A-2I & B
+\end{bmatrix}
+=
+\begin{bmatrix}
+-3 & 0 & 2 & 1\\
+0 & 1 & 1 & 0\\
+0 & 0 & 0 & 1
+\end{bmatrix},
+\qquad
+\operatorname{rank}=3.
+\]
+
+\subsection*{Conclusione}
+
+Il criterio PBH è soddisfatto per tutti gli autovalori, quindi il sistema \eqref{eq:L13_es4} è \textbf{completamente raggiungibile}.
+
+\begin{osservazione}
+Questo esempio fa capire che non conta solo la presenza di certi autovalori, ma \emph{come} l’ingresso è collegato al sistema.
+\end{osservazione}
+
+\section{Interpretazione tramite autovettori sinistri}
+
+Il criterio PBH può essere letto anche così:
+
+\begin{quote}
+\emph{il sistema è completamente raggiungibile se non esiste alcun autovettore sinistro di \(A\) ortogonale a tutte le colonne di \(B\).}
+\end{quote}
+
+Infatti, come visto nella dimostrazione:
+\[
+w^\top(A-\lambda I)=0,
+\qquad
+w^\top B=0
+\]
+significa contemporaneamente che:
+\begin{itemize}
+    \item \(w^\top\) è un autovettore sinistro di \(A\) associato a \(\lambda\);
+    \item la direzione modale corrispondente non viene eccitata dall’ingresso.
+\end{itemize}
+
+Questa è forse la lettura più concettuale dell’intero lemma PBH.
+
+\section{Messaggio pratico della lezione}
+
+Il criterio PBH è potentissimo perché evita, in molti casi, di calcolare esplicitamente la matrice di raggiungibilità
+\[
+R=\begin{bmatrix}
+B & AB & \cdots & A^{n-1}B
+\end{bmatrix}.
+\]
+
+In pratica:
+\begin{itemize}
+    \item si trovano gli autovalori di \(A\);
+    \item per ciascun autovalore \(\lambda\), si calcola il rango di
+    \[
+    \begin{bmatrix}
+    A-\lambda I & B
+    \end{bmatrix};
+    \]
+    \item se il rango è sempre \(n\), il sistema è completamente raggiungibile;
+    \item se per almeno un autovalore il rango scende, allora esiste almeno un modo non raggiungibile.
+\end{itemize}
+
+\section{Schema riassuntivo}
+
+\begin{center}
+\fbox{
+\parbox{0.93\textwidth}{
+\textbf{Criterio PBH per la raggiungibilità}
+
+\vspace{0.3cm}
+
+La coppia \((A,B)\) è completamente raggiungibile se e solo se
+\[
+\operatorname{rank}
+\begin{bmatrix}
+A-\lambda I & B
+\end{bmatrix}=n
+\qquad \forall \lambda\in\C.
+\]
+
+\begin{itemize}
+    \item Se \(\lambda\notin\sigma(A)\), il rango è automaticamente massimo.
+    \item I valori davvero critici sono quindi solo gli autovalori di \(A\).
+    \item Se \(m_g(\lambda)=k\), allora \(A-\lambda I\) perde \(k\) unità di rango.
+    \item Per recuperarle, \(B\) deve fornire almeno \(k\) direzioni indipendenti.
+    \item Se esiste un autovettore sinistro \(w^\top\neq 0\) tale che
+    \[
+    w^\top A=\lambda w^\top,
+    \qquad
+    w^\top B=0,
+    \]
+    allora il modo associato a \(\lambda\) non è raggiungibile.
+\end{itemize}
+}}
+\end{center}
+
+\section{Conclusione}
+
+Questa lezione chiude idealmente il discorso iniziato con la forma standard di raggiungibilità:
+\begin{itemize}
+    \item nella lezione precedente abbiamo separato \emph{geometricamente} la parte raggiungibile da quella non raggiungibile;
+    \item in questa lezione abbiamo ottenuto un test \emph{algebrico} molto rapido per riconoscere la stessa proprietà.
+\end{itemize}
+
+Il criterio PBH è uno degli strumenti più importanti dell’intero corso, perché mette in relazione:
+\begin{itemize}
+    \item autovalori;
+    \item blocchi di Jordan;
+    \item ingressi;
+    \item modi effettivamente pilotabili.
+\end{itemize}
+
+Nelle lezioni successive questo criterio tornerà continuamente, sia nella progettazione dei controllori sia nell’analisi strutturale dei sistemi.

@@ -1,0 +1,478 @@
+\chapter{Lezione 6 --- Trasformata z: propriet\`a, tabelle fondamentali e funzione di trasferimento dei sistemi discreti}
+
+\section{Richiamo: trasformata z della successione campionata}
+
+Riprendiamo il risultato della lezione precedente. Se un segnale continuo causale \(f(t)\)
+viene campionato con periodo \(T\), allora il segnale campionato in forma impulsiva si pu\`o scrivere come
+\[
+\hat f(t)=\sum_{k=0}^{+\infty} f(kT)\,\delta(t-kT).
+\]
+
+Applicando la trasformata di Laplace si ottiene
+\[
+\mathcal{L}\{\hat f(t)\}
+=
+\int_{0^-}^{+\infty}
+\left(
+\sum_{k=0}^{+\infty} f(kT)\,\delta(t-kT)
+\right)e^{-st}\,dt
+=
+\sum_{k=0}^{+\infty} f(kT)e^{-skT}.
+\]
+
+Introducendo la variabile
+\[
+z=e^{sT},
+\qquad\text{quindi}\qquad
+e^{-sT}=z^{-1},
+\]
+si arriva alla definizione di trasformata z monolatera:
+\[
+X(z)=\mathcal{Z}\{x(k)\}
+=
+\sum_{k=0}^{+\infty} x(k)\,z^{-k}.
+\]
+
+Nel nostro caso \(x(k)=f(kT)\), quindi pi\`u rigorosamente si dovrebbe scrivere
+\[
+\mathcal{Z}\{f(kT)\}
+=
+\sum_{k=0}^{+\infty} f(kT)\,z^{-k}.
+\]
+
+\subsection*{Osservazione importante}
+
+Nella trasformata z la dipendenza esplicita da \(T\) non compare pi\`u nella formula,
+ma \`e \emph{nascosta} nella variabile \(z=e^{sT}\).
+Per questo due successioni formalmente uguali possono corrispondere a segnali continui
+campionati con periodi diversi.
+
+\section{Trasformata z monolatera e bilatera}
+
+Per segnali causali o comunque definiti per \(k=0,1,2,\dots\), si usa la trasformata z \textbf{monolatera}:
+\[
+X(z)=\sum_{k=0}^{+\infty} x(k)\,z^{-k}.
+\]
+
+Per segnali definiti su tutti gli interi, si pu\`o introdurre la trasformata z \textbf{bilatera}:
+\[
+X(z)=\sum_{k=-\infty}^{+\infty} x(k)\,z^{-k}.
+\]
+
+Nel seguito lavoriamo prevalentemente con la forma monolatera, perch\'e stiamo studiando
+sistemi causali e sequenze con transitorio.
+
+\section{Propriet\`a della trasformata z}
+
+La trasformata z monolatera eredita molte propriet\`a della trasformata di Laplace.
+
+\subsection{Linearit\`a}
+
+Per \(\alpha,\beta\in\mathbb{R}\) oppure \(\mathbb{C}\),
+\[
+\mathcal{Z}\{\alpha x(k)+\beta y(k)\}
+=
+\alpha X(z)+\beta Y(z).
+\]
+
+\subsection{Convoluzione discreta}
+
+Se definiamo la convoluzione discreta di due successioni causali come
+\[
+(x\ast y)(n)=\sum_{k=0}^{n} x(k)\,y(n-k),
+\]
+allora vale
+\[
+\mathcal{Z}\{x\ast y\}=X(z)Y(z).
+\]
+
+\subsection{Traslazione temporale}
+
+Supponiamo di avere la successione
+\[
+x(k)\ \longleftrightarrow\ X(z)
+\]
+e consideriamo la successione anticipata di un passo
+\[
+\tilde x(k)=x(k+1).
+\]
+
+Allora
+\[
+\mathcal{Z}\{x(k+1)\}=zX(z)-zx(0).
+\]
+
+Questa propriet\`a \`e l'analogo discreto della propriet\`a della derivata
+nella trasformata di Laplace.
+
+\subsection{Teorema del valore iniziale}
+
+Se la trasformata z esiste, allora
+\[
+x(0)=\lim_{z\to\infty} X(z).
+\]
+
+\subsection{Teorema del valore finale}
+
+Se esiste il limite \(\lim_{k\to+\infty}x(k)\) e se sono soddisfatte le usuali ipotesi
+sui poli di \((z-1)X(z)\), allora
+\[
+\lim_{k\to+\infty}x(k)
+=
+\lim_{z\to 1}(z-1)X(z).
+\]
+
+\section{Coppie fondamentali tra trasformata z, segnale campionato e trasformata di Laplace}
+
+Raccogliamo alcune coppie molto usate negli esercizi.
+Nella tabella seguente:
+\begin{itemize}
+    \item la prima colonna contiene la trasformata z della sequenza campionata;
+    \item la seconda colonna il corrispondente segnale continuo causale;
+    \item la terza colonna la relativa trasformata di Laplace.
+\end{itemize}
+
+\[
+\renewcommand{\arraystretch}{1.5}
+\begin{array}{|c|c|c|}
+\hline
+X(z) & x(t) & X(s) \\
+\hline
+1 & \delta(t) & 1 \\
+\hline
+\dfrac{z}{z-1} & 1(t) & \dfrac{1}{s} \\
+\hline
+\dfrac{Tz}{(z-1)^2} & t\,1(t) & \dfrac{1}{s^2} \\
+\hline
+\dfrac{T^2 z(z+1)}{2(z-1)^3} & \dfrac{1}{2}t^2\,1(t) & \dfrac{1}{s^3} \\
+\hline
+\dfrac{z}{z-e^{-aT}} & e^{-at}1(t) & \dfrac{1}{s+a} \\
+\hline
+\dfrac{Tze^{-aT}}{(z-e^{-aT})^2} & t\,e^{-at}1(t) & \dfrac{1}{(s+a)^2} \\
+\hline
+\dfrac{z\sin(\omega T)}{z^2-2\cos(\omega T)z+1}
+& \sin(\omega t)\,1(t)
+& \dfrac{\omega}{s^2+\omega^2}
+\\
+\hline
+\dfrac{z\bigl(z-\cos(\omega T)\bigr)}{z^2-2\cos(\omega T)z+1}
+& \cos(\omega t)\,1(t)
+& \dfrac{s}{s^2+\omega^2}
+\\
+\hline
+\dfrac{ze^{-aT}\sin(\omega T)}
+{z^2-2e^{-aT}\cos(\omega T)z+e^{-2aT}}
+& e^{-at}\sin(\omega t)\,1(t)
+& \dfrac{\omega}{(s+a)^2+\omega^2}
+\\
+\hline
+\end{array}
+\]
+
+\subsection*{Osservazione sui poli complessi coniugati}
+
+Per il segnale
+\[
+e^{-at}\sin(\omega t)\,1(t),
+\]
+i poli della trasformata z sono
+\[
+z_{1,2}=e^{-aT}\bigl(\cos(\omega T)\pm j\sin(\omega T)\bigr)
+=
+e^{-aT}e^{\pm j\omega T}.
+\]
+
+Quindi:
+\begin{itemize}
+    \item il modulo dei poli \`e \(e^{-aT}\);
+    \item l'angolo dei poli \`e \(\pm \omega T\).
+\end{itemize}
+
+\section{Sistema in forma di stato discreta}
+
+Consideriamo ora un sistema lineare tempo-invariante nel discreto, in forma di stato:
+\[
+\begin{cases}
+x(k+1)=Ax(k)+Bu(k),\\[4pt]
+y(k)=Cx(k),
+\end{cases}
+\]
+con condizione iniziale \(x(0)\).
+
+Applicando la trasformata z monolatera all'equazione di stato, e usando la propriet\`a
+di traslazione, si ottiene
+\[
+zX(z)-zx(0)=AX(z)+BU(z).
+\]
+
+Dall'equazione di uscita segue invece
+\[
+Y(z)=CX(z).
+\]
+
+Riordinando l'equazione di stato:
+\[
+(zI-A)X(z)=BU(z)+zx(0).
+\]
+
+Quindi
+\[
+X(z)=(zI-A)^{-1}BU(z)+(zI-A)^{-1}zx(0).
+\]
+
+Sostituendo nell'equazione di uscita:
+\[
+Y(z)=C(zI-A)^{-1}BU(z)+C(zI-A)^{-1}zx(0).
+\]
+
+\subsection{Interpretazione dei due termini}
+
+I due termini hanno un significato fisico ben preciso:
+\[
+Y(z)=
+\underbrace{C(zI-A)^{-1}BU(z)}_{\text{risposta forzata}}
++
+\underbrace{C(zI-A)^{-1}zx(0)}_{\text{risposta libera}}.
+\]
+
+Il primo dipende dall'ingresso, il secondo dalla condizione iniziale.
+
+\section{Matrice di trasferimento}
+
+In assenza di condizioni iniziali, cio\`e ponendo \(x(0)=0\), resta
+\[
+Y(z)=C(zI-A)^{-1}BU(z).
+\]
+
+Da qui si definisce la \textbf{matrice di trasferimento}
+\[
+G(z)=C(zI-A)^{-1}B.
+\]
+
+Se il sistema ha anche un termine diretto \(D\), la formula generale diventa
+\[
+G(z)=C(zI-A)^{-1}B+D.
+\]
+
+Nel caso trattato negli appunti si assume \(D=0\).
+
+\section{Calcolo di \((zI-A)^{-1}\) mediante aggiunta e determinante}
+
+Per calcolare esplicitamente la matrice di trasferimento, pu\`o essere utile richiamare
+la formula generale dell'inversa di una matrice invertibile.
+
+Se \(M\in\mathbb{R}^{n\times n}\) \`e invertibile, allora
+\[
+M^{-1}=\frac{1}{\det(M)}\operatorname{Adj}(M),
+\]
+dove \(\operatorname{Adj}(M)\) \`e la matrice aggiunta di \(M\).
+
+L'elemento \((i,j)\) dell'aggiunta si ottiene a partire dal complemento algebrico:
+\[
+c_{ij}=(-1)^{i+j}\det(M^{\ast}_{ji}),
+\]
+dove \(M^{\ast}_{ji}\) \`e il minore ottenuto eliminando la riga \(j\) e la colonna \(i\).
+
+Applicando questa formula a \(M=zI-A\), si ottiene
+\[
+(zI-A)^{-1}
+=
+\frac{1}{\det(zI-A)}\operatorname{Adj}(zI-A).
+\]
+
+Quindi la matrice di trasferimento pu\`o essere scritta come
+\[
+G(z)=C(zI-A)^{-1}B
+=
+\frac{1}{\det(zI-A)}\,C\,\operatorname{Adj}(zI-A)\,B.
+\]
+
+\section{Caso SISO}
+
+Nel caso \textbf{SISO} (Single Input Single Output),
+\[
+u(k)\in\mathbb{R},\qquad y(k)\in\mathbb{R},\qquad x(k)\in\mathbb{R}^n,
+\]
+e si pu\`o scrivere
+\[
+C=c^T,\qquad c\in\mathbb{R}^n,
+\qquad
+B=b,\qquad b\in\mathbb{R}^n.
+\]
+
+La funzione di trasferimento diventa quindi
+\[
+G(z)=c^T(zI-A)^{-1}b.
+\]
+
+Poich\'e compare l'inversa di una matrice polinomiale in \(z\),
+la funzione di trasferimento \`e una \textbf{funzione razionale}:
+\[
+G(z)=
+\frac{b_m z^m+b_{m-1}z^{m-1}+\dots+b_0}
+{z^n+a_{n-1}z^{n-1}+\dots+a_1 z+a_0}.
+\]
+
+\subsection*{Osservazione}
+
+Nel caso SISO, il denominatore coincide con il polinomio caratteristico
+\[
+\det(zI-A),
+\]
+mentre il numeratore dipende da \(A,B,C\).
+
+\section{Equazione alle differenze associata alla funzione di trasferimento}
+
+Sotto ipotesi di condizioni iniziali nulle, dalla relazione
+\[
+Y(z)=G(z)U(z)
+\]
+si ha
+\[
+\bigl(z^n+a_{n-1}z^{n-1}+\dots+a_0\bigr)Y(z)
+=
+\bigl(b_m z^m+b_{m-1}z^{m-1}+\dots+b_0\bigr)U(z).
+\]
+
+Formalmente, questa relazione porta a una equazione alle differenze.
+Negli appunti compare una scrittura del tipo
+\[
+y(k+n)+a_{n-1}y(k+n-1)+\dots+a_0y(k)
+=
+b_m u(k+m)+b_{m-1}u(k+m-1)+\dots+b_0u(k).
+\]
+
+\subsection*{Forma causale pi\`u usata}
+
+Per implementare il sistema come filtro digitale causale, \`e per\`o pi\`u comodo
+scrivere la funzione di trasferimento in potenze di \(z^{-1}\):
+\[
+G(z)=
+\frac{\beta_0+\beta_1 z^{-1}+\dots+\beta_m z^{-m}}
+{1+\alpha_1 z^{-1}+\dots+\alpha_n z^{-n}}.
+\]
+
+In questo caso si ottiene direttamente la forma causale
+\[
+y(k)+\alpha_1 y(k-1)+\dots+\alpha_n y(k-n)
+=
+\beta_0 u(k)+\beta_1 u(k-1)+\dots+\beta_m u(k-m).
+\]
+
+Questa \`e l'equazione che definisce l'algoritmo di calcolo dell'uscita
+quando l'ingresso attraversa un filtro con funzione di trasferimento \(G(z)\).
+
+\section{Esempi di aggiunta e inversa di matrice}
+
+Negli appunti compaiono due esempi espliciti di calcolo dell'aggiunta.
+
+\subsection{Primo esempio: matrice \(2\times 2\)}
+
+Sia
+\[
+M=
+\begin{bmatrix}
+3 & 6\\
+7 & 9
+\end{bmatrix}.
+\]
+
+Allora
+\[
+\det(M)=3\cdot 9-6\cdot 7=-15,
+\]
+e
+\[
+\operatorname{Adj}(M)=
+\begin{bmatrix}
+9 & -6\\
+-7 & 3
+\end{bmatrix}.
+\]
+
+Quindi
+\[
+M^{-1}
+=
+\frac{1}{-15}
+\begin{bmatrix}
+9 & -6\\
+-7 & 3
+\end{bmatrix}.
+\]
+
+\subsection{Secondo esempio: matrice \(3\times 3\)}
+
+Sia
+\[
+M=
+\begin{bmatrix}
+5 & 2 & 0\\
+6 & 6 & 1\\
+0 & 3 & 2
+\end{bmatrix}.
+\]
+
+Il determinante vale
+\[
+\det(M)=21,
+\]
+mentre l'aggiunta \`e
+\[
+\operatorname{Adj}(M)=
+\begin{bmatrix}
+9 & -4 & 2\\
+-12 & 10 & -5\\
+18 & -15 & 18
+\end{bmatrix}.
+\]
+
+Quindi
+\[
+M^{-1}
+=
+\frac{1}{21}
+\begin{bmatrix}
+9 & -4 & 2\\
+-12 & 10 & -5\\
+18 & -15 & 18
+\end{bmatrix}.
+\]
+
+\section{Sintesi della lezione}
+
+I punti chiave della lezione sono:
+\begin{enumerate}
+    \item la trasformata z di una successione causale si definisce come
+    \[
+    X(z)=\sum_{k=0}^{+\infty}x(k)z^{-k};
+    \]
+    \item la dipendenza dal periodo di campionamento \(T\) scompare formalmente,
+    ma resta implicita nella relazione \(z=e^{sT}\);
+    \item la trasformata z monolatera ha propriet\`a di linearit\`a, convoluzione,
+    traslazione nel tempo, valore iniziale e valore finale;
+    \item esistono tavole di corrispondenza tra segnali continui causali,
+    trasformate di Laplace e trasformate z delle rispettive sequenze campionate;
+    \item per un sistema discreto in forma di stato
+    \[
+    \begin{cases}
+    x(k+1)=Ax(k)+Bu(k),\\
+    y(k)=Cx(k),
+    \end{cases}
+    \]
+    si ottiene
+    \[
+    Y(z)=C(zI-A)^{-1}BU(z)+C(zI-A)^{-1}zx(0);
+    \]
+    \item la matrice di trasferimento \`e
+    \[
+    G(z)=C(zI-A)^{-1}B;
+    \]
+    \item nel caso SISO, \(G(z)\) \`e una funzione razionale;
+    \item dalla funzione di trasferimento si ricava l'equazione alle differenze
+    che implementa il filtro discreto;
+    \item il calcolo esplicito di \(G(z)\) pu\`o essere fatto usando
+    \[
+    (zI-A)^{-1}=\frac{1}{\det(zI-A)}\operatorname{Adj}(zI-A).
+    \]
+\end{enumerate}

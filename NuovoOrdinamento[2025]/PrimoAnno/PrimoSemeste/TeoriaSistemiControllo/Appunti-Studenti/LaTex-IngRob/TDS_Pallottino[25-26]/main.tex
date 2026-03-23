@@ -1,0 +1,168 @@
+\documentclass[a4paper,12pt]{report}
+
+% --------------------------------------------------
+% Codifica e lingua
+% --------------------------------------------------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage{lmodern}
+
+% --------------------------------------------------
+% Impaginazione e tipografia
+% --------------------------------------------------
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage{parskip}
+
+% --------------------------------------------------
+% Matematica
+% --------------------------------------------------
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{amsthm}
+\usepackage{bm}
+\usepackage{physics}
+
+% --------------------------------------------------
+% Figure, grafici, colori
+% --------------------------------------------------
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+
+% --------------------------------------------------
+% TikZ e PGFPlots per diagrammi, blocchi, grafici
+% --------------------------------------------------
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\usetikzlibrary{
+    arrows.meta,
+    calc,
+    positioning,
+    fit,
+    matrix,
+    backgrounds,
+    decorations.pathreplacing,
+    shapes.geometric,
+    shapes.symbols,
+    shapes.misc,
+    patterns
+}
+
+% Eventuali circuiti / schemi tecnici
+\usepackage{circuitikz}
+
+% --------------------------------------------------
+% Link ipertestuali
+% --------------------------------------------------
+\usepackage[
+    colorlinks=true,
+    linkcolor=blue!50!black,
+    urlcolor=blue!50!black,
+    citecolor=blue!50!black
+]{hyperref}
+
+% --------------------------------------------------
+% Comandi utili
+% --------------------------------------------------
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+
+% --------------------------------------------------
+% Ambiente teoremi (facoltativo ma utile)
+% --------------------------------------------------
+\newtheorem{teorema}{Teorema}[chapter]
+\newtheorem{proposizione}[teorema]{Proposizione}
+\newtheorem{lemma}[teorema]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definizione}[teorema]{Definizione}
+\newtheorem{osservazione}[teorema]{Osservazione}
+\newtheorem{esempio}[teorema]{Esempio}
+
+\begin{document}
+
+% --------------------------------------------------
+% Frontespizio
+% --------------------------------------------------
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+
+    {\Huge\bfseries Teoria dei Sistemi \par}
+    \vspace{0.8cm}
+
+    {\Large Prof.ssa Pallottino \par}
+    \vspace{0.5cm}
+
+    {\large Università di Pisa\par}
+    \vspace{0.3cm}
+
+    {\large Ingegneria Robotica e dell'Automazione\par}
+
+    \vfill
+
+    {\Large\bfseries LaTex rielaborato - Appunti Ingegneri Robotizzati\par}
+    \vspace{0.8cm}
+
+    {\large\textbf{Materiale a cura di:}\par}
+    \vspace{0.2cm}
+    {\large Marcello, Alessio, Giovanni, Gabriele, Kevin\par}
+
+    \vfill
+\end{titlepage}
+
+% --------------------------------------------------
+% Disclaimer
+% --------------------------------------------------
+\chapter*{Disclaimer}
+\addcontentsline{toc}{chapter}{Disclaimer}
+
+Questo documento è stato realizzato a partire dagli appunti presi in aula durante le lezioni del corso di \emph{Teoria dei Sistemi e del Controllo}.  
+Il materiale è stato successivamente rielaborato, ordinato e ampliato con l'obiettivo di renderlo più chiaro, coerente e utile allo studio.
+
+Il testo ha esclusivamente finalità didattiche e di supporto personale allo studio. Non sostituisce in alcun modo le lezioni, il materiale ufficiale del corso, né i testi consigliati dai docenti.
+
+Eventuali imprecisioni, refusi o semplificazioni sono possibili e vanno sempre confrontati con le dispense ufficiali e con quanto svolto a lezione.
+
+Questo documento non è pensato per la vendita, la distribuzione commerciale o qualunque altra forma di utilizzo a scopo di lucro.
+
+\tableofcontents
+
+% --------------------------------------------------
+% Capitoli
+% --------------------------------------------------
+\input{L1}
+\input{L2}
+\input{L3}
+\input{L4}
+\input{L5}
+\input{L6}
+\input{L7}
+\input{L8}
+\input{L9}
+\input{L10}
+\input{L11}
+\input{L12}
+\input{L13}
+\input{L14}
+\input{L15}
+\input{L16}
+\input{L17}
+\input{L18}
+\input{L19}
+\input{L20}
+\input{L21}
+\input{L22}
+\input{L23}
+\input{L24}
+\input{L25}
+
+\end{document}

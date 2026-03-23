@@ -1,0 +1,1032 @@
+% =========================
+% L25.tex
+% =========================
+
+\chapter{L25 -- Sistemi non stazionari, stabilit\`a uniforme e Lyapunov tempo-variante}
+\label{chap:L25}
+
+\section{Chiusura del metodo indiretto e passaggio ai sistemi non stazionari}
+
+Concludiamo anzitutto l'idea vista alla fine della lezione precedente sul \emph{metodo indiretto di Lyapunov}.
+
+Quando il linearizzato di un sistema non lineare attorno a un equilibrio ha una parte stabile e una parte instabile, tramite un opportuno cambio di base si pu\`o scrivere, localmente, una dinamica del tipo
+\[
+\dot x = Ax + h(x),
+\qquad
+A=
+\begin{pmatrix}
+A_1 & 0\\
+0 & A_2
+\end{pmatrix},
+\]
+dove:
+\begin{itemize}
+    \item \(A_1\) raccoglie i modi con parte reale positiva,
+    \item \(A_2\) raccoglie i modi con parte reale negativa,
+    \item \(h(x)\) contiene i termini non lineari di ordine superiore.
+\end{itemize}
+
+Per studiare l'instabilit\`a si costruisce una funzione del tipo
+\[
+V(x)=x^\top P x,
+\qquad
+P=
+\begin{pmatrix}
+P_1 & 0\\
+0 & -P_2
+\end{pmatrix},
+\]
+con \(P_1>0\), \(P_2>0\).  
+Il segno meno sul blocco \(P_2\) serve proprio a costruire una funzione che non sia positiva definita su tutto lo spazio, ma che sia utile per applicare un criterio di instabilit\`a alla Chetaev.
+
+Lungo le traiettorie del sistema non lineare, per \(x\) piccolo, si ottiene una relazione del tipo
+\[
+L_fV(x)=x^\top x + 2x^\top P h(x),
+\]
+e il termine \(2x^\top P h(x)\) \`e di ordine superiore.  
+Questo consente di concludere che, se nel linearizzato c'\`e almeno un modo esponenzialmente divergente, allora l'equilibrio del sistema non lineare \`e instabile.
+
+\medskip
+
+\noindent
+A questo punto passiamo a una nuova classe di sistemi.
+
+\section{Sistemi non stazionari}
+
+Un sistema \`e detto \textbf{non stazionario} o \textbf{tempo-variante} se la dinamica dipende esplicitamente dal tempo:
+\begin{equation}
+\label{eq:L25-nonstat}
+\dot x = f(x,t).
+\end{equation}
+
+Nel caso lineare si scrive
+\begin{equation}
+\label{eq:L25-ltv}
+\dot x(t)=A(t)x(t).
+\end{equation}
+
+La differenza concettuale rispetto ai sistemi stazionari \`e fondamentale:
+\begin{center}
+\emph{per i sistemi tempo-varianti, conoscere gli autovalori istantanei di \(A(t)\) non basta pi\`u per concludere sulla stabilit\`a del sistema.}
+\end{center}
+
+\subsection{Primo controesempio: autovalori sempre negativi ma soluzione divergente}
+
+Consideriamo il sistema
+\[
+\dot x(t)=A(t)x(t),
+\qquad
+A(t)=
+\begin{pmatrix}
+-1 & a(t)\\
+0 & -1
+\end{pmatrix},
+\qquad
+a(t)=e^{2t}.
+\]
+Gli autovalori di \(A(t)\) sono sempre
+\[
+\lambda_1(t)=\lambda_2(t)=-1.
+\]
+Se ragionassimo come nel caso stazionario, saremmo portati a dire che il sistema \`e stabile. Ma non \`e cos\`\i.
+
+Infatti il sistema vale
+\[
+\begin{cases}
+\dot x_1 = -x_1 + e^{2t}x_2,\\[4pt]
+\dot x_2 = -x_2.
+\end{cases}
+\]
+Dalla seconda equazione otteniamo immediatamente
+\[
+x_2(t)=e^{-t}x_2(0).
+\]
+Sostituendo nella prima:
+\[
+\dot x_1 + x_1 = e^{2t}e^{-t}x_2(0)=e^t x_2(0).
+\]
+Moltiplichiamo per il fattore integrante \(e^t\):
+\[
+\frac{d}{dt}\bigl(e^t x_1(t)\bigr)=e^{2t}x_2(0).
+\]
+Integrando:
+\[
+e^t x_1(t)=x_1(0)+\frac{x_2(0)}{2}(e^{2t}-1),
+\]
+quindi
+\[
+x_1(t)=e^{-t}x_1(0)+\frac{x_2(0)}{2}\bigl(e^t-e^{-t}\bigr).
+\]
+Se \(x_2(0)\neq 0\), allora \(x_1(t)\) cresce come \(e^t\), dunque diverge.
+
+\medskip
+
+\noindent
+\textbf{Conclusione:}
+nonostante gli autovalori istantanei siano sempre uguali a \(-1\), il sistema non \`e stabile.
+
+\subsection{Messaggio da ricordare}
+
+Per i sistemi non stazionari il criterio ``autovalori con parte reale negativa'' non vale pi\`u in generale.  
+Conta l'evoluzione complessiva nel tempo, non lo spettro istantaneo della matrice \(A(t)\).
+
+\IfFileExists{25_page-0001.jpg}{
+\begin{figure}[h!]
+\centering
+\includegraphics[width=.82\textwidth]{25_page-0001.jpg}
+\caption{Appunti originali: introduzione ai sistemi non stazionari e controesempi sullo spettro istantaneo.}
+\end{figure}
+}{}
+
+\section{Stabilit\`a per sistemi dipendenti dal tempo}
+
+Nel caso non stazionario la definizione di stabilit\`a deve tener conto del fatto che il comportamento pu\`o dipendere anche dall'istante iniziale \(t_0\).
+
+Consideriamo il sistema \eqref{eq:L25-nonstat}, con equilibrio nell'origine.
+
+\subsection{Definizione di stabilit\`a}
+
+L'origine \(\bar x=0\) si dice \textbf{stabile} se
+\[
+\forall \varepsilon>0,\ \forall t_0\ge 0,\ \exists \delta=\delta(\varepsilon,t_0)>0
+\]
+tale che
+\[
+\|x(t_0)\|<\delta
+\quad\Longrightarrow\quad
+\|x(t)\|<\varepsilon
+\qquad \forall t\ge t_0.
+\]
+
+La differenza rispetto al caso stazionario \`e che qui \(\delta\) pu\`o dipendere da \(t_0\).
+
+\subsection{Definizione di stabilit\`a uniforme}
+
+L'origine si dice \textbf{uniformemente stabile} se
+\[
+\forall \varepsilon>0,\ \exists \delta=\delta(\varepsilon)>0
+\]
+indipendente da \(t_0\), tale che
+\[
+\|x(t_0)\|<\delta
+\quad\Longrightarrow\quad
+\|x(t)\|<\varepsilon
+\qquad \forall t\ge t_0.
+\]
+
+\medskip
+
+\noindent
+\textbf{Interpretazione.}
+Nel caso uniforme, la soglia di sicurezza \(\delta\) dipende solo da quanto piccolo vogliamo l'errore finale (\(\varepsilon\)), ma non dipende dal tempo in cui facciamo partire il sistema.
+
+\section{Funzioni di classe \(\mathcal K\) e \(\mathcal K_\infty\)}
+
+Quando si lavora con Lyapunov nei sistemi non stazionari, si usano molto le cosiddette funzioni di classe \(\mathcal K\).
+
+\subsection{Definizione}
+
+Una funzione
+\[
+\alpha:[0,a)\to [0,+\infty)
+\]
+si dice di \textbf{classe \(\mathcal K\)} se:
+\begin{itemize}
+    \item \(\alpha\) \`e continua;
+    \item \(\alpha\) \`e strettamente crescente;
+    \item \(\alpha(0)=0\).
+\end{itemize}
+
+Se inoltre \(a=+\infty\) e
+\[
+\alpha(r)\to +\infty
+\qquad \text{per } r\to+\infty,
+\]
+allora \(\alpha\) si dice di \textbf{classe \(\mathcal K_\infty\)}.
+
+\medskip
+
+\noindent
+Queste funzioni servono per ``incastrare'' una funzione di Lyapunov tra due stime radiali dipendenti solo dalla norma dello stato.
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[scale=1]
+\draw[->] (-0.2,0) -- (4.3,0) node[right] {$r$};
+\draw[->] (0,-0.2) -- (0,3.4) node[above] {$\alpha(r)$};
+\draw[thick,blue] (0,0) .. controls (0.7,0.05) and (1.2,0.8) .. (1.8,1.4)
+.. controls (2.4,2.0) and (3.2,2.4) .. (4,3.0);
+\node[blue] at (3.6,2.5) {\small classe \(\mathcal K\)};
+\end{tikzpicture}
+\caption{Andamento qualitativo di una funzione di classe \(\mathcal K\).}
+\end{figure}
+
+\section{Lemma fondamentale: una funzione positiva definita si stima con funzioni di classe \(\mathcal K\)}
+
+Sia
+\[
+V:D\to\mathbb R,
+\qquad
+0\in D\subseteq \mathbb R^n,
+\]
+continua e positiva definita.  
+Se \(B_r\subset D\), allora esistono due funzioni \(\alpha_1,\alpha_2\in\mathcal K\) tali che
+\begin{equation}
+\label{eq:L25-K-bounds}
+\alpha_1(\|x\|)\le V(x)\le \alpha_2(\|x\|)
+\qquad \forall x\in B_r.
+\end{equation}
+
+Se inoltre \(D=\mathbb R^n\) e \(V\) \`e radialmente illimitata, allora si possono scegliere
+\[
+\alpha_1,\alpha_2\in\mathcal K_\infty.
+\]
+
+\medskip
+
+\noindent
+\textbf{Interpretazione.}
+La disuguaglianza \eqref{eq:L25-K-bounds} dice che una funzione di Lyapunov positiva definita si comporta come una funzione crescente della distanza dall'origine.
+
+\section{Caratterizzazione della stabilit\`a uniforme}
+
+Un lemma molto utile afferma che l'origine \`e uniformemente stabile se e solo se esistono:
+\begin{itemize}
+    \item una funzione \(\alpha\in\mathcal K\),
+    \item una costante \(c>0\),
+\end{itemize}
+tali che
+\[
+\|x(t)\|\le \alpha\bigl(\|x(t_0)\|\bigr)
+\qquad \forall t\ge t_0,
+\qquad \forall \|x(t_0)\|<c.
+\]
+
+\medskip
+
+\noindent
+Questa formulazione \`e comoda perch\'e permette di tradurre la stabilit\`a uniforme in una stima quantitativa esplicita.
+
+\IfFileExists{25_page-0002.jpg}{
+\begin{figure}[h!]
+\centering
+\includegraphics[width=.82\textwidth]{25_page-0002.jpg}
+\caption{Appunti originali: definizioni di stabilit\`a uniforme e funzioni di classe \(\mathcal K\).}
+\end{figure}
+}{}
+
+\section{Teorema di Lyapunov per sistemi non stazionari}
+
+Passiamo ora al corrispondente criterio di Lyapunov per i sistemi tempo-varianti.
+
+Consideriamo
+\[
+\dot x = f(x,t),
+\qquad
+f(0,t)=0 \ \ \forall t\ge 0.
+\]
+Sia
+\[
+V:[0,+\infty)\times D \to \mathbb R
+\]
+una funzione continuamente differenziabile.
+
+Supponiamo che esistano due funzioni positive definite \(W_1,W_2\) tali che
+\begin{equation}
+\label{eq:L25-V-bounds}
+W_1(x)\le V(t,x)\le W_2(x)
+\qquad \forall t\ge 0,\ \forall x\in D,
+\end{equation}
+e che inoltre
+\begin{equation}
+\label{eq:L25-Vdot-timevarying}
+\frac{\partial V}{\partial t}(t,x)
++
+\frac{\partial V}{\partial x}(t,x)\,f(x,t)
+\le 0.
+\end{equation}
+
+Allora l'origine \`e \textbf{uniformemente stabile}.
+
+\medskip
+
+\noindent
+\textbf{Commento.}
+La differenza rispetto al caso autonomo \`e che adesso la derivata totale lungo le traiettorie diventa
+\[
+\frac{d}{dt}V(t,x(t))
+=
+\frac{\partial V}{\partial t}(t,x(t))
++
+\frac{\partial V}{\partial x}(t,x(t))\,\dot x(t),
+\]
+perch\'e \(V\) dipende esplicitamente anche dal tempo.
+
+Se invece vale la stima pi\`u forte
+\[
+\frac{\partial V}{\partial t}(t,x)
++
+\frac{\partial V}{\partial x}(t,x)\,f(x,t)
+\le -W_3(x),
+\]
+con \(W_3\) positiva definita, allora si ottiene una forma di stabilit\`a pi\`u forte; nel caso lineare, addirittura stabilit\`a uniforme esponenziale.
+
+\IfFileExists{25_page-0003.jpg}{
+\begin{figure}[h!]
+\centering
+\includegraphics[width=.82\textwidth]{25_page-0003.jpg}
+\caption{Appunti originali: teorema di Lyapunov per sistemi non stazionari e interpretazione geometrica tramite insiemi di livello.}
+\end{figure}
+}{}
+
+\section{Esempio: funzione di Lyapunov che dipende dal tempo}
+
+Consideriamo il sistema
+\begin{equation}
+\label{eq:L25-esempio-g}
+\begin{cases}
+\dot x_1 = -x_1 - g(t)x_2,\\[4pt]
+\dot x_2 = x_1 - x_2,
+\end{cases}
+\end{equation}
+dove \(g(t)\) \`e continua, derivabile e soddisfa
+\[
+0\le g(t)\le k,
+\qquad
+\dot g(t)\le g(t)
+\qquad \forall t\ge 0.
+\]
+
+Vogliamo mostrare che l'origine \`e uniformemente stabile.
+
+\subsection{Scelta della candidata}
+
+Una candidata naturale \`e
+\[
+V(t,x)=x_1^2 + (1+g(t))x_2^2.
+\]
+Poich\'e \(0\le g(t)\le k\), otteniamo le stime
+\[
+x_1^2+x_2^2 \le V(t,x)\le x_1^2+(1+k)x_2^2.
+\]
+Dunque possiamo porre
+\[
+W_1(x)=x_1^2+x_2^2,
+\qquad
+W_2(x)=x_1^2+(1+k)x_2^2.
+\]
+
+\subsection{Derivata lungo le traiettorie}
+
+Calcoliamo
+\[
+\frac{d}{dt}V(t,x(t))
+=
+\frac{\partial V}{\partial t}
++
+\frac{\partial V}{\partial x}\dot x.
+\]
+Si ha
+\[
+\frac{\partial V}{\partial t}=\dot g(t)x_2^2,
+\qquad
+\frac{\partial V}{\partial x}=(2x_1,\ 2(1+g(t))x_2).
+\]
+Quindi
+\begin{align*}
+\dot V
+&=
+\dot g(t)x_2^2
++2x_1(-x_1-gx_2)
++2(1+g)x_2(x_1-x_2)\\
+&=
+\dot g\,x_2^2 -2x_1^2 -2g x_1x_2 +2x_1x_2 +2g x_1x_2 -2x_2^2 -2g x_2^2\\
+&=
+-2x_1^2 +2x_1x_2 -(2+2g-\dot g)x_2^2.
+\end{align*}
+Poich\'e \(\dot g \le g\), segue
+\[
+2+2g-\dot g \ge 2+g \ge 1,
+\]
+e dunque
+\[
+\dot V \le -2x_1^2 + 2x_1x_2 - x_2^2.
+\]
+Ma
+\[
+-2x_1^2 + 2x_1x_2 - x_2^2
+=
+-(x_1^2 + (x_1-x_2)^2)\le 0.
+\]
+Quindi \(\dot V \le 0\) e, per il teorema precedente, l'origine \`e uniformemente stabile.
+
+\medskip
+
+\noindent
+\textbf{Osservazione.}
+Qui non basta una funzione \(V(x)\) dipendente solo dallo stato: la scelta giusta \`e una funzione \(V(t,x)\) che incorpora esplicitamente il coefficiente tempo-variante \(g(t)\).
+
+\IfFileExists{25_page-0004.jpg}{
+\begin{figure}[h!]
+\centering
+\includegraphics[width=.72\textwidth]{25_page-0004.jpg}
+\caption{Calcolo svolto a mano per l'esempio con \(g(t)\).}
+\end{figure}
+}{}
+
+\section{Caso lineare non stazionario e equazione differenziale di Lyapunov}
+
+Consideriamo ora il caso lineare
+\[
+\dot x = A(t)x,
+\]
+con \(A(t)\) continua.
+
+Supponiamo che esista una matrice simmetrica \(P(t)\), continua e derivabile, tale che
+\begin{equation}
+\label{eq:L25-P-bounds}
+0<c_1 I \le P(t)\le c_2 I
+\qquad \forall t\ge t_0,
+\end{equation}
+e che soddisfi l'equazione differenziale di Lyapunov
+\begin{equation}
+\label{eq:L25-lyap-diff}
+-\dot P(t)=P(t)A(t)+A^\top(t)P(t)+Q(t),
+\end{equation}
+dove \(Q(t)=Q^\top(t)\) \`e continua e
+\begin{equation}
+\label{eq:L25-Q-lower}
+Q(t)\ge c_3 I>0.
+\end{equation}
+
+Poniamo
+\[
+V(t,x)=x^\top P(t)x.
+\]
+Dalle stime \eqref{eq:L25-P-bounds} segue
+\[
+c_1\|x\|^2 \le V(t,x)\le c_2\|x\|^2.
+\]
+Inoltre
+\begin{align*}
+\dot V
+&=
+x^\top \dot P x + x^\top P \dot x + \dot x^\top P x\\
+&=
+x^\top\bigl(\dot P + PA + A^\top P\bigr)x\\
+&=
+-x^\top Q(t)x\\
+&\le -c_3\|x\|^2.
+\end{align*}
+Usando \(V\le c_2\|x\|^2\), otteniamo
+\[
+\dot V \le -\frac{c_3}{c_2}V.
+\]
+Per confronto scalare,
+\[
+V(t)\le e^{-\frac{c_3}{c_2}(t-t_0)}V(t_0),
+\]
+e quindi
+\[
+\|x(t)\|
+\le
+\sqrt{\frac{c_2}{c_1}}
+\,e^{-\frac{c_3}{2c_2}(t-t_0)}
+\|x(t_0)\|.
+\]
+
+\medskip
+
+\noindent
+\textbf{Conclusione.}
+L'origine \`e \textbf{uniformemente esponenzialmente stabile}.
+
+\section{Richiami: LaSalle--Yoshizawa e lemma di Barb\u{a}lat}
+
+Questi risultati vengono spesso usati per rafforzare i criteri di Lyapunov nei sistemi tempo-varianti.
+
+\subsection{Principio di LaSalle--Yoshizawa}
+
+Se esiste una funzione \(V(t,x)\) tale che
+\[
+\alpha_1(\|x\|)\le V(t,x)\le \alpha_2(\|x\|),
+\]
+e
+\[
+\frac{\partial V}{\partial t} + \frac{\partial V}{\partial x}f(x,t)\le -W(x)\le 0,
+\]
+con \(W\) semidefinita positiva, allora le traiettorie restano limitate e
+\[
+W(x(t))\to 0 \qquad \text{per } t\to+\infty.
+\]
+Se si riesce poi a capire quali traiettorie possono restare nell'insieme
+\[
+S=\{x:W(x)=0\},
+\]
+si pu\`o concludere verso quale insieme tende la soluzione.
+
+\subsection{Lemma di Barb\u{a}lat}
+
+Una forma pratica molto usata \`e la seguente: se una funzione \(r(t)\) \`e uniformemente continua e il suo integrale converge, allora
+\[
+r(t)\to 0
+\qquad \text{per } t\to+\infty.
+\]
+
+In applicazioni Lyapunov, spesso si prende
+\[
+r(t)=\dot V(t,x(t)),
+\]
+si mostra che \(\dot V\le 0\), che \(V\) \`e inferiormente limitata e che \(\dot V\) \`e uniformemente continua; da qui si conclude
+\[
+\dot V(t)\to 0.
+\]
+
+\IfFileExists{25_page-0005.jpg}{
+\begin{figure}[h!]
+\centering
+\includegraphics[width=.82\textwidth]{25_page-0005.jpg}
+\caption{Appunti originali: richiamo a LaSalle--Yoshizawa e al lemma di Barb\u{a}lat.}
+\end{figure}
+}{}
+
+\section{Esercizio d'esame: 13/04/2021}
+\label{sec:L25-esercizio-130421}
+
+Consideriamo il sistema
+\begin{equation}
+\label{eq:L25-ex-130421}
+\begin{cases}
+\dot x_1 = x_1^2 - x_1x_2,\\[4pt]
+\dot x_2 = -x_2^2 + a x_1x_2,
+\end{cases}
+\qquad a\in\mathbb R.
+\end{equation}
+
+\subsection{Punto 1: equilibri e metodo indiretto}
+
+Gli equilibri si ottengono imponendo
+\[
+\begin{cases}
+0 = x_1^2 - x_1x_2 = x_1(x_1-x_2),\\[4pt]
+0 = -x_2^2 + a x_1x_2 = x_2(ax_1-x_2).
+\end{cases}
+\]
+
+Dalla prima equazione:
+\[
+x_1=0
+\qquad \text{oppure} \qquad
+x_1=x_2.
+\]
+
+\paragraph{Caso A: \(x_1=0\).}
+La seconda equazione diventa
+\[
+0=-x_2^2,
+\]
+quindi necessariamente \(x_2=0\).  
+Otteniamo l'equilibrio
+\[
+(0,0).
+\]
+
+\paragraph{Caso B: \(x_1=x_2\).}
+La seconda equazione diventa
+\[
+0=(a-1)x_2^2.
+\]
+Quindi:
+\begin{itemize}
+    \item se \(a\neq 1\), allora \(x_2=0\) e si torna a \((0,0)\);
+    \item se \(a=1\), allora ogni punto della retta
+    \[
+    x_1=x_2
+    \]
+    \`e equilibrio.
+\end{itemize}
+
+\medskip
+
+\noindent
+\textbf{Conclusione sugli equilibri.}
+\begin{itemize}
+    \item Se \(a\neq 1\), l'unico equilibrio \`e \((0,0)\).
+    \item Se \(a=1\), c'\`e una retta di punti di equilibrio:
+    \[
+    \{(s,s):s\in\mathbb R\}.
+    \]
+\end{itemize}
+
+\subsection{Linearizzazione}
+
+La matrice jacobiana \`e
+\[
+A(x)=
+\begin{pmatrix}
+2x_1-x_2 & -x_1\\
+a x_2 & -2x_2 + a x_1
+\end{pmatrix}.
+\]
+
+\paragraph{All'origine.}
+\[
+A(0,0)=
+\begin{pmatrix}
+0 & 0\\
+0 & 0
+\end{pmatrix}.
+\]
+Tutti gli autovalori sono nulli, quindi il metodo indiretto non conclude nulla.
+
+\paragraph{Sulla retta di equilibrio, quando \(a=1\).}
+Per \(x_1=x_2=s\),
+\[
+A(s,s)=
+\begin{pmatrix}
+s & -s\\
+s & -s
+\end{pmatrix}.
+\]
+Si ha
+\[
+\operatorname{tr}A=0,
+\qquad
+\det A=0,
+\]
+quindi gli autovalori sono ancora entrambi nulli. Anche qui il metodo indiretto \`e inconcludente.
+
+\subsection{Punto 2: si pu\`o stabilizzare con un solo ingresso?}
+
+Supponiamo di aggiungere un solo ingresso in una sola equazione. Ad esempio:
+\[
+\begin{cases}
+\dot x_1 = x_1^2 - x_1x_2 + u,\\[4pt]
+\dot x_2 = -x_2^2 + a x_1x_2,
+\end{cases}
+\]
+oppure, analogamente, nella seconda.
+
+Se linearizziamo all'origine, otteniamo sempre
+\[
+A(0,0)=0.
+\]
+Nel primo caso
+\[
+B=
+\begin{pmatrix}
+1\\
+0
+\end{pmatrix},
+\]
+nel secondo
+\[
+B=
+\begin{pmatrix}
+0\\
+1
+\end{pmatrix}.
+\]
+In entrambi i casi la matrice di raggiungibilit\`a \`e
+\[
+\mathcal R=[B\ AB]=[B\ 0],
+\]
+e quindi ha rango \(1<2\).  
+Dunque la coppia \((A,B)\) non \`e completamente raggiungibile e il sistema non \`e completamente stabilizzabile con un solo ingresso locale all'origine.
+
+\subsection{Punto 3: studio dell'instabilit\`a con Chetaev nel caso \(a=1\)}
+
+Nel caso \(a=1\), proviamo la candidata
+\[
+V(x)=x_1^2-x_2^2.
+\]
+Questa funzione \emph{non} \`e definita positiva, quindi non serve per dimostrare stabilit\`a.  
+Pu\`o per\`o essere usata in senso ``inverso'' per dimostrare instabilit\`a.
+
+Calcoliamo la derivata lungo le traiettorie:
+\begin{align*}
+L_fV
+&= 2x_1(x_1^2-x_1x_2) -2x_2(-x_2^2+x_1x_2)\\
+&=2x_1^3-2x_1^2x_2+2x_2^3-2x_1x_2^2\\
+&=2(x_1-x_2)^2(x_1+x_2).
+\end{align*}
+
+Consideriamo la regione
+\[
+U=\left\{x:\ x_1^2+x_2^2<\rho^2,\ \ x_1^2-x_2^2>0,\ \ x_1+x_2>0\right\}.
+\]
+In \(U\):
+\begin{itemize}
+    \item \(V(x)>0\),
+    \item \(L_fV(x)>0\),
+    \item l'origine sta sul bordo di \(U\).
+\end{itemize}
+Per il teorema di Chetaev, l'origine \`e instabile.
+
+\medskip
+
+\noindent
+\textbf{Osservazione importante.}
+Questo \`e coerente con il fatto che per \(a=1\) l'origine non \`e un equilibrio isolato, ma appartiene a una retta di equilibri.
+
+\IfFileExists{25_page-0006.jpg}{
+\begin{figure}[h!]
+\centering
+\includegraphics[width=.76\textwidth]{25_page-0006.jpg}
+\caption{Appunti originali sull'esercizio del 13/04/2021: equilibri, linearizzazione e commenti sulla stabilizzabilit\`a.}
+\end{figure}
+}{}
+
+\IfFileExists{25_page-0007.jpg}{
+\begin{figure}[h!]
+\centering
+\includegraphics[width=.70\textwidth]{25_page-0007.jpg}
+\caption{Appunti originali: uso di una candidata non definita in segno per dimostrare instabilit\`a alla Chetaev.}
+\end{figure}
+}{}
+
+\section{Esercizio d'esame: 07/04/2022}
+\label{sec:L25-esercizio-070422}
+
+Consideriamo il sistema discreto
+\begin{equation}
+\label{eq:L25-ex-070422}
+\begin{cases}
+x_1(k+1)= -\dfrac13 x_1(k)+\alpha x_1(k)^2 + 2u(k)x_2(k),\\[8pt]
+x_2(k+1)= 2x_1(k)x_2(k)+\dfrac13 x_2(k).
+\end{cases}
+\end{equation}
+
+\subsection{Punto 1: equilibri del sistema con \(u=0\)}
+
+Poniamo \(u=0\). Gli equilibri \((\bar x_1,\bar x_2)\) soddisfano
+\[
+\begin{cases}
+\bar x_1 = -\dfrac13 \bar x_1 + \alpha \bar x_1^2,\\[8pt]
+\bar x_2 = 2\bar x_1\bar x_2 + \dfrac13 \bar x_2.
+\end{cases}
+\]
+
+La prima equazione diventa
+\[
+\frac43 \bar x_1 - \alpha \bar x_1^2 = 0
+\quad\Longleftrightarrow\quad
+\bar x_1\left(\frac43 - \alpha \bar x_1\right)=0.
+\]
+Quindi
+\[
+\bar x_1=0
+\qquad \text{oppure} \qquad
+\bar x_1=\frac{4}{3\alpha}\quad (\alpha\neq 0).
+\]
+
+La seconda diventa
+\[
+\bar x_2 - 2\bar x_1\bar x_2 - \frac13 \bar x_2 = 0
+\quad\Longleftrightarrow\quad
+\bar x_2\left(\frac23 - 2\bar x_1\right)=0,
+\]
+cio\`e
+\[
+\bar x_2=0
+\qquad \text{oppure} \qquad
+\bar x_1=\frac13.
+\]
+
+\paragraph{Combinando i casi:}
+\begin{itemize}
+    \item \((0,0)\) \`e equilibrio per ogni \(\alpha\in\mathbb R\);
+    \item se \(\alpha\neq 0\), esiste anche l'equilibrio
+    \[
+    \left(\frac{4}{3\alpha},\,0\right);
+    \]
+    \item se \(\alpha=4\), allora \(\bar x_1=\frac13\) e quindi tutti i punti
+    \[
+    \left(\frac13,\bar x_2\right),\qquad \bar x_2\in\mathbb R,
+    \]
+    sono equilibri.
+\end{itemize}
+
+\subsection{Stabilit\`a locale degli equilibri}
+
+Con \(u=0\), il jacobiano rispetto allo stato \`e
+\[
+A(x)=
+\begin{pmatrix}
+-\dfrac13 + 2\alpha x_1 & 0\\[8pt]
+2x_2 & 2x_1+\dfrac13
+\end{pmatrix}.
+\]
+
+\paragraph{All'origine.}
+\[
+A(0,0)=
+\begin{pmatrix}
+-\dfrac13 & 0\\[6pt]
+0 & \dfrac13
+\end{pmatrix}.
+\]
+Attenzione: qui bisogna essere coerenti con la forma del sistema. Se la seconda equazione \`e davvero
+\[
+x_2(k+1)=2x_1(k)x_2(k)+\frac13 x_2(k),
+\]
+allora gli autovalori all'origine sono
+\[
+\lambda_1=-\frac13,
+\qquad
+\lambda_2=\frac13.
+\]
+Poich\'e entrambi hanno modulo minore di \(1\), l'origine \`e localmente asintoticamente stabile.
+
+\paragraph{All'equilibrio \(\left(\frac{4}{3\alpha},0\right)\), \(\alpha\neq 0\).}
+Si ottiene
+\[
+A\!\left(\frac{4}{3\alpha},0\right)=
+\begin{pmatrix}
+\frac73 & 0\\[6pt]
+0 & \frac{8+\alpha}{3\alpha}
+\end{pmatrix}.
+\]
+Il primo autovalore vale sempre
+\[
+\lambda_1=\frac73,
+\]
+quindi ha modulo maggiore di \(1\). Ne segue che tale equilibrio \`e sempre instabile.
+
+\paragraph{Sulla retta \(\left(\frac13,\bar x_2\right)\), quando \(\alpha=4\).}
+In questo caso
+\[
+A\!\left(\frac13,\bar x_2\right)=
+\begin{pmatrix}
+\frac73 & 0\\[6pt]
+2\bar x_2 & 1
+\end{pmatrix}.
+\]
+Gli autovalori sono
+\[
+\lambda_1=\frac73,
+\qquad
+\lambda_2=1.
+\]
+Anche qui l'equilibrio non \`e asintoticamente stabile; in effetti \`e instabile perch\'e \(|\lambda_1|>1\).
+
+\subsection{Punto 2: raggiungibilit\`a del linearizzato}
+
+Il vettore d'ingresso \`e
+\[
+B(x)=
+\begin{pmatrix}
+\frac{\partial f_1}{\partial u}\\[4pt]
+\frac{\partial f_2}{\partial u}
+\end{pmatrix}
+=
+\begin{pmatrix}
+2x_2\\
+0
+\end{pmatrix}.
+\]
+
+\paragraph{All'origine.}
+\[
+B(0,0)=
+\begin{pmatrix}
+0\\
+0
+\end{pmatrix},
+\]
+quindi il linearizzato non \`e controllabile.
+
+\paragraph{All'equilibrio \(\left(\frac{4}{3\alpha},0\right)\).}
+Anche qui
+\[
+B\!\left(\frac{4}{3\alpha},0\right)=
+\begin{pmatrix}
+0\\
+0
+\end{pmatrix},
+\]
+quindi ancora nessuna controllabilit\`a.
+
+\paragraph{Sulla retta \(\left(\frac13,\bar x_2\right)\), con \(\alpha=4\).}
+Se \(\bar x_2\neq 0\),
+\[
+B\!\left(\frac13,\bar x_2\right)=
+\begin{pmatrix}
+2\bar x_2\\
+0
+\end{pmatrix}.
+\]
+La matrice di raggiungibilit\`a \`e
+\[
+\mathcal R=
+\begin{bmatrix}
+B & AB
+\end{bmatrix}
+=
+\begin{bmatrix}
+2\bar x_2 & \dfrac{14}{3}\bar x_2\\[6pt]
+0 & 4\bar x_2^2
+\end{bmatrix}.
+\]
+Se \(\bar x_2\neq 0\), allora
+\[
+\operatorname{rank}\mathcal R = 2.
+\]
+Quindi il linearizzato \`e completamente raggiungibile e si pu\`o progettare un controllo locale stabilizzante.
+
+\subsection{Forma di un controllo affine locale}
+
+Se \((\bar x,\bar u)\) \`e il punto di equilibrio scelto, un controllo affine locale si scrive come
+\[
+u = K(x-\bar x)+\bar u.
+\]
+Esplicitamente, in dimensione \(2\),
+\[
+u = k_1(x_1-\bar x_1)+k_2(x_2-\bar x_2)+\bar u.
+\]
+Equivalentemente,
+\[
+u = k_1x_1+k_2x_2+k_3,
+\]
+dove \(k_3\) \`e scelto in modo da non spostare l'equilibrio.
+
+\medskip
+
+\noindent
+Il progetto si fa come sempre sul sistema delle variazioni
+\[
+z(k+1)=Az(k)+Bv(k),
+\qquad
+v(k)=Kz(k),
+\]
+scegliendo \(K\) in modo che gli autovalori di \(A+BK\) cadano dove desiderato.
+
+\IfFileExists{25_page-0008.jpg}{
+\begin{figure}[h!]
+\centering
+\includegraphics[width=.76\textwidth]{25_page-0008.jpg}
+\caption{Appunti originali sull'esercizio del 07/04/2022: equilibri e studio del linearizzato.}
+\end{figure}
+}{}
+
+\IfFileExists{25_page-0009.jpg}{
+\begin{figure}[h!]
+\centering
+\includegraphics[width=.76\textwidth]{25_page-0009.jpg}
+\caption{Appunti originali: matrice di ingresso, raggiungibilit\`a e forma del controllo affine.}
+\end{figure}
+}{}
+
+\section{Schema riassuntivo della lezione}
+
+La lezione contiene quattro idee fondamentali.
+
+\subsection*{1. Nei sistemi non stazionari la stabilit\`a dipende anche da \(t_0\)}
+
+Per questo introduciamo:
+\begin{itemize}
+    \item stabilit\`a,
+    \item stabilit\`a uniforme,
+    \item funzioni di classe \(\mathcal K\).
+\end{itemize}
+
+\subsection*{2. Lyapunov si estende ai sistemi tempo-varianti}
+
+La funzione candidata pu\`o dipendere da \(t\):
+\[
+V=V(t,x).
+\]
+La derivata corretta lungo le traiettorie \`e
+\[
+\frac{d}{dt}V(t,x(t))
+=
+\frac{\partial V}{\partial t}
++
+\frac{\partial V}{\partial x}f(x,t).
+\]
+
+\subsection*{3. Nel caso lineare tempo-variante si usa una matrice \(P(t)\)}
+
+Si ottiene l'equazione differenziale di Lyapunov
+\[
+-\dot P = PA + A^\top P + Q,
+\]
+che gioca lo stesso ruolo dell'equazione algebrica nel caso stazionario.
+
+\subsection*{4. Gli esercizi d'esame combinano sempre le stesse idee}
+
+In pratica, nei compiti bisogna saper fare bene queste quattro mosse:
+\begin{enumerate}
+    \item trovare gli equilibri;
+    \item linearizzare correttamente;
+    \item capire quando il metodo indiretto conclude e quando no;
+    \item se serve, usare Chetaev, Lyapunov diretto o un controllo affine locale.
+\end{enumerate}
+
+\medskip
+
+\noindent
+\textbf{Frase da ricordare all'orale.}
+\begin{center}
+\emph{Per i sistemi tempo-varianti il criterio spettrale istantaneo non basta. La stabilit\`a si studia con strumenti pi\`u robusti, in particolare con funzioni di Lyapunov dipendenti dal tempo e con stime uniformi rispetto all'istante iniziale.}
+\end{center}

@@ -1,0 +1,961 @@
+\chapter{L15 -- Osservabilità, ricostruibilità e forma standard di osservabilità}
+
+\section{Idea generale della lezione}
+
+Dopo aver studiato la raggiungibilità, passiamo al problema duale: capire quante informazioni sullo stato si possono ricavare osservando l'uscita del sistema.
+
+Le due domande fondamentali sono:
+
+\begin{itemize}
+    \item \textbf{Osservabilità}: conoscendo \(u(\cdot)\) e \(y(\cdot)\), posso ricostruire lo \emph{stato iniziale} \(x(0)\)?
+    \item \textbf{Ricostruibilità}: conoscendo \(u(\cdot)\) e \(y(\cdot)\), posso almeno ricostruire lo \emph{stato attuale} \(x(t)\), anche se lo stato iniziale non è identificabile in modo univoco?
+\end{itemize}
+
+Questa distinzione è importante soprattutto in tempo discreto.  
+In tempo continuo, come vedremo, osservabilità e ricostruibilità finiscono per coincidere.
+
+\bigskip
+
+La logica è perfettamente duale rispetto alla raggiungibilità:
+
+\[
+\text{raggiungibilità} \quad \Longleftrightarrow \quad \text{posso muovere lo stato con l'ingresso},
+\]
+\[
+\text{osservabilità} \quad \Longleftrightarrow \quad \text{posso ricostruire lo stato guardando l'uscita}.
+\]
+
+%=========================================================
+\section{Osservabilità in tempo continuo: richiamo}
+
+Consideriamo un sistema lineare tempo invariante in tempo continuo:
+\[
+\dot x(t)=Ax(t)+Bu(t),\qquad y(t)=Cx(t)+Du(t).
+\]
+
+Fissiamo due stati iniziali \(x_0\) e \(\bar x_0\).  
+Diremo che \(x_0\) e \(\bar x_0\) sono \textbf{indistinguibili} in un intervallo \([0,t_f]\) se, a parità di ingresso, producono la stessa uscita per tutto l'intervallo:
+\[
+y(\tau; x_0,u)=y(\tau; \bar x_0,u)
+\qquad
+\forall \tau\in[0,t_f],\ \forall u.
+\]
+
+Poiché la soluzione dell'uscita è
+\[
+y(\tau)=Ce^{A\tau}x_0+\int_0^\tau Ce^{A(\tau-\sigma)}Bu(\sigma)\,d\sigma + Du(\tau),
+\]
+sottraendo le due uscite si ottiene
+\[
+Ce^{A\tau}(x_0-\bar x_0)=0
+\qquad
+\forall \tau\in[0,t_f].
+\]
+
+Quindi il sottospazio degli stati indistinguibili dall'origine è
+\[
+\mathcal I_{t_f}(0)
+=
+\bigcap_{\tau\in[0,t_f]} \ker\!\big(Ce^{A\tau}\big).
+\]
+
+Dalla teoria già vista si sa che questo insieme coincide con il nucleo della matrice di osservabilità classica:
+\[
+\mathcal O=
+\begin{bmatrix}
+C\\
+CA\\
+CA^2\\
+\vdots\\
+CA^{n-1}
+\end{bmatrix}.
+\]
+
+In particolare:
+\[
+\mathcal I_{t_f}(0)=\ker(\mathcal O).
+\]
+
+Quindi il sistema è \textbf{completamente osservabile} se e solo se
+\[
+\ker(\mathcal O)=\{0\}
+\qquad
+\Longleftrightarrow
+\qquad
+\rank(\mathcal O)=n.
+\]
+
+\medskip
+
+Osservazione importante: nel caso continuo, il concetto di osservabilità è una proprietà strutturale del sistema e non dipende dalla scelta dell'istante finale \(t_f>0\).
+
+%=========================================================
+\section{Osservabilità in tempo discreto}
+
+Consideriamo ora un sistema lineare tempo invariante in tempo discreto:
+\[
+\begin{cases}
+x(k+1)=Ax(k)+Bu(k),\\[2mm]
+y(k)=Cx(k)+Du(k).
+\end{cases}
+\]
+
+La risposta del sistema al tempo \(\tau\), partendo da \(x_0\) all'istante \(0\), è:
+\[
+y(\tau;0,x_0,u)
+=
+CA^\tau x_0
++
+\sum_{k=0}^{\tau-1} CA^{\tau-k-1}Bu(k)
++
+Du(\tau),
+\qquad \tau\in\{0,1,2,\dots\}.
+\]
+
+Se due stati iniziali \(x_0\) e \(\bar x_0\) sono indistinguibili in \(t\) passi, allora per ogni \(\tau=0,\dots,t-1\) deve valere
+\[
+y(\tau;0,x_0,u)=y(\tau;0,\bar x_0,u).
+\]
+
+Sottraendo membro a membro si cancellano tutti i termini forzati e rimane:
+\[
+\Delta y(\tau)
+=
+y(\tau;0,x_0,u)-y(\tau;0,\bar x_0,u)
+=
+CA^\tau (x_0-\bar x_0).
+\]
+
+Se ora raccogliamo tutte le differenze di uscita in un unico vettore, otteniamo
+\[
+\begin{bmatrix}
+\Delta y(0)\\
+\Delta y(1)\\
+\Delta y(2)\\
+\vdots\\
+\Delta y(t-1)
+\end{bmatrix}
+=
+\underbrace{
+\begin{bmatrix}
+C\\
+CA\\
+CA^2\\
+\vdots\\
+CA^{t-1}
+\end{bmatrix}}_{\displaystyle \mathcal O_t}
+(x_0-\bar x_0).
+\]
+
+La matrice
+\[
+\mathcal O_t=
+\begin{bmatrix}
+C\\
+CA\\
+CA^2\\
+\vdots\\
+CA^{t-1}
+\end{bmatrix}
+\]
+si chiama \textbf{matrice di osservabilità in \(t\) osservazioni}.
+
+\subsection{Sottospazio di inosservabilità in \(t\) passi}
+
+Definiamo
+\[
+\bar{\mathcal O}_t:=\ker(\mathcal O_t).
+\]
+Questo è il \textbf{sottospazio di inosservabilità in \(t\) passi}.
+
+Esso contiene tutte le differenze iniziali \(x_0-\bar x_0\) che, per \(t\) passi, non lasciano alcuna traccia in uscita.
+
+In altri termini:
+\[
+x_0 \sim_t \bar x_0
+\qquad \Longleftrightarrow \qquad
+x_0-\bar x_0\in \bar{\mathcal O}_t.
+\]
+
+Quindi:
+\[
+\bar{\mathcal O}_t=\{0\}
+\qquad \Longleftrightarrow \qquad
+\text{il sistema è completamente osservabile in \(t\) passi.}
+\]
+
+%=========================================================
+\section{Catena dei sottospazi di inosservabilità}
+
+Aumentando il numero di osservazioni, si aggiungono righe alla matrice \(\mathcal O_t\).  
+Di conseguenza il nucleo può solo restringersi:
+\[
+\bar{\mathcal O}_1 \supseteq \bar{\mathcal O}_2 \supseteq \bar{\mathcal O}_3 \supseteq \cdots
+\]
+
+Questo è intuitivo: più a lungo osservo il sistema, più informazione raccolgo, quindi meno stati iniziali restano indistinguibili.
+
+\subsection{Quando si ferma questa catena?}
+
+La risposta è: \emph{al più dopo \(n\) osservazioni}.
+
+Infatti, per il teorema di Cayley--Hamilton, ogni potenza \(A^k\) con \(k\ge n\) si può scrivere come combinazione lineare di
+\[
+I,\ A,\ A^2,\ \dots,\ A^{n-1}.
+\]
+Quindi anche ogni riga \(CA^k\) con \(k\ge n\) è combinazione lineare delle righe precedenti.  
+Ne segue che oltre \(n\) osservazioni non compare più nessuna informazione nuova.
+
+Perciò:
+\[
+\bar{\mathcal O}_n=\bar{\mathcal O}_{n+1}=\bar{\mathcal O}_{n+2}=\cdots
+\]
+
+e dunque, per verificare la completa osservabilità, basta controllare
+\[
+\rank(\mathcal O_n)=n.
+\]
+
+%=========================================================
+\section{Primo esempio: nessun miglioramento aumentando le osservazioni}
+
+Consideriamo
+\[
+A=
+\begin{bmatrix}
+-1 & 2 & 0\\
+0 & -1 & 0\\
+1 & -1 & 2
+\end{bmatrix},
+\qquad
+C=
+\begin{bmatrix}
+0 & 1 & 0
+\end{bmatrix}.
+\]
+
+\subsection{Prima osservazione}
+
+Si ha
+\[
+\mathcal O_1=C=
+\begin{bmatrix}
+0 & 1 & 0
+\end{bmatrix}.
+\]
+Quindi
+\[
+\bar{\mathcal O}_1=\ker(\mathcal O_1)
+=
+\left\{
+\begin{bmatrix}
+\alpha\\
+0\\
+\beta
+\end{bmatrix}
+:\ \alpha,\beta\in\mathbb R
+\right\}
+=
+\operatorname{span}\left\{
+\begin{bmatrix}
+1\\0\\0
+\end{bmatrix},
+\begin{bmatrix}
+0\\0\\1
+\end{bmatrix}
+\right\}.
+\]
+Dopo un solo passo, quindi, conosco solo la seconda componente dello stato.
+
+\subsection{Seconda osservazione}
+
+Calcoliamo
+\[
+CA=
+\begin{bmatrix}
+0 & 1 & 0
+\end{bmatrix}
+\begin{bmatrix}
+-1 & 2 & 0\\
+0 & -1 & 0\\
+1 & -1 & 2
+\end{bmatrix}
+=
+\begin{bmatrix}
+0 & -1 & 0
+\end{bmatrix}.
+\]
+Quindi
+\[
+\mathcal O_2=
+\begin{bmatrix}
+C\\
+CA
+\end{bmatrix}
+=
+\begin{bmatrix}
+0 & 1 & 0\\
+0 & -1 & 0
+\end{bmatrix}.
+\]
+Ma le due righe sono linearmente dipendenti, quindi
+\[
+\bar{\mathcal O}_2=\bar{\mathcal O}_1.
+\]
+
+\subsection{Terza osservazione}
+
+Analogamente:
+\[
+CA^2=
+\begin{bmatrix}
+0 & 1 & 0
+\end{bmatrix},
+\]
+quindi anche
+\[
+\bar{\mathcal O}_3=\bar{\mathcal O}_2.
+\]
+
+\medskip
+
+Conclusione: in questo esempio
+\[
+\bar{\mathcal O}_1=\bar{\mathcal O}_2=\bar{\mathcal O}_3,
+\]
+cioè già dopo la prima osservazione ho raccolto tutta l'informazione che l'uscita può dare.
+
+%=========================================================
+\section{Secondo esempio: le osservazioni riducono davvero il sottospazio di inosservabilità}
+
+Consideriamo lo stesso \(A\), ma adesso
+\[
+C=
+\begin{bmatrix}
+1 & 1 & 0
+\end{bmatrix}.
+\]
+
+\subsection{Prima osservazione}
+
+La matrice di osservabilità a un passo è
+\[
+\mathcal O_1=
+\begin{bmatrix}
+1 & 1 & 0
+\end{bmatrix}.
+\]
+Quindi
+\[
+\bar{\mathcal O}_1=\ker(\mathcal O_1)
+=
+\left\{
+\begin{bmatrix}
+\alpha\\
+-\alpha\\
+\beta
+\end{bmatrix}
+:\ \alpha,\beta\in\mathbb R
+\right\}
+=
+\operatorname{span}\left\{
+\begin{bmatrix}
+1\\-1\\0
+\end{bmatrix},
+\begin{bmatrix}
+0\\0\\1
+\end{bmatrix}
+\right\}.
+\]
+
+\subsection{Seconda osservazione}
+
+Calcoliamo
+\[
+CA=
+\begin{bmatrix}
+1 & 1 & 0
+\end{bmatrix}
+\begin{bmatrix}
+-1 & 2 & 0\\
+0 & -1 & 0\\
+1 & -1 & 2
+\end{bmatrix}
+=
+\begin{bmatrix}
+-1 & 1 & 0
+\end{bmatrix}.
+\]
+Quindi
+\[
+\mathcal O_2=
+\begin{bmatrix}
+1 & 1 & 0\\
+-1 & 1 & 0
+\end{bmatrix}.
+\]
+La condizione
+\[
+\mathcal O_2 x=0
+\]
+equivale al sistema
+\[
+\begin{cases}
+x_1+x_2=0,\\
+-x_1+x_2=0,
+\end{cases}
+\]
+da cui segue
+\[
+x_1=x_2=0.
+\]
+Quindi
+\[
+\bar{\mathcal O}_2=
+\operatorname{span}\left\{
+\begin{bmatrix}
+0\\0\\1
+\end{bmatrix}
+\right\}.
+\]
+
+\subsection{Terza osservazione}
+
+Calcoliamo ancora
+\[
+CA^2=
+\begin{bmatrix}
+1 & -3 & 0
+\end{bmatrix}.
+\]
+Quindi
+\[
+\mathcal O_3=
+\begin{bmatrix}
+1 & 1 & 0\\
+-1 & 1 & 0\\
+1 & -3 & 0
+\end{bmatrix}.
+\]
+Ma la terza riga non introduce una nuova direzione indipendente, quindi
+\[
+\bar{\mathcal O}_3=\bar{\mathcal O}_2.
+\]
+
+\medskip
+
+Conclusione: in questo caso
+\[
+\dim \bar{\mathcal O}_1=2,\qquad
+\dim \bar{\mathcal O}_2=1,\qquad
+\dim \bar{\mathcal O}_3=1.
+\]
+Dunque la seconda osservazione riduce il sottospazio di inosservabilità, mentre la terza non aggiunge più informazione.
+
+%=========================================================
+\section{Ricostruibilità in tempo discreto}
+
+L'osservabilità riguarda la ricostruzione dello \emph{passato}, cioè dello stato iniziale \(x(0)\).  
+La ricostruibilità riguarda invece lo \emph{stato attuale} \(x(t)\).
+
+\medskip
+
+La domanda è:
+
+\begin{quote}
+Se due stati iniziali \(x_0\) e \(\bar x_0\) sono indistinguibili in \(t\) passi, allora dopo \(t\) passi conducono necessariamente allo stesso stato?
+\end{quote}
+
+Se la risposta è sì, allora anche se non so distinguere esattamente da quale stato iniziale sono partito, posso comunque sapere in modo univoco dove si trova il sistema al tempo \(t\).
+
+\subsection{Definizione}
+
+Il sistema è detto \textbf{ricostruibile in \(t\) passi} se per ogni coppia di stati indistinguibili \(x_0,\bar x_0\) in \(t\) passi si ha
+\[
+x(t;x_0,u)=x(t;\bar x_0,u)
+\qquad
+\forall u.
+\]
+
+\subsection{Condizione equivalente}
+
+Le due traiettorie sono
+\[
+x_1(t)=A^t x_0+\sum_{k=0}^{t-1} A^{t-k-1}Bu(k),
+\]
+\[
+x_2(t)=A^t \bar x_0+\sum_{k=0}^{t-1} A^{t-k-1}Bu(k).
+\]
+Sottraendo:
+\[
+x_2(t)-x_1(t)=A^t(\bar x_0-x_0).
+\]
+
+Se \(x_0\) e \(\bar x_0\) sono indistinguibili in \(t\) passi, allora
+\[
+\bar x_0-x_0\in \ker(\mathcal O_t)=\bar{\mathcal O}_t.
+\]
+Perché gli stati al tempo \(t\) coincidano, serve allora che
+\[
+A^t(\bar x_0-x_0)=0.
+\]
+Quindi il sistema è ricostruibile in \(t\) passi se e solo se
+\[
+\boxed{
+\ker(\mathcal O_t)\subseteq \ker(A^t).
+}
+\]
+
+Questa è la caratterizzazione fondamentale della ricostruibilità nel discreto.
+
+\subsection{Relazione con l'osservabilità}
+
+Se il sistema è osservabile in \(t\) passi, allora
+\[
+\ker(\mathcal O_t)=\{0\},
+\]
+e dunque automaticamente
+\[
+\ker(\mathcal O_t)\subseteq \ker(A^t).
+\]
+Quindi:
+\[
+\boxed{
+\text{osservabilità} \ \Longrightarrow\ \text{ricostruibilità}.
+}
+\]
+
+Il viceversa, in generale, \textbf{non è vero} nel tempo discreto.
+
+\subsection{Quando coincidono?}
+
+Se \(A\) è invertibile, allora anche \(A^t\) è invertibile e quindi
+\[
+\ker(A^t)=\{0\}.
+\]
+In questo caso la condizione
+\[
+\ker(\mathcal O_t)\subseteq \ker(A^t)
+\]
+diventa
+\[
+\ker(\mathcal O_t)\subseteq \{0\},
+\]
+cioè
+\[
+\ker(\mathcal O_t)=\{0\}.
+\]
+Quindi, se \(A\) è invertibile,
+\[
+\boxed{
+\text{ricostruibilità} \ \Longleftrightarrow\ \text{osservabilità}.
+}
+\]
+
+\subsection{Caso continuo}
+
+Nel caso continuo, al posto di \(A^t\) compare \(e^{At}\), ma \(e^{At}\) è sempre invertibile.  
+Per questo motivo, in tempo continuo, osservabilità e ricostruibilità coincidono sempre.
+
+\[
+\boxed{
+\text{nel tempo continuo: ricostruibilità } \Longleftrightarrow \text{ osservabilità.}
+}
+\]
+
+%=========================================================
+\section{Invarianza per cambi di coordinate}
+
+Come per la raggiungibilità, anche l'osservabilità è una proprietà strutturale del sistema e non dipende dalla scelta delle coordinate di stato.
+
+Consideriamo il cambio di coordinate
+\[
+x=Tz,
+\qquad T \ \text{invertibile}.
+\]
+Allora il sistema diventa
+\[
+z(k+1)=T^{-1}AT\,z(k)+T^{-1}Bu(k),
+\qquad
+y(k)=CT\,z(k)+Du(k).
+\]
+
+La nuova matrice di osservabilità è
+\[
+\mathcal O_z=
+\begin{bmatrix}
+CT\\
+CTT^{-1}AT\\
+CT(T^{-1}AT)^2\\
+\vdots\\
+CT(T^{-1}AT)^{n-1}
+\end{bmatrix}.
+\]
+Semplificando:
+\[
+\mathcal O_z=
+\begin{bmatrix}
+C\\
+CA\\
+CA^2\\
+\vdots\\
+CA^{n-1}
+\end{bmatrix}T
+=
+\mathcal O_x\,T.
+\]
+
+Quindi
+\[
+\rank(\mathcal O_z)=\rank(\mathcal O_x),
+\]
+e inoltre
+\[
+\ker(\mathcal O_z)=T^{-1}\ker(\mathcal O_x).
+\]
+
+Conclusione:
+\[
+\boxed{
+\text{l'osservabilità è una proprietà strutturale del sistema.}
+}
+\]
+
+%=========================================================
+\section{Dualità tra raggiungibilità e osservabilità}
+
+Questa è una delle idee più importanti del corso.
+
+Consideriamo il sistema
+\[
+\begin{cases}
+x^+=Ax+Bu,\\
+y=Cx+Du.
+\end{cases}
+\]
+Il \textbf{sistema duale} è
+\[
+\begin{cases}
+\xi^+=A^\top \xi + C^\top v,\\
+\eta=B^\top \xi + D^\top v.
+\end{cases}
+\]
+
+La matrice di raggiungibilità del sistema duale è
+\[
+R^\star=
+\begin{bmatrix}
+C^\top & A^\top C^\top & (A^\top)^2 C^\top & \cdots & (A^\top)^{n-1}C^\top
+\end{bmatrix}.
+\]
+Ma questa è esattamente la trasposta della matrice di osservabilità del sistema originale:
+\[
+(R^\star)^\top=
+\begin{bmatrix}
+C\\
+CA\\
+CA^2\\
+\vdots\\
+CA^{n-1}
+\end{bmatrix}
+=
+\mathcal O.
+\]
+
+Di conseguenza:
+\[
+\boxed{
+(A,C)\ \text{osservabile}
+\quad \Longleftrightarrow \quad
+(A^\top,C^\top)\ \text{raggiungibile}.
+}
+\]
+
+Questo parallelismo permette di trasferire quasi automaticamente molti risultati dalla teoria della raggiungibilità a quella dell'osservabilità.
+
+%=========================================================
+\section{Teorema fondamentale: caratterizzazione del sottospazio di inosservabilità}
+
+Sia
+\[
+\bar{\mathcal O}:=\ker(\mathcal O)
+\]
+il sottospazio di inosservabilità del sistema.
+
+Vale il seguente risultato fondamentale:
+
+\medskip
+
+\noindent
+\textbf{Teorema.}
+\emph{
+\(\bar{\mathcal O}\) è il più grande sottospazio \(A\)-invariante contenuto in \(\ker(C)\).
+}
+
+\subsection*{Dimostrazione}
+
+La dimostrazione ha due parti.
+
+\paragraph{1) \(\bar{\mathcal O}\) è contenuto in \(\ker(C)\) ed è \(A\)-invariante.}
+
+Se \(x\in\bar{\mathcal O}\), allora
+\[
+\mathcal O x=0,
+\]
+cioè
+\[
+Cx=0,\qquad CAx=0,\qquad CA^2x=0,\qquad \dots,\qquad CA^{n-1}x=0.
+\]
+In particolare \(Cx=0\), quindi
+\[
+x\in\ker(C).
+\]
+
+Mostriamo ora l'invarianza.  
+Se \(x\in\bar{\mathcal O}\), allora
+\[
+CA^k x=0\qquad \forall k=0,\dots,n-1.
+\]
+Vogliamo verificare che anche \(Ax\in\bar{\mathcal O}\), cioè che
+\[
+CA^k(Ax)=0
+\qquad \forall k=0,\dots,n-1.
+\]
+Ma
+\[
+CA^k(Ax)=CA^{k+1}x.
+\]
+Per \(k=0,\dots,n-2\) questo è nullo per definizione di \(\bar{\mathcal O}\).  
+Per \(k=n-1\) compare \(CA^n x\), ma per Cayley--Hamilton \(A^n\) è combinazione lineare di \(I,A,\dots,A^{n-1}\), quindi anche \(CA^n x\) è combinazione lineare di
+\[
+Cx,\ CAx,\ \dots,\ CA^{n-1}x,
+\]
+tutti nulli. Dunque
+\[
+CA^n x=0.
+\]
+Quindi \(Ax\in\bar{\mathcal O}\), ossia \(\bar{\mathcal O}\) è \(A\)-invariante.
+
+\paragraph{2) È il più grande con questa proprietà.}
+
+Sia \(S\subseteq \mathbb R^n\) un sottospazio tale che:
+\[
+S\subseteq \ker(C),
+\qquad
+AS\subseteq S.
+\]
+Prendiamo \(x\in S\). Siccome \(S\subseteq\ker(C)\), si ha \(Cx=0\).  
+Poiché \(AS\subseteq S\), allora \(Ax\in S\), e quindi
+\[
+CAx=0.
+\]
+Ripetendo:
+\[
+A^2x\in S \Rightarrow CA^2x=0,
+\qquad \dots,
+\qquad A^{n-1}x\in S \Rightarrow CA^{n-1}x=0.
+\]
+Dunque
+\[
+\mathcal O x=0,
+\]
+cioè \(x\in \ker(\mathcal O)=\bar{\mathcal O}\).
+
+Quindi
+\[
+S\subseteq \bar{\mathcal O}.
+\]
+Abbiamo dunque provato che \(\bar{\mathcal O}\) è il più grande sottospazio \(A\)-invariante contenuto in \(\ker(C)\). \qed
+
+%=========================================================
+\section{Forma standard di osservabilità}
+
+Il teorema precedente suggerisce di scegliere nuove coordinate che separino esplicitamente la parte osservabile da quella non osservabile.
+
+\subsection{Scelta della base}
+
+Sia
+\[
+\bar o := \dim(\bar{\mathcal O}).
+\]
+Scegliamo:
+\begin{itemize}
+    \item \(T_{\bar o}\in\mathbb R^{n\times \bar o}\): una matrice le cui colonne formano una base di \(\bar{\mathcal O}\);
+    \item \(T_o\in\mathbb R^{n\times (n-\bar o)}\): un completamento a base di \(\mathbb R^n\).
+\end{itemize}
+
+Poniamo quindi
+\[
+T=\begin{bmatrix}T_o & T_{\bar o}\end{bmatrix},
+\qquad
+x=Tz.
+\]
+
+\subsection{Forma del sistema trasformato}
+
+Nelle nuove coordinate:
+\[
+z^+=T^{-1}AT\,z+T^{-1}Bu,
+\qquad
+y=CTz+Du.
+\]
+
+Poiché \(\bar{\mathcal O}\) è \(A\)-invariante, la matrice trasformata assume la struttura a blocchi
+\[
+\widetilde A=
+\begin{bmatrix}
+A_o & 0\\
+A_{\bar o o} & A_{\bar o}
+\end{bmatrix}.
+\]
+Inoltre, poiché tutte le colonne di \(T_{\bar o}\) appartengono a \(\ker(C)\), si ha
+\[
+CT=
+\begin{bmatrix}
+C_o & 0
+\end{bmatrix}.
+\]
+
+Quindi il sistema assume la \textbf{forma standard di osservabilità}:
+\[
+\boxed{
+\begin{cases}
+z_o^+ = A_o z_o + B_o u,\\
+z_{\bar o}^+ = A_{\bar o o} z_o + A_{\bar o} z_{\bar o} + B_{\bar o} u,\\
+y = C_o z_o + Du.
+\end{cases}
+}
+\]
+
+In forma matriciale:
+\[
+\boxed{
+z^+=
+\begin{bmatrix}
+A_o & 0\\
+A_{\bar o o} & A_{\bar o}
+\end{bmatrix} z
++
+\begin{bmatrix}
+B_o\\
+B_{\bar o}
+\end{bmatrix}u,
+\qquad
+y=
+\begin{bmatrix}
+C_o & 0
+\end{bmatrix}z+Du.
+}
+\]
+
+\subsection{Interpretazione}
+
+La parte \(z_o\) è la parte \textbf{osservabile} del sistema.  
+La parte \(z_{\bar o}\) è la parte \textbf{non osservabile}: non compare direttamente in uscita.
+
+Anzi, poiché nella legge di uscita compare solo \(z_o\),
+\[
+y=C_oz_o+Du,
+\]
+il blocco \(z_{\bar o}\) non può essere ricostruito dalle sole misure di uscita.
+
+Inoltre, il sottosistema \((A_o,C_o)\) è completamente osservabile.
+
+\medskip
+
+Gli autovalori di \(A_o\) sono gli \textbf{autovalori osservabili}, mentre quelli di \(A_{\bar o}\) sono gli \textbf{autovalori non osservabili}.
+
+%=========================================================
+\section{Parallelismo completo con la forma standard di raggiungibilità}
+
+A questo punto il parallelismo è perfetto.
+
+\subsection*{Forma standard di raggiungibilità}
+\[
+\widetilde A=
+\begin{bmatrix}
+A_R & A_{RN}\\
+0 & A_N
+\end{bmatrix},
+\qquad
+\widetilde B=
+\begin{bmatrix}
+B_R\\
+0
+\end{bmatrix}.
+\]
+Qui la parte \emph{non raggiungibile} non è direttamente influenzabile dall'ingresso.
+
+\subsection*{Forma standard di osservabilità}
+\[
+\widetilde A=
+\begin{bmatrix}
+A_o & 0\\
+A_{\bar o o} & A_{\bar o}
+\end{bmatrix},
+\qquad
+\widetilde C=
+\begin{bmatrix}
+C_o & 0
+\end{bmatrix}.
+\]
+Qui la parte \emph{non osservabile} non è direttamente visibile in uscita.
+
+\medskip
+
+Questa simmetria non è casuale: deriva dalla dualità tra osservabilità e raggiungibilità.
+
+%=========================================================
+\section{Conclusioni della lezione}
+
+In questa lezione abbiamo fissato le idee fondamentali su osservabilità e ricostruibilità.
+
+\begin{enumerate}
+    \item In tempo discreto, la matrice di osservabilità in \(t\) osservazioni è
+    \[
+    \mathcal O_t=
+    \begin{bmatrix}
+    C\\
+    CA\\
+    \vdots\\
+    CA^{t-1}
+    \end{bmatrix},
+    \]
+    e il sottospazio di inosservabilità in \(t\) passi è
+    \[
+    \bar{\mathcal O}_t=\ker(\mathcal O_t).
+    \]
+
+    \item La catena
+    \[
+    \bar{\mathcal O}_1 \supseteq \bar{\mathcal O}_2 \supseteq \cdots
+    \]
+    è decrescente e si stabilizza al più dopo \(n\) passi.
+
+    \item La ricostruibilità in \(t\) passi è equivalente alla condizione
+    \[
+    \ker(\mathcal O_t)\subseteq \ker(A^t).
+    \]
+
+    \item In tempo continuo, ricostruibilità e osservabilità coincidono; in tempo discreto no, salvo casi particolari, ad esempio quando \(A\) è invertibile.
+
+    \item L'osservabilità è una proprietà strutturale, invariante per cambi di coordinate.
+
+    \item Il sottospazio di inosservabilità
+    \[
+    \bar{\mathcal O}=\ker(\mathcal O)
+    \]
+    è il più grande sottospazio \(A\)-invariante contenuto in \(\ker(C)\).
+
+    \item In opportune coordinate, il sistema si separa in una parte osservabile e una non osservabile:
+    questa è la \textbf{forma standard di osservabilità}.
+\end{enumerate}
+
+\bigskip
+
+La lezione successiva potrà proseguire in modo naturale verso:
+\begin{itemize}
+    \item gli autovalori osservabili e non osservabili;
+    \item il lemma PBH per l'osservabilità;
+    \item gli osservatori di stato e, in particolare, l'osservatore di Luenberger.
+\end{itemize}

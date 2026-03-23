@@ -1,0 +1,388 @@
+\chapter{Lezione 12 --- Discretizzazione dell'impianto, Eulero in avanti e all'indietro, modello esatto con tenuta di ordine zero}
+
+\section{Idea della lezione}
+
+Nelle lezioni precedenti abbiamo seguito soprattutto questa filosofia:
+\begin{itemize}
+    \item progetto un regolatore continuo \(C(s)\);
+    \item poi lo discretizzo ottenendo \(R(z)\), ad esempio con Tustin.
+\end{itemize}
+
+In questa lezione compare invece un'altra possibilit\`a:
+\begin{itemize}
+    \item invece di trasformare il controllore discreto in continuo,
+    \item discretizzo direttamente l'impianto continuo,
+    \item e ottengo un modello esatto o approssimato dell'impianto nel dominio discreto.
+\end{itemize}
+
+Questo approccio \`e particolarmente naturale quando l'impianto \`e descritto in \textbf{forma di stato}.
+
+\section{Segnale in uscita dal convertitore D/A}
+
+Il convertitore digitale-analogico con tenuta di ordine zero produce un segnale
+\[
+u(t)
+\]
+\textbf{costante a tratti}.
+
+Quindi:
+\begin{itemize}
+    \item il segnale \`e continuo a tratti ma non liscio;
+    \item presenta discontinuit\`a agli istanti di aggiornamento;
+    \item dal punto di vista dell'attuatore, non sempre un ingresso cos\`i \`e desiderabile.
+\end{itemize}
+
+In pratica, a seconda dell'attuatore e della struttura fisica del sistema,
+un segnale a gradini pu\`o essere accettabile oppure no.
+
+\subsection*{Filtro addizionale di smoothing}
+
+Se il segnale costante a tratti non \`e adatto all'attuatore,
+si pu\`o inserire dopo il D/A un ulteriore filtro passa-basso analogico,
+in modo da ottenere un comando pi\`u regolare.
+
+L'idea \`e:
+\begin{itemize}
+    \item il D/A genera un segnale costante a tratti;
+    \item il filtro lo \emph{addolcisce};
+    \item se il filtro ha banda sufficientemente alta, aggiunge poli ad alta frequenza
+    ma non modifica in modo sostanziale le prestazioni in ciclo chiuso nella banda di interesse.
+\end{itemize}
+
+Quindi, dal punto di vista progettuale, non serve rifare tutto da capo
+se questo filtro \`e collocato abbastanza in alto in frequenza.
+
+\section{Derivata e approssimazioni numeriche}
+
+Negli appunti si richiama il fatto che l'operatore \(s\) nel continuo
+pu\`o essere visto come operatore di derivazione.
+
+Se ho una funzione continua \(y(t)\), fissato un passo \(h\),
+la derivata si pu\`o approssimare in modo differenziale.
+
+\subsection{Eulero in avanti}
+
+L'approssimazione in avanti \`e
+\[
+\dot y(t)\approx \frac{y(t+h)-y(t)}{h}.
+\]
+
+Nel campionamento con periodo \(T\), questo diventa
+\[
+\dot y(kT)\approx \frac{y((k+1)T)-y(kT)}{T}.
+\]
+
+Applicando la trasformata z:
+\[
+\mathcal{Z}\left\{\dot y(kT)\right\}
+\approx
+\frac{zY(z)-Y(z)}{T}
+=
+\frac{z-1}{T}Y(z).
+\]
+
+Da qui si ottiene l'approssimazione
+\[
+s \approx \frac{z-1}{T},
+\]
+equivalentemente
+\[
+z=1+Ts.
+\]
+
+\subsection{Osservazione}
+
+Questa \textbf{non} \`e la trasformata di Tustin.
+\`E una discretizzazione molto pi\`u rozza, detta \textbf{Eulero in avanti}.
+
+\section{Mappatura del piano \(s\) con Eulero in avanti}
+
+Supponiamo di avere
+\[
+s=\sigma+j\omega.
+\]
+Con Eulero in avanti, il corrispondente punto nel piano \(z\) \`e
+\[
+z=1+Ts = 1+T\sigma + jT\omega.
+\]
+
+Questa \`e una mappa affine:
+\begin{itemize}
+    \item le rette verticali del piano \(s\) restano rette verticali nel piano \(z\);
+    \item l'asse immaginario \(\sigma=0\) viene mappato nella retta
+    \[
+    \Re(z)=1;
+    \]
+    \item il semipiano sinistro non viene mappato interamente dentro il cerchio unitario.
+\end{itemize}
+
+Quindi l'Eulero in avanti \textbf{non preserva automaticamente la stabilit\`a}.
+
+\subsection{Esempio}
+
+Se un polo continuo \`e in
+\[
+s=-10,
+\]
+allora il polo discreto approssimato diventa
+\[
+z=1-10T.
+\]
+
+Per avere stabilit\`a discreta occorre
+\[
+|z|<1
+\quad\Longrightarrow\quad
+|1-10T|<1.
+\]
+
+Da cui segue
+\[
+0<T<\frac{1}{5}.
+\]
+
+Quindi un polo stabile nel continuo pu\`o diventare instabile nel discreto
+se \(T\) non \`e sufficientemente piccolo.
+
+\section{Eulero all'indietro}
+
+Si considera ora l'approssimazione all'indietro:
+\[
+\dot y(kT)\approx \frac{y(kT)-y((k-1)T)}{T}.
+\]
+
+Applicando la trasformata z:
+\[
+\mathcal{Z}\left\{\dot y(kT)\right\}
+\approx
+\frac{Y(z)-z^{-1}Y(z)}{T}
+=
+\frac{1-z^{-1}}{T}Y(z).
+\]
+
+Quindi
+\[
+s \approx \frac{1-z^{-1}}{T}
+=
+\frac{z-1}{zT}.
+\]
+
+Risolvendo rispetto a \(z\):
+\[
+z=\frac{1}{1-sT}.
+\]
+
+Questa \`e la discretizzazione di \textbf{Eulero a ritroso} o \textbf{backward Euler}.
+
+\section{Mappatura del piano \(s\) con Eulero all'indietro}
+
+Se
+\[
+s=\sigma+j\omega,
+\]
+allora
+\[
+z=\frac{1}{1-sT}
+=
+\frac{1}{1-(\sigma+j\omega)T}.
+\]
+
+Se \(\sigma<0\), cio\`e il polo continuo sta nel semipiano sinistro,
+si verifica che
+\[
+|z|<1.
+\]
+
+Quindi, con Eulero a ritroso:
+\begin{itemize}
+    \item tutto il semipiano sinistro viene mappato all'interno del cerchio unitario;
+    \item i poli stabili nel continuo diventano poli stabili nel discreto.
+\end{itemize}
+
+Questo rende l'Eulero a ritroso numericamente molto pi\`u robusto di quello in avanti.
+
+\subsection*{Osservazione pratica}
+
+Negli appunti il messaggio \`e chiaro:
+\begin{itemize}
+    \item Eulero in avanti pu\`o essere usato come approssimazione veloce e rozza;
+    \item Eulero a ritroso \`e pi\`u robusto dal punto di vista della stabilit\`a;
+    \item ma se si deve \emph{progettare} un controllore, in generale non conviene usare Eulero:
+    \`e meglio usare metodi pi\`u accurati, ad esempio Tustin oppure la discretizzazione esatta dell'impianto.
+\end{itemize}
+
+\section{Discretizzare direttamente l'impianto}
+
+La seconda parte della lezione introduce il metodo corretto per ottenere
+una rappresentazione discreta dell'impianto a partire da un modello continuo in forma di stato.
+
+Supponiamo che il sistema continuo sia descritto da
+\[
+\begin{cases}
+\dot x(t)=Ax(t)+Bu(t),\\[4pt]
+y(t)=Cx(t).
+\end{cases}
+\]
+
+Sappiamo che la soluzione dell'equazione di stato \`e
+\[
+x(t)=e^{At}x(0)+\int_0^t e^{A(t-\tau)}Bu(\tau)\,d\tau.
+\]
+
+Qui
+\[
+e^{At}
+\]
+\`e l'esponenziale di matrice, definito tramite serie:
+\[
+e^{At}=I+At+\frac{A^2t^2}{2!}+\dots+\frac{(At)^k}{k!}+\dots
+\]
+
+Nel caso matriciale, questa serie \`e una \emph{definizione}, non solo una conseguenza
+della funzione esponenziale scalare.
+
+\section{Ingresso costante a tratti}
+
+Nel nostro schema di controllo digitale, l'ingresso che entra nell'impianto
+\`e costante a tratti a causa della tenuta di ordine zero.
+
+Quindi
+\[
+u(t)=u_k
+\qquad
+\forall t\in[kT,(k+1)T).
+\]
+
+Questa ipotesi \`e fondamentale:
+stiamo discretizzando il sistema continuo tenendo conto del fatto che
+l'ingresso viene mantenuto costante tra due campioni successivi.
+
+\section{Passaggio da \(t=kT\) a \(t=(k+1)T\)}
+
+Applichiamo la formula della soluzione tra gli istanti \(kT\) e \((k+1)T\):
+\[
+x((k+1)T)=e^{AT}x(kT)+\int_{kT}^{(k+1)T} e^{A((k+1)T-\tau)}B\,u(\tau)\,d\tau.
+\]
+
+Poich\'e nell'intervallo considerato \(u(\tau)=u_k\), si pu\`o portare fuori dall'integrale:
+\[
+x((k+1)T)=e^{AT}x(kT)+\left(\int_{kT}^{(k+1)T} e^{A((k+1)T-\tau)}\,d\tau\right)B\,u_k.
+\]
+
+Facendo il cambio di variabile
+\[
+\alpha=(k+1)T-\tau,
+\]
+si ottiene
+\[
+x((k+1)T)=e^{AT}x(kT)+\left(\int_0^T e^{A\alpha}\,d\alpha\right)B\,u_k.
+\]
+
+Definendo
+\[
+F=e^{AT},
+\qquad
+G=\left(\int_0^T e^{A\alpha}\,d\alpha\right)B,
+\]
+si arriva al modello discreto esatto
+\[
+x(k+1)=Fx(k)+Gu(k).
+\]
+
+Questa \`e l'equazione di stato discreta dell'impianto.
+
+\section{Formula alternativa per \(G\)}
+
+Se \(A\) \`e invertibile, allora si pu\`o anche scrivere
+\[
+G=A^{-1}(e^{AT}-I)B.
+\]
+
+Questa formula \`e utile dal punto di vista computazionale,
+ma la forma integrale
+\[
+G=\int_0^T e^{A\alpha}\,d\alpha\,B
+\]
+resta la pi\`u generale.
+
+\section{Significato del risultato}
+
+Il modello discreto
+\[
+x(k+1)=Fx(k)+Gu(k)
+\]
+non \`e un'approssimazione come l'Eulero in avanti o all'indietro:
+\`e il \textbf{modello esatto campionato} del sistema continuo
+sotto l'ipotesi di ingresso costante a tratti.
+
+Quindi:
+\begin{itemize}
+    \item \(F=e^{AT}\) descrive l'evoluzione libera del sistema tra due campioni;
+    \item \(G\) descrive l'effetto dell'ingresso costante nell'intervallo di campionamento.
+\end{itemize}
+
+Questo \`e il modo corretto di ottenere un impianto discreto equivalente al continuo
+quando si ha un D/A con tenuta di ordine zero.
+
+\section{Perch\'e questo metodo \`e importante}
+
+Questa discretizzazione esatta \`e molto importante perch\'e permette:
+\begin{itemize}
+    \item di trattare l'impianto direttamente in tempo discreto;
+    \item di evitare le distorsioni introdotte da approssimazioni rozze della derivata;
+    \item di progettare controllori discreti direttamente sul modello campionato dell'impianto.
+\end{itemize}
+
+Quindi, invece di fare
+\[
+C(s)\ \longrightarrow\ R(z),
+\]
+si pu\`o anche fare
+\[
+G(s)\ \longrightarrow\ \tilde G(z),
+\]
+e poi progettare direttamente il regolatore discreto su \(\tilde G(z)\).
+
+\section{Sintesi della lezione}
+
+I punti chiave della lezione sono:
+\begin{enumerate}
+    \item l'uscita del convertitore D/A \`e un segnale costante a tratti;
+    \item se necessario, si pu\`o aggiungere un filtro passa-basso analogico per rendere il comando pi\`u regolare;
+    \item l'approssimazione della derivata con Eulero in avanti porta a
+    \[
+    s\approx \frac{z-1}{T},
+    \qquad
+    z=1+Ts,
+    \]
+    ma non preserva sempre la stabilit\`a;
+    \item l'approssimazione di Eulero a ritroso porta a
+    \[
+    s\approx \frac{1-z^{-1}}{T}
+    =
+    \frac{z-1}{zT},
+    \qquad
+    z=\frac{1}{1-sT},
+    \]
+    e mappa il semipiano sinistro dentro il cerchio unitario;
+    \item per il progetto del controllo, gli schemi di Eulero non sono in generale la scelta migliore;
+    \item se l'impianto \`e in forma di stato
+    \[
+    \dot x=Ax+Bu,\qquad y=Cx,
+    \]
+    allora, sotto l'ipotesi di ingresso costante a tratti, il modello discreto esatto \`e
+    \[
+    x(k+1)=Fx(k)+Gu(k),
+    \]
+    con
+    \[
+    F=e^{AT},
+    \qquad
+    G=\left(\int_0^T e^{A\alpha}\,d\alpha\right)B;
+    \]
+    \item se \(A\) \`e invertibile, si pu\`o scrivere anche
+    \[
+    G=A^{-1}(e^{AT}-I)B;
+    \]
+    \item questa discretizzazione tiene conto in modo esatto della tenuta di ordine zero.
+\end{enumerate}

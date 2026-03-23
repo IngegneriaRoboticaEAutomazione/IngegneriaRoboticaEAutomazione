@@ -1,0 +1,506 @@
+\chapter{Lezione 8 --- Anti-trasformata z, implementazione dei filtri digitali, trasformata bilineare di Tustin e pre-warping}
+
+\section{Richiamo: tavola essenziale per l'anti-trasformata z}
+
+Negli appunti viene ripresa una tabella di coppie utili tra segnale continuo causale,
+successione campionata e trasformata z.
+
+Ponendo
+\[
+\varphi=e^{-aT},
+\]
+si hanno le seguenti corrispondenze fondamentali:
+
+\[
+\mathcal{Z}\{1\}=\frac{z}{z-1},
+\]
+\[
+\mathcal{Z}\{kT\}=\frac{Tz}{(z-1)^2},
+\]
+\[
+\mathcal{Z}\left\{\frac{1}{2}k^2T^2\right\}
+=
+\frac{T^2}{2}\frac{z(z+1)}{(z-1)^3},
+\]
+\[
+\mathcal{Z}\{\varphi^k\}=\frac{z}{z-\varphi},
+\]
+\[
+\mathcal{Z}\{kT\,\varphi^k\}
+=
+\frac{T\varphi z}{(z-\varphi)^2},
+\]
+\[
+\mathcal{Z}\{1-\varphi^k\}
+=
+\frac{z(1-\varphi)}{(z-1)(z-\varphi)},
+\]
+\[
+\mathcal{Z}\{\sin(\omega kT)\}
+=
+\frac{z\sin(\omega T)}{z^2-2\cos(\omega T)\,z+1},
+\]
+\[
+\mathcal{Z}\{\cos(\omega kT)\}
+=
+\frac{z\bigl(z-\cos(\omega T)\bigr)}{z^2-2\cos(\omega T)\,z+1},
+\]
+\[
+\mathcal{Z}\{\varphi^k\sin(\omega kT)\}
+=
+\frac{z\varphi\sin(\omega T)}{z^2-2\varphi\cos(\omega T)\,z+\varphi^2},
+\]
+\[
+\mathcal{Z}\{\varphi^k\cos(\omega kT)\}
+=
+\frac{z\bigl(z-\varphi\cos(\omega T)\bigr)}{z^2-2\varphi\cos(\omega T)\,z+\varphi^2}.
+\]
+
+Questa tabella \`e il riferimento operativo per tornare da una funzione razionale \(G(z)\)
+alla corrispondente successione nel tempo discreto.
+
+\section{Anti-trasformata z con il metodo dei fratti semplici}
+
+Negli appunti si osserva che, diversamente da quanto accade in Laplace,
+nelle forme tabulate della trasformata z compare quasi sempre un fattore \(z\) al numeratore.
+Per questo, data una funzione razionale
+\[
+G(z)=\frac{N(z)}{D(z)},
+\]
+per applicare il metodo dei fratti semplici conviene spesso considerare
+\[
+\frac{G(z)}{z}.
+\]
+
+L'idea operativa \`e:
+\[
+G(z)
+\quad\longrightarrow\quad
+\frac{G(z)}{z}
+\quad\longrightarrow\quad
+\text{espansione in fratti semplici}
+\quad\longrightarrow\quad
+\text{calcolo dei residui}
+\quad\longrightarrow\quad
+\text{moltiplico per } z
+\quad\longrightarrow\quad
+\text{anti-trasformo via tabella}.
+\]
+
+In questo modo si ottiene una soluzione analitica della successione.
+
+\subsection*{Osservazione}
+
+Il procedimento \`e del tutto analogo a quello usato nel dominio di Laplace:
+si fattorizza il denominatore, si espande in termini elementari e poi si riconosce
+l'anti-trasformata di ciascun termine.
+
+\section{Metodo non analitico: lunga divisione}
+
+Negli appunti viene richiamato anche un secondo metodo, pi\`u algoritmico:
+la \textbf{lunga divisione} tra numeratore e denominatore.
+
+Se
+\[
+G(z)=\frac{N(z)}{D(z)},
+\]
+si sviluppa la funzione come serie in potenze di \(z^{-1}\):
+\[
+G(z)=g(0)+g(1)z^{-1}+g(2)z^{-2}+\dots
+\]
+
+I coefficienti letti nella serie sono proprio i valori della successione.
+
+\subsection*{Interpretazione}
+
+Ogni moltiplicazione per \(z^{-1}\) corrisponde a un ritardo di un campione,
+mentre ogni moltiplicazione per \(z\) corrisponde formalmente a un anticipo.
+
+Il metodo della lunga divisione \`e particolarmente utile quando:
+\begin{itemize}
+    \item si vogliono i primi campioni della risposta;
+    \item la fattorizzazione del denominatore \`e scomoda;
+    \item interessa un approccio numerico pi\`u che una formula chiusa.
+\end{itemize}
+
+\section{Dalla funzione di trasferimento all'equazione alle differenze}
+
+Consideriamo una funzione di trasferimento discreta del tipo
+\[
+G(z)=\frac{n(z)}{d(z)}
+=
+\frac{b_m z^m+\dots+b_0}{z^n+a_{n-1}z^{n-1}+\dots+a_0}.
+\]
+
+Assumendo la relazione ingresso--uscita
+\[
+Y(z)=G(z)U(z),
+\]
+moltiplicando per il denominatore si ottiene
+\[
+d(z)Y(z)=n(z)U(z).
+\]
+
+Anti-trasformando, si ricava una equazione alle differenze del tipo
+\[
+y(k)+a_{n-1}y(k-1)+\dots+a_0 y(k-n)
+=
+b_m u(k)+b_{m-1}u(k-1)+\dots+b_0 u(k-m).
+\]
+
+Quindi si pu\`o risolvere esplicitamente rispetto a \(y(k)\):
+\[
+y(k)=
+-a_{n-1}y(k-1)-\dots-a_0y(k-n)
++b_m u(k)+\dots+b_0u(k-m).
+\]
+
+Questa \`e l'equazione che permette di implementare il filtro nel tempo discreto.
+
+\section{Implementazione digitale del filtro}
+
+Per implementare l'equazione alle differenze su una macchina digitale serve:
+\begin{itemize}
+    \item un \textbf{buffer di memoria}, per memorizzare i campioni passati di ingresso e uscita;
+    \item una \textbf{ALU} (\emph{Arithmetic Logic Unit}), che esegue somme e moltiplicazioni;
+    \item una logica di aggiornamento dei campioni nel buffer.
+\end{itemize}
+
+Se l'ordine del filtro \`e \(n\), in una realizzazione tipica bisogna conservare:
+\begin{itemize}
+    \item \(n\) campioni passati dell'uscita;
+    \item \(n+1\) campioni dell'ingresso.
+\end{itemize}
+
+Quindi il buffer totale contiene, a meno di convenzioni di indicizzazione,
+circa \(2n+1\) campioni.
+
+\section{Filtri IIR e filtri FIR}
+
+\subsection{Filtri IIR}
+
+Un filtro descritto da una equazione alle differenze con dipendenza
+anche dai valori passati dell'uscita \`e un filtro \textbf{ricorsivo}.
+
+Questi filtri si chiamano
+\[
+\text{IIR} \quad \text{(\emph{Infinite Impulse Response})}.
+\]
+
+Il nome deriva dal fatto che, in generale, la risposta all'impulso discreto
+non si annulla in un numero finito di passi.
+
+\subsection{Filtri FIR}
+
+Se invece la funzione di trasferimento ha tutti i poli nell'origine, cio\`e pu\`o essere scritta come
+\[
+G(z)=\frac{m(z)}{z^n},
+\]
+allora il filtro non \`e ricorsivo e l'uscita dipende solo da valori presenti e passati dell'ingresso:
+\[
+y(k)=b_m u(k)+b_{m-1}u(k-1)+\dots+b_0 u(k-m).
+\]
+
+Questi filtri si chiamano
+\[
+\text{FIR} \quad \text{(\emph{Finite Impulse Response})}.
+\]
+
+Se l'ingresso \(u(k)\) \`e un impulso discreto, la risposta di un filtro FIR va a zero
+in un numero finito di passi.
+
+\section{Specifiche di un filtro passa-basso}
+
+Negli appunti si introduce il problema progettuale:
+si vogliono assegnare le specifiche di un filtro passa-basso nel continuo
+e poi costruire un filtro digitale equivalente.
+
+Un modello analogico elementare \`e
+\[
+G(s)=\frac{\omega_b}{s+\omega_b},
+\]
+dove \(\omega_b\) \`e la pulsazione di banda.
+
+Si tratta di un filtro del primo ordine, con pendenza asintotica
+\[
+-20\ \text{dB/decade}
+\]
+oltre la frequenza di taglio.
+
+\section{Problema: come passare da \(s\) a \(z\)?}
+
+Se si vuole lavorare non pi\`u su segnali continui ma su segnali campionati,
+bisogna sostituire il filtro analogico con un filtro discreto \(G(z)\).
+
+La relazione esatta tra \(s\) e \(z\),
+\[
+z=e^{sT},
+\]
+\`e per\`o trascendente, quindi non porta in generale a una funzione razionale semplice in \(z\).
+
+Per ottenere una funzione di trasferimento digitale razionale
+si introducono trasformazioni approssimate da \(s\) a \(z\).
+
+\section{Idea generale: approssimazioni razionali}
+
+Negli appunti si richiama che la trasformazione non pu\`o essere esatta,
+ma si pu\`o cercare una buona approssimazione.
+
+Una prima idea \`e quella di usare lo sviluppo di Taylor troncato.
+Una scelta pi\`u efficace \`e usare un approssimante di Pad\'e,
+cio\`e una funzione razionale che approssima una funzione trascendente.
+
+Qui si sceglie un approssimante di Pad\'e del primo ordine per \(e^{sT}\).
+
+\section{Approssimazione di Pad\'e del primo ordine}
+
+Scriviamo
+\[
+e^{sT}= \frac{e^{\frac{sT}{2}}}{e^{-\frac{sT}{2}}}.
+\]
+
+Approssimando numeratore e denominatore al primo ordine di Taylor:
+\[
+e^{\frac{sT}{2}} \approx 1+\frac{sT}{2},
+\qquad
+e^{-\frac{sT}{2}} \approx 1-\frac{sT}{2}.
+\]
+
+Si ottiene quindi
+\[
+e^{sT}\approx \frac{1+\frac{sT}{2}}{1-\frac{sT}{2}}.
+\]
+
+Poich\'e \(z=e^{sT}\), segue l'approssimazione
+\[
+z\approx \frac{1+\frac{sT}{2}}{1-\frac{sT}{2}}.
+\]
+
+Risolvendo rispetto a \(s\):
+\[
+\left(1-\frac{sT}{2}\right)z = 1+\frac{sT}{2},
+\]
+\[
+z-1=\frac{sT}{2}(z+1),
+\]
+\[
+s=\frac{2}{T}\frac{z-1}{z+1}.
+\]
+
+Questa \`e la \textbf{trasformata di Tustin}, detta anche \textbf{trasformata bilineare}.
+
+\section{Trasformata di Tustin o bilineare}
+
+La sostituzione fondamentale \`e
+\[
+s=\frac{2}{T}\frac{z-1}{z+1}.
+\]
+
+Essa permette di trasformare una funzione di trasferimento continua \(G(s)\)
+in una funzione di trasferimento discreta \(G(z)\) razionale.
+
+\subsection*{Osservazione}
+
+La trasformazione \`e semplice e molto usata in pratica,
+ma resta comunque un'approssimazione del legame esatto tra \(s\) e \(z\).
+
+\section{Esempio: discretizzazione di un passa-basso del primo ordine}
+
+Consideriamo il filtro analogico
+\[
+G(s)=\frac{\omega_b}{s+\omega_b}.
+\]
+
+Sostituendo \(s=\frac{2}{T}\frac{z-1}{z+1}\), si ottiene
+\[
+G(z)=\frac{\omega_b}{\frac{2}{T}\frac{z-1}{z+1}+\omega_b}.
+\]
+
+Moltiplicando numeratore e denominatore per \(z+1\):
+\[
+G(z)=
+\frac{\omega_b(z+1)}
+{\frac{2}{T}(z-1)+\omega_b(z+1)}.
+\]
+
+Moltiplicando ancora per \(T\):
+\[
+G(z)=
+\frac{T\omega_b(z+1)}
+{2(z-1)+T\omega_b(z+1)}.
+\]
+
+Sviluppando il denominatore:
+\[
+G(z)=
+\frac{T\omega_b(z+1)}
+{(2+T\omega_b)z-2+T\omega_b}.
+\]
+
+Questa \`e una funzione razionale in \(z\), quindi pu\`o essere implementata
+come filtro digitale tramite le tecniche gi\`a viste.
+
+\section{Dove vanno i punti del piano \(s\) con la trasformata bilineare?}
+
+La lezione si chiede anche quale sia l'effetto geometrico della trasformazione di Tustin
+sui punti del piano \(s\).
+
+Prendendo un punto sull'asse immaginario,
+\[
+s=j\omega,
+\]
+si ha
+\[
+z=\frac{1+j\omega T/2}{1-j\omega T/2}.
+\]
+
+Calcoliamo il modulo:
+\[
+|z|^2
+=
+\frac{\left(1+j\omega T/2\right)\left(1-j\omega T/2\right)}
+{\left(1-j\omega T/2\right)\left(1+j\omega T/2\right)}
+=1.
+\]
+
+Quindi
+\[
+|z|=1.
+\]
+
+Ne segue che l'asse immaginario del piano \(s\) viene mappato sul cerchio unitario del piano \(z\).
+
+Inoltre:
+\begin{itemize}
+    \item il semipiano sinistro di \(s\) viene mappato all'interno del cerchio unitario;
+    \item il semipiano destro di \(s\) viene mappato all'esterno del cerchio unitario.
+\end{itemize}
+
+Questa propriet\`a \`e molto importante perch\'e preserva il criterio di stabilit\`a:
+un sistema stabile nel continuo viene trasformato in un sistema stabile nel discreto.
+
+\section{Distorsione in frequenza: frequency warping}
+
+La trasformata di Tustin non preserva linearmente la frequenza.
+Per capire cosa succede alla risposta armonica,
+si valuta il filtro discreto sul cerchio unitario:
+\[
+z=e^{j\omega_d T}.
+\]
+
+Allora
+\[
+G_d(e^{j\omega_d T})
+=
+G_a\!\left(\frac{2}{T}\frac{e^{j\omega_d T}-1}{e^{j\omega_d T}+1}\right).
+\]
+
+Semplificando il rapporto:
+\[
+\frac{e^{j\omega_d T}-1}{e^{j\omega_d T}+1}
+=
+\frac{e^{j\omega_d T/2}\left(e^{j\omega_d T/2}-e^{-j\omega_d T/2}\right)}
+{e^{j\omega_d T/2}\left(e^{j\omega_d T/2}+e^{-j\omega_d T/2}\right)}
+=
+\frac{2j\sin(\omega_d T/2)}{2\cos(\omega_d T/2)}
+=
+j\tan\!\left(\frac{\omega_d T}{2}\right).
+\]
+
+Quindi
+\[
+G_d(e^{j\omega_d T})
+=
+G_a\!\left(
+j\,\frac{2}{T}\tan\!\left(\frac{\omega_d T}{2}\right)
+\right).
+\]
+
+Questo mostra che le pulsazioni analogiche e discrete sono legate da
+\[
+\omega_a=\frac{2}{T}\tan\!\left(\frac{\omega_d T}{2}\right),
+\]
+oppure inversamente
+\[
+\omega_d=\frac{2}{T}\arctan\!\left(\frac{\omega_a T}{2}\right).
+\]
+
+\subsection*{Interpretazione}
+
+La risposta armonica viene distorta poco alle basse frequenze
+e molto di pi\`u alle alte frequenze.
+
+Per questo si parla di \textbf{warping} della frequenza:
+la scala delle pulsazioni nel continuo non viene trasportata linearmente
+nella scala discreta.
+
+\section{Pre-warping}
+
+Spesso interessa che il filtro discreto riproduca in modo esatto
+il filtro analogico almeno a una specifica pulsazione \(\omega_0\),
+ad esempio proprio alla frequenza di taglio.
+
+Per ottenere questo, si modifica la trasformazione bilineare introducendo una costante \(k\):
+\[
+s=k\,\frac{z-1}{z+1}.
+\]
+
+Si sceglie \(k\) imponendo che la corrispondenza sia esatta alla pulsazione desiderata \(\omega_0\):
+\[
+\omega_0 = k\,\tan\!\left(\frac{\omega_0 T}{2}\right),
+\]
+da cui
+\[
+k=\frac{\omega_0}{\tan\!\left(\frac{\omega_0 T}{2}\right)}.
+\]
+
+Questa scelta prende il nome di \textbf{pre-warping}.
+
+\subsection*{Significato}
+
+Con il pre-warping si forza la trasformazione in modo che
+la risposta armonica del filtro discreto coincida con quella del filtro analogico
+alla frequenza \(\omega_0\) di progetto.
+
+In altre parole:
+\begin{itemize}
+    \item senza pre-warping, la Tustin \`e semplice ma distorce la scala in frequenza;
+    \item con pre-warping, si corregge localmente la distorsione nel punto di maggiore interesse.
+\end{itemize}
+
+\section{Sintesi della lezione}
+
+I punti chiave della lezione sono:
+\begin{enumerate}
+    \item richiamo dei metodi per anti-trasformare una funzione razionale in \(z\):
+    \begin{itemize}
+        \item fratti semplici;
+        \item lunga divisione;
+    \end{itemize}
+    \item da \(Y(z)=G(z)U(z)\) si ricava l'equazione alle differenze che implementa il filtro;
+    \item i filtri ricorsivi sono filtri IIR, mentre quelli non ricorsivi con poli nell'origine
+    sono filtri FIR;
+    \item per discretizzare un filtro analogico si cerca una trasformazione razionale da \(s\) a \(z\);
+    \item usando l'approssimante di Pad\'e del primo ordine si ottiene la trasformata di Tustin:
+    \[
+    s=\frac{2}{T}\frac{z-1}{z+1};
+    \]
+    \item applicando Tustin a
+    \[
+    G(s)=\frac{\omega_b}{s+\omega_b}
+    \]
+    si ottiene un filtro discreto razionale \(G(z)\);
+    \item la trasformata bilineare manda l'asse immaginario di \(s\) sul cerchio unitario di \(z\);
+    \item la corrispondenza tra frequenze \`e
+    \[
+    \omega_a=\frac{2}{T}\tan\!\left(\frac{\omega_d T}{2}\right),
+    \]
+    quindi la scala in frequenza \`e deformata;
+    \item con il pre-warping si usa
+    \[
+    s=k\frac{z-1}{z+1},
+    \qquad
+    k=\frac{\omega_0}{\tan(\omega_0 T/2)},
+    \]
+    per garantire corrispondenza esatta alla frequenza \(\omega_0\).
+\end{enumerate}

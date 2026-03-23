@@ -1,0 +1,514 @@
+\chapter{Lezione 22 --- Controllo decentralizzato e disaccoppiamento nei sistemi MIMO}
+
+\section{Richiamo: margine di fase e margine di guadagno}
+
+Nel diagramma di Nyquist, la stabilità del sistema in ciclo chiuso si studia rispetto al punto critico
+\[
+-1.
+\]
+Le due quantità classiche che misurano la ``distanza'' dal punto critico sono:
+
+\begin{itemize}
+    \item \textbf{margine di fase} \(M_\varphi\),
+    \item \textbf{margine di guadagno} \(M_G\).
+\end{itemize}
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[scale=1.1,>=Latex]
+    % assi
+    \draw[->] (-2.3,0)--(2.8,0) node[right] {};
+    \draw[->] (0,-2.4)--(0,2.3) node[above] {};
+
+    % punto critico
+    \fill (-1,0) circle (1.3pt);
+    \node[below] at (-1,0) {$-1$};
+
+    % cerchi qualitativi
+    \draw[thick] (0,0) circle (1.35);
+    \draw[thick] (0,0) circle (0.75);
+
+    % curve Nyquist qualitative
+    \draw[very thick,red]
+        (2.4,0) .. controls (1.5,-1.8) and (0.3,-2.1) .. (-1.1,-1.2)
+        .. controls (-1.8,-0.8) and (-1.2,-0.1) .. (-0.35,0.15)
+        .. controls (0.4,0.25) and (0.8,-0.05) .. (0.55,-0.45)
+        .. controls (0.3,-0.8) and (-0.2,-0.55) .. (-0.05,-0.1)
+        .. controls (0.1,0.15) and (0.35,0.12) .. (0.48,0.0);
+
+    \draw[very thick]
+        (2.1,0) .. controls (1.3,-1.5) and (0.2,-1.8) .. (-0.95,-1.05)
+        .. controls (-1.4,-0.65) and (-1.0,-0.1) .. (-0.3,0.05)
+        .. controls (0.25,0.15) and (0.55,-0.05) .. (0.38,-0.33)
+        .. controls (0.2,-0.58) and (-0.08,-0.38) .. (0.0,-0.08)
+        .. controls (0.08,0.08) and (0.22,0.05) .. (0.3,0.0);
+
+    % frecce direzione
+    \draw[->,thick] (-1.15,-1.15)--(-1.32,-1.0);
+    \draw[->,thick] (-0.55,-0.55)--(-0.7,-0.4);
+    \draw[->,thick,red] (-1.3,-1.25)--(-1.5,-1.1);
+    \draw[->,thick,red] (-0.68,-0.72)--(-0.82,-0.56);
+
+    % margine di guadagno
+    \draw[dashed] (-1,0)--(-1,1.5);
+    \draw[dashed] (-1.45,0)--(-1.45,1.5);
+    \draw[<->,blue] (-1.45,1.38)--(-1,1.38);
+    \node[blue,above] at (-1.225,1.42) {\small \(1/M_G\)};
+
+    % margine di fase
+    \draw[blue,thick] (-1,0)--(-1.0,-0.85);
+    \draw[blue,thick] (-1,0)--(-0.42,-0.55);
+    \draw[->,blue,thick] (-0.86,-0.35) arc[start angle=-100,end angle=-52,radius=0.52];
+    \node[blue] at (-0.92,-0.72) {\small \(M_\varphi\)};
+\end{tikzpicture}
+\caption{Interpretazione qualitativa di margine di fase \(M_\varphi\) e margine di guadagno \(M_G\) sul diagramma di Nyquist.}
+\end{figure}
+
+\section{Sistema MIMO \(2\times 2\)}
+
+Consideriamo un impianto MIMO \(2\times 2\) con matrice di trasferimento
+\[
+G(s)=
+\begin{bmatrix}
+G_{11}(s) & G_{12}(s)\\
+G_{21}(s) & G_{22}(s)
+\end{bmatrix}.
+\]
+
+I singoli elementi hanno il significato seguente:
+
+\begin{itemize}
+    \item \(G_{11}(s)\): funzione di trasferimento tra ingresso \(1\) e uscita \(1\),
+    \item \(G_{22}(s)\): funzione di trasferimento tra ingresso \(2\) e uscita \(2\),
+    \item \(G_{21}(s)\): funzione di trasferimento tra ingresso \(1\) e uscita \(2\),
+    \item \(G_{12}(s)\): funzione di trasferimento tra ingresso \(2\) e uscita \(1\).
+\end{itemize}
+
+I termini fuori diagonale \(G_{12}\) e \(G_{21}\) rappresentano le \textbf{interferenze tra canali}.
+
+\section{Controllo decentralizzato}
+
+Nel controllo decentralizzato si usano due regolatori separati, uno per ciascun canale, ignorando nella sintesi iniziale i termini di accoppiamento.
+
+\[
+R(s)=
+\begin{bmatrix}
+R_1(s) & 0\\
+0 & R_2(s)
+\end{bmatrix}.
+\]
+
+La struttura a blocchi è la seguente.
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[scale=0.95,>=Latex]
+    % r1 path
+    \node at (-0.2,2.8) {$r_1$};
+    \draw (-0.1,2.8) circle (0.08);
+    \draw[->] (0,2.8)--(0.8,2.8);
+    \node at (1.0,2.8) {$\sum$};
+    \draw[->] (1.2,2.8)--(2.1,2.8);
+    \draw (2.1,2.45) rectangle (3.2,3.15);
+    \node at (2.65,2.8) {$R_1$};
+
+    \draw[->] (3.2,2.8)--(4.2,2.8);
+    \node at (4.4,2.8) {$\sum$};
+    \draw[->] (4.6,2.8)--(5.5,2.8);
+    \node[above] at (4.95,2.9) {$u_1$};
+    \draw (5.5,2.45) rectangle (6.8,3.15);
+    \node at (6.15,2.8) {$G_{11}(s)$};
+    \draw[->] (6.8,2.8)--(8.0,2.8);
+    \node[right] at (8.0,2.8) {$y_1$};
+
+    % feedback y1
+    \draw (7.6,2.8)--(7.6,4.1)--(0.8,4.1)--(0.8,2.92);
+    \draw[->] (0.8,2.92)--(0.8,2.88);
+
+    % r2 path
+    \node at (-0.2,0.8) {$r_2$};
+    \draw (-0.1,0.8) circle (0.08);
+    \draw[->] (0,0.8)--(0.8,0.8);
+    \node at (1.0,0.8) {$\sum$};
+    \draw[->] (1.2,0.8)--(2.1,0.8);
+    \draw (2.1,0.45) rectangle (3.2,1.15);
+    \node at (2.65,0.8) {$R_2$};
+
+    \draw[->] (3.2,0.8)--(4.2,0.8);
+    \node at (4.4,0.8) {$\sum$};
+    \draw[->] (4.6,0.8)--(5.5,0.8);
+    \node[above] at (4.95,0.9) {$u_2$};
+    \draw (5.5,0.45) rectangle (6.8,1.15);
+    \node at (6.15,0.8) {$G_{22}(s)$};
+    \draw[->] (6.8,0.8)--(8.0,0.8);
+    \node[right] at (8.0,0.8) {$y_2$};
+
+    % feedback y2
+    \draw (7.6,0.8)--(7.6,-0.5)--(0.8,-0.5)--(0.8,0.68);
+    \draw[->] (0.8,0.68)--(0.8,0.72);
+
+    % interaction blocks
+    \draw (4.3,1.45) rectangle (5.2,2.05);
+    \node at (4.75,1.75) {$G_{12}$};
+    \draw[->] (4.75,1.15)--(4.75,1.45);
+    \draw[->] (4.75,2.05)--(4.75,2.6);
+
+    \draw (3.5,1.45) rectangle (4.4,2.05);
+    \node at (3.95,1.75) {$G_{21}$};
+    \draw[->] (3.95,2.45)--(3.95,2.05);
+    \draw[->] (3.95,1.45)--(3.95,1.0);
+
+    \node at (8.6,2.1) {\small controllo decentralizzato};
+\end{tikzpicture}
+\caption{Struttura di controllo decentralizzato per un sistema \(2\times 2\): i canali principali sono regolati separatamente, ma restano le interferenze incrociate \(G_{12}\) e \(G_{21}\).}
+\end{figure}
+
+Il controllo decentralizzato, da solo, \textbf{non elimina} le interferenze tra canali.
+
+\section{Inserimento del disaccoppiatore}
+
+Per ridurre o annullare le interazioni, si introduce un sistema dinamico detto \textbf{disaccoppiatore}
+\[
+D(s),
+\]
+posto tra il regolatore e l'impianto.
+
+Lo schema complessivo diventa
+
+\[
+R(s)\;\longrightarrow\; D(s)\;\longrightarrow\; G(s).
+\]
+
+Definiamo
+\[
+M(s)=G(s)D(s).
+\]
+
+L'obiettivo è scegliere \(D(s)\) in modo che \(M(s)\) risulti \textbf{diagonale}, o almeno quasi diagonale. Se questo accade, il sistema diventa disaccoppiato e il controllo decentralizzato diventa naturale.
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[scale=1,>=Latex]
+    \draw (0,0) circle (0.08);
+    \draw[->] (0.08,0)--(1.0,0);
+    \node at (0.5,0.25) {$e$};
+    \draw (1.0,-0.35) rectangle (2.0,0.35);
+    \node at (1.5,0) {$R(s)$};
+    \draw[->] (2.0,0)--(3.0,0);
+    \draw (3.0,-0.35) rectangle (4.0,0.35);
+    \node at (3.5,0) {$D(s)$};
+    \draw[->] (4.0,0)--(5.0,0);
+    \draw (5.0,-0.35) rectangle (6.0,0.35);
+    \node at (5.5,0) {$G(s)$};
+    \draw[->] (6.0,0)--(7.0,0);
+    \node[right] at (7.0,0) {$y$};
+
+    \draw (6.6,0)--(6.6,-1.0)--(0.5,-1.0)--(0.5,-0.08);
+    \draw[->] (0.5,-0.08)--(0.5,-0.02);
+    \node at (6.9,0.25) {};
+\end{tikzpicture}
+\caption{Struttura di controllo con disaccoppiatore dinamico \(D(s)\).}
+\end{figure}
+
+\section{Richiamo sul controllo classico}
+
+Nel caso SISO classico, con
+\[
+e=y^\star-y,\qquad u=Re,\qquad y=Gu,
+\]
+si ha
+\[
+y=GR(y^\star-y)=GRy^\star-GRy.
+\]
+Da cui
+\[
+(I+GR)y=GR\,y^\star
+\]
+e quindi
+\[
+y=(I+GR)^{-1}GR\,y^\star.
+\]
+
+La matrice/funzione
+\[
+H=(I+GR)^{-1}GR
+\]
+è la funzione di trasferimento in ciclo chiuso.
+
+Nel caso MIMO con disaccoppiatore, si desidera che il blocco equivalente
+\[
+M(s)=G(s)D(s)
+\]
+sia diagonale.
+
+\section{Disaccoppiamento ideale nel caso \(2\times 2\)}
+
+Supponiamo di volere
+\[
+M(s)=
+\begin{bmatrix}
+M_{11}(s) & 0\\
+0 & M_{22}(s)
+\end{bmatrix}.
+\]
+Se \(G(s)\) è invertibile, allora
+\[
+D(s)=G^{-1}(s)M(s).
+\]
+
+Per una matrice \(2\times 2\),
+\[
+G^{-1}(s)=\frac{1}{\Delta(s)}
+\begin{bmatrix}
+G_{22}(s) & -G_{12}(s)\\
+-G_{21}(s) & G_{11}(s)
+\end{bmatrix},
+\]
+dove
+\[
+\Delta(s)=G_{11}(s)G_{22}(s)-G_{12}(s)G_{21}(s).
+\]
+
+Quindi
+\[
+G^{-1}(s)M(s)
+=\frac{1}{\Delta(s)}
+\begin{bmatrix}
+G_{22}M_{11} & -G_{12}M_{22}\\
+-G_{21}M_{11} & G_{11}M_{22}
+\end{bmatrix}.
+\]
+
+Una scelta naturale è mantenere sulle diagonali le dinamiche principali originarie:
+\[
+M_{11}(s)=G_{11}(s),\qquad M_{22}(s)=G_{22}(s).
+\]
+Con questa scelta si ottiene il \textbf{disaccoppiatore ideale}
+\[
+\boxed{
+D(s)=
+\begin{bmatrix}
+\dfrac{G_{22}G_{11}}{G_{11}G_{22}-G_{12}G_{21}}
+&
+-\dfrac{G_{12}G_{22}}{G_{11}G_{22}-G_{12}G_{21}}
+\\[1.2em]
+-\dfrac{G_{21}G_{11}}{G_{11}G_{22}-G_{12}G_{21}}
+&
+\dfrac{G_{11}G_{22}}{G_{11}G_{22}-G_{12}G_{21}}
+\end{bmatrix}.
+}
+\]
+
+Ed effettivamente
+\[
+G(s)D(s)=
+\begin{bmatrix}
+G_{11}(s) & 0\\
+0 & G_{22}(s)
+\end{bmatrix}.
+\]
+
+\section{Interpretazione del disaccoppiamento ideale}
+
+Formalmente il risultato sembra perfetto: il sistema risultante è diagonale. Tuttavia questo disaccoppiamento avviene tramite \textbf{cancellazioni dinamiche}.
+
+Infatti
+\[
+M(s)=G(s)D(s)=G(s)G^{-1}(s)\,\operatorname{diag}(G(s))
+=\operatorname{diag}(G(s)).
+\]
+
+Quindi stiamo cancellando, attraverso \(D(s)\), le parti non diagonali e parte delle dinamiche del sistema.
+
+Dal punto di vista fisico questo è delicato, perché le cancellazioni possono eliminare modi interni che risultano poi non raggiungibili o non osservabili nello schema equivalente.
+
+\section{Quando si possono cancellare poli e zeri?}
+
+Nel progetto del regolatore si possono cancellare soltanto poli e zeri \textbf{a parte reale strettamente negativa}, cioè associati a \textbf{fase minima}.
+
+Quindi, poiché il disaccoppiamento ideale lavora proprio per cancellazioni, è necessario richiedere che:
+
+\begin{itemize}
+    \item le dinamiche coinvolte siano a fase minima;
+    \item non ci siano ritardi di tempo significativi;
+    \item le cancellazioni siano fisicamente robuste.
+\end{itemize}
+
+In sintesi:
+
+\[
+\boxed{\text{il disaccoppiatore ideale richiede condizioni di fase minima}}
+\]
+
+ed è inoltre molto sensibile a:
+
+\begin{itemize}
+    \item incertezze parametriche,
+    \item errori di modello,
+    \item ritardi di tempo.
+\end{itemize}
+
+\section{Caso quasi diagonale}
+
+Se i termini fuori diagonale sono piccoli, non è necessario disaccoppiare in modo esatto.
+
+In particolare, se
+\[
+G_{11}(s)G_{22}(s)\gg G_{12}(s)G_{21}(s),
+\]
+allora nel determinante
+\[
+\Delta(s)=G_{11}(s)G_{22}(s)-G_{12}(s)G_{21}(s)
+\]
+il termine dominante è \(G_{11}G_{22}\), mentre il prodotto \(G_{12}G_{21}\) può essere trascurato.
+
+In questo caso il sistema è \textbf{quasi diagonale}.
+
+\section{Disaccoppiatore semplificato}
+
+Trascurando il prodotto \(G_{12}G_{21}\) nel denominatore, dal disaccoppiatore ideale si ottiene il \textbf{disaccoppiatore semplificato}
+\[
+\boxed{
+D(s)\approx
+\begin{bmatrix}
+1 & -\dfrac{G_{12}(s)}{G_{11}(s)}\\[0.8em]
+-\dfrac{G_{21}(s)}{G_{22}(s)} & 1
+\end{bmatrix}.
+}
+\]
+
+Questo non disaccoppia perfettamente il sistema, ma riduce sensibilmente l'interazione cross-channel.
+
+\subsection{Caso triangolare}
+
+Se il sistema è triangolare, ad esempio
+\[
+G(s)=
+\begin{bmatrix}
+G_{11}(s) & 0\\
+G_{21}(s) & G_{22}(s)
+\end{bmatrix},
+\]
+si può scegliere
+\[
+D(s)=
+\begin{bmatrix}
+1 & 0\\[0.4em]
+-\dfrac{G_{21}(s)}{G_{22}(s)} & 1
+\end{bmatrix}.
+\]
+
+In questo caso la cancellazione coinvolge solo il termine \(G_{21}\) rispetto a \(G_{22}\), e la struttura è più favorevole del caso generale.
+
+\section{Schema a blocchi con disaccoppiatore semplificato}
+
+Il disaccoppiatore semplificato introduce due rami di compensazione incrociati che cercano di annullare, almeno in prima approssimazione, le interferenze.
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[scale=0.9,>=Latex]
+    % upper channel
+    \node at (-0.3,3.2) {$r_1$};
+    \draw (-0.15,3.2) circle (0.08);
+    \draw[->] (-0.07,3.2)--(0.7,3.2);
+    \node at (0.9,3.2) {$\sum$};
+    \draw[->] (1.1,3.2)--(2.0,3.2);
+    \draw (2.0,2.85) rectangle (3.1,3.55);
+    \node at (2.55,3.2) {$R_1(s)$};
+    \draw[->] (3.1,3.2)--(4.2,3.2);
+
+    \node at (4.4,3.2) {$\sum$};
+    \draw[->] (4.6,3.2)--(5.5,3.2);
+    \draw (5.5,2.85) rectangle (6.8,3.55);
+    \node at (6.15,3.2) {$G_{11}(s)$};
+    \draw[->] (6.8,3.2)--(8.0,3.2);
+    \node[right] at (8.0,3.2) {$y_1$};
+
+    % lower channel
+    \node at (-0.3,0.8) {$r_2$};
+    \draw (-0.15,0.8) circle (0.08);
+    \draw[->] (-0.07,0.8)--(0.7,0.8);
+    \node at (0.9,0.8) {$\sum$};
+    \draw[->] (1.1,0.8)--(2.0,0.8);
+    \draw (2.0,0.45) rectangle (3.1,1.15);
+    \node at (2.55,0.8) {$R_2(s)$};
+    \draw[->] (3.1,0.8)--(4.2,0.8);
+
+    \node at (4.4,0.8) {$\sum$};
+    \draw[->] (4.6,0.8)--(5.5,0.8);
+    \draw (5.5,0.45) rectangle (6.8,1.15);
+    \node at (6.15,0.8) {$G_{22}(s)$};
+    \draw[->] (6.8,0.8)--(8.0,0.8);
+    \node[right] at (8.0,0.8) {$y_2$};
+
+    % feedbacks
+    \draw (7.6,3.2)--(7.6,4.3)--(0.7,4.3)--(0.7,3.28);
+    \draw[->] (0.7,3.28)--(0.7,3.24);
+
+    \draw (7.6,0.8)--(7.6,-0.3)--(0.7,-0.3)--(0.7,0.72);
+    \draw[->] (0.7,0.72)--(0.7,0.76);
+
+    % decoupler blocks
+    \draw (3.55,1.75) rectangle (4.8,2.35);
+    \node at (4.175,2.05) {$-\dfrac{G_{12}}{G_{11}}$};
+    \draw[->] (4.175,1.15)--(4.175,1.75);
+    \draw[->] (4.175,2.35)--(4.175,3.0);
+
+    \draw (3.0,1.75) rectangle (4.2,2.35);
+    \node at (3.6,2.05) {$-\dfrac{G_{21}}{G_{22}}$};
+    \draw[->] (3.6,2.85)--(3.6,2.35);
+    \draw[->] (3.6,1.75)--(3.6,1.0);
+
+    % cross couplings remaining
+    \draw (5.0,1.75) rectangle (5.8,2.35);
+    \node at (5.4,2.05) {$G_{21}$};
+    \draw[->] (5.4,2.85)--(5.4,2.35);
+    \draw[->] (5.4,1.75)--(5.4,1.0);
+
+    \draw (5.9,1.75) rectangle (6.7,2.35);
+    \node at (6.3,2.05) {$G_{12}$};
+    \draw[->] (6.3,1.15)--(6.3,1.75);
+    \draw[->] (6.3,2.35)--(6.3,3.0);
+
+    % ellipse around decoupler
+    \draw[green!60!black,thick] (3.95,2.0) ellipse (1.35 and 1.5);
+    \node[green!60!black] at (2.9,2.95) {$D(s)$};
+\end{tikzpicture}
+\caption{Schema qualitativo con disaccoppiatore semplificato: l'interazione non viene eliminata del tutto, ma viene ridotta.}
+\end{figure}
+
+\section{Generalizzazione qualitativa al caso \(n\times n\)}
+
+Nel caso \(n\times n\), l'idea del disaccoppiatore semplificato è costruire una matrice del tipo
+\[
+D(s)\approx
+\begin{bmatrix}
+1 & -\dfrac{G_{12}}{G_{11}} & \cdots & -\dfrac{G_{1n}}{G_{11}}\\[0.8em]
+-\dfrac{G_{21}}{G_{22}} & 1 & \cdots & -\dfrac{G_{2n}}{G_{22}}\\
+\vdots & \vdots & \ddots & \vdots\\
+-\dfrac{G_{n1}}{G_{nn}} & -\dfrac{G_{n2}}{G_{nn}} & \cdots & 1
+\end{bmatrix}.
+\]
+
+Questa espressione è utile come linea guida, ma non sempre può essere realizzata in pratica: bisogna verificare che non compaiano cancellazioni non ammissibili, ritardi, o termini instabili.
+
+\section{Osservazioni finali}
+
+\begin{itemize}
+    \item Il \textbf{controllo decentralizzato} usa un regolatore per ciascun canale, ma lascia le interazioni.
+    \item Il \textbf{disaccoppiatore} viene inserito per trasformare l'impianto in uno quasi diagonale o diagonale.
+    \item Il \textbf{disaccoppiatore ideale} si ottiene imponendo
+    \[
+    M(s)=G(s)D(s)
+    \]
+    diagonale e usando
+    \[
+    D(s)=G^{-1}(s)M(s).
+    \]
+    \item Questa soluzione è però basata su \textbf{cancellazioni dinamiche}, quindi richiede condizioni di fase minima ed è molto sensibile a ritardi e incertezze.
+    \item Se i canali sono già debolmente accoppiati, cioè se
+    \[
+    G_{11}G_{22}\gg G_{12}G_{21},
+    \]
+    conviene usare il \textbf{disaccoppiatore semplificato}, più robusto e più facile da realizzare.
+\end{itemize}

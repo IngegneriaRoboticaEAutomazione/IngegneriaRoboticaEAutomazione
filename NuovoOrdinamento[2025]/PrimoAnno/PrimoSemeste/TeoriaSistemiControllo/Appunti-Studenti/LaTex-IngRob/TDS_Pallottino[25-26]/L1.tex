@@ -1,0 +1,402 @@
+\chapter{L1 -- Sistemi dinamici: ingredienti, funzioni di ingresso, stato, uscite e classificazione}
+
+\section{Ingredienti di un sistema dinamico}
+
+Per descrivere un sistema dinamico servono alcuni insiemi fondamentali.
+
+\subsection{Insieme dei tempi}
+
+Si indica con
+\[
+T
+\]
+l'insieme dei tempi. Nei casi più comuni:
+\[
+T=\mathbb{R} \qquad \text{(tempo continuo)},
+\]
+oppure
+\[
+T=\mathbb{Z} \qquad \text{(tempo discreto)}.
+\]
+
+L'ipotesi essenziale è che $T$ sia un insieme \emph{ordinato}: deve avere senso stabilire quale istante venga prima e quale dopo.
+
+\subsection{Valori istantanei di ingresso, uscita e stato}
+
+Si introducono poi tre insiemi:
+\[
+U, \qquad Y, \qquad X,
+\]
+dove:
+\begin{itemize}
+    \item $U$ è l'insieme dei possibili valori istantanei dell'ingresso;
+    \item $Y$ è l'insieme dei possibili valori istantanei dell'uscita;
+    \item $X$ è l'insieme dei possibili stati del sistema.
+\end{itemize}
+
+\paragraph{Osservazione.}
+Qui stiamo parlando dei \emph{valori istantanei}.  
+Per esempio, dire che
+\[
+u(t)\in U
+\]
+significa che, fissato un certo istante $t$, il valore assunto dall'ingresso appartiene all'insieme $U$.
+
+\subsection{Funzioni di ingresso e di uscita}
+
+Oltre agli insiemi dei valori istantanei, servono gli insiemi delle \emph{funzioni nel tempo}:
+
+\[
+\mathcal{U} \qquad \text{insieme delle funzioni di ingresso},
+\]
+\[
+\mathcal{Y} \qquad \text{insieme delle funzioni di uscita}.
+\]
+
+Quindi:
+\[
+u(\cdot)\in \mathcal{U}, \qquad y(\cdot)\in \mathcal{Y},
+\]
+mentre per ogni istante $t$ vale:
+\[
+u(t)\in U, \qquad y(t)\in Y.
+\]
+
+La distinzione è molto importante:
+\begin{itemize}
+    \item $U$ e $Y$ raccolgono i valori istantanei;
+    \item $\mathcal{U}$ e $\mathcal{Y}$ raccolgono le storie temporali complete.
+\end{itemize}
+
+\section{Funzioni di ingresso ammissibili}
+
+Nello studio dei sistemi non si considera un insieme arbitrario di segnali, ma una classe di ingressi \emph{ammissibili}, cioè fisicamente o matematicamente utilizzabili.  
+Gli appunti della lezione evidenziano tre proprietà naturali di $\mathcal{U}$.
+
+\subsection{Esistenza di un istante iniziale}
+
+Per ogni ingresso ammissibile $u(\cdot)\in \mathcal{U}$ si assume che esista un istante iniziale $t_0\in T$ a partire dal quale il segnale sia effettivamente definito.
+
+In modo informale: il segnale \emph{inizia} a un certo istante; non è necessario assegnarlo per tempi arbitrariamente precedenti.
+
+Una formulazione pratica consiste nel pensare che ogni ingresso abbia dominio del tipo
+\[
+[t_0,+\infty)\cap T.
+\]
+
+\paragraph{Interpretazione.}
+Questa ipotesi è coerente con l'idea fisica di esperimento: scelgo un istante iniziale e da lì in poi applico l'ingresso al sistema.
+
+\subsection{Chiusura per troncamento}
+
+Se un ingresso $u(\cdot)$ è ammissibile, allora deve essere ammissibile anche il suo \emph{troncamento} in un istante successivo $t_1$.
+
+Definiamo il segnale troncato:
+\[
+u^{[t_1]}(t)=u(t), \qquad t\ge t_1.
+\]
+
+L'ipotesi di chiusura per troncamento richiede che:
+\[
+u(\cdot)\in\mathcal{U}
+\quad \Longrightarrow \quad
+u^{[t_1]}(\cdot)\in\mathcal{U}.
+\]
+
+\paragraph{Significato.}
+Se un ingresso è ammissibile, allora posso sempre decidere di ``cominciare a guardarlo'' da un certo istante in poi, senza uscire dalla classe degli ingressi ammissibili.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=0.95]
+    \draw[->] (0,0) -- (9,0) node[right] {$t$};
+    \draw[->] (0,0) -- (0,3.2) node[above] {$u(t)$};
+
+    \draw[dashed] (2,0) -- (2,2.6) node[above] {$t_0$};
+    \draw[dashed] (5.2,0) -- (5.2,2.6) node[above] {$t_1$};
+
+    \draw[thick,blue]
+        plot[smooth] coordinates {(2,0.6) (2.6,1.8) (3.1,1.5) (3.8,2.0) (4.5,1.7) (5.2,1.9) (6.1,1.6) (7.0,1.9) (8.1,2.5)};
+
+    \draw[very thick,red]
+        plot[smooth] coordinates {(5.2,1.9) (6.1,1.6) (7.0,1.9) (8.1,2.5)};
+
+    \node[blue] at (7.7,2.8) {$u(t)$};
+    \node[red] at (7.6,1.1) {$u^{[t_1]}(t)$};
+\end{tikzpicture}
+\caption{Troncamento di un ingresso ammissibile. La parte successiva a $t_1$ deve restare un ingresso ammissibile.}
+\end{figure}
+
+\subsection{Chiusura per concatenazione}
+
+Dati due ingressi ammissibili $u(\cdot),v(\cdot)\in\mathcal{U}$ e fissato un istante $\tau\in T$, si può costruire il segnale concatenato
+\[
+w(t)=
+\begin{cases}
+u(t), & t<\tau,\\[4pt]
+v(t), & t\ge \tau.
+\end{cases}
+\]
+
+La chiusura per concatenazione richiede che anche $w(\cdot)$ appartenga a $\mathcal{U}$.
+
+\[
+u(\cdot),v(\cdot)\in\mathcal{U}
+\quad \Longrightarrow \quad
+w(\cdot)\in\mathcal{U}.
+\]
+
+\paragraph{Significato.}
+Posso prendere un tratto di un ingresso e, a partire da un certo istante, sostituirlo con un altro ingresso, ottenendo ancora un segnale ammissibile.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=0.95]
+    \draw[->] (0,0) -- (9,0) node[right] {$t$};
+    \draw[->] (0,0) -- (0,3.2) node[above] {$w(t)$};
+
+    \draw[dashed] (4.8,0) -- (4.8,2.8) node[above] {$\tau$};
+
+    \draw[thick,blue]
+        plot[smooth] coordinates {(0.8,0.8) (1.6,1.9) (2.3,1.4) (3.1,2.1) (4.0,1.6) (4.8,1.8)};
+
+    \draw[thick,orange!90!black]
+        plot[smooth] coordinates {(4.8,1.8) (5.4,1.4) (6.2,1.5) (7.0,2.0) (8.2,2.4)};
+
+    \node[blue] at (2.1,2.5) {$u(t)$};
+    \node[orange!90!black] at (7.1,2.8) {$v(t)$};
+\end{tikzpicture}
+\caption{Concatenazione di due ingressi ammissibili. Il segnale risultante deve appartenere ancora a $\mathcal{U}$.}
+\end{figure}
+
+\section{Funzione di transizione di stato}
+
+Il cuore della descrizione dinamica è la \emph{funzione di transizione di stato}:
+\[
+\phi:\{(t,t_0)\in T^2:\, t\ge t_0\}\times X\times \mathcal{U}\to X.
+\]
+
+Essa permette di scrivere lo stato al tempo $t$ nella forma
+\[
+x(t)=\phi\bigl(t,t_0,x(t_0),u(\cdot)\bigr).
+\]
+
+Questa formula dice che lo stato al tempo corrente dipende da:
+\begin{itemize}
+    \item istante corrente $t$;
+    \item istante iniziale $t_0$;
+    \item stato iniziale $x(t_0)$;
+    \item ingresso applicato.
+\end{itemize}
+
+\paragraph{Nota.}
+Quando si scrive $\phi(t,t_0,x(t_0),u(\cdot))$, la notazione $u(\cdot)$ indica l'intera funzione di ingresso, non soltanto il suo valore istantaneo.
+
+\subsection{Proprietà fondamentali di \texorpdfstring{$\phi$}{phi}}
+
+\subsubsection{Consistenza}
+
+All'istante iniziale il sistema deve restituire esattamente lo stato iniziale:
+\[
+\phi\bigl(t_0,t_0,x(t_0),u(\cdot)\bigr)=x(t_0).
+\]
+
+Questa proprietà è naturale: se non è ancora trascorso tempo, lo stato non può essere cambiato.
+
+\subsubsection{Causalità}
+
+La funzione di transizione non può dipendere dal futuro dell'ingresso.
+
+Se due ingressi $u_1(\cdot)$ e $u_2(\cdot)$ coincidono fino all'istante $t_1$, allora devono produrre lo stesso stato a $t_1$:
+\[
+u_1(\tau)=u_2(\tau)\quad \forall \tau\in [t_0,t_1]
+\quad \Longrightarrow \quad
+\phi(t_1,t_0,\bar x,u_1)=\phi(t_1,t_0,\bar x,u_2).
+\]
+
+\paragraph{Interpretazione.}
+Per sapere in quale stato si trovi il sistema all'istante $t_1$, basta conoscere l'ingresso fino a $t_1$; ciò che accadrà dopo non può influenzare il presente.
+
+\subsubsection{Separazione rispetto al futuro}
+
+Una formulazione equivalente e molto utile consiste nel dire che, per calcolare $x(t)$, è sufficiente il tratto di ingresso compreso tra $t_0$ e $t$:
+\[
+x(t)=\phi\bigl(t,t_0,x(t_0),u|_{[t_0,t]}\bigr).
+\]
+
+In altre parole, tutta la parte futura di $u(\cdot)$ è irrilevante per determinare lo stato attuale.
+
+\subsubsection{Composizione}
+
+L'evoluzione da $t_0$ a $t_2$ può essere spezzata in due evoluzioni successive:
+\[
+\phi(t_2,t_0,\bar x,u)
+=
+\phi\Bigl(t_2,t_1,\phi(t_1,t_0,\bar x,u),u\Bigr),
+\qquad t_0\le t_1\le t_2.
+\]
+
+\paragraph{Significato.}
+Prima porto il sistema da $t_0$ a $t_1$, ottenendo lo stato intermedio; poi uso quello stato come nuova condizione iniziale per evolvere da $t_1$ a $t_2$.
+
+\section{Il significato dello stato}
+
+Dalle proprietà precedenti emerge una delle idee centrali del corso:
+
+\begin{quote}
+Lo stato corrente contiene tutta l'informazione necessaria, insieme all'ingresso futuro, per determinare l'evoluzione futura del sistema.
+\end{quote}
+
+Per questo si dice che lo stato è una \emph{memoria compressa del passato}: non è necessario conservare tutta la storia passata, ma solo la parte essenziale riassunta in $x(t)$.
+
+\section{Trasformazione d'uscita}
+
+Per descrivere l'uscita si può introdurre una trasformazione globale
+\[
+G:\mathcal{U}\times X\to \mathcal{Y},
+\]
+che associa alla coppia ``ingresso + stato iniziale'' la funzione di uscita completa:
+\[
+(u(\cdot),x(t_0)) \mapsto y(\cdot).
+\]
+
+A livello istantaneo, in una rappresentazione locale, si scrive spesso
+\[
+y(t)=g(x(t),u(t),t),
+\]
+dove
+\[
+g:X\times U\times T \to Y.
+\]
+
+\paragraph{Osservazione.}
+La scrittura con $G$ è una descrizione ``globale'' della relazione ingresso--uscita, mentre la scrittura con $g$ è una descrizione ``istantanea''.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[>=Latex]
+    \node[draw, rounded corners, minimum width=3.3cm, minimum height=1.4cm] (sys) at (0,0) {Sistema dinamico};
+    \draw[->, thick] (-4,0) -- (sys.west) node[midway, above] {$u(\cdot)$};
+    \draw[->, thick] (sys.east) -- (4,0) node[midway, above] {$y(\cdot)$};
+    \draw[->, thick] (0,-2) -- (sys.south) node[midway, right] {$x(t_0)$};
+\end{tikzpicture}
+\caption{Visione globale della trasformazione d'uscita: ingresso e stato iniziale determinano l'uscita.}
+\end{figure}
+
+\section{Classificazione dei sistemi dinamici}
+
+\subsection{Sistemi propri e strettamente propri}
+
+Nella forma locale
+\[
+y(t)=g(x(t),u(t),t),
+\]
+si distinguono due casi.
+
+\paragraph{Sistema proprio.}
+L'uscita può dipendere direttamente anche dall'ingresso corrente $u(t)$.
+
+\paragraph{Sistema strettamente proprio.}
+L'uscita non dipende istantaneamente da $u(t)$, ma solo dallo stato:
+\[
+y(t)=g(x(t),t).
+\]
+
+\paragraph{Interpretazione fisica.}
+In un sistema strettamente proprio non esiste un passaggio istantaneo ingresso--uscita: l'ingresso deve prima modificare lo stato, e solo attraverso lo stato si riflette sull'uscita.
+
+\paragraph{Caso lineare.}
+Per un sistema lineare continuo o discreto:
+\[
+\begin{cases}
+\dot x = Ax + Bu,\\
+y = Cx + Du,
+\end{cases}
+\qquad \text{oppure} \qquad
+\begin{cases}
+x(k+1)=Ax(k)+Bu(k),\\
+y(k)=Cx(k)+Du(k),
+\end{cases}
+\]
+il sistema è strettamente proprio se e solo se
+\[
+D=0.
+\]
+
+Nel dominio della trasformata, una funzione di trasferimento strettamente propria ha denominatore di grado \emph{maggiore} del numeratore.
+
+\subsection{Sistemi tempo-varianti e tempo-invarianti}
+
+Un sistema è \emph{tempo-invariante} se il suo comportamento non cambia semplicemente traslando il riferimento temporale.
+
+Definiamo, per un qualunque shift temporale $\tau$, il segnale traslato:
+\[
+u_\tau(t)=u(t-\tau).
+\]
+
+L'idea di tempo-invarianza è: se applico oggi un certo ingresso oppure applico domani lo stesso profilo, semplicemente traslato nel tempo, il sistema deve reagire nello stesso modo, a meno della stessa traslazione temporale.
+
+Formalmente, per la dinamica, si richiede che
+\[
+\phi(t,t_0,\bar x,u)=\phi(t+\tau,t_0+\tau,\bar x,u_\tau).
+\]
+
+Per l'uscita, in forma locale, la tempo-invarianza si manifesta come assenza di dipendenza esplicita dal tempo:
+\[
+y(t)=g(x(t),u(t))
+\]
+invece di
+\[
+y(t)=g(x(t),u(t),t).
+\]
+
+\paragraph{Caso lineare.}
+Un sistema lineare è tempo-invariante quando le matrici non dipendono dal tempo:
+\[
+A,B,C,D \quad \text{costanti}.
+\]
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=0.95]
+    \draw[->] (0,0) -- (10,0) node[right] {$t$};
+    \draw[->] (0,0) -- (0,3.6) node[above] {$u(t)$};
+
+    \draw[thick,blue]
+        plot[smooth] coordinates {(0.8,0.7) (1.5,1.9) (2.3,1.2) (3.1,2.0) (4.0,1.3) (4.8,2.4)};
+
+    \draw[thick,red]
+        plot[smooth] coordinates {(3.0,0.7) (3.7,1.9) (4.5,1.2) (5.3,2.0) (6.2,1.3) (7.0,2.4)};
+
+    \draw[dashed] (0.8,-0.15) -- (0.8,0.15);
+    \draw[dashed] (3.0,-0.15) -- (3.0,0.15);
+
+    \node[blue] at (4.7,3.0) {$u(t)$};
+    \node[red] at (7.5,3.0) {$u_\tau(t)$};
+    \node at (1.0,-0.45) {$t_0-\tau$};
+    \node at (3.0,-0.45) {$t_0$};
+\end{tikzpicture}
+\caption{Tempo-invarianza: lo stesso profilo di ingresso, traslato nel tempo, produce una risposta semplicemente traslata.}
+\end{figure}
+
+\subsection{Scelta dell'istante iniziale}
+
+Nei sistemi tempo-invarianti si può spesso scegliere senza perdita di generalità
+\[
+t_0=0.
+\]
+
+Questo non significa che il sistema ``nasca'' in $0$, ma che l'origine dei tempi è arbitraria: conta il tempo trascorso dall'inizio dell'osservazione, non il calendario assoluto.
+
+\section{Sintesi della lezione}
+
+Gli elementi fondamentali emersi in questa prima lezione sono:
+\begin{enumerate}
+    \item un sistema dinamico richiede insiemi di tempi, ingressi, uscite e stati;
+    \item la dinamica si descrive tramite una funzione di transizione di stato $\phi$;
+    \item l'uscita si descrive tramite una trasformazione globale $G$ oppure una legge locale $g$;
+    \item le proprietà cruciali sono consistenza, causalità e composizione;
+    \item una prima classificazione distingue sistemi propri, strettamente propri, tempo-varianti e tempo-invarianti.
+\end{enumerate}
+
+Questi concetti costituiranno la base per la rappresentazione a stato e, più avanti, per lo studio di linearità, raggiungibilità, osservabilità e stabilità.

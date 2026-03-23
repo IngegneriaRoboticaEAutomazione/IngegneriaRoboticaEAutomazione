@@ -1,0 +1,752 @@
+% =========================
+% L24.tex
+% =========================
+
+\chapter{L24 -- Sintesi via Lyapunov, cicli limite, teoremi di instabilit\`a e metodo indiretto}
+\label{chap:L24}
+
+\section{Richiamo: progetto di un controllo tramite Lyapunov}
+
+Riprendiamo l'idea vista nella parte finale della lezione precedente: la teoria di Lyapunov non serve solo per \emph{analizzare} la stabilit\`a di un sistema, ma pu\`o essere usata anche per \emph{progettare} un controllo stabilizzante.
+
+Consideriamo il sistema non lineare controllato
+\begin{equation}
+\label{eq:L24-sistema-controllato}
+\begin{cases}
+\dot x_1 = (x_2+1)^3,\\[4pt]
+\dot x_2 = (x_1-1)^3 + u + 2.
+\end{cases}
+\end{equation}
+
+Vogliamo costruire un controllo \(u(t)\) tale che il punto
+\[
+(\bar x_1,\bar x_2)=(1,-1)
+\]
+sia un equilibrio stabile.
+
+\subsection{Scelta dell'equilibrio e traslazione}
+
+Per prima cosa osserviamo che, se fissiamo
+\[
+\bar u=-2,
+\]
+allora il punto \((1,-1)\) \`e effettivamente un equilibrio del sistema, perch\'e
+\[
+(x_2+1)^3 = (-1+1)^3 = 0,
+\]
+e inoltre
+\[
+(x_1-1)^3 + \bar u + 2 = (1-1)^3 -2 + 2 = 0.
+\]
+
+Per lavorare pi\`u comodamente trasliamo il sistema nell'origine:
+\[
+z_1 = x_1-1,
+\qquad
+z_2 = x_2+1,
+\qquad
+v = u-\bar u = u+2.
+\]
+Equivalentemente,
+\[
+u = v-2.
+\]
+
+In queste nuove coordinate il sistema diventa
+\begin{equation}
+\label{eq:L24-sistema-traslato}
+\begin{cases}
+\dot z_1 = z_2^3,\\[4pt]
+\dot z_2 = z_1^3 + v.
+\end{cases}
+\end{equation}
+Ora l'equilibrio desiderato coincide con l'origine \(z=0\).
+
+\subsection{Scelta della funzione di Lyapunov}
+
+Proviamo con la candidata naturale
+\[
+V(z)=\frac{1}{2}(z_1^2+z_2^2),
+\]
+che \`e positiva definita.
+
+La derivata lungo le traiettorie di \eqref{eq:L24-sistema-traslato} \`e
+\[
+L_fV(z)=\frac{\partial V}{\partial z}\dot z
+= z_1\dot z_1 + z_2\dot z_2.
+\]
+Sostituendo:
+\begin{align*}
+L_fV(z)
+&= z_1 z_2^3 + z_2(z_1^3+v)\\
+&= z_1 z_2^3 + z_1^3 z_2 + z_2 v.
+\end{align*}
+
+I primi due termini hanno segno indefinito. L'idea allora \`e usare il controllo per cancellarli e aggiungere un termine dissipativo.
+
+Scegliamo
+\[
+v = - z_1 z_2^2 - z_1^3 - z_2.
+\]
+Allora
+\begin{align*}
+L_fV(z)
+&= z_1 z_2^3 + z_1^3 z_2 + z_2\bigl(- z_1 z_2^2 - z_1^3 - z_2\bigr)\\
+&= z_1 z_2^3 + z_1^3 z_2 - z_1 z_2^3 - z_1^3 z_2 - z_2^2\\
+&= -z_2^2 \le 0.
+\end{align*}
+Quindi il sistema in anello chiuso \`e stabile.
+
+\subsection{Legge di controllo in coordinate originali}
+
+Ricordando che \(u=v-2\), otteniamo la legge di controllo
+\[
+\boxed{
+u(x)=-(x_1-1)(x_2+1)^2-(x_1-1)^3-(x_2+1)-2.
+}
+\]
+
+\medskip
+
+\noindent
+\textbf{Osservazione importante.}
+Questo esempio mostra bene l'idea fondamentale:
+\begin{center}
+\emph{si pu\`o progettare il controllo imponendo direttamente il segno della derivata di una funzione di Lyapunov.}
+\end{center}
+
+\section{Controllo affine in \(x\)}
+
+Una legge di controllo si dice \textbf{affine in \(x\)} se ha la forma
+\[
+u = Kx + h,
+\]
+oppure, in componenti,
+\[
+u = k_1 x_1 + k_2 x_2 + \cdots + k_n x_n + h.
+\]
+
+Si tratta quindi di un controllo lineare nelle variabili di stato, pi\`u una costante.
+
+\medskip
+
+\noindent
+\textbf{Perch\'e compare la costante?}  
+Perch\'e in generale l'equilibrio da stabilizzare non coincide con l'origine. Se vogliamo stabilizzare un punto \(\bar x\), allora il controllo deve soddisfare
+\[
+u(\bar x)=\bar u,
+\]
+cio\`e deve assumere il valore corretto nel punto di equilibrio. In coordinate traslate, questo equivale a chiedere che il controllo si annulli nell'origine:
+\[
+v(0)=0.
+\]
+
+\medskip
+
+\noindent
+In altre parole:
+\begin{center}
+\emph{un controllo stabilizzante non deve spostare il punto di equilibrio che vogliamo mantenere.}
+\end{center}
+
+\section{Sistema non lineare controllato vs linearizzato controllato}
+
+Questa parte \`e concettualmente molto importante.
+
+Sia dato il sistema non lineare controllato
+\[
+\dot x = f(x,u),
+\]
+e sia \((\bar x,\bar u)\) una coppia di equilibrio, cio\`e
+\[
+f(\bar x,\bar u)=0.
+\]
+
+Trasliamo le variabili:
+\[
+z = x-\bar x,
+\qquad
+v = u-\bar u.
+\]
+
+Sviluppando \(f(x,u)\) al primo ordine attorno a \((\bar x,\bar u)\), otteniamo
+\[
+f(x,u)\approx f(\bar x,\bar u)
++ \left.\frac{\partial f}{\partial x}\right|_{(\bar x,\bar u)} (x-\bar x)
++ \left.\frac{\partial f}{\partial u}\right|_{(\bar x,\bar u)} (u-\bar u).
+\]
+Poich\'e \(f(\bar x,\bar u)=0\), segue
+\[
+\dot z \approx Az + Bv,
+\]
+dove
+\[
+A=\left.\frac{\partial f}{\partial x}\right|_{(\bar x,\bar u)},
+\qquad
+B=\left.\frac{\partial f}{\partial u}\right|_{(\bar x,\bar u)}.
+\]
+
+Supponiamo ora di applicare una retroazione statica affine
+\[
+u = Kx + h.
+\]
+Affinch\'e \((\bar x,\bar u)\) resti equilibrio deve valere
+\[
+\bar u = K\bar x + h.
+\]
+Dunque, nelle variabili traslate,
+\[
+v = u-\bar u = K(x-\bar x)=Kz.
+\]
+Sostituendo nel linearizzato:
+\[
+\dot z \approx Az + BKz = (A+BK)z.
+\]
+
+\subsection{Conclusione concettuale}
+
+Il \textbf{linearizzato del sistema non lineare gi\`a controllato} coincide, al primo ordine, con il \textbf{sistema linearizzato non controllato a cui si applica poi la stessa retroazione lineare}.
+
+\medskip
+
+\noindent
+In simboli:
+\[
+\text{linearizza}\bigl(f(x,Kx+h)\bigr)
+\quad \Longleftrightarrow \quad
+\dot z = (A+BK)z.
+\]
+
+Questa osservazione spiega perch\'e, localmente, il progetto del controllo sul modello linearizzato \`e significativo anche per il sistema non lineare.
+
+\medskip
+
+\noindent
+\textbf{Messaggio da ricordare.}
+Se il linearizzato in anello chiuso
+\[
+\dot z=(A+BK)z
+\]
+\`e asintoticamente stabile, allora il sistema non lineare controllato \`e localmente asintoticamente stabile attorno all'equilibrio, per il metodo indiretto di Lyapunov.
+
+\section{Ciclo limite}
+
+Nei sistemi non lineari possono comparire fenomeni che nei sistemi lineari non si osservano in questo modo. Il pi\`u importante \`e il \textbf{ciclo limite}.
+
+\subsection{Definizione qualitativa}
+
+Un ciclo limite \`e una traiettoria periodica isolata nello spazio delle fasi.  
+Questo significa che:
+
+\begin{itemize}
+    \item la traiettoria \`e chiusa;
+    \item il sistema vi ritorna periodicamente;
+    \item le traiettorie vicine possono essere attratte oppure respinte da tale curva.
+\end{itemize}
+
+\medskip
+
+\noindent
+\textbf{Attenzione:} un ciclo limite \emph{non} \`e un equilibrio.  
+Un equilibrio \`e un punto fermo; un ciclo limite \`e un moto periodico.
+
+\subsection{Idea per studiarne l'attrattivit\`a}
+
+Se una curva chiusa \`e descritta implicitamente da
+\[
+C(x)=0,
+\]
+si pu\`o provare a costruire
+\[
+V(x)=\bigl(C(x)\bigr)^2.
+\]
+Questa funzione:
+
+\begin{itemize}
+    \item vale zero sulla curva;
+    \item \`e positiva fuori dalla curva;
+    \item misura, in un certo senso, la distanza energetica dalla curva.
+\end{itemize}
+
+La derivata lungo le traiettorie \`e
+\[
+L_fV(x)=2\,C(x)\,\frac{\partial C}{\partial x}f(x).
+\]
+Il segno di \(L_fV\) ci dice se le traiettorie si avvicinano alla curva oppure se ne allontanano.
+
+\begin{itemize}
+    \item Se \(L_fV<0\) vicino alla curva, il ciclo \`e attrattivo.
+    \item Se \(L_fV>0\) vicino alla curva, il ciclo \`e repulsivo.
+\end{itemize}
+
+\subsection{Esempio classico}
+
+Consideriamo il sistema
+\begin{equation}
+\label{eq:L24-ciclo}
+\begin{cases}
+\dot x_1 = -x_2 + x_1(1-x_1^2-x_2^2),\\[4pt]
+\dot x_2 = x_1 + x_2(1-x_1^2-x_2^2).
+\end{cases}
+\end{equation}
+
+\subsubsection{Studio dell'origine}
+
+Con
+\[
+V(x)=\frac12(x_1^2+x_2^2),
+\]
+si ottiene
+\begin{align*}
+L_fV
+&= x_1\dot x_1 + x_2\dot x_2\\
+&= x_1\bigl(-x_2 + x_1(1-r^2)\bigr)
++ x_2\bigl(x_1 + x_2(1-r^2)\bigr),
+\end{align*}
+dove
+\[
+r^2=x_1^2+x_2^2.
+\]
+I termini misti si cancellano:
+\[
+L_fV = (x_1^2+x_2^2)(1-x_1^2-x_2^2)=r^2(1-r^2).
+\]
+
+Vicino all'origine vale \(r<1\), quindi
+\[
+L_fV>0
+\qquad \text{per } x\neq 0 \text{ sufficientemente vicino all'origine}.
+\]
+Dunque l'origine \`e instabile.
+
+\subsubsection{Studio della circonferenza \(x_1^2+x_2^2=1\)}
+
+Poniamo
+\[
+C(x)=1-x_1^2-x_2^2 = 1-r^2,
+\qquad
+V_C(x)=\bigl(C(x)\bigr)^2.
+\]
+Allora
+\[
+\dot C = -2x_1\dot x_1 -2x_2\dot x_2.
+\]
+Sostituendo \eqref{eq:L24-ciclo}:
+\begin{align*}
+\dot C
+&=
+-2x_1\bigl(-x_2 + x_1(1-r^2)\bigr)
+-2x_2\bigl(x_1 + x_2(1-r^2)\bigr)\\
+&=
+-2(x_1^2+x_2^2)(1-r^2)\\
+&=
+-2r^2 C.
+\end{align*}
+Di conseguenza
+\[
+L_fV_C = \frac{d}{dt}(C^2)=2C\dot C = -4r^2 C^2 \le 0.
+\]
+Fuori dall'origine e fuori dalla circonferenza unitaria, la derivata \`e strettamente negativa. Dunque la curva
+\[
+x_1^2+x_2^2=1
+\]
+\`e un ciclo limite attrattivo.
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[scale=1.2]
+    \draw[->] (-2,0) -- (2,0) node[right] {$x_1$};
+    \draw[->] (0,-2) -- (0,2) node[above] {$x_2$};
+
+    \draw[thick,red] (0,0) circle (1);
+    \node[red] at (1.35,1.2) {\small ciclo limite};
+
+    \draw[orange,dashed,thick] (0,0) circle (0.55);
+    \draw[orange,dashed,thick] (0,0) circle (1.45);
+
+    \draw[-{Latex[length=3mm]},orange,thick] (0.55,0) -- (0.8,0);
+    \draw[-{Latex[length=3mm]},orange,thick] (-0.55,0) -- (-0.8,0);
+    \draw[-{Latex[length=3mm]},orange,thick] (0,0.55) -- (0,0.8);
+    \draw[-{Latex[length=3mm]},orange,thick] (0,-0.55) -- (0,-0.8);
+
+    \draw[-{Latex[length=3mm]},orange,thick] (1.45,0) -- (1.15,0);
+    \draw[-{Latex[length=3mm]},orange,thick] (-1.45,0) -- (-1.15,0);
+    \draw[-{Latex[length=3mm]},orange,thick] (0,1.45) -- (0,1.15);
+    \draw[-{Latex[length=3mm]},orange,thick] (0,-1.45) -- (0,-1.15);
+
+    \fill (0,0) circle (1.4pt);
+    \node at (-0.45,-0.2) {\small origine instabile};
+\end{tikzpicture}
+\caption{Schema qualitativo: l'origine \`e instabile e la circonferenza unitaria \`e un ciclo limite attrattivo.}
+\end{figure}
+
+\section{Teoremi inversi di Lyapunov: idea generale}
+
+I teoremi diretti di Lyapunov dicono:
+\begin{center}
+\emph{se trovi una funzione \(V\) con certe propriet\`a, allora puoi concludere qualcosa sulla stabilit\`a.}
+\end{center}
+
+I \textbf{teoremi inversi} affermano, in sostanza, il viceversa:
+
+\begin{itemize}
+    \item se un equilibrio \`e stabile, allora esiste una funzione di Lyapunov positiva definita con derivata non positiva;
+    \item se un equilibrio \`e asintoticamente stabile, allora esiste una funzione di Lyapunov positiva definita con derivata negativa definita.
+\end{itemize}
+
+\medskip
+
+\noindent
+Questi risultati sono molto profondi, ma in pratica sono poco costruttivi:
+\begin{center}
+\emph{garantiscono che la funzione \(V\) esiste, ma non ti dicono come trovarla.}
+\end{center}
+
+Per questo, negli esercizi, il problema resta sempre lo stesso: bisogna saper scegliere una buona candidata.
+
+\section{Teorema di instabilit\`a di Chetaev}
+\label{sec:L24-chetaev}
+
+Quando vogliamo dimostrare che un equilibrio \`e instabile, esiste un criterio molto utile: il teorema di Chetaev.
+
+\subsection{Enunciato}
+
+Consideriamo il sistema
+\[
+\dot x=f(x),
+\]
+con equilibrio nell'origine.  
+Sia \(W\) un intorno dell'origine e sia \(V\in C^1(W)\). Supponiamo che esista un aperto \(U\subset W\) tale che:
+
+\begin{enumerate}
+    \item l'origine appartiene al bordo di \(U\);
+    \item \(V(x)>0\) per ogni \(x\in U\);
+    \item \(V(x)=0\) per ogni \(x\in \partial U \cap W\);
+    \item \(L_fV(x)>0\) per ogni \(x\in U\).
+\end{enumerate}
+
+Allora l'origine \`e \textbf{instabile}.
+
+\medskip
+
+\noindent
+L'idea geometrica \`e molto semplice: se in una regione \(U\) arbitrariamente vicina all'origine la funzione \(V\) cresce lungo le traiettorie, allora una traiettoria che parte in \(U\) non pu\`o rimanere confinata vicino all'origine.
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[scale=1.1]
+    \draw[->] (-2.2,0) -- (2.2,0) node[right] {$x_1$};
+    \draw[->] (0,-2.2) -- (0,2.2) node[above] {$x_2$};
+
+    \draw[gray,thick] (0,0) circle (1.4);
+    \node[gray] at (-1.6,1.6) {\small \(W\)};
+
+    \fill[pattern=north east lines,pattern color=blue!60] (0,0) -- (1.4,0) arc (0:60:1.4) -- cycle;
+    \draw[red,thick] (0,0) -- (1.4,0);
+    \draw[red,thick] (0,0) -- ({1.4*cos(60)},{1.4*sin(60)});
+    \draw[red,thick] (1.4,0) arc (0:60:1.4);
+    \node at (0.8,0.45) {\small \(U\)};
+
+    \fill (0,0) circle (1.5pt);
+    \node at (-0.2,-0.2) {\small \(0\)};
+\end{tikzpicture}
+\caption{Schema qualitativo del teorema di Chetaev: l'origine sta sul bordo della regione \(U\).}
+\end{figure}
+
+\subsection{Esempio}
+
+Consideriamo il sistema
+\[
+\begin{cases}
+\dot x_1 = x_2^3,\\[4pt]
+\dot x_2 = x_1^3.
+\end{cases}
+\]
+L'origine \`e un equilibrio.
+
+Scegliamo
+\[
+V(x)=x_1x_2.
+\]
+Allora
+\[
+V(0)=0,
+\]
+e nella regione del primo quadrante
+\[
+U=\{(x_1,x_2):x_1>0,\ x_2>0,\ x_1^2+x_2^2<\rho^2\}
+\]
+si ha
+\[
+V(x)>0.
+\]
+La derivata lungo le traiettorie \`e
+\[
+L_fV = x_2 \dot x_1 + x_1 \dot x_2 = x_2 x_2^3 + x_1 x_1^3 = x_1^4 + x_2^4 > 0
+\]
+per ogni \(x\in U\setminus\{0\}\). Quindi, per Chetaev, l'origine \`e instabile.
+
+\section{Metodo indiretto di Lyapunov per sistemi lineari e non lineari}
+
+Questa parte \`e centrale perch\'e spiega come il linearizzato permette di dedurre la stabilit\`a locale del sistema non lineare.
+
+\subsection{Caso lineare continuo: equazione di Lyapunov}
+
+Consideriamo il sistema lineare tempo continuo
+\[
+\dot x = Ax.
+\]
+Cerchiamo una candidata quadratica:
+\[
+V(x)=x^\top P x,
+\]
+con \(P=P^\top\).
+
+La derivata lungo le traiettorie \`e
+\begin{align*}
+\dot V(x)
+&= \dot x^\top P x + x^\top P \dot x\\
+&= x^\top A^\top P x + x^\top P A x\\
+&= x^\top (A^\top P + PA)x.
+\end{align*}
+
+Se imponiamo
+\[
+A^\top P + PA = -Q,
+\]
+con \(Q=Q^\top>0\), otteniamo
+\[
+\dot V(x) = -x^\top Q x <0 \qquad \forall x\neq 0.
+\]
+
+Questa \`e la \textbf{equazione algebrica di Lyapunov}.
+
+\subsection{Teorema classico}
+
+Dato \(Q=Q^\top>0\), esiste un'unica soluzione simmetrica \(P=P^\top>0\) dell'equazione
+\[
+A^\top P + PA = -Q
+\]
+se e solo se tutti gli autovalori di \(A\) hanno parte reale strettamente negativa.
+
+Quindi:
+\[
+A \text{ Hurwitz}
+\quad \Longleftrightarrow \quad
+\exists\, P>0 \text{ t.c. } A^\top P + PA = -Q.
+\]
+
+\medskip
+
+\noindent
+Una rappresentazione utile della soluzione \`e
+\[
+P=\int_0^{+\infty} e^{A^\top t} Q e^{At}\,dt.
+\]
+
+\subsection{Caso lineare discreto}
+
+Per il sistema
+\[
+x(k+1)=Ax(k),
+\]
+poniamo ancora
+\[
+V(x)=x^\top P x.
+\]
+Allora
+\begin{align*}
+\Delta V(x)
+&=V(x(k+1))-V(x(k))\\
+&=x(k)^\top A^\top P A x(k) - x(k)^\top P x(k)\\
+&=x(k)^\top (A^\top P A - P)x(k).
+\end{align*}
+Se imponiamo
+\[
+A^\top P A - P = -Q,
+\qquad Q>0,
+\]
+si ottiene
+\[
+\Delta V(x) = -x^\top Q x <0.
+\]
+
+Anche qui vale il teorema analogo:
+\[
+\exists\, P>0 \text{ t.c. } A^\top P A - P = -Q
+\quad \Longleftrightarrow \quad
+|\lambda_i(A)|<1 \ \forall i.
+\]
+
+Una formula utile per \(P\) \`e
+\[
+P = \sum_{k=0}^{+\infty} (A^\top)^k Q A^k.
+\]
+
+\section{Metodo indiretto per sistemi non lineari}
+
+Consideriamo ora un sistema non lineare
+\[
+\dot x = f(x),
+\qquad
+f(0)=0.
+\]
+Supponiamo che \(f\) sia regolare e sviluppabile attorno all'origine:
+\[
+f(x)=Ax+h(x),
+\qquad
+A=\left.\frac{\partial f}{\partial x}\right|_{x=0},
+\]
+dove il resto \(h(x)\) soddisfa
+\[
+\lim_{x\to 0}\frac{\|h(x)\|}{\|x\|}=0.
+\]
+
+\subsection{Caso stabile del linearizzato}
+
+Se \(A\) \`e Hurwitz, scegliamo \(Q=I\) e risolviamo
+\[
+A^\top P + PA = -I,
+\]
+ottenendo \(P>0\). Consideriamo allora
+\[
+V(x)=x^\top P x.
+\]
+Lungo le traiettorie del sistema non lineare:
+\begin{align*}
+L_fV(x)
+&= x^\top(PA+A^\top P)x + 2x^\top P h(x)\\
+&= -\|x\|^2 + 2x^\top P h(x).
+\end{align*}
+Per \(x\) sufficientemente piccolo, il termine \(h(x)\) \`e di ordine superiore e soddisfa una stima del tipo
+\[
+\|h(x)\| \le \frac{1}{4\|P\|}\|x\|.
+\]
+Di conseguenza
+\[
+2|x^\top P h(x)| \le 2\|x\|\,\|P\|\,\|h(x)\|
+\le \frac12 \|x\|^2,
+\]
+e quindi
+\[
+L_fV(x)\le -\frac12\|x\|^2<0
+\]
+per \(x\neq 0\) sufficientemente vicino all'origine.
+
+Allora l'origine del sistema non lineare \`e \textbf{localmente asintoticamente stabile}.
+
+\subsection{Caso instabile del linearizzato}
+
+Se \(A\) possiede almeno un autovalore con parte reale positiva, allora l'origine del sistema non lineare \`e instabile.
+
+L'idea della dimostrazione \`e separare, tramite cambio di base, la parte instabile e quella stabile del linearizzato:
+\[
+A \sim
+\begin{pmatrix}
+A_1 & 0\\
+0 & A_2
+\end{pmatrix},
+\]
+dove:
+\begin{itemize}
+    \item \(A_1\) contiene gli autovalori con parte reale positiva;
+    \item \(A_2\) contiene quelli con parte reale negativa.
+\end{itemize}
+
+Si costruisce quindi una funzione di Chetaev usando due soluzioni di Lyapunov sui due sottoblocchi e si dimostra che esiste una regione in cui la funzione cresce lungo le traiettorie. Da qui segue l'instabilit\`a dell'origine.
+
+\subsection{Caso inconcludente}
+
+Se tutti gli autovalori hanno parte reale \(\le 0\), ma qualcuno ha parte reale nulla, il metodo indiretto \textbf{non conclude}.  
+In questo caso servono strumenti ulteriori: Lyapunov diretto, LaSalle, studio qualitativo, centro-manifold, eccetera.
+
+\section{Sistemi non stazionari: perch\'e il criterio sugli autovalori non vale pi\`u}
+\label{sec:L24-nonstazionari}
+
+Questa parte \`e soprattutto concettuale.
+
+Consideriamo un sistema lineare tempo-variante
+\[
+\dot x(t)=A(t)x(t).
+\]
+A differenza del caso stazionario, qui gli autovalori istantanei di \(A(t)\) \emph{non bastano} per dedurre la stabilit\`a del sistema.
+
+\subsection{Esempio 1: autovalori sempre negativi ma sistema instabile}
+
+Consideriamo
+\[
+A(t)=
+\begin{pmatrix}
+-1 & e^{2t}\\
+0 & -1
+\end{pmatrix}.
+\]
+Gli autovalori di \(A(t)\) sono sempre
+\[
+\lambda_1(t)=\lambda_2)=\lambda_2)=\lambda_2(t)=-1,
+\]
+quindi sembrerebbe un sistema stabile. Ma il sistema \`e
+\[
+\begin{cases}
+\dot x_1 = -x_1 + e^{2t}x_2,\\[4pt]
+\dot x_2 = -x_2.
+\end{cases}
+\]
+Dalla seconda equazione:
+\[
+x_2(t)=e^{-t}x_2(0).
+\]
+Sostituendo nella prima:
+\[
+\dot x_1 + x_1 = e^{2t}e^{-t}x_2(0)=e^t x_2(0).
+\]
+Moltiplicando per \(e^t\):
+\[
+\frac{d}{dt}\bigl(e^t x_1(t)\bigr)=e^{2t}x_2(0).
+\]
+Integrando:
+\[
+e^t x_1(t)=x_1(0)+\frac{x_2(0)}{2}(e^{2t}-1),
+\]
+quindi
+\[
+x_1(t)=e^{-t}x_1(0)+\frac{x_2(0)}{2}(e^t-e^{-t}).
+\]
+Se \(x_2(0)\neq 0\), allora \(x_1(t)\) diverge come \(e^t\). Quindi il sistema \`e instabile, pur avendo autovalori istantanei sempre uguali a \(-1\).
+
+\subsection{Messaggio da ricordare}
+
+Per i sistemi non stazionari:
+\begin{center}
+\emph{gli autovalori ``congelati'' di \(A(t)\) non determinano da soli la stabilit\`a del sistema.}
+\end{center}
+
+Ci\`o che conta \`e l'evoluzione complessiva nel tempo, non il solo spettro istantaneo.
+
+\section{Schema finale della lezione}
+
+La lezione raccoglie diversi messaggi importanti.
+
+\begin{enumerate}
+    \item \textbf{Lyapunov pu\`o essere usato per la sintesi del controllo}: scegli una funzione \(V\) e costruisci \(u\) in modo che \(L_fV\le 0\) o \(L_fV<0\).
+    
+    \item \textbf{Il linearizzato controllato} del sistema non lineare coincide, al primo ordine, con il sistema \((A+BK)\) ottenuto applicando la retroazione al linearizzato.
+
+    \item \textbf{I cicli limite} sono traiettorie periodiche isolate tipiche dei sistemi non lineari: non sono equilibri, ma possono essere attrattivi o repulsivi.
+
+    \item \textbf{Il teorema di Chetaev} \`e uno strumento utile per dimostrare instabilit\`a quando si riesce a costruire una funzione che cresce in una regione arbitrariamente vicina all'origine.
+
+    \item \textbf{L'equazione di Lyapunov} fornisce una procedura concreta per costruire candidate quadratiche nei sistemi lineari stabili.
+
+    \item \textbf{Il metodo indiretto di Lyapunov} collega il segno degli autovalori del linearizzato con la stabilit\`a locale del sistema non lineare.
+
+    \item \textbf{Nei sistemi tempo-varianti}, invece, il criterio sugli autovalori istantanei non \`e pi\`u affidabile.
+\end{enumerate}
+
+\medskip
+
+\noindent
+\textbf{Frase da ricordare all'orale.}
+\begin{center}
+\emph{Nel caso non lineare, il linearizzato descrive il comportamento locale solo vicino all'equilibrio; se il linearizzato \`e asintoticamente stabile, allora anche il sistema non lineare lo \`e localmente. Ma se il linearizzato \`e inconcludente, servono Lyapunov diretto, LaSalle o strumenti qualitativi pi\`u fini.}
+\end{center}

@@ -1,0 +1,702 @@
+% =========================
+% L20.tex
+% =========================
+
+\chapter{L20 -- Equilibri, movimenti, stabilità e linearizzazione}
+\label{chap:L20}
+
+\section{Richiamo iniziale: stato, traiettoria e rappresentazione grafica}
+
+Prima di introdurre i concetti di equilibrio e stabilità, è utile chiarire bene il significato geometrico di una traiettoria di stato.
+
+Consideriamo, come esempio introduttivo, l'oscillatore armonico non forzato
+\[
+\ddot y(t) + y(t) = 0.
+\]
+Introducendo le variabili di stato
+\[
+x_1(t)=y(t), 
+\qquad
+x_2(t)=\dot y(t),
+\]
+si ottiene il sistema
+\[
+\begin{cases}
+\dot x_1(t)=x_2(t),\\
+\dot x_2(t)=-x_1(t).
+\end{cases}
+\]
+In forma matriciale:
+\[
+\dot x(t)=
+\begin{bmatrix}
+0 & 1\\
+-1 & 0
+\end{bmatrix}x(t).
+\]
+
+Se ad esempio si sceglie la condizione iniziale
+\[
+x(0)=
+\begin{bmatrix}
+1\\
+0
+\end{bmatrix},
+\]
+la soluzione è
+\[
+x_1(t)=\cos t,
+\qquad
+x_2(t)=-\sin t.
+\]
+Quindi, nel piano di stato \((x_1,x_2)\), la traiettoria descrive una circonferenza unitaria.
+
+\subsection*{Interpretazione geometrica}
+Questo esempio fa vedere bene la differenza tra:
+\begin{itemize}
+    \item il \textbf{movimento nel tempo}, cioè l'evoluzione delle componenti \(x_1(t)\), \(x_2(t)\) come funzioni di \(t\);
+    \item la \textbf{traiettoria nello spazio di stato}, cioè il luogo dei punti \(x(t)\) nel piano \((x_1,x_2)\).
+\end{itemize}
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[scale=1.25]
+    % assi
+    \draw[->] (-2.2,0) -- (2.4,0) node[right] {$x_1$};
+    \draw[->] (0,-2.2) -- (0,2.4) node[above] {$x_2$};
+
+    % circonferenza
+    \draw[dashed] (0,0) circle (1.5);
+
+    % frecce senso orario
+    \draw[->] (1.5,0) arc[start angle=0,end angle=-35,radius=1.5];
+    \draw[->] (0,-1.5) arc[start angle=-90,end angle=-125,radius=1.5];
+    \draw[->] (-1.5,0) arc[start angle=180,end angle=145,radius=1.5];
+    \draw[->] (0,1.5) arc[start angle=90,end angle=55,radius=1.5];
+
+    % punto iniziale
+    \fill (1.5,0) circle (1.5pt);
+    \node[below right] at (1.5,0) {$x(0)$};
+
+    \node at (1.15,1.35) {\small \(x_1^2+x_2^2=1\)};
+\end{tikzpicture}
+\caption{Traiettoria dell'oscillatore armonico nel piano di stato.}
+\end{figure}
+
+\bigskip
+
+\section{Equilibrio di un sistema dinamico}
+
+Passiamo adesso al concetto di equilibrio.
+
+\subsection{Caso continuo}
+Per un sistema non lineare tempo continuo
+\[
+\dot x = f(x,u),
+\]
+una coppia \((\bar x,\bar u)\) si dice \textbf{coppia di equilibrio} se, applicando l'ingresso costante \(\bar u\), lo stato \(\bar x\) rimane costante nel tempo. Questo equivale a imporre
+\[
+f(\bar x,\bar u)=0.
+\]
+
+\subsection{Caso discreto}
+Per un sistema non lineare tempo discreto
+\[
+x(k+1)=f(x(k),u(k)),
+\]
+la coppia \((\bar x,\bar u)\) è di equilibrio se
+\[
+\bar x=f(\bar x,\bar u).
+\]
+
+\subsection*{Interpretazione}
+Dire che \((\bar x,\bar u)\) è una coppia di equilibrio significa che, se il sistema parte da \(\bar x\) e l'ingresso viene mantenuto uguale a \(\bar u\), allora lo stato non si muove:
+\[
+x(t)\equiv \bar x
+\quad \text{oppure} \quad
+x(k)\equiv \bar x.
+\]
+
+In altre parole, la ``velocità'' dello stato è nulla: il sistema resta fermo in quel punto.
+
+\bigskip
+
+\section{Movimento e traiettoria}
+
+Sia assegnata una soluzione del sistema, ad esempio nel continuo
+\[
+x(t)=\varphi(t,t_0,x_0,u),
+\]
+oppure nel discreto
+\[
+x(k)=\varphi(k,k_0,x_0,u).
+\]
+
+\begin{itemize}
+    \item Il \textbf{movimento} è l'evoluzione temporale del sistema.
+    \item La \textbf{traiettoria} è la curva descritta dal vettore di stato nello spazio di stato.
+\end{itemize}
+
+Se ad esempio si guarda una sola componente \(x_i(t)\), si ottiene il grafico in funzione del tempo. Se invece si rappresenta \(x(t)\) nello spazio degli stati, si ottiene la traiettoria.
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[scale=1.0]
+    % sinistra: x(t)
+    \draw[->] (0,0) -- (4.4,0) node[right] {$t$};
+    \draw[->] (0,0) -- (0,2.8) node[above] {$x(t)$};
+    \draw[smooth] plot coordinates {(0.2,0.4) (0.8,1.2) (1.5,1.0) (2.2,0.6) (3.1,1.8) (4.0,2.2)};
+    \draw[dashed] (2.2,0) -- (2.2,0.6);
+    \node[below] at (2.2,0) {$t^\star$};
+
+    % destra: traiettoria nello spazio di stato
+    \begin{scope}[xshift=7cm]
+        \draw[->] (-2.2,0) -- (2.5,0) node[right] {$x_1$};
+        \draw[->] (0,-2.0) -- (0,2.5) node[above] {$x_2$};
+        \draw[smooth] plot coordinates {(-1.8,-1.2) (-1.0,-0.5) (-0.3,0.8) (0.4,1.3) (1.0,0.7) (1.8,1.8)};
+        \fill (0.4,1.3) circle (1.2pt);
+        \node[right] at (0.45,1.3) {\small \(x(t^\star)\)};
+    \end{scope}
+\end{tikzpicture}
+\caption{A sinistra un movimento nel tempo, a destra la corrispondente traiettoria nello spazio di stato.}
+\end{figure}
+
+\bigskip
+
+\section{Stabilità di un movimento nominale}
+
+La teoria della stabilità non si applica solo ai punti di equilibrio: in generale si può parlare anche di stabilità di un \textbf{movimento nominale}.
+
+Supponiamo di avere una traiettoria nominale
+\[
+x(t)=\varphi(t,t_0,x_0,\bar u)
+\]
+generata da un certo ingresso assegnato \(\bar u\), e una traiettoria perturbata
+\[
+\tilde x(t)=\varphi(t,t_0,x_0+\delta x_0,\bar u)
+\]
+ottenuta modificando leggermente la condizione iniziale.
+
+\subsection{Movimento stabile}
+Il movimento nominale si dice \textbf{stabile} se
+\[
+\forall \varepsilon>0 \ \exists \delta>0 \ \text{tale che}\
+\|\delta x_0\|<\delta
+\ \Longrightarrow\
+\|\tilde x(t)-x(t)\|<\varepsilon
+\quad \forall t\ge t_0.
+\]
+
+Interpretazione: se parto sufficientemente vicino alla traiettoria nominale, allora ci resto vicino per tutti i tempi successivi.
+
+\subsection{Movimento attrattivo}
+Il movimento nominale si dice \textbf{attrattivo} se esiste un intorno iniziale tale che
+\[
+\|\delta x_0\|<\delta
+\ \Longrightarrow\
+\lim_{t\to+\infty}\|\tilde x(t)-x(t)\|=0.
+\]
+
+Interpretazione: le traiettorie perturbate, magari dopo essersi un po' allontanate, alla fine tendono alla traiettoria nominale.
+
+\subsection{Movimento asintoticamente stabile}
+Il movimento nominale si dice \textbf{asintoticamente stabile} se è sia stabile sia attrattivo.
+
+\bigskip
+
+\section{Esempio: attrattivo ma non stabile}
+
+Un esempio classico, presente anche nei tuoi appunti, è il sistema discreto scalare
+\[
+x(k+1)=
+\begin{cases}
+2x(k), & |x(k)|<1,\\[0.1cm]
+0, & |x(k)|\ge 1.
+\end{cases}
+\]
+
+Studiamo l'equilibrio nell'origine \(x=0\).
+
+\subsection*{Perché è attrattivo}
+Se la traiettoria prima o poi esce dall'intervallo \((-1,1)\), al passo successivo va a zero e poi resta a zero. Dunque molte traiettorie convergono all'origine.
+
+\subsection*{Perché non è stabile}
+Prendiamo una condizione iniziale molto piccola, ad esempio
+\[
+x(0)=\frac{1}{2}.
+\]
+Allora
+\[
+x(1)=2x(0)=1,
+\qquad
+x(2)=0.
+\]
+Quindi la traiettoria, pur convergendo infine all'origine, prima si allontana da un intorno arbitrariamente piccolo dello zero. Questo viola la definizione di stabilità.
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[scale=1.0]
+    \draw[->] (0,0) -- (5.2,0) node[right] {$k$};
+    \draw[->] (0,-0.4) -- (0,2.6) node[above] {$x(k)$};
+
+    % livelli
+    \draw[dashed] (0,1) -- (4.7,1);
+    \draw[dashed] (0,0.5) -- (4.7,0.5);
+
+    % punti
+    \fill (0,0.5) circle (1.6pt);
+    \fill (1,1.0) circle (1.6pt);
+    \fill (2,0.0) circle (1.6pt);
+    \fill (3,0.0) circle (1.6pt);
+    \fill (4,0.0) circle (1.6pt);
+
+    \draw (0,0.5) -- (1,1.0) -- (2,0.0) -- (4,0.0);
+
+    \node[below] at (0,0) {$0$};
+    \node[below] at (1,0) {$1$};
+    \node[below] at (2,0) {$2$};
+\end{tikzpicture}
+\caption{Traiettoria che converge a zero ma non resta vicina allo zero per tutti i tempi: l'origine è attrattiva ma non stabile.}
+\end{figure}
+
+\bigskip
+
+\section{Equilibrio come caso particolare di movimento}
+
+Un punto di equilibrio è un caso particolare di traiettoria nominale: è una traiettoria costante.
+
+Infatti, se \((\bar x,\bar u)\) è una coppia di equilibrio, allora la traiettoria nominale associata è
+\[
+x(t)\equiv \bar x
+\qquad \text{oppure} \qquad
+x(k)\equiv \bar x.
+\]
+
+Per questo motivo le definizioni di stabilità, attrattività e stabilità asintotica di un equilibrio si ottengono come caso particolare di quelle date per un movimento qualunque.
+
+\bigskip
+
+\section{Traslazione dell'equilibrio all'origine}
+
+Quando si studia la stabilità di un equilibrio \(\bar x\), è quasi sempre conveniente traslare il sistema in nuove coordinate in modo che l'equilibrio diventi l'origine.
+
+Definiamo
+\[
+z=x-\bar x,
+\qquad
+v=u-\bar u.
+\]
+
+\subsection{Caso continuo}
+Se
+\[
+\dot x=f(x,u),
+\]
+allora
+\[
+\dot z=\dot x=f(z+\bar x,v+\bar u).
+\]
+Poiché \((\bar x,\bar u)\) è equilibrio, vale
+\[
+f(\bar x,\bar u)=0.
+\]
+Quindi il sistema traslato ha equilibrio nell'origine \(z=0\).
+
+\subsection{Caso discreto}
+Se
+\[
+x(k+1)=f(x(k),u(k)),
+\]
+ponendo
+\[
+z(k)=x(k)-\bar x,
+\qquad
+v(k)=u(k)-\bar u,
+\]
+si ottiene di nuovo un sistema equivalente con equilibrio nell'origine.
+
+\medskip
+
+\noindent
+\textbf{Conclusione importante.}
+Le proprietà di stabilità dell'equilibrio \(\bar x\) nel sistema originale coincidono con le proprietà di stabilità dell'origine nel sistema traslato.
+
+Per questo, da qui in poi, si studia quasi sempre la stabilità dell'origine.
+
+\bigskip
+
+\section{Equilibri dei sistemi lineari autonomi}
+
+Consideriamo ora un sistema lineare autonomo.
+
+\subsection{Tempo continuo}
+\[
+\dot x=Ax.
+\]
+Un punto \(\bar x\) è equilibrio se
+\[
+A\bar x=0.
+\]
+Quindi l'insieme degli equilibri è
+\[
+\ker A.
+\]
+
+\subsection{Tempo discreto}
+\[
+x(k+1)=Ax(k).
+\]
+Un punto \(\bar x\) è equilibrio se
+\[
+\bar x=A\bar x
+\quad \Longleftrightarrow \quad
+(A-I)\bar x=0.
+\]
+Quindi l'insieme degli equilibri è
+\[
+\ker(A-I).
+\]
+
+\subsection*{Osservazione}
+Se \(A\) non è invertibile (nel continuo), oppure se \(1\) è autovalore di \(A\) (nel discreto), allora possono esistere infiniti equilibri.
+
+\bigskip
+
+\section{Perché un equilibrio non isolato non può essere asintoticamente stabile}
+
+Se un equilibrio non è isolato, allora in ogni suo intorno esistono altri punti di equilibrio.
+
+Ma una traiettoria che parte esattamente da un altro equilibrio resta ferma in quel punto e quindi non può convergere all'equilibrio considerato. Perciò un equilibrio non isolato non può essere attrattivo, e dunque non può essere asintoticamente stabile.
+
+\medskip
+
+\noindent
+Può però essere \textbf{stabile} nel senso di Lyapunov.
+
+\bigskip
+
+\section{Regione di attrazione o RAS}
+
+Sia l'origine un equilibrio asintoticamente stabile. Si definisce \textbf{regione di attrazione} (RAS, \emph{Region of Asymptotic Stability}) l'insieme delle condizioni iniziali che generano traiettorie convergenti all'origine:
+\[
+\mathcal{A}(0)=\left\{x_0 \in \mathbb{R}^n \ :\ \lim_{t\to +\infty}\varphi(t,t_0,x_0)=0 \right\}.
+\]
+
+Se l'origine è \textbf{globalmente asintoticamente stabile}, allora
+\[
+\mathcal{A}(0)=\mathbb{R}^n.
+\]
+
+In generale, però, la RAS può essere un sottoinsieme proprio dello spazio di stato e non è sempre facile da determinare esplicitamente.
+
+\bigskip
+
+\section{Linearizzazione di un sistema non lineare}
+
+Per studiare la stabilità locale di un equilibrio di un sistema non lineare, si usa la linearizzazione.
+
+Consideriamo il sistema
+\[
+\dot x = f(x,u),
+\qquad
+y=h(x,u),
+\]
+e una coppia di equilibrio \((\bar x,\bar u)\), cioè
+\[
+f(\bar x,\bar u)=0.
+\]
+
+Introduciamo le variabili di deviazione:
+\[
+z=x-\bar x,
+\qquad
+v=u-\bar u,
+\qquad
+\eta=y-\bar y,
+\quad \bar y=h(\bar x,\bar u).
+\]
+
+Sviluppando \(f\) e \(h\) al primo ordine attorno a \((\bar x,\bar u)\) si ottiene
+\[
+f(x,u)\approx
+f(\bar x,\bar u)
++\left.\frac{\partial f}{\partial x}\right|_{(\bar x,\bar u)}(x-\bar x)
++\left.\frac{\partial f}{\partial u}\right|_{(\bar x,\bar u)}(u-\bar u),
+\]
+e analogamente
+\[
+h(x,u)\approx
+h(\bar x,\bar u)
++\left.\frac{\partial h}{\partial x}\right|_{(\bar x,\bar u)}(x-\bar x)
++\left.\frac{\partial h}{\partial u}\right|_{(\bar x,\bar u)}(u-\bar u).
+\]
+
+Poiché \(f(\bar x,\bar u)=0\), il sistema linearizzato diventa
+\[
+\begin{cases}
+\dot z = Az + Bv,\\
+\eta = Cz + Dv,
+\end{cases}
+\]
+dove
+\[
+A=\left.\frac{\partial f}{\partial x}\right|_{(\bar x,\bar u)},
+\qquad
+B=\left.\frac{\partial f}{\partial u}\right|_{(\bar x,\bar u)},
+\qquad
+C=\left.\frac{\partial h}{\partial x}\right|_{(\bar x,\bar u)},
+\qquad
+D=\left.\frac{\partial h}{\partial u}\right|_{(\bar x,\bar u)}.
+\]
+
+\medskip
+
+\noindent
+\textbf{Interpretazione.}
+La linearizzazione fornisce una buona approssimazione del sistema non lineare \emph{solo localmente}, cioè per stati e ingressi sufficientemente vicini al punto di equilibrio considerato.
+
+\bigskip
+
+\section{Esempio: pendolo con attrito}
+
+Consideriamo il pendolo con attrito viscoso e ingresso di coppia:
+\[
+m\ell^2\ddot\theta + c\dot\theta + mg\ell \sin\theta = u.
+\]
+
+Introduciamo le variabili di stato
+\[
+x_1=\theta,
+\qquad
+x_2=\dot\theta.
+\]
+Allora il sistema si scrive come
+\[
+\begin{cases}
+\dot x_1 = x_2,\\
+\dot x_2 = -\dfrac{g}{\ell}\sin x_1 - \dfrac{c}{m\ell^2}x_2 + \dfrac{1}{m\ell^2}u.
+\end{cases}
+\]
+
+\subsection{Equilibri per \(u=0\)}
+Se \(u=0\), gli equilibri soddisfano
+\[
+\begin{cases}
+0=x_2,\\
+0=-\dfrac{g}{\ell}\sin x_1.
+\end{cases}
+\]
+Quindi
+\[
+x_2=0,
+\qquad
+\sin x_1=0
+\quad\Longrightarrow\quad
+x_1=k\pi,\qquad k\in\mathbb{Z}.
+\]
+Dunque ci sono infiniti equilibri:
+\[
+(k\pi,0), \qquad k\in\mathbb{Z}.
+\]
+
+\subsection{Jacobiana del sistema}
+La matrice Jacobiana rispetto allo stato è
+\[
+\frac{\partial f}{\partial x}(x_1,x_2)=
+\begin{bmatrix}
+0 & 1\\[0.1cm]
+-\dfrac{g}{\ell}\cos x_1 & -\dfrac{c}{m\ell^2}
+\end{bmatrix},
+\]
+mentre rispetto all'ingresso
+\[
+\frac{\partial f}{\partial u}(x_1,x_2)=
+\begin{bmatrix}
+0\\[0.1cm]
+\dfrac{1}{m\ell^2}
+\end{bmatrix}.
+\]
+
+\subsection{Linearizzazione attorno a \((0,0)\)}
+Poiché \(\cos 0=1\), si ottiene
+\[
+A_1=
+\begin{bmatrix}
+0 & 1\\[0.1cm]
+-\dfrac{g}{\ell} & -\dfrac{c}{m\ell^2}
+\end{bmatrix},
+\qquad
+B_1=
+\begin{bmatrix}
+0\\[0.1cm]
+\dfrac{1}{m\ell^2}
+\end{bmatrix}.
+\]
+
+La traccia e il determinante valgono
+\[
+\operatorname{tr}(A_1)=-\frac{c}{m\ell^2}<0,
+\qquad
+\det(A_1)=\frac{g}{\ell}>0.
+\]
+Quindi gli autovalori hanno parte reale negativa: l'equilibrio \((0,0)\) risulta localmente asintoticamente stabile se \(c>0\).
+
+\subsection{Linearizzazione attorno a \((\pi,0)\)}
+Poiché \(\cos \pi=-1\), si ottiene
+\[
+A_2=
+\begin{bmatrix}
+0 & 1\\[0.1cm]
+\dfrac{g}{\ell} & -\dfrac{c}{m\ell^2}
+\end{bmatrix},
+\qquad
+B_2=
+\begin{bmatrix}
+0\\[0.1cm]
+\dfrac{1}{m\ell^2}
+\end{bmatrix}.
+\]
+
+Ora
+\[
+\det(A_2)=-\frac{g}{\ell}<0.
+\]
+Quindi gli autovalori hanno segno opposto e l'equilibrio \((\pi,0)\) è instabile.
+
+\medskip
+
+\noindent
+Poiché il pendolo è periodico in \(\theta\), gli equilibri con \(x_1=2k\pi\) hanno lo stesso comportamento di \((0,0)\), mentre quelli con \(x_1=(2k+1)\pi\) hanno lo stesso comportamento di \((\pi,0)\).
+
+\bigskip
+
+\section{Teorema indiretto di Lyapunov}
+
+Il teorema indiretto di Lyapunov consente di dedurre la stabilità locale del sistema non lineare a partire dalla stabilità del sistema linearizzato.
+
+Consideriamo il sistema autonomo
+\[
+\dot x=f(x),
+\qquad
+f(0)=0.
+\]
+Sia
+\[
+\dot z = Az
+\]
+la linearizzazione di \(\dot x=f(x)\) attorno all'origine, con
+\[
+A=\left.\frac{\partial f}{\partial x}\right|_{x=0}.
+\]
+
+Allora valgono i seguenti risultati.
+
+\subsection*{1. Caso asintoticamente stabile}
+Se la matrice \(A\) è di Hurwitz, cioè tutti i suoi autovalori hanno parte reale strettamente negativa, allora l'origine del sistema non lineare è \textbf{localmente asintoticamente stabile}.
+
+\subsection*{2. Caso instabile}
+Se \(A\) possiede almeno un autovalore con parte reale positiva, allora l'origine del sistema non lineare è \textbf{instabile}.
+
+\subsection*{3. Caso critico}
+Se tutti gli autovalori di \(A\) hanno parte reale non positiva, ma almeno uno ha parte reale nulla, allora il teorema indiretto \textbf{non è conclusivo}. In questo caso servono altri strumenti, per esempio il metodo diretto di Lyapunov.
+
+\bigskip
+
+\section{Caso critico: perché il teorema indiretto può non bastare}
+
+Se, nel pendolo, si pone \(c=0\), la linearizzazione attorno a \((0,0)\) diventa
+\[
+A=
+\begin{bmatrix}
+0 & 1\\
+-\dfrac{g}{\ell} & 0
+\end{bmatrix}.
+\]
+Allora
+\[
+\operatorname{tr}(A)=0,
+\qquad
+\det(A)=\frac{g}{\ell}>0,
+\]
+e gli autovalori sono
+\[
+\lambda_{1,2}=\pm j\sqrt{\frac{g}{\ell}}.
+\]
+
+Il sistema linearizzato ha quindi orbite periodiche chiuse, e il teorema indiretto di Lyapunov non permette di concludere né stabilità asintotica né instabilità del sistema non lineare.
+
+Questo è il tipico \textbf{caso critico}.
+
+\bigskip
+
+\section{Schema riassuntivo sulle classificazioni di stabilità}
+
+Per un equilibrio dell'origine nel continuo:
+\begin{itemize}
+    \item se esiste un autovalore con \(\Re(\lambda)>0\), allora l'origine è \textbf{instabile};
+    \item se tutti gli autovalori hanno \(\Re(\lambda)<0\), allora l'origine è \textbf{localmente asintoticamente stabile};
+    \item se tutti hanno \(\Re(\lambda)\le 0\) e qualcuno ha \(\Re(\lambda)=0\), il test lineare è \textbf{inconcludente}.
+\end{itemize}
+
+Nel discreto, le condizioni si riscrivono sostituendo:
+\[
+\Re(\lambda)<0
+\quad \longleftrightarrow \quad
+|\lambda|<1,
+\]
+\[
+\Re(\lambda)>0
+\quad \text{(nel caso continuo)}
+\quad \leadsto \quad
+|\lambda|>1
+\quad \text{(nel caso discreto)}.
+\]
+
+\bigskip
+
+\section{Esempio geometrico: equilibrio stabile e instabile}
+
+Un modo utile per interpretare la stabilità è osservare il comportamento delle traiettorie vicine a un punto di equilibrio.
+
+\begin{itemize}
+    \item Se tutte le traiettorie che partono abbastanza vicine restano vicine, l'equilibrio è \textbf{stabile}.
+    \item Se inoltre tendono all'equilibrio, è \textbf{asintoticamente stabile}.
+    \item Se esistono traiettorie arbitrariamente vicine che se ne allontanano, l'equilibrio è \textbf{instabile}.
+\end{itemize}
+
+Ad esempio, nel pendolo:
+\begin{itemize}
+    \item la posizione verso il basso \(\theta=0\) è stabile (e con attrito è anche asintoticamente stabile);
+    \item la posizione capovolta \(\theta=\pi\) è instabile.
+\end{itemize}
+
+\bigskip
+
+\section{Conclusioni della lezione}
+
+In questa lezione abbiamo chiarito alcuni concetti fondamentali per lo studio qualitativo dei sistemi dinamici.
+
+\begin{enumerate}
+    \item Il concetto di \textbf{equilibrio} è il caso particolare di una traiettoria costante.
+    \item La stabilità può essere definita inizialmente per un \textbf{movimento nominale} e poi specializzata al caso dell'equilibrio.
+    \item Un equilibrio si studia più comodamente traslandolo nell'origine.
+    \item Nei sistemi lineari autonomi, l'insieme degli equilibri è
+    \[
+    \ker A \quad \text{(TC)},
+    \qquad
+    \ker(A-I) \quad \text{(TD)}.
+    \]
+    \item Un equilibrio non isolato non può essere asintoticamente stabile.
+    \item La \textbf{RAS} è l'insieme delle condizioni iniziali che convergono all'equilibrio.
+    \item Per i sistemi non lineari, la \textbf{linearizzazione} permette di dedurre proprietà locali di stabilità.
+    \item Il \textbf{teorema indiretto di Lyapunov} consente di concludere:
+    \begin{itemize}
+        \item stabilità asintotica locale se il linearizzato è asintoticamente stabile;
+        \item instabilità se il linearizzato ha almeno un modo divergente;
+        \item nessuna conclusione nel caso critico.
+    \end{itemize}
+\end{enumerate}
+
+\medskip
+
+In sostanza, la linearizzazione è il ponte che collega lo studio locale dei sistemi non lineari alla teoria, molto più semplice e potente, dei sistemi lineari.
