@@ -25,7 +25,9 @@ Per un eventuale ripasso degli argomenti presentati a lezione, è disponibile la
 https://youtube.com/playlist?list=PLSaZ8gBuI6aZh-aVSb5AWBqdUuyz4gUQi&si=AoMMU0igyIBYk_c4
 
 Drive con varie prove d'esame:
+
 https://drive.google.com/drive/folders/12jKlCtabIuSAMSyKZkJ--tTEp29zf0HL?usp=drive_link
+
 (Effettuare l'accesso solo con mail universitaria)
 
 ## Note
