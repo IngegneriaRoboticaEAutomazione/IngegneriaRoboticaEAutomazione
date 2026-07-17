@@ -253,6 +253,10 @@ Forms dedito alla Raccolta dei quesiti d'esame, tutti i dati raccolti nel tempo,
 
 <!-- AUTO:nuovo|2|na|identificazione-stima-e-controllo-robusto -->
 
+- **Docente:** Prof. Salaris — **Appello:** Sessione Estiva — **Inserito il:** 2026-07-17
+  - Il professore fa l'orale in forma scritta, trovate gli appelli, nella cartella Esami dedicata al corso
+
+
 </details>
 
 <details>
