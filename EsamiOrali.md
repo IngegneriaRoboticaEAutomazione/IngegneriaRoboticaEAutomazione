@@ -254,6 +254,11 @@ Forms dedito alla Raccolta dei quesiti d'esame, tutti i dati raccolti nel tempo,
 <!-- AUTO:nuovo|2|na|identificazione-stima-e-controllo-robusto -->
 
 - **Docente:** Prof. Costanzi — **Appello:** Sessione Estiva — **Inserito il:** 2026-07-17
+  - Ingressi persistentemente eccitanti
+  - Filtro di Kalman e innovazione
+
+
+- **Docente:** Prof. Costanzi — **Appello:** Sessione Estiva — **Inserito il:** 2026-07-17
   - Identificazione arx/armax
   - Filtro a particelle
   - Ekf e Ukf
