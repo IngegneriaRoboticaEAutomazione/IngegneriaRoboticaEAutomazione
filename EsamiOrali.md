@@ -254,6 +254,15 @@ Forms dedito alla Raccolta dei quesiti d'esame, tutti i dati raccolti nel tempo,
 <!-- AUTO:nuovo|2|na|identificazione-stima-e-controllo-robusto -->
 
 - **Docente:** Prof. Costanzi — **Appello:** Sessione Estiva — **Inserito il:** 2026-07-17
+  - Identificazione arx/armax
+  - Filtro a particelle
+  - Ekf e Ukf
+  - Ingresso persistentemente eccitante
+  - Ottimalità del filtro di kalman
+  - Indici per scegliere grado di complessità del modello
+
+
+- **Docente:** Prof. Costanzi — **Appello:** Sessione Estiva — **Inserito il:** 2026-07-17
   - degenerazione dei pesi e ricampionamento
   - scelta della complessità di modello e cosa comporta
 
