@@ -253,6 +253,15 @@ Forms dedito alla Raccolta dei quesiti d'esame, tutti i dati raccolti nel tempo,
 
 <!-- AUTO:nuovo|2|na|identificazione-stima-e-controllo-robusto -->
 
+- **Docente:** Prof. Costanzi — **Appello:** Sessione Estiva — **Inserito il:** 2026-07-17
+  - identificazione dei parametri dei modelli della famiglia AR
+  - idem ma con quelli ARMA
+  - Come si calcola la complessità n di un predittore
+  - descrizione partcle filter
+  - descrizione unscented filter
+  - come si ricavano le formule dei predittori ar e arma
+
+
 - **Docente:** Prof. Salaris — **Appello:** Sessione Estiva — **Inserito il:** 2026-07-17
   - Il professore fa l'orale in forma scritta, trovate gli appelli, nella cartella Esami dedicata al corso
 
