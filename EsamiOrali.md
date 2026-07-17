@@ -361,6 +361,10 @@ Forms dedito alla Raccolta dei quesiti d'esame, tutti i dati raccolti nel tempo,
 
 <!-- AUTO:nuovo|2|na|tecnologie-per-la-robotica -->
 
+- **Docente:** Prof. Pollini — **Appello:** Primo appello - Sessione Estiva 2025/2026 — **Inserito il:** 2026-07-17
+  - Il docente ha fatto l'orale in forma scritta, trovate le domande del orale, nella cartella specifica del esame
+
+
 </details>
 
 <details>
