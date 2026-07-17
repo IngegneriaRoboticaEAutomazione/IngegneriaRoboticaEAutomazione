@@ -254,6 +254,11 @@ Forms dedito alla Raccolta dei quesiti d'esame, tutti i dati raccolti nel tempo,
 <!-- AUTO:nuovo|2|na|identificazione-stima-e-controllo-robusto -->
 
 - **Docente:** Prof. Costanzi — **Appello:** Sessione Estiva — **Inserito il:** 2026-07-17
+  - degenerazione dei pesi e ricampionamento
+  - scelta della complessità di modello e cosa comporta
+
+
+- **Docente:** Prof. Costanzi — **Appello:** Sessione Estiva — **Inserito il:** 2026-07-17
   - Stima delle caratteristiche di un PPS
   - Ricavare equazioni filtro di kalman e dirne le proprietà
 
