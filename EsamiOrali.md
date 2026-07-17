@@ -254,8 +254,8 @@ Forms dedito alla Raccolta dei quesiti d'esame, tutti i dati raccolti nel tempo,
 <!-- AUTO:nuovo|2|na|identificazione-stima-e-controllo-robusto -->
 
 - **Docente:** Prof. Costanzi — **Appello:** Sessione Estiva — **Inserito il:** 2026-07-17
-  - * La  trasformata unscented
-  - * L'identificazione dei sistemi ARMA/ARMAX
+  -  La  trasformata unscented
+  -  L'identificazione dei sistemi ARMA/ARMAX
 
 
 - **Docente:** Prof. Costanzi — **Appello:** Sessione Estiva — **Inserito il:** 2026-07-17
